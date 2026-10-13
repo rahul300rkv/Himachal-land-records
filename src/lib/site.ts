@@ -5,7 +5,7 @@
  * legal pages (About, Disclaimer, Privacy, Terms) reviewed by a qualified advocate.
  */
 export const SITE = {
-  name: 'HimLand Check',
+  name: 'HimachalLand Check',
   /** TODO: replace with the registered name of the LLP (the pages append "LLP"). */
   companyName: '[Your Company Name]',
   /** TODO: replace with a monitored support / grievance email address. */
