@@ -41,9 +41,9 @@ export function HeroSearch() {
       onSubmit={onSubmit}
       noValidate
       aria-label={t('searchTitle')}
-      className="rounded-xl border bg-card p-4 shadow-lg shadow-primary/5 sm:p-6"
+      className="land-search p-5 sm:p-7"
     >
-      <h2 className="font-sans text-lg font-semibold tracking-normal">{t('searchTitle')}</h2>
+      <h2 className="font-sans text-xl font-semibold tracking-normal">{t('searchTitle')}</h2>
       <p className="mt-1 text-sm text-muted-foreground">{t('searchHint')}</p>
 
       <div className="mt-4 grid items-start gap-4 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_auto]">

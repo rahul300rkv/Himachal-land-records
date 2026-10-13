@@ -15,7 +15,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
-      <div className="container flex h-16 items-center justify-between gap-2 sm:gap-3">
+      <div className="container flex h-20 items-center justify-between gap-2 sm:gap-3">
         <Logo />
 
         <nav aria-label={t('mainNavigation')} className="hidden items-center gap-1 lg:flex">
@@ -29,7 +29,7 @@ export function Header() {
                 className={cn(
                   'rounded-md px-3 py-2 text-sm font-medium transition-colors',
                   active
-                    ? 'bg-primary-soft text-primary'
+                    ? 'land-nav-active'
                     : 'text-muted-foreground hover:bg-accent hover:text-foreground',
                 )}
               >

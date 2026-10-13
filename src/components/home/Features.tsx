@@ -20,16 +20,16 @@ export function Features() {
         <p className="mt-3 text-lg text-muted-foreground">{t('subtitle')}</p>
       </Reveal>
 
-      <ul className="mt-10 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+      <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {FEATURES.map(({ key, icon: Icon, href }, index) => (
           <li key={key}>
-            <Reveal delay={index * 0.07} className="h-full border-t-2 border-primary/15 pt-5">
+            <Reveal delay={index * 0.07} className="land-feature">
               <span className="flex size-11 items-center justify-center rounded-lg bg-primary-soft text-primary">
                 <Icon className="size-5" aria-hidden="true" />
               </span>
               <h3 className="mt-4 text-xl">
                 {href ? (
-                  <Link href={href} className="rounded-sm hover:text-primary hover:underline">
+                  <Link href={href} className="rounded-sm text-primary hover:underline">
                     {t(`items.${key}.title`)}
                   </Link>
                 ) : (
