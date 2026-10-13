@@ -1,0 +1,1075 @@
+{
+  "Metadata": {
+    "siteName": "HimLand Check",
+    "title": "HimLand Check: search and check land records in Himachal Pradesh",
+    "description": "Read, understand and check Himachal Pradesh land records in one place: jamabandi, khasra, khatauni, khewat, mutations, maps and shajra, pre-purchase reports and a land marketplace. An independent private platform, not a government website."
+  },
+  "Navigation": {
+    "home": "Home",
+    "search": "Search records",
+    "marketplace": "Marketplace",
+    "reports": "Reports",
+    "about": "About",
+    "login": "Log in",
+    "menu": "Menu",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "mainNavigation": "Main navigation",
+    "homeLabel": "HimLand Check, home",
+    "disclaimer": "Disclaimer",
+    "privacy": "Privacy policy",
+    "terms": "Terms of use",
+    "dashboard": "Dashboard",
+    "logout": "Log out",
+    "account": "Account"
+  },
+  "Common": {
+    "skipToContent": "Skip to main content",
+    "language": "Language",
+    "switchTo": "Switch to {language}",
+    "english": "English",
+    "hindi": "हिन्दी",
+    "loading": "Loading…",
+    "search": "Search",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "save": "Save",
+    "back": "Back",
+    "next": "Next",
+    "learnMore": "Learn more",
+    "viewAll": "View all",
+    "tryAgain": "Try again",
+    "optional": "optional",
+    "required": "required",
+    "or": "or",
+    "close": "Close",
+    "home": "Go to home"
+  },
+  "Disclaimer": {
+    "banner": "Private, independent platform. Not a government website. Information is not an official record: verify with the Revenue Department before you act.",
+    "bannerLink": "Read the full disclaimer",
+    "points": {
+      "independent": "This is a private, independent platform. It is not owned, operated, endorsed or authorised by the Government of Himachal Pradesh, the Revenue Department or any government agency.",
+      "notLegalRecord": "Information shown here is for general reference only. It is not an official or certified land record and cannot be used as proof of ownership, title, possession or boundaries in any court, office or transaction. Only a certified copy (nakal) issued by the competent Revenue authority is valid.",
+      "accuracy": "Records may be incomplete, outdated, wrongly transcribed or different from the current official entries. We do not guarantee accuracy, completeness or timeliness.",
+      "verify": "Before you buy, sell, lend against or otherwise deal in any land, always verify every detail with the local Patwari, the Tehsil office or the official government portal.",
+      "noAdvice": "Nothing on this platform is legal, financial or professional advice. Pre-purchase reports are informational summaries, not an opinion on title. Consult a qualified advocate.",
+      "landLaws": "Transfer of land in Himachal Pradesh may be restricted, or may need prior permission, under laws such as the H.P. Tenancy and Land Reforms Act, 1972 (including Section 118). Check your eligibility before entering into any transaction.",
+      "marketplace": "Marketplace listings are posted by third parties. We do not own, inspect or verify the listed land and are not a party to any transaction. A “verified” badge, where shown, only means that basic checks were done. It is not a guarantee of title.",
+      "liability": "To the fullest extent permitted by law, we accept no liability for any loss or damage arising from the use of, or reliance on, this platform."
+    },
+    "page": {
+      "title": "Disclaimer",
+      "intro": "Please read this disclaimer carefully before using HimLand Check. By using the website you confirm that you have read and understood it.",
+      "titles": {
+        "independent": "We are not the government",
+        "notLegalRecord": "Not an official record",
+        "accuracy": "Accuracy and completeness",
+        "verify": "Always verify before you act",
+        "noAdvice": "No legal or financial advice",
+        "landLaws": "Land laws and permissions",
+        "marketplace": "Marketplace listings",
+        "reports": "Pre-purchase check reports",
+        "liability": "Limitation of liability"
+      },
+      "reports": "A pre-purchase check report summarises the entries we hold for a plot and highlights points you may want to verify. It is an informational aid. It is not a title search, a title opinion, or a guarantee that a plot is free of dispute, mortgage, encumbrance or litigation.",
+      "howToVerify": {
+        "title": "How to verify a record",
+        "steps": {
+          "a": "Note the district, tehsil, village and the khasra, khewat and khatauni numbers from our result.",
+          "b": "Visit the Patwari or Tehsil office, or use the official government land-records portal, and ask for a certified copy (nakal) of the current entry.",
+          "c": "Compare the certified copy with what you saw here: owner names, shares, area and land type.",
+          "d": "Check for mutations, mortgages and court orders, and ask a qualified advocate to review the documents before you pay any money."
+        }
+      }
+    },
+    "title": "Important legal disclaimer"
+  },
+  "Footer": {
+    "tagline": "A private, independent platform for Himachal Pradesh land records.",
+    "explore": "Explore",
+    "company": "Company",
+    "independentNote": "Not affiliated with the Government of Himachal Pradesh.",
+    "copyright": "© {year} HimLand Check. All rights reserved.",
+    "legal": "Legal",
+    "disclaimerShort": "HimLand Check is a private platform and not a government website. Information is for reference only and is not an official land record. Verify with the Tehsil / Patwari office before any transaction.",
+    "readDisclaimer": "Read the full disclaimer"
+  },
+  "Home": {
+    "hero": {
+      "title": "Check Himachal land records before you decide",
+      "subtitle": "Search jamabandi, khasra, khatauni and mutation entries, view village maps and get a clear pre-purchase report, in Hindi or English.",
+      "searchTitle": "Find a land record",
+      "searchHint": "Start with the district, then the tehsil, then the village.",
+      "submit": "Search records",
+      "trustNote": "Independent platform. Not a government website.",
+      "errors": {
+        "district": "Select a district",
+        "tehsil": "Select a tehsil"
+      }
+    },
+    "whatWeDo": {
+      "title": "What we do",
+      "body": "We make public revenue records searchable in one place, show them on maps and shajra drawings, and produce pre-purchase check reports. There is also a marketplace where people list land themselves.",
+      "glossary": "The records we cover",
+      "records": {
+        "jamabandi": {
+          "title": "Jamabandi",
+          "description": "The record of rights: who holds the land, in what share."
+        },
+        "khasra": {
+          "title": "Khasra",
+          "description": "The number of each plot, with its area and use."
+        },
+        "khatauni": {
+          "title": "Khatauni",
+          "description": "The register of holdings, grouped by account (khata)."
+        },
+        "khewat": {
+          "title": "Khewat",
+          "description": "The ownership register, listing each owner’s holdings."
+        },
+        "mutations": {
+          "title": "Mutations (intkal)",
+          "description": "Entries that record a change of ownership."
+        },
+        "shajra": {
+          "title": "Maps and shajra",
+          "description": "The village plot map, showing where each khasra lies."
+        }
+      }
+    },
+    "features": {
+      "title": "Everything you need to check a plot",
+      "subtitle": "From the original entry to the map, in one place.",
+      "items": {
+        "search": {
+          "title": "Search records",
+          "description": "Find a plot by district, tehsil and village, then by khasra number or owner name."
+        },
+        "maps": {
+          "title": "Maps and shajra",
+          "description": "See where a khasra sits on the village map and how it borders other plots."
+        },
+        "reports": {
+          "title": "Pre-purchase reports",
+          "description": "A plain-language summary of ownership, mutations and points to check before you buy."
+        },
+        "marketplace": {
+          "title": "Land marketplace",
+          "description": "Browse land listed by owners and agents, with the record details beside each listing."
+        }
+      }
+    },
+    "howItWorks": {
+      "title": "How it works",
+      "steps": {
+        "search": {
+          "title": "Search",
+          "description": "Choose the district, tehsil and village, then enter a khasra number or an owner name."
+        },
+        "review": {
+          "title": "Review",
+          "description": "Read the record, its mutation history and the map."
+        },
+        "verify": {
+          "title": "Verify",
+          "description": "Confirm the details with the Patwari or Tehsil office and get a certified copy before any transaction."
+        }
+      }
+    },
+    "disclaimer": {
+      "title": "Please read this before you rely on any record",
+      "intro": "HimLand Check helps you read and understand records. It does not replace the government record or professional advice.",
+      "readFull": "Read the full disclaimer"
+    },
+    "cta": {
+      "title": "Start with a search",
+      "body": "Look up a plot by district, village and khasra number.",
+      "button": "Search land records",
+      "secondary": "Browse marketplace"
+    }
+  },
+  "Search": {
+    "title": "Search land records",
+    "subtitle": "Choose a district and tehsil, then narrow down by village, khasra number or owner name.",
+    "form": {
+      "district": "District",
+      "districtPlaceholder": "Select district",
+      "tehsil": "Tehsil",
+      "tehsilPlaceholder": "Select tehsil",
+      "tehsilFirst": "Select a district first",
+      "village": "Village",
+      "villagePlaceholder": "Type the village name",
+      "villageFirst": "Select a tehsil first",
+      "khasra": "Khasra number",
+      "khasraPlaceholder": "e.g. 123/4",
+      "khasraHint": "Enter the full number as written in the record.",
+      "owner": "Owner name",
+      "ownerPlaceholder": "Name of the owner",
+      "submit": "Search records",
+      "reset": "Clear",
+      "errors": {
+        "district": "Select a district",
+        "atLeastOne": "Add a tehsil, village, khasra number or owner name"
+      }
+    },
+    "filters": {
+      "title": "Refine results",
+      "khewat": "Khewat number",
+      "khatauni": "Khatauni number",
+      "landType": "Land type",
+      "allLandTypes": "All land types",
+      "year": "Jamabandi year",
+      "allYears": "All years",
+      "apply": "Apply filters",
+      "clear": "Clear filters",
+      "active": "{count} active"
+    },
+    "results": {
+      "summary": "Page {page}: {count, plural, one {# record} other {# records}}",
+      "searchedIn": "Results for {place}",
+      "notice": "Results are for reference only and are not an official record. Confirm with the Tehsil / Patwari office before any transaction.",
+      "demoNotice": "Demo mode: the database is not connected, so you are seeing fictional sample records.",
+      "empty": {
+        "title": "No records found",
+        "body": "Check the spelling, try fewer details, or search by tehsil or village only. Records may not be available for every village yet."
+      },
+      "invalid": {
+        "title": "Add one more detail",
+        "body": "Choose a district together with a tehsil, village, khasra number or owner name."
+      },
+      "error": {
+        "title": "Search is unavailable",
+        "body": "We could not load records right now. Please try again in a moment."
+      },
+      "idle": {
+        "title": "How to search",
+        "tips": {
+          "a": "Pick the district and tehsil, then type the village. Suggestions appear as records become available.",
+          "b": "Know the plot? Add the khasra number exactly as written in the record, for example 123/4.",
+          "c": "Searching for a person? Enter the owner’s name and narrow it down with the tehsil."
+        }
+      }
+    },
+    "card": {
+      "fatherName": "Father’s name",
+      "khasra": "Khasra",
+      "khewat": "Khewat",
+      "khatauni": "Khatauni",
+      "area": "Area",
+      "landType": "Land type",
+      "year": "Jamabandi year",
+      "notAvailable": "Not available",
+      "viewRecord": "View full record",
+      "viewRecordFor": "View full record for {owner}"
+    },
+    "pagination": {
+      "label": "Pagination",
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page {page}"
+    }
+  },
+  "LandTypes": {
+    "irrigated": "Irrigated",
+    "unirrigated": "Unirrigated",
+    "orchard": "Orchard",
+    "residential": "Residential",
+    "commercial": "Commercial",
+    "forest": "Forest",
+    "pasture": "Pasture",
+    "barren": "Barren",
+    "other": "Other"
+  },
+  "Units": {
+    "sq_m": "sq m",
+    "hectare": "hectare",
+    "bigha": "bigha",
+    "biswa": "biswa",
+    "kanal": "kanal",
+    "marla": "marla",
+    "acre": "acre"
+  },
+  "About": {
+    "title": "About HimLand Check",
+    "lastUpdated": "Last updated {date}",
+    "intro": "HimLand Check is a simpler way to read, understand and check government land records — for villages in Himachal Pradesh.",
+    "whatWeDo": {
+      "title": "What we do",
+      "body": "We make public revenue records — jamabandi, khasra, khatauni, khewat, mutations — searchable in one place, show them on maps and shajra drawings, and produce pre-purchase check reports. There is also a marketplace where people list land themselves."
+    },
+    "whatWeAreNot": {
+      "title": "What we are not",
+      "body": "HimLand Check is an independent private platform. It is not affiliated with or authorised by the Government of Himachal Pradesh or any revenue department. Our copies are not a substitute for a certified government copy. Always confirm with the relevant Tehsil / Patwari office before any transaction."
+    },
+    "whoRuns": {
+      "title": "Who runs it",
+      "body": "Operated by {company} LLP, a limited liability partnership registered in India."
+    },
+    "related": "Read more"
+  },
+  "Legal": {
+    "lastUpdated": "Last updated {date}",
+    "onThisPage": "On this page"
+  },
+  "Privacy": {
+    "title": "Privacy policy",
+    "intro": "This policy explains what personal data HimLand Check collects, why we collect it and the choices you have. It applies to this website and the services offered on it. By using the service you agree to this policy.",
+    "sections": {
+      "who": {
+        "title": "Who we are",
+        "body": [
+          "HimLand Check is operated by {company} LLP (“we”, “us”), a limited liability partnership registered in India. For the purposes of the Digital Personal Data Protection Act, 2023, we are the data fiduciary for the personal data described here.",
+          "Questions or requests about your data can be sent to {email}."
+        ]
+      },
+      "collect": {
+        "title": "What we collect",
+        "body": [
+          "We collect only what we need to run the service:",
+          "- Account details: name, email address, phone number and preferred language when you sign up.",
+          "- Search activity: the district, tehsil, village, khasra or owner-name searches you run, and the records or reports you open.",
+          "- Listings and uploads: the details, contact information and photographs you add when you post land on the marketplace.",
+          "- Report requests and payment status for reports you order. When paid reports are offered, card and bank details are handled by the payment provider and are not stored by us.",
+          "- Technical data: IP address, browser and device type, pages visited and error logs, used for security and to keep the service running."
+        ]
+      },
+      "publicRecords": {
+        "title": "Land records and personal data",
+        "body": [
+          "Land records contain the names of owners and related persons. We compile this information from public revenue records and from information supplied by users, and we show it for reference only.",
+          "If you believe an entry about you is wrong, or you want it reviewed, write to {email} with the details of the record. We will look into it and reply within a reasonable time."
+        ]
+      },
+      "use": {
+        "title": "How we use your data",
+        "body": [
+          "- To create and secure your account and sign you in.",
+          "- To run searches, show records and generate reports.",
+          "- To publish and moderate marketplace listings.",
+          "- To contact you about your account, your requests and important changes.",
+          "- To prevent fraud and abuse and to meet legal obligations.",
+          "- To understand how the service is used so we can improve it."
+        ]
+      },
+      "consent": {
+        "title": "Consent and lawful use",
+        "body": [
+          "We process your personal data with your consent, or for other uses the law allows, such as complying with a legal obligation. You can withdraw consent at any time. This does not affect processing done before you withdrew it, and some features may stop working."
+        ]
+      },
+      "sharing": {
+        "title": "Who we share data with",
+        "body": [
+          "We do not sell your personal data. We share data only with service providers that help us run the service, under appropriate safeguards:",
+          "- Supabase, which provides our database, authentication and file storage.",
+          "- Our website hosting and content-delivery provider.",
+          "- Payment and communication providers, if and when we use them.",
+          "We may also disclose data when required by law, a court order or a government authority, or to protect our rights and the safety of users.",
+          "Marketplace listings you publish, including any contact details you choose to show, are visible to other visitors."
+        ]
+      },
+      "location": {
+        "title": "Where data is processed",
+        "body": [
+          "Our providers may store and process data on servers in India or in other countries. Where data leaves India we take steps to keep it protected as the law requires."
+        ]
+      },
+      "cookies": {
+        "title": "Cookies and similar technologies",
+        "body": [
+          "At the time of the last update we use only the cookies and browser storage that are necessary to run the service: keeping you signed in and remembering your language choice.",
+          "We do not use advertising cookies. If we add analytics or other optional cookies we will update this policy and ask for your consent where required."
+        ]
+      },
+      "retention": {
+        "title": "How long we keep data",
+        "body": [
+          "We keep account data while your account is active and for a reasonable period afterwards. Server logs are kept for a limited period. We may keep some information for longer where the law requires or to resolve disputes. When data is no longer needed we delete or anonymise it."
+        ]
+      },
+      "security": {
+        "title": "Security",
+        "body": [
+          "We use access controls, encrypted connections and database-level row security to protect data. No online service is completely secure, so we cannot guarantee absolute security. Please use a strong password and keep it private."
+        ]
+      },
+      "rights": {
+        "title": "Your rights",
+        "body": [
+          "Under the Digital Personal Data Protection Act, 2023 you may:",
+          "- ask for a summary of the personal data we hold about you;",
+          "- ask us to correct or complete inaccurate data;",
+          "- ask us to erase data that is no longer needed;",
+          "- nominate another person to exercise your rights if you die or become unable to do so;",
+          "- raise a grievance with us and, if it is not resolved, complain to the Data Protection Board of India.",
+          "To use these rights, write to {email}. We may ask you to verify your identity first."
+        ]
+      },
+      "children": {
+        "title": "Children",
+        "body": [
+          "The service is not meant for people under 18. We do not knowingly collect personal data from children. If you think a child has given us data, contact us and we will delete it."
+        ]
+      },
+      "grievance": {
+        "title": "Grievance contact",
+        "body": [
+          "For privacy questions, requests or complaints, contact {company} LLP at {email}. We will acknowledge your request promptly and aim to resolve it within a reasonable time."
+        ]
+      },
+      "changes": {
+        "title": "Changes to this policy",
+        "body": [
+          "We may update this policy from time to time. The “last updated” date at the top shows when it last changed. If a change is significant we will tell you on the website or by email."
+        ]
+      }
+    }
+  },
+  "Terms": {
+    "title": "Terms of use",
+    "intro": "These terms govern your use of HimLand Check. Please read them together with our Disclaimer and Privacy policy. By using the website, creating an account or posting a listing you agree to these terms. If you do not agree, please do not use the service.",
+    "sections": {
+      "about": {
+        "title": "About the service",
+        "body": [
+          "HimLand Check is an independent private platform operated by {company} LLP. It lets you search and read land-record information, view maps, request pre-purchase check reports and browse or post land listings. It is not a government website and is not connected with the Government of Himachal Pradesh or any revenue department."
+        ]
+      },
+      "notOfficial": {
+        "title": "No official status",
+        "body": [
+          "Information on the service is for reference only. It is not an official or certified record and is not proof of ownership, title or possession. You must confirm everything with the Tehsil / Patwari office and obtain a certified copy before you buy, sell, lend against or otherwise deal with land. Please read our Disclaimer."
+        ]
+      },
+      "eligibility": {
+        "title": "Eligibility and accounts",
+        "body": [
+          "You must be at least 18 years old and able to enter into a binding contract under Indian law.",
+          "- Give accurate information when you register and keep it up to date.",
+          "- Keep your password confidential. You are responsible for activity under your account.",
+          "- Tell us at once if you think your account has been misused."
+        ]
+      },
+      "acceptableUse": {
+        "title": "Acceptable use",
+        "body": [
+          "You agree not to:",
+          "- use the service for anything unlawful, fraudulent or misleading;",
+          "- scrape, copy or republish records in bulk, or use bots or automated tools, without our written permission;",
+          "- try to break, probe or overload the service, or bypass its security or access limits;",
+          "- upload malware or content that infringes anyone’s rights;",
+          "- impersonate another person or misrepresent your relationship with a property."
+        ]
+      },
+      "reports": {
+        "title": "Reports",
+        "body": [
+          "Pre-purchase check reports summarise information we hold and point out items to verify. They are not a title search, legal opinion or guarantee. Do not rely on a report as the only basis for a purchase or lending decision.",
+          "Fee and refund terms, where they apply, will be shown before you order."
+        ]
+      },
+      "marketplace": {
+        "title": "Marketplace",
+        "body": [
+          "Listings are posted by users, not by us. We do not own, inspect or verify listed land, and we are not a party to any sale, lease or other transaction between users.",
+          "If you post a listing, you confirm that:",
+          "- you own the land or are legally authorised to offer it;",
+          "- the details, price and photographs are accurate and not misleading;",
+          "- the sale or transfer is permitted under applicable law, including any restriction or permission requirement under the H.P. Tenancy and Land Reforms Act, 1972;",
+          "- you have the right to share any contact details you publish.",
+          "We may review, refuse, edit, suspend or remove any listing, and close accounts that break these terms. A “verified” label only means that basic checks were done. It is not a guarantee of title.",
+          "If you are a buyer, do your own due diligence and take legal advice before you pay any money."
+        ]
+      },
+      "ip": {
+        "title": "Intellectual property",
+        "body": [
+          "The website, its design, software and original content belong to us or our licensors. The underlying public records belong to the relevant authorities. We give you a limited, personal, non-transferable licence to use the service for lawful purposes. You keep ownership of content you upload, and you give us a licence to host, display and use it to run the service."
+        ]
+      },
+      "availability": {
+        "title": "Availability and changes",
+        "body": [
+          "We try to keep the service running, but we do not promise that it will always be available, error-free or up to date. We may change, suspend or stop any part of it at any time."
+        ]
+      },
+      "thirdParty": {
+        "title": "Third-party services and links",
+        "body": [
+          "The service may rely on, or link to, third-party services. We are not responsible for their content or practices."
+        ]
+      },
+      "warranty": {
+        "title": "No warranties",
+        "body": [
+          "The service is provided “as is” and “as available”. To the fullest extent the law allows, we disclaim all warranties, express or implied, including accuracy, completeness, fitness for a particular purpose and non-infringement."
+        ]
+      },
+      "liability": {
+        "title": "Limitation of liability",
+        "body": [
+          "To the fullest extent permitted by law, {company} LLP and its partners, employees and affiliates are not liable for any indirect, incidental, special or consequential loss, or for loss of money, property, profit, data or opportunity, arising from your use of or reliance on the service or any listing or report.",
+          "Where liability cannot be excluded, our total liability to you for any claim is limited to the amount you paid us for the service in the 12 months before the claim."
+        ]
+      },
+      "indemnity": {
+        "title": "Your responsibility",
+        "body": [
+          "You agree to compensate us for loss, claims and costs arising from your breach of these terms, your listings, or your unlawful use of the service."
+        ]
+      },
+      "termination": {
+        "title": "Suspension and termination",
+        "body": [
+          "We may suspend or end your access at any time if you break these terms or the law. You may stop using the service, and ask us to close your account, at any time."
+        ]
+      },
+      "law": {
+        "title": "Governing law and disputes",
+        "body": [
+          "These terms are governed by the laws of India. Subject to any mandatory legal rights you have, the courts at {jurisdiction} have exclusive jurisdiction over any dispute arising from them."
+        ]
+      },
+      "changes": {
+        "title": "Changes to these terms",
+        "body": [
+          "We may update these terms. The updated version applies from the “last updated” date shown above. If you keep using the service after that date, you accept the changes."
+        ]
+      },
+      "contact": {
+        "title": "Contact",
+        "body": [
+          "Questions about these terms: {company} LLP, {email}."
+        ]
+      }
+    }
+  },
+  "MutationTypes": {
+    "sale": "Sale",
+    "inheritance": "Inheritance",
+    "gift": "Gift",
+    "partition": "Partition",
+    "lease": "Lease",
+    "mortgage": "Mortgage",
+    "court_order": "Court order",
+    "other": "Other"
+  },
+  "MutationStatus": {
+    "pending": "Pending",
+    "attested": "Attested",
+    "rejected": "Rejected"
+  },
+  "ListingStatus": {
+    "draft": "Draft",
+    "pending_review": "Awaiting review",
+    "active": "Live",
+    "sold": "Sold",
+    "withdrawn": "Withdrawn",
+    "rejected": "Rejected",
+    "expired": "Expired"
+  },
+  "Record": {
+    "metaTitle": "Land record: khasra {khasra}, {village}",
+    "metaDescription": "Jamabandi details, mutation history, map and shajra nasb for khasra {khasra} in {village}, {tehsil}, {district}.",
+    "back": "Back to search",
+    "khasraTitle": "Khasra {number}",
+    "demoNotice": "Demo mode: this is a fictional sample record.",
+    "onPage": "On this page",
+    "report": {
+      "title": "Pre-purchase check report",
+      "body": "Get a PDF that summarises this record and its mutation history and lists the points to verify before you buy.",
+      "button": "Generate pre-purchase report",
+      "generating": "Preparing your report…",
+      "loginButton": "Log in to generate report",
+      "loginHint": "You need a free account to generate a report.",
+      "success": "Your report has been downloaded.",
+      "errors": {
+        "generic": "We could not generate the report. Please try again.",
+        "notFound": "This record could not be found.",
+        "rateLimit": "You have requested many reports recently. Please try again later.",
+        "auth": "Your session has expired. Please log in again."
+      }
+    },
+    "jamabandi": {
+      "title": "Jamabandi details",
+      "caption": "Entry as held on HimLand Check. Not an official record.",
+      "groups": {
+        "location": "Location",
+        "identifiers": "Record numbers",
+        "ownership": "Ownership",
+        "land": "Land",
+        "source": "Entry"
+      },
+      "fields": {
+        "district": "District",
+        "tehsil": "Tehsil",
+        "village": "Village",
+        "khasra": "Khasra number",
+        "khewat": "Khewat number",
+        "khatauni": "Khatauni number",
+        "owner": "Owner name",
+        "fatherName": "Father’s name",
+        "share": "Share",
+        "cultivator": "Cultivator",
+        "area": "Area",
+        "areaAsRecorded": "Area as recorded",
+        "landType": "Land type",
+        "year": "Jamabandi year",
+        "remarks": "Remarks",
+        "source": "Source",
+        "review": "Review status",
+        "updated": "Last updated"
+      },
+      "notProvided": "Not provided",
+      "reviewValues": {
+        "verified": "Reviewed by our team",
+        "unverified": "Not independently reviewed"
+      }
+    },
+    "mutations": {
+      "title": "Mutation history",
+      "intro": "Changes of ownership recorded against this plot, newest first.",
+      "empty": {
+        "title": "No mutations recorded",
+        "body": "We hold no mutation entries for this record. That does not mean there have been none: ask the Patwari for the full history."
+      },
+      "number": "Mutation no. {number}",
+      "dateUnknown": "Date not recorded",
+      "from": "From",
+      "to": "To",
+      "area": "Area affected",
+      "remarks": "Remarks"
+    },
+    "map": {
+      "title": "Map",
+      "intro": "Where the plot lies. The outline is indicative and may differ from the legal boundary.",
+      "ariaLabel": "Map showing the outline of the plot",
+      "placeholderTitle": "Map not available yet",
+      "placeholderBody": "We do not hold a boundary map for this plot yet. Ask the Patwari for the village map and match it with the khasra number.",
+      "loading": "Loading map…",
+      "error": "The map could not be loaded."
+    },
+    "shajra": {
+      "title": "Shajra nasb (family tree)",
+      "intro": "The family tree recorded for this holding. It is used when ownership passes by inheritance.",
+      "emptyTitle": "No family tree recorded",
+      "emptyBody": "We do not hold a shajra nasb for this record. Ask the Patwari if one exists for this holding.",
+      "deceased": "Deceased",
+      "note": "As recorded. It may be incomplete: confirm with the Patwari."
+    },
+    "bottomCta": {
+      "title": "Thinking of buying this land?",
+      "body": "A pre-purchase report lists what to verify before you pay."
+    }
+  },
+  "Marketplace": {
+    "title": "Land marketplace",
+    "subtitle": "Browse land listed for sale by owners and agents. Check the record behind every listing before you decide.",
+    "metaDescription": "Browse land for sale in Himachal Pradesh. Every listing shows whether it is linked to a land record. Independent platform, not a government website.",
+    "listLand": "List your land",
+    "demoNotice": "Demo mode: showing fictional sample listings.",
+    "notice": "Listings are posted by third parties. We do not own or inspect the land. Verify the land record and the seller yourself before you pay any money.",
+    "filters": {
+      "title": "Filter listings",
+      "district": "District",
+      "allDistricts": "All districts",
+      "price": "Price (₹)",
+      "min": "Min",
+      "max": "Max",
+      "area": "Area",
+      "areaUnit": "Area unit",
+      "landType": "Land type",
+      "allLandTypes": "All land types",
+      "verifiedOnly": "Verified listings only",
+      "sort": "Sort by",
+      "sortNew": "Newest first",
+      "sortPriceAsc": "Price: low to high",
+      "sortPriceDesc": "Price: high to low",
+      "apply": "Apply filters",
+      "clear": "Clear filters",
+      "active": "{count} active"
+    },
+    "results": {
+      "summary": "{count, plural, one {# listing} other {# listings}} on page {page}",
+      "empty": {
+        "title": "No listings found",
+        "body": "Try removing a filter, or check back soon. You can also list your own land."
+      },
+      "error": {
+        "title": "Listings are unavailable",
+        "body": "We could not load listings right now. Please try again in a moment."
+      }
+    },
+    "card": {
+      "negotiable": "Negotiable",
+      "fixed": "Fixed price",
+      "noPhoto": "No photo",
+      "featured": "Featured",
+      "view": "View listing",
+      "viewFor": "View listing: {title}",
+      "posted": "Posted {date}"
+    },
+    "verification": {
+      "verified": "Verified",
+      "linked": "Linked to land record",
+      "unlinked": "Not linked to a record",
+      "verifiedHelp": "Our team completed basic checks on this listing and its land record. This is not a guarantee of title.",
+      "linkedHelp": "This listing is connected to a land record we hold. The listing itself has not been verified yet.",
+      "unlinkedHelp": "The seller has not linked this listing to a land record. Ask for the khasra, khewat and khatauni numbers and check them yourself."
+    },
+    "detail": {
+      "back": "Back to listings",
+      "demoNotice": "Demo mode: this is a fictional sample listing.",
+      "pendingNotice": "This listing is not public yet. Only you can see it.",
+      "about": "About this land",
+      "details": "Details",
+      "location": "Location",
+      "landType": "Land type",
+      "area": "Area",
+      "price": "Asking price",
+      "posted": "Posted",
+      "status": "Status",
+      "noPhotos": "No photos were added to this listing.",
+      "photo": "Photo {number} of {total}",
+      "record": {
+        "title": "The land record behind this listing",
+        "intro": "Compare the owner and numbers below with what the seller tells you and with the certified copy.",
+        "owner": "Owner on record",
+        "khasra": "Khasra",
+        "khewat": "Khewat",
+        "khatauni": "Khatauni",
+        "year": "Jamabandi year",
+        "view": "View full record",
+        "none": "No record is linked to this listing."
+      },
+      "report": {
+        "title": "Check before you buy",
+        "body": "Generate a pre-purchase check report for the linked record."
+      },
+      "contact": {
+        "title": "Contact the seller",
+        "reveal": "Show contact details",
+        "loginPrompt": "Log in to see the seller’s contact details. This helps protect sellers from spam.",
+        "login": "Log in to contact seller",
+        "call": "Call",
+        "whatsapp": "WhatsApp",
+        "seller": "Seller",
+        "unavailable": "Contact details are not available for this listing.",
+        "demoPhone": "Demo number: this is not a real person.",
+        "whatsappMessage": "Hello, I saw your listing “{title}” on HimLand Check and I am interested.",
+        "safetyTitle": "Stay safe",
+        "safety": {
+          "a": "Never pay an advance before you have verified the land record and visited the plot.",
+          "b": "Get a certified copy (nakal) from the Tehsil / Patwari office and ask an advocate to review the documents.",
+          "c": "Check that you are eligible to buy: transfers of land in Himachal Pradesh can be restricted under Section 118 of the H.P. Tenancy and Land Reforms Act, 1972."
+        }
+      }
+    },
+    "form": {
+      "title": "List your land",
+      "subtitle": "Tell buyers about your land. Your listing is reviewed before it appears on the marketplace.",
+      "metaDescription": "List your land for sale on HimLand Check.",
+      "notConfigured": "Listing is not available yet because the database is not connected.",
+      "sections": {
+        "basics": "About the listing",
+        "location": "Where is the land?",
+        "land": "The land",
+        "price": "Price",
+        "record": "Link to a land record",
+        "photos": "Photos",
+        "contact": "Your contact details"
+      },
+      "fields": {
+        "title": "Listing title",
+        "titlePlaceholder": "e.g. Apple orchard near Theog, road-facing",
+        "description": "Description",
+        "descriptionPlaceholder": "Access, water, nearby places, anything a buyer should know",
+        "landType": "Land type",
+        "landTypePlaceholder": "Select land type",
+        "area": "Area",
+        "areaUnit": "Unit",
+        "price": "Asking price (₹)",
+        "negotiable": "Price is negotiable",
+        "khasra": "Khasra number",
+        "khasraHint": "Optional but recommended. If we hold this khasra for the village you chose, your listing is linked to its record and shows a link badge.",
+        "photos": "Add photos",
+        "photosHint": "Up to {max} photos. JPG, PNG or WebP, up to 5 MB each.",
+        "removePhoto": "Remove {name}",
+        "contactName": "Your name",
+        "contactPhone": "Mobile number",
+        "contactHint": "Only logged-in visitors can see your contact details.",
+        "consent": "I confirm that I own this land or am legally authorised to offer it, that the details are accurate, and that I agree to the Terms of use.",
+        "termsLink": "Terms of use"
+      },
+      "errors": {
+        "title": "Enter a title of at least 5 characters",
+        "district": "Select a district",
+        "tehsil": "Select a tehsil",
+        "village": "Enter the village",
+        "landType": "Select a land type",
+        "area": "Enter an area greater than zero",
+        "price": "Enter a price greater than zero",
+        "phone": "Enter a valid 10-digit mobile number",
+        "name": "Enter your name",
+        "consent": "Please confirm to continue",
+        "photosCount": "You can add up to {max} photos",
+        "photosType": "Only JPG, PNG or WebP photos are allowed",
+        "photosSize": "Each photo must be 5 MB or smaller",
+        "upload": "A photo could not be uploaded. Please try again.",
+        "save": "We could not save your listing. Please try again.",
+        "auth": "Please log in again to continue."
+      },
+      "submit": "Submit for review",
+      "submitting": "Submitting…",
+      "success": {
+        "title": "Listing submitted",
+        "body": "Your listing is awaiting review. We will publish it once it passes basic checks. You can follow its status on your dashboard.",
+        "linked": "Linked to a land record we hold.",
+        "notLinked": "Not linked to a land record. You can mention the khasra number in the description.",
+        "view": "View your listing",
+        "dashboard": "Go to dashboard"
+      }
+    }
+  },
+  "Report": {
+    "page": {
+      "title": "Pre-purchase check reports",
+      "subtitle": "A clear PDF that summarises a land record, its mutation history and the points to verify before you pay.",
+      "metaDescription": "Generate a pre-purchase check report for a Himachal Pradesh land record: land details, ownership, mutation history and points to verify. Not a title opinion.",
+      "includesTitle": "What is in a report",
+      "includes": {
+        "a": "Land details summary",
+        "b": "Ownership information",
+        "c": "Mutation history",
+        "d": "Points to verify before you buy",
+        "e": "Circle rate (placeholder for now)",
+        "f": "Unique report ID and generation date",
+        "g": "Full legal disclaimer"
+      },
+      "howTitle": "How to get one",
+      "steps": {
+        "search": {
+          "title": "Find the record",
+          "body": "Search by district, tehsil, village and khasra number."
+        },
+        "open": {
+          "title": "Open the full record",
+          "body": "Choose “View full record” on the result."
+        },
+        "generate": {
+          "title": "Generate the report",
+          "body": "Log in and choose “Generate pre-purchase report”."
+        }
+      },
+      "ctaSearch": "Search for a record",
+      "yourReports": "Your reports",
+      "loginPrompt": "Log in to see and download your reports.",
+      "login": "Log in",
+      "demoNotice": "Demo mode: sign-in and saved reports need a connected database. You can still generate a demo report from a sample record.",
+      "empty": {
+        "title": "No reports yet",
+        "body": "Open a land record and choose “Generate pre-purchase report”. It will appear here."
+      },
+      "table": {
+        "id": "Report ID",
+        "land": "Land",
+        "date": "Generated",
+        "download": "Download PDF"
+      },
+      "downloadFor": "Download report {id}",
+      "error": {
+        "title": "Reports are unavailable",
+        "body": "We could not load your reports right now. Please try again in a moment."
+      }
+    },
+    "pdf": {
+      "title": "Pre-purchase check report",
+      "subtitle": "Informational summary. Not a title opinion.",
+      "brandLine": "HimLand Check · independent private platform, not a government website",
+      "reportId": "Report ID",
+      "generatedOn": "Generated on",
+      "demoMark": "DEMO REPORT: fictional data",
+      "snapshot": "Data as held on HimLand Check on {date}.",
+      "sections": {
+        "summary": "1. Land details summary",
+        "ownership": "2. Ownership information",
+        "mutations": "3. Mutation history",
+        "circleRate": "4. Circle rate",
+        "verify": "5. Points to verify before you buy",
+        "disclaimer": "6. Legal disclaimer"
+      },
+      "fields": {
+        "district": "District",
+        "tehsil": "Tehsil",
+        "village": "Village",
+        "khasra": "Khasra number",
+        "khewat": "Khewat number",
+        "khatauni": "Khatauni number",
+        "area": "Area",
+        "areaAsRecorded": "Area as recorded",
+        "landType": "Land type",
+        "year": "Jamabandi year",
+        "owner": "Owner name",
+        "fatherName": "Father’s name",
+        "share": "Share",
+        "cultivator": "Cultivator",
+        "review": "Review status",
+        "notProvided": "Not provided"
+      },
+      "ownershipNote": "Ownership is shown as it appears in the entry we hold. Compare it with a certified copy (nakal) from the Tehsil / Patwari office.",
+      "mutationsTable": {
+        "number": "Mutation no.",
+        "date": "Date",
+        "type": "Type",
+        "status": "Status",
+        "parties": "Parties",
+        "area": "Area"
+      },
+      "mutationsEmpty": "No mutation entries are held for this record. That does not mean there have been none.",
+      "circleRate": {
+        "rate": "Circle rate",
+        "value": "To be added",
+        "body": "Circle rates (the minimum valuation rates notified by the district administration for registration) are not yet included in this report. Check the current notified rate with the Tehsil / Sub-Registrar office."
+      },
+      "flagsIntro": "These points come from the data we hold. They are a checklist to help you ask the right questions, not a risk rating.",
+      "flagsNone": "No specific points were flagged from the data we hold. This does not mean the land is free of problems.",
+      "flags": {
+        "noKhewat": "No khewat number is recorded for this entry.",
+        "noKhatauni": "No khatauni number is recorded for this entry.",
+        "pendingMutation": "Mutation {number} is still pending, so ownership may be about to change.",
+        "rejectedMutation": "Mutation {number} was rejected. Find out why and whether it was challenged.",
+        "recentMutation": "The most recent mutation ({number}) is dated {date}, within the last 12 months.",
+        "mortgage": "A mortgage mutation ({number}) appears in the history. Check whether it has been cleared.",
+        "courtOrder": "A court-order mutation ({number}) appears in the history. Ask for the order and check for any ongoing case.",
+        "oldJamabandi": "The latest jamabandi we hold is from {year}. Ask for the current entry.",
+        "agricultural": "This is {landType} (agricultural) land. Transfers of agricultural land to non-agriculturists may be restricted or need permission under Section 118 of the H.P. Tenancy and Land Reforms Act, 1972.",
+        "unreviewed": "This entry has not been independently reviewed by our team."
+      },
+      "reportDisclaimer": "This report is an informational summary of the entries held on HimLand Check on the date above. It is not a title search, a legal opinion, a valuation, or a guarantee that the land is free from dispute, mortgage, encumbrance or litigation.",
+      "footer": "Report {id}  ·  Page {page} of {total}"
+    }
+  },
+  "Auth": {
+    "title": "Log in or sign up",
+    "subtitle": "Use your mobile number or email. We send you a one-time code, so there is no password to remember.",
+    "metaDescription": "Log in to HimLand Check to save searches, generate reports and list land.",
+    "notConfigured": "Sign-in is not available yet because the database is not connected.",
+    "tabs": {
+      "phone": "Mobile number",
+      "email": "Email"
+    },
+    "phone": {
+      "label": "Mobile number",
+      "placeholder": "10-digit mobile number",
+      "send": "Send code",
+      "invalid": "Enter a valid 10-digit Indian mobile number."
+    },
+    "email": {
+      "label": "Email address",
+      "placeholder": "you@example.com",
+      "send": "Send code",
+      "invalid": "Enter a valid email address."
+    },
+    "name": {
+      "label": "Your name",
+      "placeholder": "Full name",
+      "hint": "Used only when you create a new account."
+    },
+    "consent": "I agree to the <terms>Terms of use</terms> and the <privacy>Privacy policy</privacy>.",
+    "consentRequired": "Please accept to continue.",
+    "code": {
+      "title": "Enter the code",
+      "sentTo": "We sent a 6-digit code to {destination}.",
+      "emailLink": "You can also open the sign-in link in that email.",
+      "label": "6-digit code",
+      "verify": "Verify and continue",
+      "verifying": "Verifying…",
+      "resend": "Send a new code",
+      "resendIn": "Send a new code in {seconds}s",
+      "change": "Use a different number or email",
+      "invalid": "Enter the 6-digit code."
+    },
+    "errors": {
+      "generic": "Something went wrong. Please try again.",
+      "sendFailed": "We could not send the code. Check the details and try again.",
+      "verifyFailed": "That code is not correct or has expired.",
+      "rateLimited": "Too many attempts. Please wait a minute and try again.",
+      "link": "The sign-in link is invalid or has expired. Please request a new code."
+    },
+    "already": {
+      "title": "You are already logged in",
+      "body": "Continue to your dashboard.",
+      "button": "Go to dashboard"
+    },
+    "sending": "Sending…",
+    "why": "Log in to save searches, generate reports and list your land."
+  },
+  "Dashboard": {
+    "title": "Your dashboard",
+    "metaDescription": "Your saved searches, generated reports and land listings.",
+    "welcome": "Welcome, {name}",
+    "welcomeAnon": "Welcome",
+    "demoNotice": "Demo mode: the dashboard needs a connected database and a signed-in user.",
+    "logout": "Log out",
+    "saved": {
+      "title": "Saved searches",
+      "empty": {
+        "title": "No saved searches yet",
+        "body": "Run a search and choose “Save this search”. It will appear here."
+      },
+      "run": "Run search",
+      "delete": "Delete",
+      "deleteLabel": "Delete saved search: {name}",
+      "savedOn": "Saved {date}",
+      "deleteFailed": "Could not delete. Please try again."
+    },
+    "reports": {
+      "title": "Generated reports",
+      "empty": {
+        "title": "No reports yet",
+        "body": "Open a land record and choose “Generate pre-purchase report”."
+      },
+      "download": "Download PDF",
+      "about": "About reports"
+    },
+    "listings": {
+      "title": "My land listings",
+      "empty": {
+        "title": "You have not listed any land",
+        "body": "List a plot and reach buyers across Himachal Pradesh."
+      },
+      "create": "List your land",
+      "view": "View",
+      "markSold": "Mark as sold",
+      "withdraw": "Withdraw",
+      "delete": "Delete",
+      "confirmDelete": "Delete this listing permanently?",
+      "actionFailed": "Could not update the listing. Please try again."
+    },
+    "error": {
+      "title": "Dashboard unavailable",
+      "body": "We could not load some of your data. Please refresh the page."
+    }
+  },
+  "SaveSearch": {
+    "button": "Save this search",
+    "saved": "Saved",
+    "loginToSave": "Log in to save this search",
+    "failed": "Could not save. Please try again.",
+    "limit": "You can keep up to 25 saved searches. Delete one to save another.",
+    "view": "View saved searches"
+  },
+  "Errors": {
+    "title": "Something went wrong",
+    "body": "An unexpected error occurred. Please try again. If it keeps happening, come back in a little while.",
+    "retry": "Try again",
+    "reference": "Error reference: {digest}"
+  },
+  "NotFound": {
+    "title": "Page not found",
+    "body": "The page you are looking for does not exist, or it has moved.",
+    "search": "Search land records"
+  }
+}

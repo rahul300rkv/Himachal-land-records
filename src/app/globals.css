@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* White surface, deep slate text */
+    --background: 0 0% 100%;
+    --foreground: 215 30% 13%;
+    --card: 0 0% 100%;
+    --card-foreground: 215 30% 13%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 30% 13%;
+
+    /* Soft blue: primary actions, links, focus */
+    --primary: 211 64% 38%;
+    --primary-foreground: 0 0% 100%;
+    --primary-soft: 210 70% 96%;
+
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 215 30% 20%;
+
+    --muted: 210 30% 96%;
+    --muted-foreground: 215 14% 36%;
+
+    --accent: 210 40% 94%;
+    --accent-foreground: 215 30% 13%;
+
+    /* Green: verified / positive states, secondary CTA */
+    --leaf: 158 46% 30%;
+    --leaf-foreground: 0 0% 100%;
+    --leaf-soft: 152 42% 94%;
+
+    /* Amber: legal notices */
+    --notice: 43 100% 94%;
+    --notice-foreground: 30 70% 20%;
+    --notice-border: 40 80% 70%;
+
+    --destructive: 0 70% 45%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214 25% 88%;
+    --input: 214 25% 84%;
+    --ring: 211 64% 38%;
+    --radius: 0.5rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* Keeps in-page anchors (e.g. #legal-disclaimer) clear of the sticky header */
+    scroll-padding-top: 5rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: 'kern' 1, 'liga' 1;
+  }
+
+  /* Devanagari needs more vertical room than Latin */
+  html[lang='hi'] body {
+    line-height: 1.7;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-serif font-semibold tracking-tight text-foreground;
+    text-wrap: balance;
+  }
+
+  html[lang='hi'] h1,
+  html[lang='hi'] h2,
+  html[lang='hi'] h3 {
+    line-height: 1.4;
+    letter-spacing: 0;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+}
