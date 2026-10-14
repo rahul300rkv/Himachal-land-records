@@ -4,7 +4,7 @@ import { absoluteUrl } from '@/lib/utils';
 
 // Public, indexable pages. (Record pages hold personal data and are deliberately excluded;
 // add individual marketplace listings here once you want them indexed.)
-const PATHS = ['', '/search', '/marketplace', '/reports', '/about', '/disclaimer', '/privacy', '/terms'];
+const PATHS = ['', '/search', '/marketplace', '/reports', '/converter', '/about', '/disclaimer', '/privacy', '/terms'];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return PATHS.flatMap((path) =>

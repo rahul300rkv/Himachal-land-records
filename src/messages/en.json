@@ -21,7 +21,8 @@
     "terms": "Terms of use",
     "dashboard": "Dashboard",
     "logout": "Log out",
-    "account": "Account"
+    "account": "Account",
+    "converter": "Land converter"
   },
   "Common": {
     "skipToContent": "Skip to main content",
@@ -1071,5 +1072,13 @@
     "title": "Page not found",
     "body": "The page you are looking for does not exist, or it has moved.",
     "search": "Search land records"
+  },
+  "Converter": {
+    "title": "Land unit converter",
+    "intro": "Convert land area between kanal, marla and square metres using Himachal Pradesh rates.",
+    "result": "{sqm} sq m = {kanal} kanal {marla} marla",
+    "rateMarla": "1 marla = 19.2 sq m",
+    "rateKanal": "1 kanal = 20 marla = 384 sq m",
+    "note": "For guidance only. Always confirm the area in official revenue records."
   }
 }
