@@ -290,7 +290,8 @@
     "biswa": "biswa",
     "kanal": "kanal",
     "marla": "marla",
-    "acre": "acre"
+    "acre": "acre",
+    "sq_ft": "sq ft"
   },
   "About": {
     "title": "About HimLand Check",
@@ -1075,10 +1076,15 @@
   },
   "Converter": {
     "title": "Land unit converter",
-    "intro": "Convert land area between kanal, marla and square metres using Himachal Pradesh rates.",
-    "result": "{sqm} sq m = {kanal} kanal {marla} marla",
+    "intro": "Convert land area between kanal, marla, square metres and square feet using Himachal Pradesh rates.",
+    "value": "Area",
+    "from": "From",
+    "to": "To",
+    "enterValue": "Enter an area to see the conversion.",
+    "result": "{value} {from} = {result} {to}",
     "rateMarla": "1 marla = 19.2 sq m",
     "rateKanal": "1 kanal = 20 marla = 384 sq m",
+    "rateSqft": "1 sq m = 10.7639 sq ft",
     "note": "For guidance only. Always confirm the area in official revenue records."
   }
 }
