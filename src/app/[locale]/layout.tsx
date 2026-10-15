@@ -39,6 +39,7 @@ const CLIENT_NAMESPACES = [
   'Search',
   'LandTypes',
   'Units',
+  'Converter',
   'Record',
   'Marketplace',
   'MutationTypes',

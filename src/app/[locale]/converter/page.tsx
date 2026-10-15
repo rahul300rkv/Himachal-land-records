@@ -18,10 +18,10 @@ export default async function ConverterPage({ params }: Props) {
   const t = await getTranslations('Converter');
 
   return (
-    <article className="container max-w-3xl py-12 sm:py-16">
-      <header className="mb-8">
-        <h1 className="text-4xl sm:text-5xl">{t('title')}</h1>
-        <p className="mt-4 text-lg leading-relaxed text-muted-foreground">{t('intro')}</p>
+    <article className="container max-w-xl py-8 sm:py-12">
+      <header className="mb-6">
+        <h1 className="text-3xl leading-tight sm:text-4xl">{t('title')}</h1>
+        <p className="mt-2 text-sm text-muted-foreground">{t('rateMarla')} · {t('rateKanal')}</p>
       </header>
       <LandConverter />
       <p className="mt-6 text-sm text-muted-foreground">{t('note')}</p>
