@@ -5,7 +5,6 @@ const text = z
   .string()
   .nullish()
   .transform((v) => (v && v.trim() ? v.trim() : null));
-
 const int = z
   .union([z.number(), z.string().regex(/^\s*\d+\s*$/).transform(Number)])
   .nullish()
