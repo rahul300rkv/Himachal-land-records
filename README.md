@@ -255,6 +255,20 @@ supabase/
 - **Marketplace contact privacy**: logged-out visitors cannot read `contact_name` / `contact_phone`. This is enforced in the database with column privileges (migration 002), so it cannot be bypassed through the API. The app therefore always selects explicit columns for listings. If you add a public column to `listings`, also run `grant select (new_column) on public.listings to anon;`.
 - **Demo mode** (no Supabase variables): sample data from `src/lib/data/sample-records.ts`. It switches to the database automatically once the variables are set.
 
+## Nakal checker (upload a nakal PDF -> risk score)
+
+`/hi/check` and `/en/check`: upload a jamabandi nakal PDF, get a 0-100 score with the reasons.
+
+Pipeline: `src/lib/nakal/extract.ts` (Gemini reads the PDF and returns JSON) -> `src/lib/nakal/assess.ts` (deterministic rules; the AI never sets the score) -> `NakalChecker.tsx` shows flags in Hindi/English (`NakalCheck` messages).
+
+Setup (free): create a key at <https://aistudio.google.com/app/api-keys>, then set `GEMINI_API_KEY` (and optionally `GEMINI_MODELS`) in `.env.local` and in Vercel -> Settings -> Environment Variables.
+
+Notes:
+- The free tier has small daily quotas and Google may use free-tier inputs to improve its models. Land records name real people: move to a paid/Vertex key before real users, or add your own consent text.
+- Uploads are limited to 4 MB (Vercel's request body limit) and are not stored.
+- Rule penalties in `assess.ts` are starting values: calibrate them with a local lawyer or patwari.
+- Area units reuse the marla = 19.2 sq m / kanal = 384 sq m rates from the converter (`src/lib/nakal/units.ts`).
+
 ## Internationalisation
 
 - Locales: `hi` (default) and `en`, set in `src/i18n/routing.ts` (change `defaultLocale` for English).
