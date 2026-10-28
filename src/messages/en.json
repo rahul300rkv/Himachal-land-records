@@ -22,7 +22,8 @@
     "dashboard": "Dashboard",
     "logout": "Log out",
     "account": "Account",
-    "converter": "Land converter"
+    "converter": "Land converter",
+    "check": "Check a record"
   },
   "Common": {
     "skipToContent": "Skip to main content",
@@ -1086,5 +1087,63 @@
     "rateKanal": "1 kanal = 20 marla = 384 sq m",
     "rateSqft": "1 sq m = 10.7639 sq ft",
     "note": "For guidance only. Always confirm the area in official revenue records."
+  },
+  "NakalCheck": {
+    "title": "Check a land record (nakal)",
+    "intro": "Upload a jamabandi nakal PDF. We read it, run rule-based checks and show a score with the reasons. An AI model does the reading, so always compare the result with the original record.",
+    "choose": "Choose a PDF (up to 4 MB)",
+    "analyze": "Check this record",
+    "analyzing": "Reading the record… this can take up to a minute.",
+    "privacy": "Your file is sent to Google's Gemini API to be read and is not stored by this site. On Google's free tier, inputs may be used to improve its models, so do not upload records you do not want shared.",
+    "errors": {
+      "unauthorized": "Please log in to check a record.",
+      "invalid_file": "Please upload a PDF file.",
+      "too_large": "This PDF is larger than 4 MB.",
+      "rate_limited": "Too many checks right now. Please try again later.",
+      "not_configured": "This feature is not set up yet.",
+      "model_error": "The record could not be read. Please try again.",
+      "bad_output": "The record could not be read. Please try again.",
+      "network": "Network error. Please try again."
+    },
+    "scoreHelp": "Higher is better. 100 means our checks found no issues.",
+    "bands": {
+      "low": "Fewer concerns",
+      "moderate": "Some concerns",
+      "high": "Serious concerns"
+    },
+    "severity": {
+      "critical": "Critical",
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    },
+    "flagsTitle": "What we found",
+    "noFlags": "Our checks found no issues. This does not prove the record is genuine.",
+    "summary": {
+      "title": "Record details",
+      "refNo": "Nakal reference",
+      "khata": "Khata",
+      "village": "Village",
+      "tehsil": "Tehsil",
+      "area": "Total area",
+      "shareHolders": "Share holders",
+      "mutations": "Mutations",
+      "pendingCases": "Pending cases"
+    },
+    "areaValue": "{sqm} sq m ({kanal} kanal {marla} marla)",
+    "ownersTitle": "Owners and shares",
+    "verify": "Before any purchase, verify this record on the official Himachal Pradesh land records portal or with the Patwari.",
+    "flags": {
+      "SHARE_MISMATCH": "The owner shares add up to {sum}, but the record states a total of {total}. Either the record is inconsistent or it was read incorrectly.",
+      "PENDING_CASE": "Case {caseNo} ({caseType}) is pending in {court}, filed {filedOn}. Ownership shares or boundaries may change once the court decides.",
+      "SALE_AFTER_CASE": "Mutation {number} ({date}) is a transfer made after the court case was filed. Such transfers can be challenged.",
+      "MANY_COOWNERS": "{count} share holders own this land jointly. A seller can usually sell only a share, not a specific plot, unless the land has been partitioned.",
+      "COOWNERS": "{count} share holders own this land jointly. Check that every holder agrees to the sale.",
+      "RAPID_TRANSFERS": "{count} sales or gifts were recorded in the last {months} months. Check for plot-splitting or speculation.",
+      "MUTATION_EXCEEDS_AREA": "Mutation {number} transfers more area than the record shows for this land.",
+      "AGRI_LAND": "This looks like agricultural land. In Himachal Pradesh, buying it as a non-agriculturist generally needs permission under Section 118 of the HP Tenancy and Land Reforms Act.",
+      "LOW_CONFIDENCE": "The reader was unsure about {count} fields. Compare the details below with the original.",
+      "EXTRACTION_INCOMPLETE": "Owners or the total share could not be read, so this score is not reliable."
+    }
   }
 }
