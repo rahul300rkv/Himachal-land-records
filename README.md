@@ -86,6 +86,7 @@ cp .env.local.example .env.local
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Project Settings -> API | Anon / publishable key. Safe in the browser; protected by RLS |
 | `SUPABASE_SERVICE_ROLE_KEY` | Project Settings -> API | **Server only.** Bypasses RLS. Used to save generated reports. Never prefix with `NEXT_PUBLIC_` |
 | `NEXT_PUBLIC_SITE_URL` | your domain | `http://localhost:3000` locally |
+| `GOOGLE_SITE_VERIFICATION` | Search Console -> URL-prefix property -> HTML tag | Paste only the verification token; optional locally |
 
 ### 3. Create the database
 
@@ -151,6 +152,15 @@ npm run dev
 5. Project Settings -> **Functions** -> choose a region near your users and your Supabase project (for India: Mumbai `bom1`).
 6. Add your custom domain (Settings -> Domains), then update **Site URL** and **Redirect URLs** in Supabase (step 4 above) to that domain.
 7. Open `https://your-domain/api/health`. It should return `{"status":"ok"}`.
+
+### Google Search Console
+
+1. Add a **URL-prefix property** for the exact production URL (including `https://`).
+2. Choose the **HTML tag** verification method and copy only its `content` token into `GOOGLE_SITE_VERIFICATION` in Vercel.
+3. Redeploy, then click **Verify** in Search Console.
+4. Submit `https://your-domain/sitemap.xml` in the Sitemaps report. The app also advertises it in `robots.txt`.
+
+The app generates `/robots.txt`, `/sitemap.xml` and `/manifest.webmanifest` at runtime. `public/llms.txt` is an optional, non-standard summary for AI crawlers; it does not replace normal SEO or Search Console verification.
 
 Notes:
 
@@ -317,6 +327,7 @@ Notes:
 - [ ] Verify the tehsil list in `src/lib/data/districts.ts` against official data.
 - [ ] Configure an SMS provider (with DLT registration for India) and custom SMTP.
 - [ ] Set Site URL and Redirect URLs in Supabase; set `NEXT_PUBLIC_SITE_URL`.
+- [ ] Set `GOOGLE_SITE_VERIFICATION`, verify the production property, and submit `/sitemap.xml` in Search Console.
 - [ ] Load real land records, with the right to publish them.
 - [ ] Switch the map tiles to a commercial provider if you expect traffic.
 - [ ] Implement circle rates (or keep the clearly labelled placeholder).

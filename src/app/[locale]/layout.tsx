@@ -3,10 +3,13 @@ import { Hind, Noto_Serif, Noto_Serif_Devanagari } from 'next/font/google';
 import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
+import { JsonLd } from '@/components/seo/JsonLd';
 import { DisclaimerBanner } from '@/components/layout/DisclaimerBanner';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
 import { routing, type Locale } from '@/i18n/routing';
+import { SITE } from '@/lib/site';
+import { absoluteUrl } from '@/lib/utils';
 import '../globals.css';
 
 // Hind: one family that covers both Latin and Devanagari for body/UI text.
@@ -73,18 +76,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale: locale as Locale, namespace: 'Metadata' });
 
+  const googleVerification =
+    process.env.GOOGLE_SITE_VERIFICATION ?? 'RBbljzCIw3mPRaMp6kDl03gswB9HqiyYYwUSdhC8cEA';
   return {
     metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'),
     title: { default: t('title'), template: `%s | ${t('siteName')}` },
     description: t('description'),
     applicationName: t('siteName'),
+    category: 'real estate',
+    manifest: '/manifest.webmanifest',
+    ...(googleVerification ? { verification: { google: googleVerification } } : {}),
     openGraph: {
       type: 'website',
       siteName: t('siteName'),
       title: t('title'),
       description: t('description'),
       locale: locale === 'hi' ? 'hi_IN' : 'en_IN',
+      images: [{ url: '/images/himachal-valley.jpg', width: 1600, height: 900, alt: t('title') }],
     },
+    twitter: { card: 'summary_large_image', title: t('title'), description: t('description'), images: ['/images/himachal-valley.jpg'] },
   };
 }
 
@@ -103,6 +113,30 @@ export default async function LocaleLayout({ children, params }: Props) {
     CLIENT_NAMESPACES.filter((ns) => ns in allMessages).map((ns) => [ns, allMessages[ns as keyof typeof allMessages]]),
   );
   const t = await getTranslations('Common');
+  const metadata = await getTranslations({ locale: locale as Locale, namespace: 'Metadata' });
+  const homeUrl = absoluteUrl(`/${locale}`);
+  const structuredData = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      '@id': `${absoluteUrl('/')}#organization`,
+      name: SITE.name,
+      url: absoluteUrl('/'),
+      logo: absoluteUrl('/icon.svg'),
+      description: metadata('description'),
+      areaServed: { '@type': 'AdministrativeArea', name: 'Himachal Pradesh, India' },
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      '@id': `${absoluteUrl('/')}#website`,
+      name: SITE.name,
+      url: homeUrl,
+      inLanguage: locale === 'hi' ? 'hi-IN' : 'en-IN',
+      description: metadata('description'),
+      publisher: { '@id': `${absoluteUrl('/')}#organization` },
+    },
+  ];
 
   return (
     <html
@@ -110,6 +144,7 @@ export default async function LocaleLayout({ children, params }: Props) {
       className={`${hind.variable} ${serifLatin.variable} ${serifDeva.variable}`}
       suppressHydrationWarning
     >
+      <head><JsonLd data={structuredData} /></head>
       <body className="flex min-h-screen flex-col font-sans antialiased">
         <NextIntlClientProvider locale={locale} messages={messages}>
           <a

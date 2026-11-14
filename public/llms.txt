@@ -1,0 +1,34 @@
+# HimachalLand Check
+
+> An independent, bilingual land-record research and buyer-education service for Himachal Pradesh, India. It is not a government website and does not issue certified records or legal opinions.
+
+## Primary topics
+
+- Jamabandi, khasra, khatauni and khewat terminology
+- Mutation (intkal) history and pre-purchase document checks
+- Tatima / cadastral-map viewing guidance
+- Mortgage, registered-deed, land-use and Section 118 verification guidance
+- Himachal Pradesh land-area conversion and buyer checklists
+
+## Preferred pages
+
+- English home: /en
+- Hindi home: /hi
+- English tools: /en/tools
+- Hindi tools: /hi/tools
+- English verification workspace: /en/verify
+- Hindi verification workspace: /hi/verify
+- English buyer guide: /en/blog/7-documents-before-buying-land
+- Hindi buyer guide: /hi/blog/7-documents-before-buying-land
+
+## Source and safety policy
+
+- Official Himachal Pradesh and Indian court/registration portals are linked for final verification.
+- Demo records and map examples are fictional and clearly labelled.
+- Personal record pages, dashboards, login pages and APIs are not intended for indexing.
+- Users must verify records with the relevant Patwari, Tehsil, Sub-Registrar or competent authority before a transaction.
+
+## Languages
+
+- English (en-IN)
+- Hindi (hi-IN)
