@@ -35,6 +35,9 @@ A private, independent platform to **search, read and check land records in Hima
 | **Record detail**: jamabandi table, mutation timeline, Leaflet map, shajra nasb tree, "Generate pre-purchase report" | `/record/[id]` |
 | **Marketplace**: browse + filter (district, price, area, land type, verified), listing page with linked record and verification badge, contact seller, create a listing with photos | `/marketplace`, `/marketplace/[id]`, `/marketplace/list` |
 | **Pre-purchase reports**: PDF generated with `@react-pdf/renderer` (Hindi + English), unique report ID, mutation history, circle-rate placeholder, disclaimer | `/reports`, `POST/GET /api/report/generate` |
+| **Source verification workspace**: one plot brief with official HimBhoomi, HP High Court and district eCourts handoffs | `/verify`, `/api/integrations/capabilities` |
+| **Tools, map and guides**: internal toolkit, fictional map demonstration and practical bilingual explainers | `/tools`, `/map`, `/guides` |
+| **Blog**: bilingual due-diligence articles, including the seven-document pre-purchase checklist with official online-check links | `/blog`, `/blog/7-documents-before-buying-land` |
 | **Auth**: passwordless sign-in by **mobile OTP or email** (Supabase Auth) | `/login`, `/api/auth/callback` |
 | **Dashboard**: saved searches, generated reports, my land listings | `/dashboard` |
 | **Legal + info**: About, Disclaimer, Privacy policy, Terms of use | `/about`, `/disclaimer`, `/privacy`, `/terms` |
@@ -249,6 +252,8 @@ supabase/
 ```
 
 ## How the main features work
+
+- **External verification**: `/verify` creates a consistent plot brief and opens each official source in a separate tab. Search values stay in the browser and are not sent by HimLand Check. HimBhoomi and eCourts require the user to complete their CAPTCHAs. The application does not proxy protected requests or store third-party credentials. `/api/integrations/capabilities` exposes the current source modes and constraints for clients.
 
 - **Search**: `/search?district=&tehsil=&village=&khasra=&owner=` (+ `khewat`, `khatauni`, `type`, `year`, `page`). Everything is in the URL, so searches can be shared and saved. Khasra/khewat/khatauni match exactly; owner and village match partially. 20 results per page.
 - **Village suggestions** come from the villages already stored for the chosen tehsil (`/api/villages`). No village names are hard-coded.

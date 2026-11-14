@@ -1,8 +1,9 @@
 /** Primary navigation. Labels live in messages under `Navigation.<key>`. */
 export const NAV_ITEMS = [
+  { href: '/verify', key: 'verify' },
   { href: '/search', key: 'search' },
+  { href: '/map', key: 'map' },
+  { href: '/tools', key: 'tools' },
+  { href: '/blog', key: 'blog' },
   { href: '/marketplace', key: 'marketplace' },
-  { href: '/reports', key: 'reports' },
-  { href: '/converter', key: 'converter' },
-  { href: '/about', key: 'about' },
 ] as const;

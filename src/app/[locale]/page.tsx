@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { CTA } from '@/components/home/CTA';
 import { DisclaimerSection } from '@/components/home/DisclaimerSection';
+import { DueDiligence } from '@/components/home/DueDiligence';
 import { Features } from '@/components/home/Features';
 import { Hero } from '@/components/home/Hero';
 import { HowItWorks } from '@/components/home/HowItWorks';
@@ -23,6 +24,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   return (
     <>
       <Hero />
+      <DueDiligence />
       <WhatWeDo />
       <Features />
       <HowItWorks />

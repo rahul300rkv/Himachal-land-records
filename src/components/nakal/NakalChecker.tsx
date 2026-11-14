@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import { FileUp, Loader2 } from 'lucide-react';
+import { FileKey2, FileUp, Gavel, Landmark, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import type { AssessResult, Band, Severity } from '@/lib/nakal/assess';
@@ -103,6 +103,28 @@ export function NakalChecker() {
               <Badge tone={BAND_TONE[result.band]}>{tx(`bands.${result.band}`)}</Badge>
               <p className="text-sm text-muted-foreground">{t('scoreHelp')}</p>
             </div>
+          </div>
+
+          <div>
+            <h2 className="mb-3 text-xl">{t('threeChecks.title')}</h2>
+            <div className="grid gap-3 md:grid-cols-3">
+              <article className="rounded-lg border border-border bg-card p-4">
+                <FileKey2 className="size-5 text-primary" aria-hidden="true" />
+                <h3 className="mt-3 text-base">{t('threeChecks.ownership.title')}</h3>
+                <p className="mt-1 text-sm text-muted-foreground">{t('threeChecks.ownership.body', { count: s.shareHolders })}</p>
+              </article>
+              <article className="rounded-lg border border-border bg-card p-4">
+                <Landmark className="size-5 text-primary" aria-hidden="true" />
+                <h3 className="mt-3 text-base">{t('threeChecks.encumbrances.title')}</h3>
+                <p className="mt-1 text-sm text-muted-foreground">{t('threeChecks.encumbrances.body', { count: s.mutationCount })}</p>
+              </article>
+              <article className="rounded-lg border border-border bg-card p-4">
+                <Gavel className="size-5 text-primary" aria-hidden="true" />
+                <h3 className="mt-3 text-base">{t('threeChecks.litigation.title')}</h3>
+                <p className="mt-1 text-sm text-muted-foreground">{t('threeChecks.litigation.body', { count: s.pendingCases })}</p>
+              </article>
+            </div>
+            <p className="mt-3 text-xs text-muted-foreground">{t('threeChecks.note')}</p>
           </div>
 
           <div>

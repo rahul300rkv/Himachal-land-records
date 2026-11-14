@@ -17,7 +17,7 @@ export function Footer() {
   const nav = useTranslations('Navigation');
   const year = new Date().getFullYear();
 
-  const exploreLinks = NAV_ITEMS.filter((item) => item.key !== 'about');
+  const exploreLinks = NAV_ITEMS;
 
   return (
     <footer className="mt-16 border-t bg-muted/50">

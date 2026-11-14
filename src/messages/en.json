@@ -23,7 +23,12 @@
     "logout": "Log out",
     "account": "Account",
     "converter": "Land converter",
-    "check": "Check a record"
+    "check": "Check a record",
+    "verify": "Verify a plot",
+    "map": "Plot map",
+    "tools": "Tools",
+    "guides": "Guides",
+    "blog": "Blog"
   },
   "Common": {
     "skipToContent": "Skip to main content",
@@ -110,6 +115,31 @@
         "tehsil": "Select a tehsil"
       }
     },
+    "dueDiligence": {
+      "eyebrow": "Before the money moves",
+      "title": "Know what the records say about the plot",
+      "intro": "A sound land check connects the current revenue entry with the transaction history and any dispute that may affect the seller's right to transfer it. HimLand Check brings those questions into one reviewable file.",
+      "checks": {
+        "ownership": {
+          "title": "Who owns it?",
+          "description": "Read the current jamabandi, khewat and khatauni together. Confirm every recorded owner, share, khasra number, area and land classification.",
+          "evidence": "Review: current nakal, owner shares, khasra and shajra"
+        },
+        "encumbrances": {
+          "title": "What is registered against it?",
+          "description": "Follow the mutation chain for sales, gifts, inheritance, partitions, mortgages and court orders. Flag pending or rejected entries for verification.",
+          "evidence": "Review: intkal history, registered deeds and mortgage releases"
+        },
+        "litigation": {
+          "title": "Is anyone in court over it?",
+          "description": "Use every owner and predecessor named in the records to check relevant court filings. A name match is only a lead; identity and connection to the plot must be verified from the order.",
+          "evidence": "Review: case number, party identity, status and order copy"
+        }
+      },
+      "ctaTitle": "Start with the record you already have",
+      "ctaBody": "Upload a jamabandi nakal for a structured, rule-based review. The result is a verification checklist—not a title opinion or a guarantee.",
+      "cta": "Check a nakal"
+    },
     "whatWeDo": {
       "title": "What we do",
       "body": "We make public revenue records searchable in one place, show them on maps and shajra drawings, and produce pre-purchase check reports. There is also a marketplace where people list land themselves.",
@@ -190,6 +220,177 @@
       "body": "Look up a plot by district, village and khasra number.",
       "button": "Search land records",
       "secondary": "Browse marketplace"
+    }
+  },
+  "Verification": {
+    "eyebrow": "Source-by-source verification",
+    "title": "Verify the owner, the record and the dispute history",
+    "intro": "Prepare one plot brief, then check it against Himachal's official revenue and court portals.",
+    "brief": {
+      "title": "Prepare the plot brief",
+      "body": "Keep the same spelling and identifiers in every search. Nothing entered below is sent to an external provider.",
+      "copy": "Copy verification brief",
+      "copied": "Brief copied",
+      "privacy": "External sites receive information only when you open them and enter it there. CAPTCHA and sign-in remain under your control."
+    },
+    "fields": {
+      "owner": "Owner / seller name",
+      "district": "District",
+      "tehsil": "Tehsil",
+      "village": "Village",
+      "khasra": "Khasra number"
+    },
+    "sourcesTitle": "Open each source and preserve the evidence",
+    "sources": {
+      "himbhoomi": {
+        "title": "HimBhoomi land records",
+        "badge": "Official revenue source",
+        "body": "Retrieve the current jamabandi or shajra-nasb copy from the Himachal Pradesh Revenue Department public interface.",
+        "step1": "Select district, tehsil, village and jamabandi year.",
+        "step2": "Complete the CAPTCHA yourself and retain the receipt number and copy.",
+        "open": "Open HimBhoomi"
+      },
+      "hp-high-court": {
+        "title": "HP High Court party search",
+        "badge": "Official eCourts source",
+        "body": "Search every present and previous owner as petitioner or respondent, then inspect the case and its published orders.",
+        "step1": "Search spelling variants and relevant filing years.",
+        "step2": "Complete the CAPTCHA and verify identity from the order—not the name alone.",
+        "open": "Search High Court"
+      },
+      "district-courts": {
+        "title": "District and subordinate courts",
+        "badge": "Official eCourts source",
+        "body": "Search the district where the land sits for civil, revenue-linked and other proceedings involving the parties.",
+        "step1": "Choose Himachal Pradesh and the land's district and court complex.",
+        "step2": "Search each party and preserve case status, CNR and relevant order copies.",
+        "open": "Open district eCourts"
+      }
+    },
+    "limits": {
+      "title": "Why these checks require a person",
+      "body": "HimBhoomi and eCourts use CAPTCHAs. HimLand Check does not bypass those controls or impersonate a user. The workspace standardises the search and evidence trail while you complete protected steps at the official source."
+    }
+  },
+  "Tools": {
+    "eyebrow": "Himachal land toolkit",
+    "title": "Useful tools, in one place",
+    "intro": "Search, read, map and cross-check a plot without jumping through the rest of the site.",
+    "open": "Open tool",
+    "items": {
+      "verify": { "title": "Plot verification", "body": "Work through ownership, revenue entries and official court searches in a consistent order." },
+      "search": { "title": "Land-record search", "body": "Find records by district, tehsil, village, khasra or owner name." },
+      "nakal": { "title": "Nakal checker", "body": "Upload a jamabandi PDF for an explainable, rule-based review." },
+      "map": { "title": "Plot map", "body": "View an available GeoJSON boundary and understand how map evidence is presented." },
+      "converter": { "title": "Area converter", "body": "Convert kanal, marla, square metres and square feet using Himachal units." }
+    }
+  },
+  "MapExplorer": {
+    "eyebrow": "Map tool",
+    "title": "See the plot in context",
+    "intro": "View mapped boundaries when a record contains verified geographic data. A map helps locate a khasra; it does not establish title or the legal boundary by itself.",
+    "demoTitle": "Fictional boundary demonstration",
+    "demoBody": "This outline for khasra {khasra} is demo data and does not describe real land.",
+    "search": "Search records with maps",
+    "notice": "Always compare the online outline with the official shajra, field book and demarcation on the ground."
+  },
+  "Guides": {
+    "eyebrow": "Practical guides",
+    "title": "Understand the record before you rely on it",
+    "intro": "Short, plain-language explainers for common Himachal land-record questions.",
+    "guideLabel": "Guide {number}",
+    "items": {
+      "jamabandi": {
+        "title": "How to read a jamabandi",
+        "body": "Read the ownership and cultivation columns together, then connect the khata, khewat and khasra numbers before drawing any conclusion.",
+        "point1": "Match every owner and recorded share.", "point2": "Check area and land classification khasra by khasra.", "point3": "Read remarks and the latest mutation references."
+      },
+      "beforeBuy": {
+        "title": "What to collect before paying",
+        "body": "The seller's copy is only the start. Build a dated file that ties the current revenue entry to registered transfers and dispute searches.",
+        "point1": "Current certified nakal and shajra.", "point2": "Sale deeds, mutation orders and mortgage releases.", "point3": "Court searches for every present and previous owner."
+      },
+      "section118": {
+        "title": "Section 118 in plain language",
+        "body": "Transfers of agricultural land to a non-agriculturist may be restricted or require prior permission under Himachal law. Eligibility depends on the parties, land and transaction.",
+        "point1": "Confirm the buyer's legal status.", "point2": "Check the recorded land classification.", "point3": "Obtain local legal advice before signing or paying."
+      }
+    }
+  },
+  "Blog": {
+    "eyebrow": "Land due-diligence library",
+    "title": "Himachal land guides",
+    "intro": "Practical, source-aware articles to help you ask better questions before a property transaction.",
+    "read": "Read the guide",
+    "article": {
+      "readTime": "10 minute guide",
+      "title": "7 documents you must check before buying land in Himachal Pradesh",
+      "summary": "Jamabandi, tatima, intkal, title deed, mortgage status, land use and Section 118 permission—what each document proves, what it does not prove and how to check it online."
+    },
+    "sevenDocuments": {
+      "eyebrow": "Pre-purchase checklist",
+      "title": "7 documents you must check before buying land in Himachal Pradesh",
+      "intro": "Do not treat one jamabandi or one sale deed as a complete title check. These seven records answer different questions about ownership, boundaries, transfers, charges, permitted use and the buyer's eligibility.",
+      "warning": "Online records are useful for preliminary checking, but they may be delayed, incomplete or informational. Before paying token money or signing an agreement, obtain current certified copies and have a Himachal property lawyer examine the complete chain.",
+      "documentLabel": "Document to check",
+      "whatItShows": "What it shows",
+      "redFlags": "Warning signs",
+      "onlineCheck": "How to check online",
+      "items": {
+        "jamabandi": {
+          "title": "Jamabandi (record of rights)",
+          "shows": "The revenue record normally identifies recorded owners, their shares, cultivators or possession entries, khata and khatauni references, khasra numbers, area, land classification and remarks for the selected settlement year.",
+          "flags": "The seller is missing, the seller owns only a share, the area or khasra differs from the offer, an old jamabandi is shown, or the remarks refer to a mortgage, stay, acquisition or disputed mutation.",
+          "online": "On HimBhoomi, select district, tehsil, village and jamabandi year, complete the CAPTCHA and retain the receipt number. Compare the online copy with a fresh certified nakal from the competent revenue office.",
+          "link": "Check Jamabandi on HimBhoomi"
+        },
+        "tatima": {
+          "title": "Tatima / plot map",
+          "shows": "A tatima or plot extract locates the khasra and its relationship to neighbouring plots, access and subdivisions. It helps test whether the land shown on the ground is the land described in the records.",
+          "flags": "No legal access, overlap with a neighbour, an unrecorded subdivision, shape or area inconsistent with the deed, or construction outside the offered khasra.",
+          "online": "Use Bhunaksha HP where mapping has been digitised. Search the correct district, tehsil, village and plot number. The Revenue Department says map availability depends on completed digitisation, so obtain an official tatima or demarcation when the online map is absent or unclear.",
+          "link": "Open Bhunaksha HP"
+        },
+        "intkal": {
+          "title": "Intkal / mutation orders",
+          "shows": "Mutation entries record changes proposed or attested after sale, inheritance, gift, partition, mortgage, release or a court order. The order and status explain how the current revenue entry arose.",
+          "flags": "A pending, rejected or missing mutation; transfer after the seller's deed but before the current jamabandi; inconsistent buyer or area; or a mortgage entry without a later release.",
+          "online": "Read every mutation number referenced in the jamabandi and ask the Patwari or Tehsil office for the mutation order and status. HimBhoomi provides the revenue copy, but do not assume a name in the latest jamabandi proves the underlying deed or mutation order is valid.",
+          "link": "Open HimBhoomi"
+        },
+        "titleDeed": {
+          "title": "Registered title deed and chain deeds",
+          "shows": "The registered sale, gift, exchange, partition, release or inheritance documents establish the claimed transaction and its terms. The chain should connect the present seller to earlier owners without unexplained gaps.",
+          "flags": "Missing original or certified copy, inconsistent khasra or area, unregistered agreement presented as ownership, power-of-attorney sale concerns, absent links in the chain, or consideration and possession clauses that conflict with the facts.",
+          "online": "Use Himachal's NGDRS registration portal for available registration services and verify document particulars with the concerned Sub-Registrar. Obtain certified copies for every material link; online deed templates are not proof that a particular deed was registered.",
+          "link": "Open Himachal NGDRS"
+        },
+        "mortgage": {
+          "title": "Mortgage and encumbrance status",
+          "shows": "A proper search checks whether the property or owner is affected by a registered mortgage, charge, attachment, lease, agreement, court restraint or other encumbrance during the relevant period.",
+          "flags": "Mortgage mutation without release, bank possession or original deeds held by a lender, recent loan closure without registered satisfaction, attachment or litigation, or a search period too short to cover the title chain.",
+          "online": "Check available registered documents through NGDRS and obtain an official search or encumbrance result from the Sub-Registrar where required. Also inspect mutation remarks and obtain the lender's no-dues and release documents; one database may not reveal every equitable mortgage or court restraint.",
+          "link": "Open Himachal NGDRS"
+        },
+        "landUse": {
+          "title": "Land use and development permission",
+          "shows": "Revenue classification and planning permissions indicate whether the plot is agricultural, orchard, residential, commercial, forest-related or subject to planning and construction controls.",
+          "flags": "Use advertised by the seller differs from the revenue classification, construction lacks permission, conversion or change-of-use approval is absent, road/access requirements are unmet, or protected/forest restrictions may apply.",
+          "online": "Start with the land classification in the jamabandi and the official Revenue Department links. For development or change of land use, verify the current approval with the competent Town and Country Planning, local body and revenue authorities for that location.",
+          "link": "Open HP Revenue Department"
+        },
+        "section118": {
+          "title": "Section 118 eligibility or permission",
+          "shows": "Section 118 of the H.P. Tenancy and Land Reforms Act regulates transfers of land to non-agriculturists, subject to statutory exceptions and permissions. A permission letter must match the buyer, seller, land, purpose and conditions of the proposed transfer.",
+          "flags": "Buyer eligibility is assumed without evidence, permission is expired or for another parcel/purpose, conditions or utilisation deadlines were breached, or payment is demanded before permission and registration requirements are satisfied.",
+          "online": "Read the current Act, rules and Revenue Department Section 118 instructions. Verify the permission directly with the issuing authority and obtain legal advice on the buyer's status and the exact transaction; a website checklist cannot decide eligibility.",
+          "link": "Open official Section 118 resources"
+        }
+      },
+      "final": {
+        "title": "The seven documents must agree",
+        "body": "Names, shares, khasra numbers, area, boundaries, transaction dates, mortgage releases, land use and permission conditions should form one consistent chain. Any mismatch should pause the transaction until it is resolved in writing from the competent authority."
+      }
     }
   },
   "Search": {
@@ -1106,6 +1307,22 @@
       "network": "Network error. Please try again."
     },
     "scoreHelp": "Higher is better. 100 means our checks found no issues.",
+    "threeChecks": {
+      "title": "The three checks at a glance",
+      "ownership": {
+        "title": "Recorded ownership",
+        "body": "{count, plural, =0 {No owner was read} one {# recorded shareholder} other {# recorded shareholders}} in this nakal."
+      },
+      "encumbrances": {
+        "title": "Registered history",
+        "body": "{count, plural, =0 {No mutation was read} one {# mutation entry} other {# mutation entries}} to verify against deeds and releases."
+      },
+      "litigation": {
+        "title": "Pending litigation",
+        "body": "{count, plural, =0 {No pending case was read from this document} one {# pending case was read} other {# pending cases were read}}."
+      },
+      "note": "This reflects only what the uploaded document contains and what the reader extracted. It is not an independent search of registration or court databases."
+    },
     "bands": {
       "low": "Fewer concerns",
       "moderate": "Some concerns",

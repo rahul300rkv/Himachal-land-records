@@ -50,6 +50,8 @@ const CLIENT_NAMESPACES = [
   'SaveSearch',
   'Errors',
   'NotFound',
+  'NakalCheck',
+  'Verification',
 ] as const;
 
 type Props = {
