@@ -10,6 +10,21 @@ export function Hero() {
     <>
       <section className="land-hero">
         <Image src="/images/himachal-valley.jpg" alt="" fill priority sizes="100vw" className="land-hero__image" />
+        <video
+          className="land-hero__video"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          poster="/images/himachal-valley.jpg"
+          aria-hidden="true"
+        >
+          <source
+            src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260503_144509_89e2d612-8af2-45c3-90f4-4831bc60715d.mp4"
+            type="video/mp4"
+          />
+        </video>
         <div className="container py-12 sm:py-16 lg:py-20">
           <div className="max-w-3xl">
             <Reveal trigger="mount">
