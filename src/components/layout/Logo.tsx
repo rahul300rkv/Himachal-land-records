@@ -28,7 +28,7 @@ export function Logo({ className }: { className?: string }) {
       className={cn('flex items-center gap-2.5 rounded-md', className)}
     >
       <LogoMark />
-      <span className="max-w-[11rem] font-sans text-base font-semibold leading-tight text-foreground sm:max-w-none sm:text-xl">
+      <span className="font-display max-w-[11rem] text-xl leading-tight tracking-tight text-black sm:max-w-none sm:text-3xl">
         {t('Metadata.siteName')}
       </span>
     </Link>

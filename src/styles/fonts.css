@@ -1,0 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  --font-display: 'Instrument Serif', 'Noto Serif', 'Noto Serif Devanagari', serif;
+  --font-body-editorial: 'Inter', 'Hind', system-ui, sans-serif;
+}
+
+.font-display { font-family: var(--font-display); }

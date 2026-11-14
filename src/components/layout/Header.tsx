@@ -14,7 +14,7 @@ export function Header() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+    <header className="sticky top-0 z-40 border-b border-black/5 bg-white/80 backdrop-blur-xl">
       <div className="container flex h-20 items-center justify-between gap-2 sm:gap-3">
         <Logo />
 
@@ -27,10 +27,10 @@ export function Header() {
                 href={item.href}
                 aria-current={active ? 'page' : undefined}
                 className={cn(
-                  'rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                  'rounded-full px-3 py-2 text-sm font-medium transition-colors',
                   active
-                    ? 'land-nav-active'
-                    : 'text-muted-foreground hover:bg-accent hover:text-foreground',
+                    ? 'bg-black/5 text-black'
+                    : 'text-[#6f6f6f] hover:bg-black/5 hover:text-black',
                 )}
               >
                 {t(item.key)}
