@@ -25,8 +25,8 @@ export function DueDiligence() {
 
         <ol className="mt-14 grid gap-5 lg:grid-cols-3">
           {CHECKS.map(({ key, icon: Icon }, index) => (
-            <li key={key}>
-              <Reveal delay={index * 0.08} className="due-diligence__card">
+            <li key={key} className={index === 1 ? 'lg:translate-y-5' : ''}>
+              <Reveal delay={index * 0.08} className="due-diligence__card concept-card">
                 <div className="flex items-center justify-between">
                   <span className="flex size-12 items-center justify-center rounded-full bg-primary-soft text-primary">
                     <Icon className="size-6" aria-hidden="true" />

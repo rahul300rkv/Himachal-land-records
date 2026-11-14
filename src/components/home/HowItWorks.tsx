@@ -7,7 +7,7 @@ export function HowItWorks() {
   const t = useTranslations('Home.howItWorks');
 
   return (
-    <section className="bg-[#102a22] text-white">
+    <section className="blueprint-grid text-white">
       <div className="container py-20 sm:py-28">
         <Reveal>
           <h2 className="text-4xl text-white sm:text-6xl">{t('title')}</h2>
@@ -17,7 +17,7 @@ export function HowItWorks() {
         <ol className="mt-10 grid gap-8 md:grid-cols-3">
           {STEPS.map((key, index) => (
             <li key={key}>
-              <Reveal delay={index * 0.1} className="flex gap-5 border-t border-white/20 pt-6">
+              <Reveal delay={index * 0.1} className="concept-card flex gap-5 border border-dashed border-white/25 bg-white/[0.035] p-6">
                 <span
                   className="flex size-10 shrink-0 items-center justify-center rounded-full border border-white/30 font-serif text-lg text-white"
                   aria-hidden="true"

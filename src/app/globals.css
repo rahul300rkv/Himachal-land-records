@@ -8,9 +8,9 @@
 @layer base {
   :root {
     /* White surface, deep slate text */
-    --background: 0 0% 100%;
+    --background: 43 33% 96%;
     --foreground: 160 18% 13%;
-    --card: 0 0% 100%;
+    --card: 43 38% 98%;
     --card-foreground: 215 30% 13%;
     --popover: 0 0% 100%;
     --popover-foreground: 215 30% 13%;
@@ -42,7 +42,7 @@
     --destructive: 0 70% 45%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 150 13% 87%;
+    --border: 155 12% 76%;
     --input: 150 13% 80%;
     --ring: 158 48% 28%;
     --radius: 1rem;
@@ -72,6 +72,10 @@
     @apply bg-background text-foreground;
     font-family: var(--font-body-editorial);
     font-feature-settings: 'kern' 1, 'liga' 1;
+    background-image:
+      linear-gradient(hsl(158 20% 35% / 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(158 20% 35% / 0.035) 1px, transparent 1px);
+    background-size: 32px 32px;
   }
 
   /* Devanagari needs more vertical room than Latin */
@@ -106,7 +110,7 @@
     min-height: calc(100vh - 5rem);
     width: 100%;
     overflow: hidden;
-    background: #fff;
+    background: #f7f3e9;
     font-family: var(--font-body-editorial);
   }
   .cinematic-hero__media {
@@ -127,7 +131,7 @@
   .cinematic-hero__gradient {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, #fff 0%, rgb(255 255 255 / 0) 38%, #fff 100%);
+    background: linear-gradient(to bottom, #f7f3e9 0%, rgb(247 243 233 / 0.06) 38%, #f7f3e9 100%);
     pointer-events: none;
   }
   .land-search {
@@ -136,7 +140,7 @@
     background: hsl(var(--card));
     border: 1px solid hsl(var(--border));
     border-radius: 1.5rem;
-    box-shadow: 0 30px 90px hsl(var(--shadow-color) / 0.1);
+    box-shadow: 10px 12px 0 hsl(var(--foreground) / 0.09), 0 30px 90px hsl(var(--shadow-color) / 0.08);
   }
   .land-feature {
     height: 100%;
@@ -144,7 +148,7 @@
     border-radius: 1.5rem;
     padding: 1.75rem;
     background: hsl(var(--card));
-    box-shadow: 0 18px 55px hsl(var(--shadow-color) / 0.05);
+    box-shadow: 6px 7px 0 hsl(var(--foreground) / 0.07);
     transition: border-color 220ms ease, transform 220ms ease, box-shadow 220ms ease;
   }
   .land-feature:hover {
@@ -163,7 +167,63 @@
     border-radius: 1.5rem;
     padding: 2rem;
     background: hsl(var(--card) / 0.92);
-    box-shadow: 0 16px 45px hsl(var(--shadow-color) / 0.06);
+    box-shadow: 7px 8px 0 hsl(var(--foreground) / 0.07);
+  }
+  .concept-grid {
+    background-image:
+      linear-gradient(hsl(158 28% 28% / 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(158 28% 28% / 0.07) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  .concept-card {
+    position: relative;
+  }
+  .concept-card::before,
+  .concept-card::after {
+    content: '';
+    position: absolute;
+    width: 1.5rem;
+    height: 1.5rem;
+    pointer-events: none;
+  }
+  .concept-card::before {
+    left: -0.35rem;
+    top: -0.35rem;
+    border-left: 1px solid hsl(var(--foreground) / 0.5);
+    border-top: 1px solid hsl(var(--foreground) / 0.5);
+  }
+  .concept-card::after {
+    right: -0.35rem;
+    bottom: -0.35rem;
+    border-right: 1px solid hsl(var(--foreground) / 0.5);
+    border-bottom: 1px solid hsl(var(--foreground) / 0.5);
+  }
+  .field-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .field-note::before {
+    content: '';
+    width: 2rem;
+    border-top: 1px solid currentColor;
+  }
+  .sketch-underline {
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.18em;
+    text-decoration-color: hsl(var(--primary) / 0.55);
+  }
+  .blueprint-grid {
+    background-color: #16372d;
+    background-image:
+      linear-gradient(rgb(255 255 255 / 0.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(255 255 255 / 0.055) 1px, transparent 1px);
+    background-size: 28px 28px;
   }
   .land-nav-active {
     color: hsl(var(--primary));

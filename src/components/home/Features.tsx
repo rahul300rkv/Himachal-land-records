@@ -23,11 +23,12 @@ export function Features() {
       <ul className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {FEATURES.map(({ key, icon: Icon, href }, index) => (
           <li key={key}>
-            <Reveal delay={index * 0.07} className="land-feature">
+            <Reveal delay={index * 0.07} className="land-feature concept-card">
               <span className="flex size-11 items-center justify-center rounded-lg bg-primary-soft text-primary">
                 <Icon className="size-5" aria-hidden="true" />
               </span>
-              <h3 className="mt-4 text-xl">
+              <p className="mt-6 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-muted-foreground">0{index + 1} / 04</p>
+              <h3 className="mt-2 text-2xl">
                 {href ? (
                   <Link href={href} className="rounded-sm text-primary hover:underline">
                     {t(`items.${key}.title`)}

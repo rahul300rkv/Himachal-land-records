@@ -10,7 +10,7 @@ export function CTA() {
   return (
     <section className="container py-16 sm:py-24">
       <Reveal>
-        <div className="relative flex flex-col items-start justify-between gap-8 overflow-hidden rounded-[2rem] bg-leaf-soft px-7 py-12 shadow-[0_30px_90px_rgba(15,50,40,0.12)] sm:px-12 lg:flex-row lg:items-center lg:px-16 lg:py-16">
+        <div className="concept-card concept-grid relative flex flex-col items-start justify-between gap-8 rounded-[2rem] border border-black/15 bg-leaf-soft px-7 py-12 shadow-[10px_12px_0_rgba(15,50,40,0.10)] sm:px-12 lg:flex-row lg:items-center lg:px-16 lg:py-16">
           <div className="max-w-xl">
             <h2 className="text-4xl sm:text-5xl">{t('title')}</h2>
             <p className="mt-2 text-lg text-muted-foreground">{t('body')}</p>

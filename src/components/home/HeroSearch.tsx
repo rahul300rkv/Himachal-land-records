@@ -41,11 +41,11 @@ export function HeroSearch() {
       onSubmit={onSubmit}
       noValidate
       aria-label={t('searchTitle')}
-      className="land-search p-6 sm:p-9 lg:p-10"
+      className="land-search concept-card p-6 sm:p-9 lg:p-10"
     >
       <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">01</p>
+          <p className="field-note text-primary">01 / 01</p>
           <h2 className="mt-2 text-3xl sm:text-4xl">{t('searchTitle')}</h2>
         </div>
         <p className="max-w-md text-sm text-muted-foreground sm:text-right">{t('searchHint')}</p>
