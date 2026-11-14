@@ -79,7 +79,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const googleVerification =
     process.env.GOOGLE_SITE_VERIFICATION ?? 'RBbljzCIw3mPRaMp6kDl03gswB9HqiyYYwUSdhC8cEA';
   return {
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'),
+    metadataBase: new URL(
+      process.env.NEXT_PUBLIC_SITE_URL ?? 'https://himachal-land-records.vercel.app',
+    ),
     title: { default: t('title'), template: `%s | ${t('siteName')}` },
     description: t('description'),
     applicationName: t('siteName'),

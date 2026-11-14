@@ -18,7 +18,7 @@ export function formatINR(amount: number, options: Intl.NumberFormatOptions = {}
 
 /** Absolute URL for the given path, based on NEXT_PUBLIC_SITE_URL. */
 export function absoluteUrl(path = '/') {
-  const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+  const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://himachal-land-records.vercel.app';
   return new URL(path, base).toString();
 }
 
