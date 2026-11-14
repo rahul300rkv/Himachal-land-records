@@ -14,16 +14,16 @@ export function DueDiligence() {
 
   return (
     <section className="due-diligence" aria-labelledby="due-diligence-title">
-      <div className="container py-14 sm:py-20">
-        <Reveal className="max-w-3xl">
+      <div className="container py-20 sm:py-28">
+        <Reveal className="max-w-4xl">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-leaf">{t('eyebrow')}</p>
-          <h2 id="due-diligence-title" className="mt-3 text-3xl sm:text-4xl lg:text-5xl">
+          <h2 id="due-diligence-title" className="mt-4 text-4xl leading-tight sm:text-6xl lg:text-7xl">
             {t('title')}
           </h2>
           <p className="mt-5 text-lg leading-relaxed text-muted-foreground">{t('intro')}</p>
         </Reveal>
 
-        <ol className="mt-10 grid gap-5 lg:grid-cols-3">
+        <ol className="mt-14 grid gap-5 lg:grid-cols-3">
           {CHECKS.map(({ key, icon: Icon }, index) => (
             <li key={key}>
               <Reveal delay={index * 0.08} className="due-diligence__card">
@@ -43,12 +43,12 @@ export function DueDiligence() {
           ))}
         </ol>
 
-        <Reveal delay={0.2} className="mt-8 flex flex-col gap-4 rounded-xl border border-primary/15 bg-primary p-6 text-primary-foreground sm:flex-row sm:items-center sm:justify-between">
+        <Reveal delay={0.2} className="mt-8 flex flex-col gap-6 rounded-3xl border border-primary/15 bg-primary p-8 text-primary-foreground shadow-2xl sm:flex-row sm:items-center sm:justify-between lg:p-10">
           <div>
             <h3 className="text-2xl text-primary-foreground">{t('ctaTitle')}</h3>
             <p className="mt-2 max-w-2xl text-primary-foreground/80">{t('ctaBody')}</p>
           </div>
-          <Link href="/check" className="inline-flex shrink-0 items-center justify-center gap-2 rounded-md bg-white px-5 py-3 font-semibold text-primary transition hover:bg-white/90">
+          <Link href="/check" className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-white px-7 py-3.5 font-semibold text-primary transition hover:scale-[1.03]">
             {t('cta')} <ArrowRight className="size-4" aria-hidden="true" />
           </Link>
         </Reveal>

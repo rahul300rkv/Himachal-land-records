@@ -14,13 +14,13 @@ export function Features() {
   const t = useTranslations('Home.features');
 
   return (
-    <section className="container py-12 sm:py-16">
+    <section className="container py-20 sm:py-28">
       <Reveal className="max-w-2xl">
-        <h2 className="text-3xl sm:text-4xl">{t('title')}</h2>
+        <h2 className="text-4xl sm:text-6xl">{t('title')}</h2>
         <p className="mt-3 text-lg text-muted-foreground">{t('subtitle')}</p>
       </Reveal>
 
-      <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <ul className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {FEATURES.map(({ key, icon: Icon, href }, index) => (
           <li key={key}>
             <Reveal delay={index * 0.07} className="land-feature">

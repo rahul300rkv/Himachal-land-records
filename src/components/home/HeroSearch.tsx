@@ -41,16 +41,21 @@ export function HeroSearch() {
       onSubmit={onSubmit}
       noValidate
       aria-label={t('searchTitle')}
-      className="land-search p-5 sm:p-7"
+      className="land-search p-6 sm:p-9 lg:p-10"
     >
-      <h2 className="font-sans text-xl font-semibold tracking-normal">{t('searchTitle')}</h2>
-      <p className="mt-1 text-sm text-muted-foreground">{t('searchHint')}</p>
+      <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">01</p>
+          <h2 className="mt-2 text-3xl sm:text-4xl">{t('searchTitle')}</h2>
+        </div>
+        <p className="max-w-md text-sm text-muted-foreground sm:text-right">{t('searchHint')}</p>
+      </div>
 
-      <div className="mt-4 grid items-start gap-4 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_auto]">
+      <div className="mt-8 grid items-start gap-4 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_auto]">
         <LocationFields {...location} onChange={onChange} errors={errors} />
         {/* Spacer label keeps the button aligned with the inputs on wide screens */}
         <div className="sm:col-span-2 lg:col-span-1 lg:pt-[1.625rem]">
-          <Button type="submit" size="lg" className="w-full lg:w-auto" disabled={isPending}>
+          <Button type="submit" size="lg" className="w-full rounded-full px-7 lg:w-auto" disabled={isPending}>
             <Search />
             {t('submit')}
           </Button>
