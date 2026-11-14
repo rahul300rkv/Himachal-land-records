@@ -2,6 +2,8 @@
 
 A private, independent platform to **search, read and check land records in Himachal Pradesh**: jamabandi, khasra, khatauni, khewat, mutations (intkal), maps, shajra nasb (family tree), pre-purchase check reports (PDF) and a land marketplace. Fully bilingual: **Hindi and English**.
 
+**Link** https://himachal-land-records.vercel.app/
+
 > **Legal notice.** This is a private platform. It is **not** a government website and is not affiliated with the Government of Himachal Pradesh or any revenue department. Information shown is for general reference only, is not an official or certified record, and must be verified with the Patwari / Tehsil office before any transaction. A disclaimer is shown on every page (banner above the header, notice in the footer) and a full one on record, listing, report and marketplace pages and at `/disclaimer`.
 
 ---
@@ -21,7 +23,7 @@ A private, independent platform to **search, read and check land records in Hima
 11. [Scripts and testing](#scripts-and-testing)
 12. [Before you launch (checklist)](#before-you-launch)
 13. [Troubleshooting](#troubleshooting)
-https://himachal-land-records.vercel.app/
+
 ---
 
 ## What is built
