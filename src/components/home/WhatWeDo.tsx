@@ -7,7 +7,7 @@ export function WhatWeDo() {
   const t = useTranslations('Home.whatWeDo');
 
   return (
-    <section className="concept-grid border-y bg-[#f1ede2]">
+    <section className="concept-grid border-y bg-[#dde3e8]">
       <div className="container grid gap-12 py-20 sm:py-28 lg:grid-cols-[2fr_3fr] lg:gap-24">
         <Reveal>
           <h2 className="text-4xl sm:text-6xl">{t('title')}</h2>

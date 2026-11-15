@@ -14,7 +14,7 @@ export function Header() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-black/10 bg-[#f7f3e9]/90 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 border-b border-black/10 bg-[#e9eef1]/90 backdrop-blur-xl">
       <div className="container flex h-20 items-center justify-between gap-2 sm:gap-3">
         <Logo />
 
@@ -29,8 +29,8 @@ export function Header() {
                 className={cn(
                   'rounded-full px-3 py-2 text-sm font-medium transition-colors',
                   active
-                    ? 'bg-black/5 text-black'
-                    : 'text-[#6f6f6f] hover:bg-black/5 hover:text-black',
+                    ? 'bg-[#2a102d]/[0.07] text-[#2a102d]'
+                    : 'text-[#69566b] hover:bg-[#2a102d]/[0.06] hover:text-[#2a102d]',
                 )}
               >
                 {t(item.key)}

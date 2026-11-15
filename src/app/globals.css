@@ -8,47 +8,47 @@
 @layer base {
   :root {
     /* White surface, deep slate text */
-    --background: 43 33% 96%;
-    --foreground: 160 18% 13%;
-    --card: 43 38% 98%;
-    --card-foreground: 215 30% 13%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 215 30% 13%;
+    --background: 207 24% 96%;
+    --foreground: 296 48% 12%;
+    --card: 207 30% 98%;
+    --card-foreground: 296 48% 12%;
+    --popover: 207 30% 98%;
+    --popover-foreground: 296 48% 12%;
 
     /* Soft blue: primary actions, links, focus */
-    --primary: 158 48% 28%;
+    --primary: 296 48% 12%;
     --primary-foreground: 0 0% 100%;
-    --primary-soft: 150 30% 95%;
+    --primary-soft: 292 20% 92%;
 
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 215 30% 20%;
+    --secondary: 207 20% 89%;
+    --secondary-foreground: 296 48% 12%;
 
-    --muted: 210 30% 96%;
-    --muted-foreground: 215 14% 36%;
+    --muted: 207 20% 91%;
+    --muted-foreground: 292 12% 36%;
 
-    --accent: 210 40% 94%;
-    --accent-foreground: 215 30% 13%;
+    --accent: 39 88% 88%;
+    --accent-foreground: 296 48% 12%;
 
     /* Green: verified / positive states, secondary CTA */
-    --leaf: 158 46% 30%;
+    --leaf: 38 82% 38%;
     --leaf-foreground: 0 0% 100%;
-    --leaf-soft: 152 42% 94%;
+    --leaf-soft: 39 88% 88%;
 
     /* Amber: legal notices */
-    --notice: 43 100% 94%;
-    --notice-foreground: 30 70% 20%;
-    --notice-border: 40 80% 70%;
+    --notice: 39 92% 90%;
+    --notice-foreground: 296 48% 12%;
+    --notice-border: 39 80% 62%;
 
     --destructive: 0 70% 45%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 155 12% 76%;
-    --input: 150 13% 80%;
-    --ring: 158 48% 28%;
+    --border: 207 15% 75%;
+    --input: 207 15% 72%;
+    --ring: 39 88% 58%;
     --radius: 1rem;
     --hero-foreground: 0 0% 100%;
-    --hero-shade: 160 30% 10%;
-    --shadow-color: 160 24% 12%;
+    --hero-shade: 296 48% 12%;
+    --shadow-color: 296 48% 12%;
     --shadow-search: 0 12px 36px hsl(var(--shadow-color) / 0.08);
   }
 
@@ -73,8 +73,8 @@
     font-family: var(--font-body-editorial);
     font-feature-settings: 'kern' 1, 'liga' 1;
     background-image:
-      linear-gradient(hsl(158 20% 35% / 0.035) 1px, transparent 1px),
-      linear-gradient(90deg, hsl(158 20% 35% / 0.035) 1px, transparent 1px);
+      linear-gradient(hsl(296 48% 12% / 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(296 48% 12% / 0.035) 1px, transparent 1px);
     background-size: 32px 32px;
   }
 
@@ -110,7 +110,7 @@
     min-height: calc(100vh - 5rem);
     width: 100%;
     overflow: hidden;
-    background: #f7f3e9;
+    background: #f1f4f6;
     font-family: var(--font-body-editorial);
   }
   .cinematic-hero__media {
@@ -131,7 +131,7 @@
   .cinematic-hero__gradient {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, #f7f3e9 0%, rgb(247 243 233 / 0.06) 38%, #f7f3e9 100%);
+    background: linear-gradient(to bottom, #f1f4f6 0%, rgb(241 244 246 / 0.06) 38%, #f1f4f6 100%);
     pointer-events: none;
   }
   .land-search {
@@ -171,8 +171,8 @@
   }
   .concept-grid {
     background-image:
-      linear-gradient(hsl(158 28% 28% / 0.07) 1px, transparent 1px),
-      linear-gradient(90deg, hsl(158 28% 28% / 0.07) 1px, transparent 1px);
+      linear-gradient(hsl(296 48% 12% / 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(296 48% 12% / 0.07) 1px, transparent 1px);
     background-size: 24px 24px;
   }
   .concept-card {
@@ -219,7 +219,7 @@
     text-decoration-color: hsl(var(--primary) / 0.55);
   }
   .blueprint-grid {
-    background-color: #16372d;
+    background-color: #2a102d;
     background-image:
       linear-gradient(rgb(255 255 255 / 0.055) 1px, transparent 1px),
       linear-gradient(90deg, rgb(255 255 255 / 0.055) 1px, transparent 1px);
