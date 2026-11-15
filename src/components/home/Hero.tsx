@@ -63,6 +63,9 @@ export function Hero() {
         </svg>
 
         <div className="container relative z-10 flex min-h-[calc(100vh-5rem)] flex-col items-center justify-center px-6 pb-40 pt-[calc(8rem-75px)] text-center">
+          <span className="font-signature animate-fade-rise pointer-events-none absolute top-[12%] select-none text-6xl text-[#f2b134]/75 sm:text-8xl" aria-hidden="true">
+            Himachal
+          </span>
           <p className="field-note animate-fade-rise text-[#69566b]">
             <ShieldCheck className="size-4" aria-hidden="true" /> {t('trustNote')}
           </p>

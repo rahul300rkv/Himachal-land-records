@@ -16,7 +16,7 @@ export function DueDiligence() {
     <section className="due-diligence" aria-labelledby="due-diligence-title">
       <div className="container py-20 sm:py-28">
         <Reveal className="max-w-4xl">
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-leaf">{t('eyebrow')}</p>
+          <p className="font-signature text-3xl text-leaf sm:text-4xl">{t('eyebrow')}</p>
           <h2 id="due-diligence-title" className="mt-4 text-4xl leading-tight sm:text-6xl lg:text-7xl">
             {t('title')}
           </h2>
