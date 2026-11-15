@@ -82,7 +82,13 @@ export function LocationFields({
           <option value="">{district ? t('tehsilPlaceholder') : t('tehsilFirst')}</option>
           {tehsils.map((item) => (
             <option key={item.value} value={item.value}>
-              {locale === 'hi' ? item.hi : item.value}
+              {locale === 'hi' ? item.hi : item.value} ({t(
+                item.kind === 'tehsil'
+                  ? 'tehsilType'
+                  : item.kind === 'sub-tehsil'
+                    ? 'subTehsilType'
+                    : 'administrativeUnitType',
+              )})
             </option>
           ))}
         </Select>

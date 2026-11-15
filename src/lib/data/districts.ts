@@ -1,7 +1,12 @@
 import subdistricts from './hp-subdistricts.json';
+import subdistrictTypes from './hp-subdistrict-types.json';
 
 export type Named = { value: string; hi: string };
-export type District = Named & { tehsils: readonly Named[] };
+export type AdministrativeUnitKind = 'tehsil' | 'sub-tehsil' | 'administrative-unit';
+export type AdministrativeUnit = Named & { kind: AdministrativeUnitKind };
+export type District = Named & { tehsils: readonly AdministrativeUnit[] };
+
+const unitTypes = subdistrictTypes as Record<string, Record<string, AdministrativeUnitKind>>;
 
 const DISTRICT_HI: Record<string, string> = {
   Bilaspur: 'बिलासपुर',
@@ -29,7 +34,11 @@ export const HP_DISTRICTS: readonly District[] = Object.entries(subdistricts).ma
   ([district, tehsils]) => ({
     value: district,
     hi: DISTRICT_HI[district] ?? district,
-    tehsils: tehsils.map((tehsil) => ({ value: tehsil, hi: tehsil })),
+    tehsils: tehsils.map((tehsil) => ({
+      value: tehsil,
+      hi: tehsil,
+      kind: unitTypes[district]?.[tehsil] ?? 'administrative-unit',
+    })),
   }),
 );
 
@@ -37,7 +46,7 @@ const label = (item: Named | undefined, fallback: string, locale: string) =>
   item ? (locale === 'hi' ? item.hi : item.value) : fallback;
 
 /** Tehsils and sub-tehsils for a canonical English district name. */
-export function getTehsils(district: string): readonly Named[] {
+export function getTehsils(district: string): readonly AdministrativeUnit[] {
   return HP_DISTRICTS.find((item) => item.value === district)?.tehsils ?? [];
 }
 

@@ -179,6 +179,11 @@ Himachal Pradesh village directory dated 15 November 2026. The generated data fi
 retain both the canonical English value and the local-language label. Regenerate these
 files whenever the source administrative directory changes.
 
+Tehsil and sub-tehsil classifications come from the supplied district administrative-unit
+CSV. The selector displays the classification beside each name. Units present in the village
+directory but absent from that CSV remain available and are labelled `Administrative unit`
+instead of being assigned a type without source evidence.
+
 `land_records` is read-only for the public and writable only by admins (or the service role). Add data from the Supabase **Table Editor** (import CSV) or SQL:
 
 ```sql
