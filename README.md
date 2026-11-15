@@ -172,6 +172,13 @@ Notes:
 
 ### Loading land records
 
+The district, tehsil/sub-tehsil and village selectors are populated from the supplied
+Himachal Pradesh village directory dated 15 November 2026. The generated data files are
+`src/lib/data/hp-subdistricts.json` and `src/lib/data/hp-villages.json`: 12 districts,
+193 sub-districts and all 21,595 coded village records (21,590 unique location names). Village names
+retain both the canonical English value and the local-language label. Regenerate these
+files whenever the source administrative directory changes.
+
 `land_records` is read-only for the public and writable only by admins (or the service role). Add data from the Supabase **Table Editor** (import CSV) or SQL:
 
 ```sql

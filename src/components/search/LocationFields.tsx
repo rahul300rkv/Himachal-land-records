@@ -35,7 +35,7 @@ export function LocationFields({
   const t = useTranslations('Search.form');
   const locale = useLocale();
   const uid = useId();
-  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [suggestions, setSuggestions] = useState<Array<{ key: string; value: string; label: string }>>([]);
 
   const tehsils = getTehsils(district);
 
@@ -46,13 +46,13 @@ export function LocationFields({
       return;
     }
     const controller = new AbortController();
-    const params = new URLSearchParams({ district, tehsil });
+    const params = new URLSearchParams({ district, tehsil, locale });
     fetch(`/api/villages?${params}`, { signal: controller.signal })
       .then((response) => (response.ok ? response.json() : { villages: [] }))
-      .then((data: { villages?: string[] }) => setSuggestions(data.villages ?? []))
+      .then((data: { villages?: Array<{ key: string; value: string; label: string }> }) => setSuggestions(data.villages ?? []))
       .catch(() => setSuggestions([]));
     return () => controller.abort();
-  }, [district, tehsil]);
+  }, [district, tehsil, locale]);
 
   const tehsilId = `${uid}-tehsil`;
   const villageId = `${uid}-village`;
@@ -114,8 +114,8 @@ export function LocationFields({
           </p>
         )}
         <datalist id={listId}>
-          {suggestions.map((name) => (
-            <option key={name} value={name} />
+          {suggestions.map((item) => (
+            <option key={item.key} value={item.value} label={item.label} />
           ))}
         </datalist>
       </div>
