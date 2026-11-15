@@ -1,58 +1,16 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
 import { ArrowDown, ShieldCheck } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { HeroSearch } from './HeroSearch';
 
-const HERO_VIDEO =
-  'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260328_083109_283f3553-e28f-428b-a723-d639c617eb2b.mp4';
-const FADE_SECONDS = 0.5;
-
 export function Hero() {
   const t = useTranslations('Home.hero');
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const restartTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-    let animationFrame = 0;
-
-    const monitorOpacity = () => {
-      const { currentTime, duration } = video;
-      if (Number.isFinite(duration) && duration > 0) {
-        const fadeIn = Math.min(currentTime / FADE_SECONDS, 1);
-        const fadeOut = Math.min((duration - currentTime) / FADE_SECONDS, 1);
-        video.style.opacity = String(Math.max(0, Math.min(fadeIn, fadeOut)));
-      }
-      animationFrame = requestAnimationFrame(monitorOpacity);
-    };
-
-    animationFrame = requestAnimationFrame(monitorOpacity);
-    return () => {
-      cancelAnimationFrame(animationFrame);
-      if (restartTimerRef.current) clearTimeout(restartTimerRef.current);
-    };
-  }, []);
-
-  const restartVideo = () => {
-    const video = videoRef.current;
-    if (!video) return;
-    video.style.opacity = '0';
-    restartTimerRef.current = setTimeout(() => {
-      video.currentTime = 0;
-      void video.play().catch(() => undefined);
-    }, 100);
-  };
 
   return (
     <>
       <section className="cinematic-hero">
         <div className="cinematic-hero__media" aria-hidden="true">
-          <video ref={videoRef} className="cinematic-hero__video" autoPlay muted playsInline preload="metadata" poster="/images/himachal-valley.jpg" onEnded={restartVideo}>
-            <source src={HERO_VIDEO} type="video/mp4" />
-          </video>
           <div className="cinematic-hero__gradient" />
         </div>
         <svg className="pointer-events-none absolute inset-x-0 bottom-8 z-[1] h-[44%] w-full text-[#2a102d]/30" viewBox="0 0 1440 420" preserveAspectRatio="none" aria-hidden="true">
@@ -63,9 +21,6 @@ export function Hero() {
         </svg>
 
         <div className="container relative z-10 flex min-h-[calc(100vh-5rem)] flex-col items-center justify-center px-6 pb-40 pt-[calc(8rem-75px)] text-center">
-          <span className="font-signature animate-fade-rise pointer-events-none absolute top-[12%] select-none text-6xl text-[#f2b134]/75 sm:text-8xl" aria-hidden="true">
-            Himachal
-          </span>
           <p className="field-note animate-fade-rise text-[#69566b]">
             <ShieldCheck className="size-4" aria-hidden="true" /> {t('trustNote')}
           </p>

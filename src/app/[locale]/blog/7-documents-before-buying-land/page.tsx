@@ -46,7 +46,7 @@ export default async function SevenDocumentsPage({ params }: Props) {
       '@id': `${articleUrl}#article`,
       headline: t('title'),
       description: t('intro'),
-      image: [absoluteUrl('/images/himachal-valley.jpg')],
+      image: [absoluteUrl('/images/himachal-concept-hero.png')],
       datePublished: PUBLISHED_AT,
       dateModified: PUBLISHED_AT,
       inLanguage: locale === 'hi' ? 'hi-IN' : 'en-IN',

@@ -94,9 +94,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: t('title'),
       description: t('description'),
       locale: locale === 'hi' ? 'hi_IN' : 'en_IN',
-      images: [{ url: '/images/himachal-valley.jpg', width: 1600, height: 900, alt: t('title') }],
+      images: [{ url: '/images/himachal-concept-hero.png', width: 1680, height: 945, alt: t('title') }],
     },
-    twitter: { card: 'summary_large_image', title: t('title'), description: t('description'), images: ['/images/himachal-valley.jpg'] },
+    twitter: { card: 'summary_large_image', title: t('title'), description: t('description'), images: ['/images/himachal-concept-hero.png'] },
   };
 }
 

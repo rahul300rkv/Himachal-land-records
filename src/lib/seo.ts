@@ -31,7 +31,7 @@ export function pageMetadata({
 }: PageMetadataInput): Metadata {
   const languages = Object.fromEntries(routing.locales.map((l) => [l, `/${l}${path}`]));
   const url = `/${locale}${path}`;
-  const image = absoluteUrl('/images/himachal-valley.jpg');
+  const image = absoluteUrl('/images/himachal-concept-hero.png');
   return {
     title,
     description,
