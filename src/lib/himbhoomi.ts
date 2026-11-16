@@ -124,7 +124,7 @@ async function request(url: string, init: RequestInit, cookie = ''): Promise<Ups
       ...(cookie ? { Cookie: cookie } : {}),
       ...init.headers,
     },
-    signal: AbortSignal.timeout(20_000),
+    signal: AbortSignal.timeout(30_000),
   });
   if (!response.ok) throw new Error(`HimBhoomi returned ${response.status}`);
   return { cookie: mergeCookie(cookie, response), html: await response.text(), url: response.url };
@@ -278,7 +278,7 @@ export async function createCaptchaSession(token: string) {
   const captchaResponse = await fetch(new URL('CaptchaControl.aspx', BASE_URL), {
     cache: 'no-store',
     headers: { Cookie: session.cookie, Referer: RECORDS_URL },
-    signal: AbortSignal.timeout(20_000),
+    signal: AbortSignal.timeout(30_000),
   });
   if (!captchaResponse.ok) throw new Error(`Captcha returned ${captchaResponse.status}`);
   const bytes = Buffer.from(await captchaResponse.arrayBuffer());

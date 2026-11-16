@@ -10,6 +10,8 @@ import {
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
+export const preferredRegion = 'bom1';
+export const maxDuration = 60;
 
 const requestSchema = z.discriminatedUnion('action', [
   z.object({ action: z.literal('districts') }),
