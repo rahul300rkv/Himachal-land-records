@@ -14,6 +14,6 @@ export function getOfficialVillages(district: string, tehsil: string, locale: st
   return entries.map(([english, local, code]) => ({
     key: code,
     value: english,
-    label: locale === 'hi' && local ? local : english,
+    label: `${locale === 'hi' && local ? `${local} — ${english}` : english} · ${code}`,
   }));
 }

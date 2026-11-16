@@ -2,7 +2,6 @@
 
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useId, useState } from 'react';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select } from '@/components/ui/select';
 import { getTehsils } from '@/lib/data/districts';
@@ -36,27 +35,36 @@ export function LocationFields({
   const locale = useLocale();
   const uid = useId();
   const [suggestions, setSuggestions] = useState<Array<{ key: string; value: string; label: string }>>([]);
+  const [isLoadingVillages, setIsLoadingVillages] = useState(false);
 
   const tehsils = getTehsils(district);
+  const tehsilGroups = [
+    { kind: 'tehsil', label: t('tehsilGroup') },
+    { kind: 'sub-tehsil', label: t('subTehsilGroup') },
+    { kind: 'administrative-unit', label: t('administrativeUnitGroup') },
+  ] as const;
 
-  // Load village suggestions for the selected tehsil (optional; the field also accepts free text).
+  // Load the official village dropdown for the selected administrative unit.
   useEffect(() => {
     if (!district || !tehsil) {
       setSuggestions([]);
+      setIsLoadingVillages(false);
       return;
     }
     const controller = new AbortController();
+    setSuggestions([]);
+    setIsLoadingVillages(true);
     const params = new URLSearchParams({ district, tehsil, locale });
     fetch(`/api/villages?${params}`, { signal: controller.signal })
       .then((response) => (response.ok ? response.json() : { villages: [] }))
       .then((data: { villages?: Array<{ key: string; value: string; label: string }> }) => setSuggestions(data.villages ?? []))
-      .catch(() => setSuggestions([]));
+      .catch(() => setSuggestions([]))
+      .finally(() => setIsLoadingVillages(false));
     return () => controller.abort();
   }, [district, tehsil, locale]);
 
   const tehsilId = `${uid}-tehsil`;
   const villageId = `${uid}-village`;
-  const listId = `${uid}-villages`;
 
   return (
     <>
@@ -80,17 +88,16 @@ export function LocationFields({
           aria-describedby={errors?.tehsil ? `${tehsilId}-error` : undefined}
         >
           <option value="">{district ? t('tehsilPlaceholder') : t('tehsilFirst')}</option>
-          {tehsils.map((item) => (
-            <option key={item.value} value={item.value}>
-              {locale === 'hi' ? item.hi : item.value} ({t(
-                item.kind === 'tehsil'
-                  ? 'tehsilType'
-                  : item.kind === 'sub-tehsil'
-                    ? 'subTehsilType'
-                    : 'administrativeUnitType',
-              )})
-            </option>
-          ))}
+          {tehsilGroups.map((group) => {
+            const items = tehsils.filter((item) => item.kind === group.kind);
+            return items.length ? (
+              <optgroup key={group.kind} label={group.label}>
+                {items.map((item) => (
+                  <option key={item.value} value={item.value}>{locale === 'hi' ? item.hi : item.value}</option>
+                ))}
+              </optgroup>
+            ) : null;
+          })}
         </Select>
         {errors?.tehsil && (
           <p id={`${tehsilId}-error`} role="alert" className="mt-1.5 text-sm text-destructive">
@@ -101,29 +108,33 @@ export function LocationFields({
 
       <div className={fieldClassName}>
         <Label htmlFor={villageId}>{t('village')}</Label>
-        <Input
+        <Select
           id={villageId}
           name="village"
           value={village}
-          list={listId}
-          disabled={!tehsil}
-          autoComplete="off"
-          maxLength={100}
-          placeholder={tehsil ? t('villagePlaceholder') : t('villageFirst')}
+          disabled={!tehsil || isLoadingVillages}
           onChange={(event) => onChange({ village: event.target.value })}
           aria-invalid={Boolean(errors?.village)}
           aria-describedby={errors?.village ? `${villageId}-error` : undefined}
-        />
+        >
+          <option value="">
+            {!tehsil
+              ? t('villageFirst')
+              : isLoadingVillages
+                ? t('villageLoading')
+                : suggestions.length
+                  ? t('villagePlaceholder')
+                  : t('villageEmpty')}
+          </option>
+          {suggestions.map((item) => (
+            <option key={item.key} value={item.value}>{item.label}</option>
+          ))}
+        </Select>
         {errors?.village && (
           <p id={`${villageId}-error`} role="alert" className="mt-1.5 text-sm text-destructive">
             {errors.village}
           </p>
         )}
-        <datalist id={listId}>
-          {suggestions.map((item) => (
-            <option key={item.key} value={item.value} label={item.label} />
-          ))}
-        </datalist>
       </div>
     </>
   );
