@@ -395,7 +395,7 @@
   },
   "Search": {
     "title": "Search land records",
-    "subtitle": "Choose a district and tehsil, then narrow down by village, khasra number or owner name.",
+    "subtitle": "Choose the district, tehsil, village and Jamabandi year used by HimBhoomi.",
     "form": {
       "district": "District",
       "districtPlaceholder": "Select district",
@@ -418,11 +418,15 @@
       "khasraHint": "Enter the full number as written in the record.",
       "owner": "Owner name",
       "ownerPlaceholder": "Name of the owner",
+      "year": "Jamabandi year",
+      "yearPlaceholder": "e.g. 2023",
+      "yearHint": "Use a year offered by HimBhoomi for the selected village.",
       "submit": "Search records",
       "reset": "Clear",
       "errors": {
         "district": "Select a district",
-        "atLeastOne": "Add a tehsil, village, khasra number or owner name"
+        "atLeastOne": "Add a tehsil, village, khasra number or Jamabandi year",
+        "year": "Enter a four-digit Jamabandi year"
       }
     },
     "filters": {
@@ -448,7 +452,7 @@
       },
       "invalid": {
         "title": "Add one more detail",
-        "body": "Choose a district together with a tehsil, village, khasra number or owner name."
+        "body": "Choose a district together with a tehsil, village, khasra number or Jamabandi year."
       },
       "error": {
         "title": "Search is unavailable",
@@ -457,9 +461,9 @@
       "idle": {
         "title": "How to search",
         "tips": {
-          "a": "Pick the district and tehsil, then type the village. Suggestions appear as records become available.",
+          "a": "Pick the district and tehsil, then select the village from the official directory.",
           "b": "Know the plot? Add the khasra number exactly as written in the record, for example 123/4.",
-          "c": "Searching for a person? Enter the owner’s name and narrow it down with the tehsil."
+          "c": "Enter a Jamabandi year available for that village on HimBhoomi."
         }
       }
     },

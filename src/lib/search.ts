@@ -24,7 +24,7 @@ export type SearchDefaults = {
   tehsil: string;
   village: string;
   khasra: string;
-  owner: string;
+  year: string;
 };
 
 export type ParsedSearch =
@@ -39,7 +39,7 @@ export function parseSearchParams(raw: RawParams): ParsedSearch {
     tehsil: text(raw.tehsil) ?? '',
     village: text(raw.village) ?? '',
     khasra: text(raw.khasra) ?? '',
-    owner: text(raw.owner) ?? '',
+    year: text(raw.year) ?? '',
   };
 
   const hasAnyInput = Object.values(raw).some((v) => (Array.isArray(v) ? v.length : Boolean(v)));
@@ -53,9 +53,9 @@ export function parseSearchParams(raw: RawParams): ParsedSearch {
     khasraNumber: defaults.khasra,
     khewatNumber: text(raw.khewat),
     khatauniNumber: text(raw.khatauni),
-    ownerName: defaults.owner,
+    ownerName: text(raw.owner),
     landType: LAND_TYPES.find((t) => t === type),
-    jamabandiYear: int(raw.year),
+    jamabandiYear: int(defaults.year),
     page: int(raw.page) ?? 1,
   });
 

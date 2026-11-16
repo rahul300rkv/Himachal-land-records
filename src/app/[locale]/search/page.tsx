@@ -158,7 +158,7 @@ export default async function SearchPage({ params, searchParams }: Props) {
                   {isSupabaseConfigured && (
                     <SaveSearchButton
                       params={currentQuery}
-                      name={[place, parsed.query.khasraNumber && `${parsed.query.khasraNumber}`, parsed.query.ownerName]
+                      name={[place, parsed.query.khasraNumber && `${parsed.query.khasraNumber}`, parsed.query.jamabandiYear]
                         .filter(Boolean)
                         .join(' · ')}
                       isAuthenticated={Boolean(user)}

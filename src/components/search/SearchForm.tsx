@@ -19,9 +19,9 @@ const formSchema = z
     tehsil: z.string(),
     village: z.string().trim().max(100),
     khasra: z.string().trim().max(100),
-    owner: z.string().trim().max(100),
+    year: z.string().trim().regex(/^$|^\d{4}$/, 'year'),
   })
-  .refine((v) => Boolean(v.tehsil || v.village || v.khasra || v.owner), {
+  .refine((v) => Boolean(v.tehsil || v.village || v.khasra || v.year), {
     message: 'atLeastOne',
     path: ['tehsil'],
   });
@@ -46,7 +46,7 @@ export function SearchForm({ defaultValues }: SearchFormProps) {
     formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: { district: '', tehsil: '', village: '', khasra: '', owner: '', ...defaultValues },
+    defaultValues: { district: '', tehsil: '', village: '', khasra: '', year: '', ...defaultValues },
   });
 
   const { district, tehsil, village } = watch();
@@ -67,11 +67,11 @@ export function SearchForm({ defaultValues }: SearchFormProps) {
   }
 
   function onReset() {
-    reset({ district: '', tehsil: '', village: '', khasra: '', owner: '' });
+    reset({ district: '', tehsil: '', village: '', khasra: '', year: '' });
     startTransition(() => router.push('/search'));
   }
 
-  const translate = (key?: string) => (key ? t(`errors.${key as 'district' | 'atLeastOne'}`) : undefined);
+  const translate = (key?: string) => (key ? t(`errors.${key as 'district' | 'atLeastOne' | 'year'}`) : undefined);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
@@ -102,14 +102,21 @@ export function SearchForm({ defaultValues }: SearchFormProps) {
           </p>
         </div>
         <div>
-          <Label htmlFor="owner">{t('owner')}</Label>
+          <Label htmlFor="year">{t('year')}</Label>
           <Input
-            id="owner"
+            id="year"
+            inputMode="numeric"
             autoComplete="off"
-            maxLength={100}
-            placeholder={t('ownerPlaceholder')}
-            {...register('owner')}
+            maxLength={4}
+            placeholder={t('yearPlaceholder')}
+            aria-describedby="year-hint"
+            {...register('year')}
+            aria-invalid={Boolean(errors.year)}
           />
+          <p id="year-hint" className="mt-1.5 text-sm text-muted-foreground">
+            {t('yearHint')}
+          </p>
+          {errors.year && <p role="alert" className="mt-1.5 text-sm text-destructive">{translate(errors.year.message)}</p>}
         </div>
       </div>
 
