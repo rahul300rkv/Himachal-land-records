@@ -43,16 +43,42 @@ function hiddenFields(html: string) {
   return fields;
 }
 
-function defaultFormFields(html: string) {
+function browserFormFields(html: string) {
   const fields: Record<string, string> = {};
   for (const match of html.matchAll(/<input\b[^>]*>/gi)) {
     const attrs = attributes(match[0]);
+    if (!attrs.name || /\sdisabled(?:\s|=|\/?>)/i.test(match[0])) continue;
+    const type = attrs.type?.toLowerCase() ?? 'text';
     const checked = /\schecked(?:\s*=\s*(?:["']checked["']|["']?true["']?))?(?:\s|\/?>)/i.test(match[0]);
-    if (attrs.type?.toLowerCase() === 'radio' && attrs.name && checked) {
+    if ((type === 'radio' || type === 'checkbox') && checked) {
+      fields[attrs.name] = attrs.value ?? '';
+    } else if (!['hidden', 'radio', 'checkbox', 'submit', 'button', 'reset', 'file', 'image'].includes(type)) {
       fields[attrs.name] = attrs.value ?? '';
     }
   }
+  for (const match of html.matchAll(/<select\b([^>]*)>([\s\S]*?)<\/select>/gi)) {
+    const tag = `<select ${match[1]}>`;
+    const attrs = attributes(tag);
+    if (!attrs.name || /\sdisabled(?:\s|=|>)/i.test(tag)) continue;
+    const options = [...match[2].matchAll(/<option\b([^>]*)>([\s\S]*?)<\/option>/gi)];
+    const selected = options.find((option) => /\sselected(?:\s|=|>)/i.test(`<option ${option[1]}>`)) ?? options[0];
+    if (selected) fields[attrs.name] = attributes(`<option ${selected[1]}>`).value ?? plainText(selected[2]);
+  }
   return fields;
+}
+
+function formPostbacks(html: string) {
+  const postbacks: Record<string, Record<string, string>> = {};
+  for (const match of html.matchAll(/<(?:input|select)\b[^>]*>/gi)) {
+    const attrs = attributes(match[0]);
+    if (!attrs.name) continue;
+    const script = attrs.onclick ?? attrs.onchange ?? '';
+    const target = script.match(/__doPostBack\(\s*\\?["']([^\\"']+)\\?["']/i)?.[1];
+    if (!target) continue;
+    postbacks[attrs.name] ??= {};
+    postbacks[attrs.name][attrs.value ?? '*'] = target;
+  }
+  return postbacks;
 }
 
 export function selectOptions(html: string, id: string): OfficialOption[] {
@@ -145,6 +171,7 @@ type CaptchaSession = OfficialSelection & {
   cookie: string;
   hidden: Record<string, string>;
   fields?: Record<string, string>;
+  postbacks?: Record<string, Record<string, string>>;
 };
 
 export type OfficialControl = {
@@ -231,7 +258,8 @@ export async function prepareOfficialSearch(selection: Required<OfficialSelectio
       ...selection,
       cookie: state.cookie,
       hidden: hiddenFields(state.html),
-      fields: defaultFormFields(state.html),
+      fields: browserFormFields(state.html),
+      postbacks: formPostbacks(state.html),
     }),
   };
 }
@@ -293,11 +321,16 @@ export async function submitOfficialSearch(token: string, captcha: string) {
   const recordReady = isNakalPage(state.url);
   const responseText = plainText(state.html);
   const captchaFailed = !recordReady && /(?:invalid|wrong|incorrect)\s*captcha|captcha.{0,80}(?:invalid|wrong|incorrect|गलत|अमान्य|स्वीकार नहीं)/i.test(responseText);
+  const responseFields = browserFormFields(state.html);
+  const activeSelections = Object.fromEntries(
+    Object.entries(session.fields ?? {}).filter(([name]) => Object.hasOwn(responseFields, name)),
+  );
   const nextToken = encodeSession({
     ...session,
     cookie: state.cookie,
     hidden: hiddenFields(state.html),
-    fields: { ...defaultFormFields(state.html), ...(session.fields ?? {}) },
+    fields: { ...responseFields, ...activeSelections },
+    postbacks: formPostbacks(state.html),
   });
   const replacementCaptcha = captchaFailed ? await createCaptchaSession(nextToken) : null;
   return {
@@ -319,6 +352,11 @@ export async function continueOfficialSearch(token: string, fields: Record<strin
     ),
   );
   const allFields = { ...(session.fields ?? {}), ...safeFields };
+  const requestedTarget = eventTarget.startsWith('ctl00$ContentPlaceHolder1$') ? eventTarget : '';
+  const selectedValue = safeFields[requestedTarget] ?? '';
+  const resolvedTarget = session.postbacks?.[requestedTarget]?.[selectedValue]
+    ?? session.postbacks?.[requestedTarget]?.['*']
+    ?? requestedTarget;
   const body = new URLSearchParams({
     ...session.hidden,
     [FIELD.district]: session.district,
@@ -326,7 +364,7 @@ export async function continueOfficialSearch(token: string, fields: Record<strin
     [FIELD.village]: session.village!,
     [FIELD.year]: session.year,
     ...allFields,
-    __EVENTTARGET: eventTarget.startsWith('ctl00$ContentPlaceHolder1$') ? eventTarget : '',
+    __EVENTTARGET: resolvedTarget,
     __EVENTARGUMENT: '',
   });
   const state = await request(RECORDS_URL, {
@@ -335,12 +373,22 @@ export async function continueOfficialSearch(token: string, fields: Record<strin
     body,
   }, session.cookie);
   const recordReady = isNakalPage(state.url);
-  const nextFields = { ...defaultFormFields(state.html), ...allFields };
+  const responseFields = browserFormFields(state.html);
+  const activeSelections = Object.fromEntries(
+    Object.entries(allFields).filter(([name]) => Object.hasOwn(responseFields, name)),
+  );
+  const nextFields = { ...responseFields, ...activeSelections };
   return {
     html: recordReady ? sanitizeOfficialResult(state.html) : '',
     recordReady,
     controls: recordReady ? [] : officialControls(state.html),
-    token: encodeSession({ ...session, cookie: state.cookie, hidden: hiddenFields(state.html), fields: nextFields }),
+    token: encodeSession({
+      ...session,
+      cookie: state.cookie,
+      hidden: hiddenFields(state.html),
+      fields: nextFields,
+      postbacks: formPostbacks(state.html),
+    }),
   };
 }
 
