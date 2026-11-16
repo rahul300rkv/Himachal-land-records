@@ -1,4 +1,8 @@
-const BASE_URL = 'https://himbhoomilmk.nic.in/';
+// The NIC host serves the same public form over both protocols. Its TLS edge
+// intermittently rejects Vercel serverless traffic before an HTTP response is
+// produced, so the deployed server-side relay uses its working HTTP endpoint.
+const BASE_URL = process.env.HIMBHOOMI_BASE_URL
+  ?? (process.env.VERCEL ? 'http://himbhoomilmk.nic.in/' : 'https://himbhoomilmk.nic.in/');
 const RECORDS_URL = new URL('viewlandrecords.aspx', BASE_URL).toString();
 const POSTBACK_SETTLE_MS = 500;
 const CAPTCHA_SETTLE_MS = 750;
@@ -119,8 +123,9 @@ async function request(url: string, init: RequestInit, cookie = ''): Promise<Ups
     cache: 'no-store',
     redirect: 'follow',
     headers: {
-      'User-Agent': 'HimLand-Check/1.0 (+https://himachal-land-records.vercel.app)',
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
       Accept: 'text/html,application/xhtml+xml',
+      'Accept-Language': 'hi-IN,hi;q=0.9,en-IN;q=0.8,en;q=0.7',
       ...(cookie ? { Cookie: cookie } : {}),
       ...init.headers,
     },
