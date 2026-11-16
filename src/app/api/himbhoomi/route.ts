@@ -4,6 +4,7 @@ import {
   continueOfficialSearch,
   getDependentOptions,
   getDistricts,
+  prepareOfficialSearch,
   submitOfficialSearch,
 } from '@/lib/himbhoomi';
 
@@ -15,7 +16,8 @@ const requestSchema = z.discriminatedUnion('action', [
   z.object({ action: z.literal('tehsils'), district: z.string().min(1).max(10) }),
   z.object({ action: z.literal('villages'), district: z.string().min(1).max(10), tehsil: z.string().min(1).max(10) }),
   z.object({ action: z.literal('years'), district: z.string().min(1).max(10), tehsil: z.string().min(1).max(10), village: z.string().min(1).max(20) }),
-  z.object({ action: z.literal('captcha'), district: z.string().min(1).max(10), tehsil: z.string().min(1).max(10), village: z.string().min(1).max(20), year: z.string().regex(/^\d{4}$/) }),
+  z.object({ action: z.literal('recordOptions'), district: z.string().min(1).max(10), tehsil: z.string().min(1).max(10), village: z.string().min(1).max(20), year: z.string().regex(/^\d{4}$/) }),
+  z.object({ action: z.literal('captcha'), token: z.string().min(1).max(250_000) }),
   z.object({ action: z.literal('search'), token: z.string().min(1).max(250_000), captcha: z.string().trim().min(1).max(12) }),
   z.object({
     action: z.literal('continue'),
@@ -32,7 +34,8 @@ export async function POST(request: Request) {
     if (input.action === 'tehsils') return Response.json({ options: await getDependentOptions(input) });
     if (input.action === 'villages') return Response.json({ options: await getDependentOptions(input) });
     if (input.action === 'years') return Response.json({ options: await getDependentOptions(input) });
-    if (input.action === 'captcha') return Response.json(await createCaptchaSession(input));
+    if (input.action === 'recordOptions') return Response.json(await prepareOfficialSearch(input));
+    if (input.action === 'captcha') return Response.json(await createCaptchaSession(input.token));
     if (input.action === 'search') return Response.json(await submitOfficialSearch(input.token, input.captcha));
     return Response.json(await continueOfficialSearch(input.token, input.fields, input.eventTarget));
   } catch (error) {

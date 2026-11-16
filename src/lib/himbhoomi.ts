@@ -138,7 +138,7 @@ type CaptchaSession = OfficialSelection & {
 export type OfficialControl = {
   name: string;
   label: string;
-  kind: 'select' | 'radio';
+  kind: 'select' | 'radio' | 'text';
   options: OfficialOption[];
 };
 
@@ -147,7 +147,7 @@ function plainText(value: string) {
 }
 
 function officialControls(html: string): OfficialControl[] {
-  const relevant = /(khewat|khatauni|khasra|jam|tatima|rblkkk|ddlkh|srchparam)/i;
+  const relevant = /(khewat|khatauni|khasra|jamshj|rblkkk|ddlkh)/i;
   const labels = new Map(
     [...html.matchAll(/<label\b([^>]*)>([\s\S]*?)<\/label>/gi)].map((match) => {
       const attrs = attributes(`<label ${match[1]}>`);
@@ -163,8 +163,12 @@ function officialControls(html: string): OfficialControl[] {
         const optionAttrs = attributes(`<option ${option[1]}>`);
         return { value: optionAttrs.value ?? '', label: plainText(option[2]) };
       })
-      .filter((option) => option.value);
-    controls.push({ name: attrs.name, label: labels.get(attrs.id ?? '') || plainText(attrs.title ?? '') || 'Official record choice', kind: 'select', options });
+      .filter((option) => option.value && !/^-?select-?$/i.test(option.value));
+    const inferredLabel = /Khewat/i.test(attrs.name) ? 'Khewat number'
+      : /Khatauni/i.test(attrs.name) ? 'Khatauni number'
+        : /Khasra/i.test(attrs.name) ? 'Khasra number'
+          : 'Official record choice';
+    controls.push({ name: attrs.name, label: labels.get(attrs.id ?? '') || plainText(attrs.title ?? '') || inferredLabel, kind: 'select', options });
   }
   const radioGroups = new Map<string, OfficialOption[]>();
   for (const match of html.matchAll(/<input\b[^>]*type=["']radio["'][^>]*>/gi)) {
@@ -173,8 +177,24 @@ function officialControls(html: string): OfficialControl[] {
     const option = { value: attrs.value ?? '', label: labels.get(attrs.id ?? '') || attrs.value || 'Option' };
     radioGroups.set(attrs.name, [...(radioGroups.get(attrs.name) ?? []), option]);
   }
-  radioGroups.forEach((options, name) => controls.push({ name, label: 'Search record by', kind: 'radio', options }));
-  return controls.filter((control) => control.options.length > 0);
+  radioGroups.forEach((options, name) => controls.push({
+    name,
+    label: /JamShj/i.test(name) ? 'Record type' : 'Search record by',
+    kind: 'radio',
+    options,
+  }));
+  for (const match of html.matchAll(/<input\b[^>]*type=["']text["'][^>]*>/gi)) {
+    const attrs = attributes(match[0]);
+    if (attrs.name === 'ctl00$ContentPlaceHolder1$txtFullName') {
+      controls.push({ name: attrs.name, label: 'Name for Shajra Nasab', kind: 'text', options: [] });
+    }
+  }
+  const order = (control: OfficialControl) => /JamShj/i.test(control.name) ? 0
+    : /RBLKKK/i.test(control.name) ? 1
+      : control.kind === 'text' ? 2 : 3;
+  return controls
+    .filter((control) => control.kind === 'text' || control.options.length > 0)
+    .sort((left, right) => order(left) - order(right));
 }
 
 function encodeSession(session: CaptchaSession) {
@@ -183,17 +203,27 @@ function encodeSession(session: CaptchaSession) {
 
 function decodeSession(token: string): CaptchaSession {
   const parsed = JSON.parse(Buffer.from(token, 'base64url').toString('utf8')) as CaptchaSession;
-  if (!parsed.district || !parsed.tehsil || !parsed.village || !parsed.year || !parsed.cookie || !parsed.hidden) {
+  if (!parsed.district || !parsed.tehsil || !parsed.village || !parsed.year || !parsed.hidden) {
     throw new Error('Invalid HimBhoomi session');
   }
   return parsed;
 }
 
-export async function createCaptchaSession(selection: Required<OfficialSelection> & { year: string }) {
-  const { state } = await loadOfficialState(selection);
+export async function prepareOfficialSearch(selection: Required<OfficialSelection> & { year: string }) {
+  const loaded = await loadOfficialState(selection);
+  const selected = { ...loaded.selected, [FIELD.year]: selection.year };
+  const state = await postback(loaded.state, FIELD.year, selected);
+  return {
+    controls: officialControls(state.html),
+    token: encodeSession({ ...selection, cookie: state.cookie, hidden: hiddenFields(state.html), fields: {} }),
+  };
+}
+
+export async function createCaptchaSession(token: string) {
+  const session = decodeSession(token);
   const captchaResponse = await fetch(new URL('CaptchaControl.aspx', BASE_URL), {
     cache: 'no-store',
-    headers: { Cookie: state.cookie, Referer: RECORDS_URL },
+    headers: { Cookie: session.cookie, Referer: RECORDS_URL },
     signal: AbortSignal.timeout(20_000),
   });
   if (!captchaResponse.ok) throw new Error(`Captcha returned ${captchaResponse.status}`);
@@ -201,7 +231,7 @@ export async function createCaptchaSession(selection: Required<OfficialSelection
   const mediaType = captchaResponse.headers.get('content-type')?.split(';')[0] || 'image/jpeg';
   return {
     image: `data:${mediaType};base64,${bytes.toString('base64')}`,
-    token: encodeSession({ ...selection, cookie: state.cookie, hidden: hiddenFields(state.html), fields: {} }),
+    token: encodeSession({ ...session, cookie: mergeCookie(session.cookie, captchaResponse) }),
   };
 }
 
@@ -232,6 +262,7 @@ export async function submitOfficialSearch(token: string, captcha: string) {
     [FIELD.tehsil]: session.tehsil!,
     [FIELD.village]: session.village!,
     [FIELD.year]: session.year,
+    ...(session.fields ?? {}),
     [FIELD.captcha]: captcha.trim().toUpperCase(),
     [FIELD.submit]: 'OK',
     __EVENTTARGET: '',
@@ -248,7 +279,7 @@ export async function submitOfficialSearch(token: string, captcha: string) {
     captchaFailed,
     recordReady: isNakalPage(state.url),
     controls: isNakalPage(state.url) ? [] : officialControls(state.html),
-    token: encodeSession({ ...session, cookie: state.cookie, hidden: hiddenFields(state.html), fields: {} }),
+    token: encodeSession({ ...session, cookie: state.cookie, hidden: hiddenFields(state.html) }),
   };
 }
 
