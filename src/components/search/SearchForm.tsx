@@ -2,7 +2,7 @@
 
 import { LoaderCircle, RefreshCw, Search, ShieldCheck, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -39,6 +39,7 @@ export function SearchForm(_props: SearchFormProps) {
   const [recordReady, setRecordReady] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
+  const operationInFlight = useRef(false);
 
   useEffect(() => {
     let active = true;
@@ -63,18 +64,20 @@ export function SearchForm(_props: SearchFormProps) {
   }
 
   async function requestCaptcha() {
-    if (!token) return;
+    if (!token || operationInFlight.current) return;
+    operationInFlight.current = true;
     setBusy(true); setError(''); setCaptcha(''); setCaptchaImage('');
     try {
       const data = await callHimBhoomi({ action: 'captcha', token });
       setCaptchaImage(data.image ?? ''); setToken(data.token ?? '');
     } catch (reason) { setError(reason instanceof Error ? reason.message : t('unavailable')); }
-    finally { setBusy(false); }
+    finally { operationInFlight.current = false; setBusy(false); }
   }
 
   async function submitCaptcha(event: React.FormEvent) {
     event.preventDefault();
-    if (!token || !captcha.trim()) return;
+    if (!token || !captcha.trim() || operationInFlight.current) return;
+    operationInFlight.current = true;
     setBusy(true); setError('');
     try {
       const data = await callHimBhoomi({ action: 'search', token, captcha });
@@ -93,24 +96,28 @@ export function SearchForm(_props: SearchFormProps) {
       }
       setToken(data.token ?? token); setControls(data.controls ?? []); setResultHtml(data.html ?? ''); setRecordReady(Boolean(data.recordReady));
     } catch (reason) { setError(reason instanceof Error ? reason.message : t('unavailable')); }
-    finally { setBusy(false); }
+    finally { operationInFlight.current = false; setBusy(false); }
   }
 
   async function prepareRecordOptions(nextYear: string) {
+    if (operationInFlight.current) return;
+    operationInFlight.current = true;
     setYear(nextYear); resetAfterLocation();
-    if (!nextYear) return;
+    if (!nextYear) { operationInFlight.current = false; return; }
     setBusy(true); setError('');
     try {
       const data = await callHimBhoomi({ action: 'recordOptions', district, tehsil, village, year: nextYear });
       setToken(data.token ?? ''); setControls(data.controls ?? []); setOfficialFields({});
     } catch (reason) { setError(reason instanceof Error ? reason.message : t('unavailable')); }
-    finally { setBusy(false); }
+    finally { operationInFlight.current = false; setBusy(false); }
   }
 
   async function changeOfficialControl(control: OfficialControl, value: string) {
+    if (operationInFlight.current) return;
     const nextFields = { ...officialFields, [control.name]: value };
     setOfficialFields(nextFields); setCaptchaImage(''); setCaptcha('');
     if (control.kind === 'text' || !value || !token) return;
+    operationInFlight.current = true;
     setBusy(true); setError('');
     try {
       const data = await callHimBhoomi({ action: 'continue', token, fields: nextFields, eventTarget: control.name });
@@ -119,7 +126,7 @@ export function SearchForm(_props: SearchFormProps) {
       setOfficialFields(Object.fromEntries(Object.entries(nextFields).filter(([name]) => names.has(name))));
       setToken(data.token ?? token); setControls(nextControls); setRecordReady(Boolean(data.recordReady));
     } catch (reason) { setError(reason instanceof Error ? reason.message : t('unavailable')); }
-    finally { setBusy(false); }
+    finally { operationInFlight.current = false; setBusy(false); }
   }
 
   const canRequestCaptcha = Boolean(token && controls.length > 0 && controls.every((control) => officialFields[control.name]?.trim()));
@@ -138,7 +145,7 @@ export function SearchForm(_props: SearchFormProps) {
     </div>
     {!captchaImage && !resultHtml && controls.length === 0 && <div className="flex flex-col gap-3 sm:flex-row"><Button type="button" size="lg" variant="ghost" disabled={busy} onClick={clearAll}><X />{t('reset')}</Button></div>}
     {captchaImage && !resultHtml && <form className="rounded-xl border bg-background p-5" onSubmit={submitCaptcha}><h2 className="font-sans text-lg font-semibold tracking-normal">{t('captchaTitle')}</h2><p className="mt-1 text-sm text-muted-foreground">{t('captchaBody')}</p><div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-end"><div><span className="text-sm font-medium">{t('captcha')}</span><div className="mt-1 flex min-h-12 items-center rounded-md border bg-white px-3"><img src={captchaImage} alt={t('captchaAlt')} className="max-h-10 max-w-[190px]" /></div></div><div className="min-w-48 flex-1"><Label htmlFor="official-captcha">{t('captchaEntry')}</Label><Input id="official-captcha" value={captcha} maxLength={12} autoComplete="off" onChange={(event) => setCaptcha(event.target.value.toUpperCase())} /></div><Button type="submit" size="lg" disabled={busy || !captcha.trim()}>{busy ? <LoaderCircle className="animate-spin" /> : <Search />}{t('fetch')}</Button><Button type="button" variant="ghost" size="lg" disabled={busy} onClick={() => void requestCaptcha()}><RefreshCw />{t('newCaptcha')}</Button></div></form>}
-    {controls.length > 0 && !captchaImage && <section className="rounded-xl border bg-background p-5"><h2 className="font-sans text-lg font-semibold tracking-normal">{t('recordChooser')}</h2><p className="mt-1 text-sm text-muted-foreground">{t('recordChooserBody')}</p><div className="mt-4 grid gap-4 sm:grid-cols-2">{controls.map((control) => <div key={control.name}><Label htmlFor={`official-${control.name}`}>{control.label}</Label>{control.kind === 'text' ? <Input id={`official-${control.name}`} value={officialFields[control.name] ?? ''} autoComplete="off" onChange={(event) => void changeOfficialControl(control, event.target.value)} /> : <Select id={`official-${control.name}`} value={officialFields[control.name] ?? ''} disabled={busy} onChange={(event) => void changeOfficialControl(control, event.target.value)}><option value="">{t('choose')}</option>{control.options.map((option) => <option key={`${control.name}-${option.value}`} value={option.value}>{option.label}</option>)}</Select>}</div>)}</div><div className="mt-4 flex flex-col gap-3 sm:flex-row"><Button type="button" disabled={busy || !canRequestCaptcha} onClick={() => void requestCaptcha()}>{busy ? <LoaderCircle className="animate-spin" /> : <Search />}{t('continue')}</Button><Button type="button" variant="ghost" disabled={busy} onClick={clearAll}><X />{t('reset')}</Button></div></section>}
+    {controls.length > 0 && !captchaImage && <section className="rounded-xl border bg-background p-5"><h2 className="font-sans text-lg font-semibold tracking-normal">{t('recordChooser')}</h2><p className="mt-1 text-sm text-muted-foreground">{t('recordChooserBody')}</p><div className="mt-4 grid gap-4 sm:grid-cols-2">{controls.map((control) => <div key={control.name}><Label htmlFor={`official-${control.name}`}>{control.label}</Label>{control.kind === 'text' ? <Input id={`official-${control.name}`} value={officialFields[control.name] ?? ''} disabled={busy} autoComplete="off" onChange={(event) => void changeOfficialControl(control, event.target.value)} /> : <Select id={`official-${control.name}`} value={officialFields[control.name] ?? ''} disabled={busy} onChange={(event) => void changeOfficialControl(control, event.target.value)}><option value="">{t('choose')}</option>{control.options.map((option) => <option key={`${control.name}-${option.value}`} value={option.value}>{option.label}</option>)}</Select>}</div>)}</div><div className="mt-4 flex flex-col gap-3 sm:flex-row"><Button type="button" disabled={busy || !canRequestCaptcha} onClick={() => void requestCaptcha()}>{busy ? <LoaderCircle className="animate-spin" /> : <Search />}{t('continue')}</Button><Button type="button" variant="ghost" disabled={busy} onClick={clearAll}><X />{t('reset')}</Button></div></section>}
     {error && <p role="alert" className="rounded-md border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">{error}</p>}
     {resultHtml && <section className="space-y-3"><h2 className="font-sans text-lg font-semibold tracking-normal">{recordReady ? t('nakalReady') : t('officialResponse')}</h2><div className="official-record overflow-x-auto rounded-xl border bg-white p-4 text-sm text-foreground [&_table]:w-full [&_td]:border [&_td]:p-2 [&_th]:border [&_th]:bg-muted [&_th]:p-2" aria-label={t('officialResult')} dangerouslySetInnerHTML={{ __html: resultHtml }} /></section>}
   </div>;

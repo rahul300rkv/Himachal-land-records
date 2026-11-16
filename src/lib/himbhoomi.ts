@@ -1,8 +1,14 @@
 const BASE_URL = 'https://himbhoomilmk.nic.in/';
 const RECORDS_URL = new URL('viewlandrecords.aspx', BASE_URL).toString();
+const POSTBACK_SETTLE_MS = 500;
+const CAPTCHA_SETTLE_MS = 750;
 
 export type OfficialOption = { value: string; label: string };
 type UpstreamState = { cookie: string; html: string; url: string };
+
+function delay(milliseconds: number) {
+  return new Promise((resolve) => setTimeout(resolve, milliseconds));
+}
 
 const FIELD = {
   district: 'ctl00$ContentPlaceHolder1$cmbdistrict',
@@ -130,11 +136,13 @@ async function start() {
 
 async function postback(state: UpstreamState, eventTarget: string, selected: Record<string, string>) {
   const body = new URLSearchParams({ ...hiddenFields(state.html), ...selected, __EVENTTARGET: eventTarget, __EVENTARGUMENT: '' });
-  return request(RECORDS_URL, {
+  const nextState = await request(RECORDS_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded', Referer: RECORDS_URL },
     body,
   }, state.cookie);
+  await delay(POSTBACK_SETTLE_MS);
+  return nextState;
 }
 
 export type OfficialSelection = { district: string; tehsil?: string; village?: string };
@@ -266,6 +274,7 @@ export async function prepareOfficialSearch(selection: Required<OfficialSelectio
 
 export async function createCaptchaSession(token: string) {
   const session = decodeSession(token);
+  await delay(CAPTCHA_SETTLE_MS);
   const captchaResponse = await fetch(new URL('CaptchaControl.aspx', BASE_URL), {
     cache: 'no-store',
     headers: { Cookie: session.cookie, Referer: RECORDS_URL },
