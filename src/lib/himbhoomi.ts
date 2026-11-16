@@ -273,12 +273,13 @@ export async function submitOfficialSearch(token: string, captcha: string) {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded', Referer: RECORDS_URL },
     body,
   }, session.cookie);
-  const captchaFailed = /invalid\s*captcha|wrong\s*captcha|captcha[^<]{0,50}(?:गलत|अमान्य)/i.test(state.html);
+  const recordReady = isNakalPage(state.url);
+  const captchaFailed = !recordReady || /invalid\s*captcha|wrong\s*captcha|captcha[^<]{0,50}(?:गलत|अमान्य)/i.test(state.html);
   return {
-    html: sanitizeOfficialResult(state.html),
+    html: recordReady ? sanitizeOfficialResult(state.html) : '',
     captchaFailed,
-    recordReady: isNakalPage(state.url),
-    controls: isNakalPage(state.url) ? [] : officialControls(state.html),
+    recordReady,
+    controls: [],
     token: encodeSession({ ...session, cookie: state.cookie, hidden: hiddenFields(state.html) }),
   };
 }
@@ -306,10 +307,11 @@ export async function continueOfficialSearch(token: string, fields: Record<strin
     headers: { 'Content-Type': 'application/x-www-form-urlencoded', Referer: RECORDS_URL },
     body,
   }, session.cookie);
+  const recordReady = isNakalPage(state.url);
   return {
-    html: sanitizeOfficialResult(state.html),
-    recordReady: isNakalPage(state.url),
-    controls: isNakalPage(state.url) ? [] : officialControls(state.html),
+    html: recordReady ? sanitizeOfficialResult(state.html) : '',
+    recordReady,
+    controls: recordReady ? [] : officialControls(state.html),
     token: encodeSession({ ...session, cookie: state.cookie, hidden: hiddenFields(state.html), fields: allFields }),
   };
 }
