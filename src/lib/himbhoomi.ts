@@ -2,7 +2,7 @@ const BASE_URL = 'https://himbhoomilmk.nic.in/';
 const RECORDS_URL = new URL('viewlandrecords.aspx', BASE_URL).toString();
 
 export type OfficialOption = { value: string; label: string };
-type UpstreamState = { cookie: string; html: string };
+type UpstreamState = { cookie: string; html: string; url: string };
 
 const FIELD = {
   district: 'ctl00$ContentPlaceHolder1$cmbdistrict',
@@ -83,7 +83,7 @@ async function request(url: string, init: RequestInit, cookie = ''): Promise<Ups
     signal: AbortSignal.timeout(20_000),
   });
   if (!response.ok) throw new Error(`HimBhoomi returned ${response.status}`);
-  return { cookie: mergeCookie(cookie, response), html: await response.text() };
+  return { cookie: mergeCookie(cookie, response), html: await response.text(), url: response.url };
 }
 
 async function start() {
@@ -220,6 +220,10 @@ function sanitizeOfficialResult(html: string) {
     });
 }
 
+function isNakalPage(url: string) {
+  return /\/viewNakal\.aspx(?:$|[?#])/i.test(url);
+}
+
 export async function submitOfficialSearch(token: string, captcha: string) {
   const session = decodeSession(token);
   const body = new URLSearchParams({
@@ -242,7 +246,8 @@ export async function submitOfficialSearch(token: string, captcha: string) {
   return {
     html: sanitizeOfficialResult(state.html),
     captchaFailed,
-    controls: officialControls(state.html),
+    recordReady: isNakalPage(state.url),
+    controls: isNakalPage(state.url) ? [] : officialControls(state.html),
     token: encodeSession({ ...session, cookie: state.cookie, hidden: hiddenFields(state.html), fields: {} }),
   };
 }
@@ -272,7 +277,8 @@ export async function continueOfficialSearch(token: string, fields: Record<strin
   }, session.cookie);
   return {
     html: sanitizeOfficialResult(state.html),
-    controls: officialControls(state.html),
+    recordReady: isNakalPage(state.url),
+    controls: isNakalPage(state.url) ? [] : officialControls(state.html),
     token: encodeSession({ ...session, cookie: state.cookie, hidden: hiddenFields(state.html), fields: allFields }),
   };
 }

@@ -420,6 +420,8 @@
       "recordChooserBody": "Khewat, Khatauni and Khasra choices are populated from HimBhoomi for the selected village and Jamabandi year.",
       "choose": "Select an option",
       "loadRecord": "Load official record",
+      "nakalReady": "Official Nakal record",
+      "officialResponse": "HimBhoomi record choices",
       "officialResult": "Official HimBhoomi response",
       "unavailable": "HimBhoomi is temporarily unavailable. Please try again."
     },
