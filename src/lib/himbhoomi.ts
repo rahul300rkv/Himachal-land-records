@@ -1,0 +1,279 @@
+const BASE_URL = 'https://himbhoomilmk.nic.in/';
+const RECORDS_URL = new URL('viewlandrecords.aspx', BASE_URL).toString();
+
+export type OfficialOption = { value: string; label: string };
+type UpstreamState = { cookie: string; html: string };
+
+const FIELD = {
+  district: 'ctl00$ContentPlaceHolder1$cmbdistrict',
+  tehsil: 'ctl00$ContentPlaceHolder1$cmbtehsil',
+  village: 'ctl00$ContentPlaceHolder1$cmbvillage',
+  year: 'ctl00$ContentPlaceHolder1$cmbjyear',
+  captcha: 'ctl00$ContentPlaceHolder1$txtSearchCaptcha',
+  submit: 'ctl00$ContentPlaceHolder1$btnGo',
+} as const;
+
+function decodeEntities(value: string) {
+  return value
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;|&apos;/gi, "'")
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/&#(\d+);/g, (_, code: string) => String.fromCodePoint(Number(code)))
+    .replace(/&#x([\da-f]+);/gi, (_, code: string) => String.fromCodePoint(Number.parseInt(code, 16)));
+}
+
+function attributes(tag: string) {
+  return Object.fromEntries(
+    [...tag.matchAll(/([:\w$-]+)\s*=\s*(?:"([^"]*)"|'([^']*)')/g)].map((match) => [
+      match[1].toLowerCase(),
+      decodeEntities(match[2] ?? match[3] ?? ''),
+    ]),
+  );
+}
+
+function hiddenFields(html: string) {
+  const fields: Record<string, string> = {};
+  for (const match of html.matchAll(/<input\b[^>]*>/gi)) {
+    const attrs = attributes(match[0]);
+    if (attrs.type?.toLowerCase() === 'hidden' && attrs.name) fields[attrs.name] = attrs.value ?? '';
+  }
+  return fields;
+}
+
+export function selectOptions(html: string, id: string): OfficialOption[] {
+  const escaped = id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const select = html.match(new RegExp(`<select\\b[^>]*id=["']${escaped}["'][^>]*>([\\s\\S]*?)<\\/select>`, 'i'));
+  if (!select) return [];
+  return [...select[1].matchAll(/<option\b([^>]*)>([\s\S]*?)<\/option>/gi)]
+    .map((match) => {
+      const attrs = attributes(`<option ${match[1]}>`);
+      return { value: attrs.value ?? '', label: decodeEntities(match[2].replace(/<[^>]+>/g, '')).replace(/\s+/g, ' ').trim() };
+    })
+    .filter((option) => option.value);
+}
+
+function mergeCookie(current: string, response: Response) {
+  const cookies = new Map(current.split(/;\s*/).filter(Boolean).map((part) => {
+    const index = part.indexOf('=');
+    return [part.slice(0, index), part.slice(index + 1)] as const;
+  }));
+  const setCookies = response.headers.getSetCookie?.() ?? (response.headers.get('set-cookie') ? [response.headers.get('set-cookie')!] : []);
+  setCookies.forEach((header) => {
+    const pair = header.split(';', 1)[0];
+    const index = pair.indexOf('=');
+    if (index > 0) cookies.set(pair.slice(0, index), pair.slice(index + 1));
+  });
+  return [...cookies].map(([name, value]) => `${name}=${value}`).join('; ');
+}
+
+async function request(url: string, init: RequestInit, cookie = ''): Promise<UpstreamState> {
+  const response = await fetch(url, {
+    ...init,
+    cache: 'no-store',
+    redirect: 'follow',
+    headers: {
+      'User-Agent': 'HimLand-Check/1.0 (+https://himachal-land-records.vercel.app)',
+      Accept: 'text/html,application/xhtml+xml',
+      ...(cookie ? { Cookie: cookie } : {}),
+      ...init.headers,
+    },
+    signal: AbortSignal.timeout(20_000),
+  });
+  if (!response.ok) throw new Error(`HimBhoomi returned ${response.status}`);
+  return { cookie: mergeCookie(cookie, response), html: await response.text() };
+}
+
+async function start() {
+  return request(RECORDS_URL, { method: 'GET' });
+}
+
+async function postback(state: UpstreamState, eventTarget: string, selected: Record<string, string>) {
+  const body = new URLSearchParams({ ...hiddenFields(state.html), ...selected, __EVENTTARGET: eventTarget, __EVENTARGUMENT: '' });
+  return request(RECORDS_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded', Referer: RECORDS_URL },
+    body,
+  }, state.cookie);
+}
+
+export type OfficialSelection = { district: string; tehsil?: string; village?: string };
+
+export async function loadOfficialState(selection: OfficialSelection) {
+  let state = await start();
+  const selected: Record<string, string> = { [FIELD.district]: selection.district };
+  state = await postback(state, FIELD.district, selected);
+  if (selection.tehsil) {
+    selected[FIELD.tehsil] = selection.tehsil;
+    state = await postback(state, FIELD.tehsil, selected);
+  }
+  if (selection.village) {
+    selected[FIELD.village] = selection.village;
+    state = await postback(state, FIELD.village, selected);
+  }
+  return { state, selected };
+}
+
+export async function getDistricts() {
+  const state = await start();
+  return selectOptions(state.html, 'ctl00_ContentPlaceHolder1_cmbdistrict');
+}
+
+export async function getDependentOptions(selection: OfficialSelection) {
+  const { state } = await loadOfficialState(selection);
+  if (!selection.tehsil) return selectOptions(state.html, 'ctl00_ContentPlaceHolder1_cmbtehsil');
+  if (!selection.village) return selectOptions(state.html, 'ctl00_ContentPlaceHolder1_cmbvillage');
+  return selectOptions(state.html, 'ctl00_ContentPlaceHolder1_cmbjyear');
+}
+
+type CaptchaSession = OfficialSelection & {
+  year: string;
+  cookie: string;
+  hidden: Record<string, string>;
+  fields?: Record<string, string>;
+};
+
+export type OfficialControl = {
+  name: string;
+  label: string;
+  kind: 'select' | 'radio';
+  options: OfficialOption[];
+};
+
+function plainText(value: string) {
+  return decodeEntities(value.replace(/<[^>]+>/g, ' ')).replace(/\s+/g, ' ').trim();
+}
+
+function officialControls(html: string): OfficialControl[] {
+  const relevant = /(khewat|khatauni|khasra|jam|tatima|rblkkk|ddlkh|srchparam)/i;
+  const labels = new Map(
+    [...html.matchAll(/<label\b([^>]*)>([\s\S]*?)<\/label>/gi)].map((match) => {
+      const attrs = attributes(`<label ${match[1]}>`);
+      return [attrs.for ?? '', plainText(match[2])] as const;
+    }),
+  );
+  const controls: OfficialControl[] = [];
+  for (const match of html.matchAll(/<select\b([^>]*)>([\s\S]*?)<\/select>/gi)) {
+    const attrs = attributes(`<select ${match[1]}>`);
+    if (!attrs.name || !relevant.test(`${attrs.name} ${attrs.id ?? ''}`)) continue;
+    const options = [...match[2].matchAll(/<option\b([^>]*)>([\s\S]*?)<\/option>/gi)]
+      .map((option) => {
+        const optionAttrs = attributes(`<option ${option[1]}>`);
+        return { value: optionAttrs.value ?? '', label: plainText(option[2]) };
+      })
+      .filter((option) => option.value);
+    controls.push({ name: attrs.name, label: labels.get(attrs.id ?? '') || plainText(attrs.title ?? '') || 'Official record choice', kind: 'select', options });
+  }
+  const radioGroups = new Map<string, OfficialOption[]>();
+  for (const match of html.matchAll(/<input\b[^>]*type=["']radio["'][^>]*>/gi)) {
+    const attrs = attributes(match[0]);
+    if (!attrs.name || !relevant.test(`${attrs.name} ${attrs.id ?? ''}`)) continue;
+    const option = { value: attrs.value ?? '', label: labels.get(attrs.id ?? '') || attrs.value || 'Option' };
+    radioGroups.set(attrs.name, [...(radioGroups.get(attrs.name) ?? []), option]);
+  }
+  radioGroups.forEach((options, name) => controls.push({ name, label: 'Search record by', kind: 'radio', options }));
+  return controls.filter((control) => control.options.length > 0);
+}
+
+function encodeSession(session: CaptchaSession) {
+  return Buffer.from(JSON.stringify(session), 'utf8').toString('base64url');
+}
+
+function decodeSession(token: string): CaptchaSession {
+  const parsed = JSON.parse(Buffer.from(token, 'base64url').toString('utf8')) as CaptchaSession;
+  if (!parsed.district || !parsed.tehsil || !parsed.village || !parsed.year || !parsed.cookie || !parsed.hidden) {
+    throw new Error('Invalid HimBhoomi session');
+  }
+  return parsed;
+}
+
+export async function createCaptchaSession(selection: Required<OfficialSelection> & { year: string }) {
+  const { state } = await loadOfficialState(selection);
+  const captchaResponse = await fetch(new URL('CaptchaControl.aspx', BASE_URL), {
+    cache: 'no-store',
+    headers: { Cookie: state.cookie, Referer: RECORDS_URL },
+    signal: AbortSignal.timeout(20_000),
+  });
+  if (!captchaResponse.ok) throw new Error(`Captcha returned ${captchaResponse.status}`);
+  const bytes = Buffer.from(await captchaResponse.arrayBuffer());
+  const mediaType = captchaResponse.headers.get('content-type')?.split(';')[0] || 'image/jpeg';
+  return {
+    image: `data:${mediaType};base64,${bytes.toString('base64')}`,
+    token: encodeSession({ ...selection, cookie: state.cookie, hidden: hiddenFields(state.html), fields: {} }),
+  };
+}
+
+function sanitizeOfficialResult(html: string) {
+  const content = html.match(/<div\b[^>]*id=["']ctl00_ContentPlaceHolder1_UpdatePanel1["'][^>]*>([\s\S]*?)<div\b[^>]*id=["']footer_image["']/i)?.[1] ?? html;
+  return content
+    .replace(/<(script|style|form|iframe|object|embed|svg)\b[\s\S]*?<\/\1>/gi, '')
+    .replace(/<input\b[^>]*>/gi, '')
+    .replace(/\s+on\w+\s*=\s*(?:"[^"]*"|'[^']*')/gi, '')
+    .replace(/\s+(?:href|src|action)\s*=\s*(?:"[^"]*"|'[^']*')/gi, '')
+    .replace(/<(?!\/?(?:table|thead|tbody|tfoot|tr|td|th|div|span|p|br|h[1-6]|strong|b|em|ul|ol|li)\b)[^>]+>/gi, '')
+    .replace(/<(\w+)\b([^>]*)>/g, (_tag, name: string, attrs: string) => {
+      const safe = [...attrs.matchAll(/\s+(colspan|rowspan)\s*=\s*(?:"(\d+)"|'(\d+)')/gi)]
+        .map((match) => ` ${match[1]}="${match[2] ?? match[3]}"`).join('');
+      return `<${name}${safe}>`;
+    });
+}
+
+export async function submitOfficialSearch(token: string, captcha: string) {
+  const session = decodeSession(token);
+  const body = new URLSearchParams({
+    ...session.hidden,
+    [FIELD.district]: session.district,
+    [FIELD.tehsil]: session.tehsil!,
+    [FIELD.village]: session.village!,
+    [FIELD.year]: session.year,
+    [FIELD.captcha]: captcha.trim().toUpperCase(),
+    [FIELD.submit]: 'OK',
+    __EVENTTARGET: '',
+    __EVENTARGUMENT: '',
+  });
+  const state = await request(RECORDS_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded', Referer: RECORDS_URL },
+    body,
+  }, session.cookie);
+  const captchaFailed = /invalid\s*captcha|wrong\s*captcha|captcha[^<]{0,50}(?:गलत|अमान्य)/i.test(state.html);
+  return {
+    html: sanitizeOfficialResult(state.html),
+    captchaFailed,
+    controls: officialControls(state.html),
+    token: encodeSession({ ...session, cookie: state.cookie, hidden: hiddenFields(state.html), fields: {} }),
+  };
+}
+
+export async function continueOfficialSearch(token: string, fields: Record<string, string>, eventTarget = '') {
+  const session = decodeSession(token);
+  const safeFields = Object.fromEntries(
+    Object.entries(fields).filter(([name, value]) =>
+      name.startsWith('ctl00$ContentPlaceHolder1$') && name.length <= 150 && value.length <= 500,
+    ),
+  );
+  const allFields = { ...(session.fields ?? {}), ...safeFields };
+  const body = new URLSearchParams({
+    ...session.hidden,
+    [FIELD.district]: session.district,
+    [FIELD.tehsil]: session.tehsil!,
+    [FIELD.village]: session.village!,
+    [FIELD.year]: session.year,
+    ...allFields,
+    __EVENTTARGET: eventTarget.startsWith('ctl00$ContentPlaceHolder1$') ? eventTarget : '',
+    __EVENTARGUMENT: '',
+  });
+  const state = await request(RECORDS_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded', Referer: RECORDS_URL },
+    body,
+  }, session.cookie);
+  return {
+    html: sanitizeOfficialResult(state.html),
+    controls: officialControls(state.html),
+    token: encodeSession({ ...session, cookie: state.cookie, hidden: hiddenFields(state.html), fields: allFields }),
+  };
+}
+

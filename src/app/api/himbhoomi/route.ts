@@ -1,0 +1,44 @@
+import { z } from 'zod';
+import {
+  createCaptchaSession,
+  continueOfficialSearch,
+  getDependentOptions,
+  getDistricts,
+  submitOfficialSearch,
+} from '@/lib/himbhoomi';
+
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
+const requestSchema = z.discriminatedUnion('action', [
+  z.object({ action: z.literal('districts') }),
+  z.object({ action: z.literal('tehsils'), district: z.string().min(1).max(10) }),
+  z.object({ action: z.literal('villages'), district: z.string().min(1).max(10), tehsil: z.string().min(1).max(10) }),
+  z.object({ action: z.literal('years'), district: z.string().min(1).max(10), tehsil: z.string().min(1).max(10), village: z.string().min(1).max(20) }),
+  z.object({ action: z.literal('captcha'), district: z.string().min(1).max(10), tehsil: z.string().min(1).max(10), village: z.string().min(1).max(20), year: z.string().regex(/^\d{4}$/) }),
+  z.object({ action: z.literal('search'), token: z.string().min(1).max(250_000), captcha: z.string().trim().min(1).max(12) }),
+  z.object({
+    action: z.literal('continue'),
+    token: z.string().min(1).max(250_000),
+    fields: z.record(z.string(), z.string()),
+    eventTarget: z.string().max(150).optional(),
+  }),
+]);
+
+export async function POST(request: Request) {
+  try {
+    const input = requestSchema.parse(await request.json());
+    if (input.action === 'districts') return Response.json({ options: await getDistricts() });
+    if (input.action === 'tehsils') return Response.json({ options: await getDependentOptions(input) });
+    if (input.action === 'villages') return Response.json({ options: await getDependentOptions(input) });
+    if (input.action === 'years') return Response.json({ options: await getDependentOptions(input) });
+    if (input.action === 'captcha') return Response.json(await createCaptchaSession(input));
+    if (input.action === 'search') return Response.json(await submitOfficialSearch(input.token, input.captcha));
+    return Response.json(await continueOfficialSearch(input.token, input.fields, input.eventTarget));
+  } catch (error) {
+    console.error('HimBhoomi relay failed', error);
+    const message = error instanceof z.ZodError ? 'Invalid request' : 'HimBhoomi is temporarily unavailable';
+    return Response.json({ error: message }, { status: error instanceof z.ZodError ? 400 : 502 });
+  }
+}
+
