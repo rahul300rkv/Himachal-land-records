@@ -320,7 +320,7 @@ export async function submitOfficialSearch(token: string, captcha: string) {
   }, session.cookie);
   const recordReady = isNakalPage(state.url);
   const responseText = plainText(state.html);
-  const captchaFailed = !recordReady && /(?:invalid|wrong|incorrect)\s*captcha|captcha.{0,80}(?:invalid|wrong|incorrect|गलत|अमान्य|स्वीकार नहीं)/i.test(responseText);
+  const captchaFailed = !recordReady && /(?:wrong|incorrect|invalid)\s*(?:captcha\s*)?code|(?:invalid|wrong|incorrect)\s*captcha|captcha.{0,80}(?:invalid|wrong|incorrect|गलत|अमान्य|स्वीकार नहीं)/i.test(responseText);
   const responseFields = browserFormFields(state.html);
   const activeSelections = Object.fromEntries(
     Object.entries(session.fields ?? {}).filter(([name]) => Object.hasOwn(responseFields, name)),
