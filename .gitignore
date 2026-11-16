@@ -33,3 +33,9 @@ next-env.d.ts
 # supabase local
 supabase/.branches
 supabase/.temp
+
+# local scraper output and scratch data
+/.tmp-himbhoomi-debug/
+/data/himbhoomi/
+__pycache__/
+*.py[cod]
