@@ -29,6 +29,14 @@ const requestSchema = z.discriminatedUnion('action', [
   }),
 ]);
 
+function diagnosticCode(error: unknown) {
+  const outer = error instanceof Error ? error.name : 'UnknownError';
+  const cause = (error as { cause?: { code?: unknown; name?: unknown } } | null)?.cause;
+  const detail = typeof cause?.code === 'string' ? cause.code
+    : typeof cause?.name === 'string' ? cause.name : outer;
+  return detail.replace(/[^A-Z0-9_-]/gi, '').slice(0, 48) || 'UNKNOWN';
+}
+
 export async function POST(request: Request) {
   try {
     const input = requestSchema.parse(await request.json());
@@ -42,7 +50,9 @@ export async function POST(request: Request) {
     return Response.json(await continueOfficialSearch(input.token, input.fields, input.eventTarget));
   } catch (error) {
     console.error('HimBhoomi relay failed', error);
-    const message = error instanceof z.ZodError ? 'Invalid request' : 'HimBhoomi is temporarily unavailable';
+    const message = error instanceof z.ZodError
+      ? 'Invalid request'
+      : `HimBhoomi is temporarily unavailable [${diagnosticCode(error)}]`;
     return Response.json({ error: message }, { status: error instanceof z.ZodError ? 400 : 502 });
   }
 }

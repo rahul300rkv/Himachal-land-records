@@ -10,6 +10,21 @@ const CAPTCHA_SETTLE_MS = 750;
 export type OfficialOption = { value: string; label: string };
 type UpstreamState = { cookie: string; html: string; url: string };
 
+const OFFICIAL_DISTRICTS: OfficialOption[] = [
+  { value: '04', label: 'ऊना' },
+  { value: '07', label: 'कुल्लू' },
+  { value: '02', label: 'कांगड़ा' },
+  { value: '12', label: 'किन्नौर' },
+  { value: '01', label: 'चम्बा' },
+  { value: '05', label: 'बिलासपुर' },
+  { value: '06', label: 'मण्डी' },
+  { value: '08', label: 'लाहौल-स्पीति' },
+  { value: '09', label: 'शिमला' },
+  { value: '11', label: 'सिरमौर' },
+  { value: '10', label: 'सोलन' },
+  { value: '03', label: 'हमीरपुर' },
+];
+
 function delay(milliseconds: number) {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
@@ -168,8 +183,7 @@ export async function loadOfficialState(selection: OfficialSelection) {
 }
 
 export async function getDistricts() {
-  const state = await start();
-  return selectOptions(state.html, 'ctl00_ContentPlaceHolder1_cmbdistrict');
+  return OFFICIAL_DISTRICTS;
 }
 
 export async function getDependentOptions(selection: OfficialSelection) {
