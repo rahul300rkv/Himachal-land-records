@@ -416,6 +416,7 @@
       "fetch": "Open official record",
       "newCaptcha": "New code",
       "captchaInvalid": "The CAPTCHA was not accepted. Request a new code and try again.",
+      "submissionInvalid": "HimBhoomi did not accept the selected record details. Re-select the record number, then request a new CAPTCHA.",
       "recordChooser": "Choose the official record",
       "recordChooserBody": "Choose Jamabandi or Shajra Nasab. For Jamabandi, choose Khewat, Khatauni or Khasra and then its HimBhoomi-populated number. For Shajra Nasab, enter the name.",
       "choose": "Select an option",

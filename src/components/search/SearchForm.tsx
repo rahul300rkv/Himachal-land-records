@@ -10,7 +10,7 @@ import { Select } from '@/components/ui/select';
 
 type Option = { value: string; label: string };
 type OfficialControl = { name: string; label: string; kind: 'select' | 'radio' | 'text'; options: Option[] };
-type ApiResult = { options?: Option[]; image?: string; token?: string; html?: string; controls?: OfficialControl[]; captchaFailed?: boolean; recordReady?: boolean; error?: string };
+type ApiResult = { options?: Option[]; image?: string; token?: string; html?: string; controls?: OfficialControl[]; captchaFailed?: boolean; submissionFailed?: boolean; recordReady?: boolean; error?: string };
 type SearchFormProps = { defaultValues?: unknown };
 
 async function callHimBhoomi(payload: Record<string, unknown>): Promise<ApiResult> {
@@ -78,7 +78,19 @@ export function SearchForm(_props: SearchFormProps) {
     setBusy(true); setError('');
     try {
       const data = await callHimBhoomi({ action: 'search', token, captcha });
-      if (data.captchaFailed) { setError(t('captchaInvalid')); setCaptcha(''); setCaptchaImage(''); setToken(''); return; }
+      if (data.captchaFailed) {
+        setError(t('captchaInvalid'));
+        setCaptcha(''); setCaptchaImage(data.image ?? '');
+        setToken(data.token ?? token);
+        return;
+      }
+      if (data.submissionFailed) {
+        setError(t('submissionInvalid'));
+        setCaptcha(''); setCaptchaImage('');
+        setToken(data.token ?? token);
+        setControls(data.controls ?? controls);
+        return;
+      }
       setToken(data.token ?? token); setControls(data.controls ?? []); setResultHtml(data.html ?? ''); setRecordReady(Boolean(data.recordReady));
     } catch (reason) { setError(reason instanceof Error ? reason.message : t('unavailable')); }
     finally { setBusy(false); }

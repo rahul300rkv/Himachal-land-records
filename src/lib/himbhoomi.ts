@@ -43,6 +43,18 @@ function hiddenFields(html: string) {
   return fields;
 }
 
+function defaultFormFields(html: string) {
+  const fields: Record<string, string> = {};
+  for (const match of html.matchAll(/<input\b[^>]*>/gi)) {
+    const attrs = attributes(match[0]);
+    const checked = /\schecked(?:\s*=\s*(?:["']checked["']|["']?true["']?))?(?:\s|\/?>)/i.test(match[0]);
+    if (attrs.type?.toLowerCase() === 'radio' && attrs.name && checked) {
+      fields[attrs.name] = attrs.value ?? '';
+    }
+  }
+  return fields;
+}
+
 export function selectOptions(html: string, id: string): OfficialOption[] {
   const escaped = id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const select = html.match(new RegExp(`<select\\b[^>]*id=["']${escaped}["'][^>]*>([\\s\\S]*?)<\\/select>`, 'i'));
@@ -215,7 +227,12 @@ export async function prepareOfficialSearch(selection: Required<OfficialSelectio
   const state = await postback(loaded.state, FIELD.year, selected);
   return {
     controls: officialControls(state.html),
-    token: encodeSession({ ...selection, cookie: state.cookie, hidden: hiddenFields(state.html), fields: {} }),
+    token: encodeSession({
+      ...selection,
+      cookie: state.cookie,
+      hidden: hiddenFields(state.html),
+      fields: defaultFormFields(state.html),
+    }),
   };
 }
 
@@ -274,13 +291,23 @@ export async function submitOfficialSearch(token: string, captcha: string) {
     body,
   }, session.cookie);
   const recordReady = isNakalPage(state.url);
-  const captchaFailed = !recordReady || /invalid\s*captcha|wrong\s*captcha|captcha[^<]{0,50}(?:गलत|अमान्य)/i.test(state.html);
+  const responseText = plainText(state.html);
+  const captchaFailed = !recordReady && /(?:invalid|wrong|incorrect)\s*captcha|captcha.{0,80}(?:invalid|wrong|incorrect|गलत|अमान्य|स्वीकार नहीं)/i.test(responseText);
+  const nextToken = encodeSession({
+    ...session,
+    cookie: state.cookie,
+    hidden: hiddenFields(state.html),
+    fields: { ...defaultFormFields(state.html), ...(session.fields ?? {}) },
+  });
+  const replacementCaptcha = captchaFailed ? await createCaptchaSession(nextToken) : null;
   return {
     html: recordReady ? sanitizeOfficialResult(state.html) : '',
     captchaFailed,
+    submissionFailed: !recordReady && !captchaFailed,
     recordReady,
-    controls: [],
-    token: encodeSession({ ...session, cookie: state.cookie, hidden: hiddenFields(state.html) }),
+    controls: recordReady || captchaFailed ? [] : officialControls(state.html),
+    image: replacementCaptcha?.image,
+    token: replacementCaptcha?.token ?? nextToken,
   };
 }
 
@@ -308,11 +335,12 @@ export async function continueOfficialSearch(token: string, fields: Record<strin
     body,
   }, session.cookie);
   const recordReady = isNakalPage(state.url);
+  const nextFields = { ...defaultFormFields(state.html), ...allFields };
   return {
     html: recordReady ? sanitizeOfficialResult(state.html) : '',
     recordReady,
     controls: recordReady ? [] : officialControls(state.html),
-    token: encodeSession({ ...session, cookie: state.cookie, hidden: hiddenFields(state.html), fields: allFields }),
+    token: encodeSession({ ...session, cookie: state.cookie, hidden: hiddenFields(state.html), fields: nextFields }),
   };
 }
 
