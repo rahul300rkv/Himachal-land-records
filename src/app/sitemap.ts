@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { routing } from '@/i18n/routing';
 import { absoluteUrl } from '@/lib/utils';
+import { BLOG_GUIDES } from '@/lib/blog-guides';
 
 // Public, indexable pages. (Record pages hold personal data and are deliberately excluded;
 // add individual marketplace listings here once you want them indexed.)
@@ -17,6 +18,7 @@ const PATHS = [
   '/guides',
   '/blog',
   '/blog/7-documents-before-buying-land',
+  ...BLOG_GUIDES.map(({ slug }) => `/blog/${slug}`),
   '/about',
   '/disclaimer',
   '/privacy',

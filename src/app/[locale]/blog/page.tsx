@@ -4,6 +4,7 @@ import { ArrowRight, FileCheck2 } from 'lucide-react';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
 import type { Locale } from '@/i18n/routing';
+import { BLOG_GUIDES } from '@/lib/blog-guides';
 import { pageMetadata } from '@/lib/seo';
 
 type Props = { params: Promise<{ locale: string }> };
@@ -33,6 +34,15 @@ export default async function BlogPage({ params }: Props) {
           <span className="mt-5 inline-flex items-center gap-2 font-semibold text-primary">{t('read')} <ArrowRight className="size-4 transition group-hover:translate-x-1" aria-hidden="true" /></span>
         </div>
       </Link>
+      <div className="mt-8 grid gap-6 md:grid-cols-2">
+        {BLOG_GUIDES.map((guide) => {
+          const language = locale === 'hi' ? 'hi' : 'en';
+          return <Link key={guide.slug} href={`/blog/${guide.slug}`} className="concept-card group overflow-hidden rounded-3xl border bg-card shadow-[6px_7px_0_rgba(42,16,45,0.07)] transition hover:-translate-y-1 hover:border-primary/40">
+            <div className="relative aspect-[16/9] overflow-hidden"><Image src={guide.image} alt="" fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover transition duration-700 group-hover:scale-[1.03]" /></div>
+            <div className="p-6"><p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{guide.readTime[language]}</p><h2 className="mt-2 text-2xl">{guide.title[language]}</h2><p className="mt-3 leading-relaxed text-muted-foreground">{guide.summary[language]}</p><span className="mt-5 inline-flex items-center gap-2 font-semibold text-primary">{t('read')} <ArrowRight className="size-4 transition group-hover:translate-x-1" aria-hidden="true" /></span></div>
+          </Link>;
+        })}
+      </div>
     </article>
   );
 }
