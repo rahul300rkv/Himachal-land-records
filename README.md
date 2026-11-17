@@ -333,7 +333,7 @@ Notes:
 
 ## Before you launch
 
-- [ ] Replace the placeholders in `src/lib/site.ts`: `companyName`, `contactEmail`, `jurisdiction`. Bump `legalLastUpdated` whenever legal pages change.
+- [ ] Confirm the configured `companyName`, `contactEmail`, and `jurisdiction` in `src/lib/site.ts`; bump `legalLastUpdated` whenever legal pages change.
 - [ ] Have an advocate review the **Disclaimer, Privacy policy, Terms of use** and the About page. They are careful drafts, **not legal advice**.
 - [ ] Have the Hindi text reviewed by a native speaker.
 - [ ] Verify the tehsil list in `src/lib/data/districts.ts` against official data.

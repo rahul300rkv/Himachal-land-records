@@ -1,19 +1,17 @@
 /**
  * Site-wide constants used by the legal pages and metadata.
  *
- * TODO before launch: replace the placeholder values marked below, and have the
- * legal pages (About, Disclaimer, Privacy, Terms) reviewed by a qualified advocate.
+ * Have the legal pages (About, Disclaimer, Privacy, Terms) reviewed by a
+ * qualified advocate before relying on them in production.
  */
 export const SITE = {
   name: 'HimachalLand Check',
-  /** TODO: replace with the registered name of the LLP (the pages append "LLP"). */
-  companyName: '[Your Company Name]',
-  /** TODO: replace with a monitored support / grievance email address. */
-  contactEmail: 'hello@your-domain.example',
+  companyName: 'Himland Check',
+  contactEmail: 'himlandcheck@gmail.com',
   /** TODO: confirm the place whose courts have jurisdiction (see Terms of use). */
   jurisdiction: 'Shimla, Himachal Pradesh',
   /** Update this date (YYYY-MM-DD) whenever the legal pages change. */
-  legalLastUpdated: '2026-10-11',
+  legalLastUpdated: '2026-11-17',
 } as const;
 
 /** Formats the "last updated" date for the visitor's language, e.g. "11 October 2026". */
