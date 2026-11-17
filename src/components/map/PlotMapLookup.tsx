@@ -2,32 +2,72 @@
 
 import { ArrowUpRight, Copy, MapPinned, Search } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
-import { useMemo, useState } from 'react';
-import { LocationFields, type Location } from '@/components/search/LocationFields';
+import { useEffect, useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select } from '@/components/ui/select';
 
-const OFFICIAL_BHUNAKSHA_URL = 'https://bhunakshahp.nic.in/home/';
+type Option = { id: string; name: string; hi?: string };
 
 export function PlotMapLookup() {
   const t = useTranslations('MapExplorer');
   const locale = useLocale();
-  const [location, setLocation] = useState<Location>({ district: '', tehsil: '', village: '' });
+  const [districts, setDistricts] = useState<Option[]>([]);
+  const [tehsils, setTehsils] = useState<Option[]>([]);
+  const [villages, setVillages] = useState<Option[]>([]);
+  const [districtId, setDistrictId] = useState('');
+  const [tehsilId, setTehsilId] = useState('');
+  const [villageId, setVillageId] = useState('');
+  const [loading, setLoading] = useState<'districts' | 'tehsils' | 'villages' | ''>('districts');
   const [plot, setPlot] = useState('');
   const [copied, setCopied] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
+  useEffect(() => {
+    fetch('/api/bhunaksha/locations')
+      .then((response) => response.json())
+      .then((data: { districts?: Option[] }) => setDistricts(data.districts ?? []))
+      .finally(() => setLoading(''));
+  }, []);
+
+  useEffect(() => {
+    if (!districtId) {
+      setTehsils([]);
+      return;
+    }
+    setLoading('tehsils');
+    fetch(`/api/bhunaksha/locations?districtId=${districtId}`)
+      .then((response) => response.json())
+      .then((data: { tehsils?: Option[] }) => setTehsils(data.tehsils ?? []))
+      .finally(() => setLoading(''));
+  }, [districtId]);
+
+  useEffect(() => {
+    if (!districtId || !tehsilId) {
+      setVillages([]);
+      return;
+    }
+    setLoading('villages');
+    fetch(`/api/bhunaksha/locations?districtId=${districtId}&tehsilId=${tehsilId}`)
+      .then((response) => response.json())
+      .then((data: { villages?: Option[] }) => setVillages(data.villages ?? []))
+      .finally(() => setLoading(''));
+  }, [districtId, tehsilId]);
+
+  const district = districts.find((item) => item.id === districtId);
+  const tehsil = tehsils.find((item) => item.id === tehsilId);
+  const village = villages.find((item) => item.id === villageId);
   const reference = useMemo(
-    () => [location.district, location.tehsil, location.village, plot && `${t('plotLabel')}: ${plot}`].filter(Boolean).join(' · '),
-    [location, plot, t],
+    () => [district?.name, tehsil?.name, village?.name, plot && `${t('plotLabel')}: ${plot}`].filter(Boolean).join(' · '),
+    [district, tehsil, village, plot, t],
   );
 
   function validate() {
     const next = {
-      district: location.district ? '' : t('requiredDistrict'),
-      tehsil: location.tehsil ? '' : t('requiredTehsil'),
-      village: location.village ? '' : t('requiredVillage'),
+      district: districtId ? '' : t('requiredDistrict'),
+      tehsil: tehsilId ? '' : t('requiredTehsil'),
+      village: villageId ? '' : t('requiredVillage'),
       plot: plot.trim() ? '' : t('requiredPlot'),
     };
     setErrors(next);
@@ -36,7 +76,8 @@ export function PlotMapLookup() {
 
   function openOfficialMap() {
     if (!validate()) return;
-    window.open(OFFICIAL_BHUNAKSHA_URL, '_blank', 'noopener,noreferrer');
+    const locationCode = `${districtId}${tehsilId}${villageId}`;
+    window.open(`https://bhunakshahp.nic.in/plotreport/${locationCode}/${encodeURIComponent(plot.trim())}`, '_blank', 'noopener,noreferrer');
   }
 
   async function copyReference() {
@@ -47,9 +88,7 @@ export function PlotMapLookup() {
   }
 
   const searchParams = new URLSearchParams({
-    ...(location.district && { district: location.district }),
-    ...(location.tehsil && { tehsil: location.tehsil }),
-    ...(location.village && { village: location.village }),
+    ...(district?.name && { district: district.name }),
     ...(plot.trim() && { khasra: plot.trim() }),
   });
 
@@ -67,15 +106,36 @@ export function PlotMapLookup() {
         </div>
 
         <div className="mt-7 grid gap-5 sm:grid-cols-2">
-          <LocationFields
-            {...location}
-            fieldClassName="min-w-0"
-            errors={{ district: errors.district, tehsil: errors.tehsil, village: errors.village }}
-            onChange={(patch) => {
-              setLocation((current) => ({ ...current, ...patch }));
-              setErrors((current) => ({ ...current, ...Object.fromEntries(Object.keys(patch).map((key) => [key, ''])) }));
-            }}
-          />
+          <div className="min-w-0">
+            <Label htmlFor="map-district">{t('districtLabel')}</Label>
+            <Select id="map-district" value={districtId} disabled={loading === 'districts'} aria-invalid={Boolean(errors.district)} onChange={(event) => {
+              setDistrictId(event.target.value); setTehsilId(''); setVillageId(''); setErrors((current) => ({ ...current, district: '', tehsil: '', village: '' }));
+            }}>
+              <option value="">{loading === 'districts' ? t('loading') : t('districtPlaceholder')}</option>
+              {districts.map((item) => <option key={item.id} value={item.id}>{locale === 'hi' ? item.hi : item.name}</option>)}
+            </Select>
+            {errors.district && <p className="mt-1.5 text-sm text-destructive">{errors.district}</p>}
+          </div>
+          <div className="min-w-0">
+            <Label htmlFor="map-tehsil">{t('tehsilLabel')}</Label>
+            <Select id="map-tehsil" value={tehsilId} disabled={!districtId || loading === 'tehsils'} aria-invalid={Boolean(errors.tehsil)} onChange={(event) => {
+              setTehsilId(event.target.value); setVillageId(''); setErrors((current) => ({ ...current, tehsil: '', village: '' }));
+            }}>
+              <option value="">{loading === 'tehsils' ? t('loading') : t('tehsilPlaceholder')}</option>
+              {tehsils.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
+            </Select>
+            {errors.tehsil && <p className="mt-1.5 text-sm text-destructive">{errors.tehsil}</p>}
+          </div>
+          <div className="min-w-0">
+            <Label htmlFor="map-village">{t('villageLabel')}</Label>
+            <Select id="map-village" value={villageId} disabled={!tehsilId || loading === 'villages'} aria-invalid={Boolean(errors.village)} onChange={(event) => {
+              setVillageId(event.target.value); setErrors((current) => ({ ...current, village: '' }));
+            }}>
+              <option value="">{loading === 'villages' ? t('loading') : t('villagePlaceholder')}</option>
+              {villages.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
+            </Select>
+            {errors.village && <p className="mt-1.5 text-sm text-destructive">{errors.village}</p>}
+          </div>
           <div className="min-w-0">
             <Label htmlFor="plot-number">{t('plotLabel')}</Label>
             <Input
