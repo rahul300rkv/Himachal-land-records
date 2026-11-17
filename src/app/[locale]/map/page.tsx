@@ -6,6 +6,8 @@ import { pageMetadata } from '@/lib/seo';
 
 type Props = { params: Promise<{ locale: string }> };
 
+const faqTopics = ['plotNumber', 'openReport', 'missingReport', 'ownership', 'boundary'] as const;
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale: locale as Locale, namespace: 'MapExplorer' });
@@ -59,6 +61,27 @@ export default async function MapPage({ params }: Props) {
           </dl>
         </div>
       </figure>
+      <section aria-labelledby="map-overview" className="mt-10 max-w-3xl">
+        <h2 id="map-overview" className="text-2xl sm:text-3xl">{t('overview.title')}</h2>
+        <p className="mt-3 text-muted-foreground">{t('overview.body')}</p>
+        <ul className="mt-4 list-disc space-y-2 pl-5 text-muted-foreground">
+          <li>{t('overview.identify')}</li>
+          <li>{t('overview.compare')}</li>
+        </ul>
+      </section>
+      <section aria-labelledby="map-faq" className="mt-10 max-w-3xl">
+        <h2 id="map-faq" className="text-2xl sm:text-3xl">{t('faq.title')}</h2>
+        <div className="mt-4 space-y-3">
+          {faqTopics.map((topic) => (
+            <details key={topic} className="rounded-xl border bg-card">
+              <summary className="min-h-12 cursor-pointer px-4 py-3 font-medium">
+                {t(`faq.${topic}.question`)}
+              </summary>
+              <p className="px-4 pb-4 text-muted-foreground">{t(`faq.${topic}.answer`)}</p>
+            </details>
+          ))}
+        </div>
+      </section>
       <p className="mt-5 rounded-xl border border-notice-border bg-notice px-4 py-3 text-sm text-notice-foreground">{t('notice')}</p>
     </article>
   );

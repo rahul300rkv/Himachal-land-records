@@ -325,6 +325,35 @@
       "area": "Plot area",
       "areaValue": "520 m²"
     },
+    "overview": {
+      "title": "Himachal Pradesh BhuNaksha overview",
+      "body": "BhuNaksha is Himachal Pradesh’s online parcel map. Use it to locate a Khasra within the selected revenue village and see its mapped outline alongside adjoining plots.",
+      "identify": "Check the plot number and shape against the village map or Tatima you were given.",
+      "compare": "Compare the location and plot number with the corresponding Jamabandi before relying on them for a land purchase."
+    },
+    "faq": {
+      "title": "Frequently asked questions",
+      "plotNumber": {
+        "question": "Where do I find the Plot / Khasra No.?",
+        "answer": "Look for the Khasra number in the Jamabandi for that revenue village. Enter it exactly as shown, including any slash or subdivision."
+      },
+      "openReport": {
+        "question": "How do I view or save the plot report?",
+        "answer": "Choose the district, tehsil or sub-tehsil, and village. Enter the Khasra number and click Open Map. The official report opens in a new tab. If the report loads, use your browser’s Print option to save a PDF."
+      },
+      "missingReport": {
+        "question": "What if the map does not open?",
+        "answer": "Check the full location and Khasra number against your land record. If they match and the report still fails to load, try the official BhuNaksha viewer or ask the local revenue office about map availability."
+      },
+      "ownership": {
+        "question": "Can I use BhuNaksha to confirm ownership?",
+        "answer": "Use BhuNaksha to identify the mapped parcel. Check ownership separately against the current revenue record and the relevant registered documents."
+      },
+      "boundary": {
+        "question": "How do I confirm the boundary on the ground?",
+        "answer": "Compare the mapped outline with the village shajra or Tatima. For a boundary stakeout or dispute, ask the local revenue office about official demarcation."
+      }
+    },
     "notice": "Always compare the online outline with the official shajra, field book and demarcation on the ground."
   },
   "Guides": {
