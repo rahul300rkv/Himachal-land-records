@@ -7,7 +7,8 @@ import { rawNakalSchema, type RawNakal } from './schema';
  * model list in AI Studio. A 429 / 404 / 5xx falls through to the next model.
  */
 const ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models';
-const MODELS = (process.env.GEMINI_MODELS ?? 'gemini-3.8-flash,gemini-3.5-flash-lite')
+// Keep broadly available model IDs as defaults. Override in Vercel with GEMINI_MODELS when needed.
+const MODELS = (process.env.GEMINI_MODELS ?? 'gemini-2.5-flash,gemini-2.0-flash')
   .split(',')
   .map((s) => s.trim())
   .filter(Boolean);
@@ -85,12 +86,19 @@ export async function extractNakal(pdf: Buffer): Promise<{ raw: RawNakal; model:
 
     if (res.status === 429) { last = new ExtractionError('rate_limited', `${model}: quota exhausted`); continue; }
     if (res.status === 404 || res.status >= 500) { last = new ExtractionError('model_error', `${model}: HTTP ${res.status}`); continue; }
-    if (!res.ok) throw new ExtractionError('model_error', `${model}: HTTP ${res.status}`);
+    if (!res.ok) {
+      const detail = (await res.text()).slice(0, 240).replace(/\s+/g, ' ');
+      throw new ExtractionError('model_error', `${model}: HTTP ${res.status} ${detail}`);
+    }
 
     const data = (await res.json()) as {
       candidates?: { content?: { parts?: { text?: string }[] } }[];
     };
     const text = data.candidates?.[0]?.content?.parts?.map((p) => p.text ?? '').join('') ?? '';
+    if (!text) {
+      last = new ExtractionError('bad_output', `${model}: empty response`);
+      continue;
+    }
     try {
       return { raw: rawNakalSchema.parse(parseJson(text)), model };
     } catch {
