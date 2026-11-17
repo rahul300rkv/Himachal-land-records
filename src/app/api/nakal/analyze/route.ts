@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic';
 export const maxDuration = 60; // reading a PDF can take 20-50 s
 
 const MAX_BYTES = 4 * 1024 * 1024; // Vercel rejects request bodies over ~4.5 MB
-const MAX_PER_HOUR = 5;
+const MAX_PER_HOUR = 20;
 
 // Best-effort limiter (per server instance). The free Gemini quota is small, so also
 // require login whenever Supabase is configured.
@@ -26,7 +26,6 @@ const json = (body: Record<string, unknown>, status: number) =>
 /** POST multipart/form-data { file: PDF } -> { model, result } */
 export async function POST(request: Request) {
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
-  if (limited(ip)) return json({ error: 'rate_limited' }, 429);
 
   const form = await request.formData().catch(() => null);
   const file = form?.get('file');
@@ -34,6 +33,9 @@ export async function POST(request: Request) {
   if (file.size > MAX_BYTES) return json({ error: 'too_large' }, 413);
   const bytes = Buffer.from(await file.arrayBuffer());
   if (bytes.subarray(0, 5).toString('latin1') !== '%PDF-') return json({ error: 'invalid_file' }, 400);
+  // Count only valid PDF analysis attempts. Invalid uploads and configuration
+  // errors should not lock a user out while they are correcting a submission.
+  if (limited(ip)) return json({ error: 'rate_limited' }, 429);
 
   try {
     const { raw, model } = await extractNakal(bytes);
