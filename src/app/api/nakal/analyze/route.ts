@@ -1,7 +1,5 @@
-import { getCurrentUser } from '@/lib/auth';
 import { assess } from '@/lib/nakal/assess';
 import { ExtractionError, extractNakal } from '@/lib/nakal/extract';
-import { isSupabaseConfigured } from '@/lib/supabase/config';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -27,11 +25,8 @@ const json = (body: Record<string, unknown>, status: number) =>
 
 /** POST multipart/form-data { file: PDF } -> { model, result } */
 export async function POST(request: Request) {
-  const user = await getCurrentUser();
-  if (isSupabaseConfigured && !user) return json({ error: 'unauthorized' }, 401);
-
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
-  if (limited(user?.id ?? ip)) return json({ error: 'rate_limited' }, 429);
+  if (limited(ip)) return json({ error: 'rate_limited' }, 429);
 
   const form = await request.formData().catch(() => null);
   const file = form?.get('file');
