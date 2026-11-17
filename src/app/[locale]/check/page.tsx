@@ -38,9 +38,6 @@ export default async function CheckPage({ params }: Props) {
             sizes="(max-width: 672px) 100vw, 672px"
             className="h-auto w-full"
           />
-          <figcaption className="border-t border-border px-4 py-3 text-sm text-muted-foreground">
-            {t('guide.caption')}
-          </figcaption>
         </figure>
       </section>
       <section className="space-y-4 border-t border-border pt-8" aria-labelledby="nakal-faq">

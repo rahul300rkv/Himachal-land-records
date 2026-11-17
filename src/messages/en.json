@@ -1436,7 +1436,6 @@
       "body": "Upload a Himachal Pradesh Jamabandi PDF to review the recorded owners and shares, mutation entries, case references and possible charges that the checker can read. Compare highlighted findings with the original record and verify current details with the relevant offices.",
       "faqTitle": "Frequently asked questions",
       "sample": "Illustrated sample report",
-      "caption": "AI-generated illustration based on the checker layout. It uses fictional visual placeholders.",
       "faq": {
         "file": {
           "q": "Which file should I upload?",
@@ -1461,7 +1460,7 @@
       }
     },
     "title": "Check a land record (nakal)",
-    "intro": "Upload a jamabandi nakal PDF. We read it, run rule-based checks and show a score with the reasons. An AI model does the reading, so always compare the result with the original record.",
+    "intro": "Upload a Jamabandi nakal PDF. We read it, run rule-based checks and show a score with the reasons. An AI model does the reading, so always compare the result with the original record.",
     "choose": "Choose a PDF (up to 4 MB)",
     "analyze": "Check this record",
     "analyzing": "Reading the record… this can take up to a minute.",
