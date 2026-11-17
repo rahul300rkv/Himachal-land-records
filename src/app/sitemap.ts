@@ -20,6 +20,7 @@ const PATHS = [
   '/blog/7-documents-before-buying-land',
   ...BLOG_GUIDES.map(({ slug }) => `/blog/${slug}`),
   '/about',
+  '/contact',
   '/disclaimer',
   '/privacy',
   '/terms',

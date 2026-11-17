@@ -94,9 +94,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: t('title'),
       description: t('description'),
       locale: locale === 'hi' ? 'hi_IN' : 'en_IN',
-      images: [{ url: '/images/himachal-concept-hero.png', width: 1680, height: 945, alt: t('title') }],
+      images: [{ url: '/images/himachal-concept-hero.webp', width: 1600, height: 900, alt: t('title') }],
     },
-    twitter: { card: 'summary_large_image', title: t('title'), description: t('description'), images: ['/images/himachal-concept-hero.png'] },
+    twitter: { card: 'summary_large_image', title: t('title'), description: t('description'), images: ['/images/himachal-concept-hero.webp'] },
   };
 }
 
@@ -127,6 +127,7 @@ export default async function LocaleLayout({ children, params }: Props) {
       logo: absoluteUrl('/icon.svg'),
       description: metadata('description'),
       areaServed: { '@type': 'AdministrativeArea', name: 'Himachal Pradesh, India' },
+      contactPoint: { '@type': 'ContactPoint', email: SITE.contactEmail, contactType: 'customer support', availableLanguage: ['English', 'Hindi'] },
     },
     {
       '@context': 'https://schema.org',

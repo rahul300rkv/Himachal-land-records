@@ -14,7 +14,7 @@ export type BlogGuide = {
 export const BLOG_GUIDES: BlogGuide[] = [
   {
     slug: 'how-to-read-jamabandi-khewat-khatauni-khasra',
-    image: '/images/land-record-guides.png',
+    image: '/images/land-record-guides.webp',
     publishedAt: '2026-11-17T10:00:00+05:30',
     readTime: { en: '8 minute guide', hi: '8 मिनट की मार्गदर्शिका' },
     title: { en: 'How to read a Himachal Jamabandi: Khewat, Khatauni and Khasra explained', hi: 'हिमाचल जमाबंदी कैसे पढ़ें: खेवट, खतौनी और खसरा समझें' },
@@ -61,7 +61,7 @@ export const BLOG_GUIDES: BlogGuide[] = [
   },
   {
     slug: 'tatima-plot-map-boundary-access-check',
-    image: '/images/himachal-concept-hero.png',
+    image: '/images/himachal-concept-hero.webp',
     publishedAt: '2026-11-17T11:00:00+05:30',
     readTime: { en: '8 minute guide', hi: '8 मिनट की मार्गदर्शिका' },
     title: { en: 'Tatima and plot maps: how to verify boundary, area and legal access', hi: 'ततीमा और प्लॉट नक्शा: सीमा, क्षेत्रफल और कानूनी रास्ता कैसे जाँचें' },

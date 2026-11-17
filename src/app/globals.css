@@ -117,7 +117,6 @@
     position: absolute;
     inset: 300px 0 0;
     z-index: 0;
-    background: url('/images/himachal-concept-hero.png') center / cover no-repeat;
   }
   .cinematic-hero__gradient {
     position: absolute;
@@ -193,7 +192,7 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    font-size: 0.7rem;
+    font-size: 0.8rem;
     font-weight: 600;
     letter-spacing: 0.16em;
     text-transform: uppercase;

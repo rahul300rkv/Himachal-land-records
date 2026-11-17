@@ -1,16 +1,16 @@
-'use client';
-
 import { ArrowDown, ShieldCheck } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import Image from 'next/image';
+import { getTranslations } from 'next-intl/server';
 import { HeroSearch } from './HeroSearch';
 
-export function Hero() {
-  const t = useTranslations('Home.hero');
+export async function Hero() {
+  const t = await getTranslations('Home.hero');
 
   return (
     <>
       <section className="cinematic-hero">
         <div className="cinematic-hero__media" aria-hidden="true">
+          <Image src="/images/himachal-concept-hero.webp" alt="" fill priority fetchPriority="high" quality={72} sizes="100vw" className="object-cover" />
           <div className="cinematic-hero__gradient" />
         </div>
         <svg className="pointer-events-none absolute inset-x-0 bottom-8 z-[1] h-[44%] w-full text-[#2a102d]/30" viewBox="0 0 1440 420" preserveAspectRatio="none" aria-hidden="true">

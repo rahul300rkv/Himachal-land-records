@@ -47,7 +47,7 @@ export default async function SevenDocumentsPage({ params }: Props) {
       '@id': `${articleUrl}#article`,
       headline: t('title'),
       description: t('intro'),
-      image: [absoluteUrl('/images/seven-land-documents.png')],
+      image: [absoluteUrl('/images/seven-land-documents.webp')],
       datePublished: PUBLISHED_AT,
       dateModified: PUBLISHED_AT,
       inLanguage: locale === 'hi' ? 'hi-IN' : 'en-IN',
@@ -76,7 +76,7 @@ export default async function SevenDocumentsPage({ params }: Props) {
       </header>
 
       <figure className="concept-card relative mt-9 aspect-[16/9] overflow-hidden rounded-3xl border bg-muted shadow-[8px_9px_0_rgba(42,16,45,0.08)]">
-        <Image src="/images/seven-land-documents.png" alt="" fill priority sizes="(min-width: 1024px) 896px, 100vw" className="object-cover" />
+        <Image src="/images/seven-land-documents.webp" alt="" fill priority sizes="(min-width: 1024px) 896px, 100vw" className="object-cover" />
       </figure>
 
       <aside className="mt-8 rounded-xl border border-notice-border bg-notice p-5 text-sm leading-relaxed text-notice-foreground">{t('warning')}</aside>

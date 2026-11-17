@@ -1,8 +1,9 @@
-import { TriangleAlert } from 'lucide-react';
+import { Mail, TriangleAlert } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { Logo } from './Logo';
 import { NAV_ITEMS } from './nav-items';
+import { SITE } from '@/lib/site';
 
 const LEGAL_LINKS = [
   { href: '/disclaimer', key: 'disclaimer' },
@@ -10,7 +11,7 @@ const LEGAL_LINKS = [
   { href: '/terms', key: 'terms' },
 ] as const;
 
-const linkClass = 'text-muted-foreground hover:text-primary hover:underline';
+const linkClass = 'inline-flex min-h-12 items-center text-muted-foreground hover:text-primary hover:underline';
 
 export function Footer() {
   const t = useTranslations('Footer');
@@ -30,7 +31,7 @@ export function Footer() {
 
           <nav aria-label={t('explore')}>
             <h2 className="font-sans text-sm font-semibold tracking-normal">{t('explore')}</h2>
-            <ul className="mt-3 space-y-2 text-sm">
+            <ul className="mt-3 text-base">
               {exploreLinks.map((item) => (
                 <li key={item.href}>
                   <Link href={item.href} className={linkClass}>
@@ -43,18 +44,20 @@ export function Footer() {
 
           <nav aria-label={t('company')}>
             <h2 className="font-sans text-sm font-semibold tracking-normal">{t('company')}</h2>
-            <ul className="mt-3 space-y-2 text-sm">
+            <ul className="mt-3 text-base">
               <li>
                 <Link href="/about" className={linkClass}>
                   {nav('about')}
                 </Link>
               </li>
+              <li><Link href="/contact" className={linkClass}>{nav('contact')}</Link></li>
+              <li><a href={`mailto:${SITE.contactEmail}`} className={linkClass}><Mail className="mr-2 size-4" aria-hidden="true" />{SITE.contactEmail}</a></li>
             </ul>
           </nav>
 
           <nav aria-label={t('legal')}>
             <h2 className="font-sans text-sm font-semibold tracking-normal">{t('legal')}</h2>
-            <ul className="mt-3 space-y-2 text-sm">
+            <ul className="mt-3 text-base">
               {LEGAL_LINKS.map((item) => (
                 <li key={item.href}>
                   <Link href={item.href} className={linkClass}>

@@ -13,7 +13,7 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(({ className, ch
     <select
       ref={ref}
       className={cn(
-        'h-11 w-full appearance-none rounded-md border border-input bg-background pl-3 pr-10 text-base text-foreground shadow-sm transition-colors',
+        'h-12 w-full appearance-none rounded-md border border-input bg-background pl-3 pr-10 text-base text-foreground shadow-sm transition-colors',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1',
         'disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground disabled:opacity-70',
         'aria-[invalid=true]:border-destructive',

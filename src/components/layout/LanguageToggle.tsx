@@ -49,7 +49,7 @@ export function LanguageToggle({ className }: { className?: string }) {
             disabled={isPending}
             onClick={() => switchTo(code)}
             className={cn(
-              'min-h-8 rounded-full px-2.5 font-medium transition-colors sm:px-3',
+              'min-h-12 rounded-full px-2.5 font-medium transition-colors sm:px-3',
               active
                 ? 'bg-primary text-primary-foreground shadow-sm'
                 : 'text-muted-foreground hover:text-foreground',
