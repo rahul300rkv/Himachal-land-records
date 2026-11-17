@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "src/app/api/circle-rate/route.ts": {
+      "regions": ["bom1"]
+    }
+  }
+}

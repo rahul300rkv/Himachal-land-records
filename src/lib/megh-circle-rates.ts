@@ -26,13 +26,20 @@ function attribute(tag: string, name: string) {
 }
 
 async function meghFetch(url: URL, init?: RequestInit) {
-  const result = await fetch(url, {
-    ...init,
-    cache: 'no-store',
-    redirect: 'error',
-    signal: AbortSignal.timeout(8000),
-  });
-  if (!result.ok) throw new Error(`MEGH returned ${result.status}`);
+  const step = url.pathname.endsWith('get_office_name') ? 'office list' : init?.method === 'POST' ? 'report submission' : 'session form';
+  let result: Response;
+  try {
+    result = await fetch(url, {
+      ...init,
+      cache: 'no-store',
+      redirect: 'error',
+      signal: AbortSignal.timeout(8000),
+    });
+  } catch (error) {
+    const cause = error instanceof Error ? error.cause as { code?: string } | undefined : undefined;
+    throw new Error(`MEGH ${step} request failed (${cause?.code ?? (error instanceof Error ? error.name : 'unknown')})`);
+  }
+  if (!result.ok) throw new Error(`MEGH ${step} returned HTTP ${result.status}`);
   return result;
 }
 
@@ -54,7 +61,9 @@ async function readMeghOffices(district: string, cookie: string): Promise<MeghOf
       Cookie: cookie,
     },
   });
-  const entries: unknown = await response.json();
+  const entries: unknown = await response.json().catch(() => {
+    throw new Error('MEGH office list returned invalid JSON');
+  });
   if (!entries || typeof entries !== 'object' || Array.isArray(entries)) throw new Error('Unexpected MEGH office response');
   return Object.entries(entries)
     .filter(([id, name]) => /^\d+$/.test(id) && id !== '0' && typeof name === 'string' && name.trim() !== '')
