@@ -1,8 +1,5 @@
-// The NIC host serves the same public form over both protocols. Its TLS edge
-// intermittently rejects Vercel serverless traffic before an HTTP response is
-// produced, so the deployed server-side relay uses its working HTTP endpoint.
 const BASE_URL = process.env.HIMBHOOMI_BASE_URL
-  ?? (process.env.VERCEL ? 'http://himbhoomilmk.nic.in/' : 'https://himbhoomilmk.nic.in/');
+  ?? 'https://himbhoomilmk.nic.in/';
 const RECORDS_URL = new URL('viewlandrecords.aspx', BASE_URL).toString();
 const POSTBACK_SETTLE_MS = 500;
 const CAPTCHA_SETTLE_MS = 750;

@@ -509,6 +509,7 @@
       "submissionInvalid": "HimBhoomi returned the search form instead of a record. Check the displayed details and request a fresh CAPTCHA to retry.",
       "recordChooser": "Choose the official record",
       "loadingOfficial": "Waiting for HimBhoomi to refresh…",
+      "openOfficial": "Open official HimBhoomi",
       "recordChooserBody": "Choose Jamabandi or Shajra Nasab. For Jamabandi, choose Khewat, Khatauni or Khasra and then its HimBhoomi-populated number. For Shajra Nasab, enter the name.",
       "choose": "Select an option",
       "loadRecord": "Load official record",
