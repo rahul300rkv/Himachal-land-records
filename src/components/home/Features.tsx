@@ -16,7 +16,7 @@ export function Features() {
   return (
     <section className="container py-20 sm:py-28">
       <Reveal className="max-w-2xl">
-        <h2 className="text-4xl sm:text-6xl">{t('title')}</h2>
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl">{t('title')}</h2>
         <p className="mt-3 text-lg text-muted-foreground">{t('subtitle')}</p>
       </Reveal>
 

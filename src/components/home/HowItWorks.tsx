@@ -10,7 +10,7 @@ export function HowItWorks() {
     <section className="blueprint-grid text-white">
       <div className="container py-20 sm:py-28">
         <Reveal>
-          <h2 className="text-4xl text-white sm:text-6xl">{t('title')}</h2>
+          <h2 className="text-3xl text-white sm:text-4xl lg:text-5xl">{t('title')}</h2>
         </Reveal>
 
         {/* The steps are a real sequence, so numbering carries meaning here */}

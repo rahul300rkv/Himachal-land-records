@@ -17,7 +17,7 @@ export function DueDiligence() {
       <div className="container py-20 sm:py-28">
         <Reveal className="max-w-4xl">
           <p className="font-signature text-3xl text-leaf sm:text-4xl">{t('eyebrow')}</p>
-          <h2 id="due-diligence-title" className="mt-4 text-4xl leading-tight sm:text-6xl lg:text-7xl">
+          <h2 id="due-diligence-title" className="mt-4 text-3xl leading-tight sm:text-4xl lg:text-6xl">
             {t('title')}
           </h2>
           <p className="mt-5 text-lg leading-relaxed text-muted-foreground">{t('intro')}</p>

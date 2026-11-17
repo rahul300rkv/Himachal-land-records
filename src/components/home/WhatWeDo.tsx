@@ -10,7 +10,7 @@ export function WhatWeDo() {
     <section className="concept-grid border-y bg-[#dde3e8]">
       <div className="container grid gap-12 py-20 sm:py-28 lg:grid-cols-[2fr_3fr] lg:gap-24">
         <Reveal>
-          <h2 className="text-4xl sm:text-6xl">{t('title')}</h2>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl">{t('title')}</h2>
           <p className="mt-4 text-lg leading-relaxed text-muted-foreground">{t('body')}</p>
         </Reveal>
 

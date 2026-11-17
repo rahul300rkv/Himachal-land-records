@@ -15,7 +15,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-black/10 bg-[#e9eef1]/90 backdrop-blur-xl">
-      <div className="container flex h-20 items-center justify-between gap-2 sm:gap-3">
+      <div className="container flex h-16 items-center justify-between gap-2 sm:h-[4.5rem] sm:gap-3 lg:h-20">
         <Logo />
 
         <nav aria-label={t('mainNavigation')} className="hidden items-center gap-1 lg:flex">
@@ -41,7 +41,7 @@ export function Header() {
 
         <div className="flex items-center gap-2">
           <LanguageToggle />
-          <div className="hidden sm:block">
+          <div className="hidden md:block">
             <AuthActions variant="desktop" />
           </div>
           <MobileNav className="lg:hidden" />

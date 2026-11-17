@@ -107,7 +107,7 @@
 @layer components {
   .cinematic-hero {
     position: relative;
-    min-height: calc(100vh - 5rem);
+    min-height: calc(100svh - 4rem);
     width: 100%;
     overflow: hidden;
     background: #f1f4f6;
@@ -115,7 +115,7 @@
   }
   .cinematic-hero__media {
     position: absolute;
-    inset: 300px 0 0;
+    inset: 240px 0 0;
     z-index: 0;
   }
   .cinematic-hero__gradient {
@@ -222,5 +222,12 @@
   @media (prefers-reduced-motion: reduce) {
     .land-feature { transition: none; }
     .land-feature:hover { transform: none; }
+  }
+  @media (min-width: 768px) {
+    .cinematic-hero__media { inset: 280px 0 0; }
+  }
+  @media (min-width: 1024px) {
+    .cinematic-hero { min-height: calc(100vh - 5rem); }
+    .cinematic-hero__media { inset: 300px 0 0; }
   }
 }
