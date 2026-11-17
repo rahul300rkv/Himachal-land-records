@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { Download, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Select } from '@/components/ui/select';
 import type { MeghOffice, MeghReport } from '@/lib/megh-circle-rates';
@@ -87,22 +88,42 @@ export function CircleRateLookup({ districts, copy }: Props) {
         {error && <p className="mt-4 text-sm text-destructive">{copy.failed}</p>}
         {reports?.length === 0 && <p className="mt-4 text-sm">{copy.empty}</p>}
         {reports && reports.length > 0 && (
-          <div className="mt-5 overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead><tr className="border-b">
-                <th scope="col" className="p-3">{copy.office}</th>
-                <th scope="col" className="p-3">{copy.file}</th>
-                <th scope="col" className="p-3">{copy.uploaded}</th>
-                <th scope="col" className="p-3">{copy.download}</th>
-              </tr></thead>
-              <tbody>{reports.map((report, index) => (
-                <tr key={`${report.url}-${index}`} className="border-b">
-                  <td className="p-3">{report.office}</td>
-                  <td className="p-3">{report.file}</td>
-                  <td className="p-3">{report.uploaded}</td>
-                  <td className="p-3"><a className="inline-flex min-h-12 items-center whitespace-nowrap font-medium text-primary underline" href={report.url} target="_blank" rel="noopener noreferrer">{copy.download}</a></td>
+          <div className="mt-6 overflow-x-auto rounded-xl border border-border bg-background shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" tabIndex={0} role="region" aria-label={copy.submit}>
+            <table className="w-full min-w-[40rem] text-left text-sm">
+              <thead className="border-b border-border bg-primary/5 text-primary">
+                <tr>
+                  <th scope="col" className="px-4 py-4 sm:px-5">{copy.office}</th>
+                  <th scope="col" className="px-4 py-4 sm:px-5">{copy.file}</th>
+                  <th scope="col" className="px-4 py-4 sm:px-5">{copy.uploaded}</th>
+                  <th scope="col" className="px-4 py-4 text-right sm:px-5">{copy.download}</th>
                 </tr>
-              ))}</tbody>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {reports.map((report, index) => (
+                  <tr key={`${report.url}-${index}`} className="even:bg-muted/30 hover:bg-primary/5">
+                    <th scope="row" className="px-4 py-4 font-semibold sm:px-5">{report.office}</th>
+                    <td className="px-4 py-4 sm:px-5">
+                      <span className="flex items-center gap-3">
+                        <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary">
+                          <FileText className="size-4" aria-hidden="true" />
+                        </span>
+                        <span className="break-all font-medium">{report.file}</span>
+                      </span>
+                    </td>
+                    <td className="px-4 py-4 tabular-nums text-muted-foreground sm:px-5">{report.uploaded}</td>
+                    <td className="px-4 py-4 text-right sm:px-5">
+                      <Button asChild className="group gap-2.5 rounded-full pl-2 pr-4 shadow-sm">
+                        <a href={report.url} target="_blank" rel="noopener noreferrer" aria-label={`${copy.download} — ${report.file}`}>
+                          <span className="grid size-8 shrink-0 place-items-center rounded-full bg-amber-300 text-[#261026]">
+                            <Download className="size-4 motion-safe:transition-transform motion-safe:group-hover:translate-y-0.5" aria-hidden="true" />
+                          </span>
+                          {copy.download}
+                        </a>
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
             </table>
           </div>
         )}
