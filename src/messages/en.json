@@ -288,11 +288,16 @@
   },
   "CircleRateTool": {
     "title": "Himachal Pradesh Circle Rates",
-    "intro": "Find the notified rate for your land and estimate its value using the published rate and plot area.",
+    "intro": "Find and download official MEGH circle-rate notices by district and Sub-Registrar office.",
     "lookup": "Find the published rate",
-    "lookupHelp": "Open the official NGDRS report and select the location and applicable period there. Check that the land category and unit match your plot before using the rate.",
-    "open": "Open official circle rates",
-    "notices": "District notices",
+    "lookupHelp": "Select a district and SRO to see available notices. Open the PDF and check its effective period, land category and unit.",
+    "form": {
+      "district": "District", "office": "Sub-Registrar Office", "choose": "Select",
+      "submit": "Find reports", "loading": "Loading from MEGH…",
+      "failed": "MEGH could not return results. Try searching again or reselect the district.",
+      "empty": "MEGH returned no downloadable reports for this office.",
+      "file": "File name", "uploaded": "Uploaded date", "download": "Download PDF"
+    },
     "overview": "Circle rate overview",
     "overviewBody": "Circle rates are official benchmarks used in property valuation for registration. Read the schedule for the relevant revenue village or locality, land category, effective period and unit. Where the notice distinguishes plots by road access, check which category applies.",
     "stampDuty": "Open the stamp duty calculator",
@@ -300,8 +305,7 @@
     "questions": {
       "meaning": { "q": "Is the circle rate the sale price?", "a": "The circle rate is a registration valuation benchmark. The sale price is the amount the buyer and seller agree to." },
       "variation": { "q": "Can two plots in the same village have different rates?", "a": "Yes. A schedule may list different rates by land category or distance from a road. Read the row and any notes that apply to your plot." },
-      "date": { "q": "Which rate should I use?", "a": "Check the effective period in the official schedule for your transaction date. If the online report is unavailable, check the district notice or ask the Sub-Registrar." },
-      "estimate": { "q": "How is the land value estimate calculated?", "a": "Multiply the published rate per unit by the plot area in the same unit. For plots with more than one applicable rate, estimate the value of each portion separately." }
+      "date": { "q": "Which rate should I use?", "a": "Check the effective period in the official schedule for your transaction date. If the online report is unavailable, ask the Sub-Registrar." }
     }
   },
   "MapExplorer": {
