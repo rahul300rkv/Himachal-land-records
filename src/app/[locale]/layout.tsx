@@ -55,6 +55,7 @@ const CLIENT_NAMESPACES = [
   'NotFound',
   'NakalCheck',
   'Verification',
+  'MapExplorer',
 ] as const;
 
 type Props = {

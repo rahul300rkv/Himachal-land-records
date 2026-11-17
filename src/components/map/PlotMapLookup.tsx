@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowUpRight, Copy, MapPinned, Search } from 'lucide-react';
+import { ArrowUpRight, Copy, MapPinned } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -87,11 +87,6 @@ export function PlotMapLookup() {
     window.setTimeout(() => setCopied(false), 1800);
   }
 
-  const searchParams = new URLSearchParams({
-    ...(district?.name && { district: district.name }),
-    ...(plot.trim() && { khasra: plot.trim() }),
-  });
-
   return (
     <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1.25fr)_minmax(18rem,.75fr)]">
       <section className="rounded-2xl border bg-card p-5 shadow-sm sm:p-7" aria-labelledby="plot-map-form-title">
@@ -158,14 +153,9 @@ export function PlotMapLookup() {
           </div>
         </div>
 
-        <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+        <div className="mt-7 flex flex-col sm:flex-row">
           <Button type="button" size="lg" onClick={openOfficialMap}>
             {t('openOfficial')} <ArrowUpRight aria-hidden="true" />
-          </Button>
-          <Button type="button" size="lg" variant="outline" asChild>
-            <a href={`/${locale}/search?${searchParams.toString()}`}>
-              {t('searchRecords')} <Search aria-hidden="true" />
-            </a>
           </Button>
         </div>
       </section>
@@ -173,10 +163,10 @@ export function PlotMapLookup() {
       <aside className="rounded-2xl border border-primary/15 bg-primary-soft/60 p-5 sm:p-7">
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-primary">{t('officialEyebrow')}</p>
         <h2 className="mt-2 text-2xl">{t('officialTitle')}</h2>
-        <ol className="mt-5 space-y-4 text-sm leading-6 text-muted-foreground">
-          <li><strong className="text-foreground">1.</strong> {t('step1')}</li>
-          <li><strong className="text-foreground">2.</strong> {t('step2')}</li>
-          <li><strong className="text-foreground">3.</strong> {t('step3')}</li>
+        <ol className="mt-5 list-decimal space-y-3 pl-5 text-sm leading-6 text-muted-foreground">
+          <li>{t('step1')}</li>
+          <li>{t('step2')}</li>
+          <li>{t('step3')}</li>
         </ol>
         {reference && (
           <div className="mt-6 rounded-xl border bg-background/80 p-4">
