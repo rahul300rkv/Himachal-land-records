@@ -20,6 +20,16 @@ async function callHimBhoomi(payload: Record<string, unknown>): Promise<ApiResul
   return data;
 }
 
+async function loadMapLocations(level: 'districts' | 'tehsils' | 'villages', district?: string, tehsil?: string): Promise<Option[]> {
+  const params = new URLSearchParams();
+  if (district) params.set('districtId', district);
+  if (tehsil) params.set('tehsilId', tehsil);
+  const response = await fetch(`/api/bhunaksha/locations?${params}`);
+  if (!response.ok) throw new Error('Location catalog unavailable');
+  const data = await response.json() as Record<string, { id: string; name: string; hi?: string }[]>;
+  return (data[level] ?? []).map(({ id, name, hi }) => ({ value: id, label: hi ?? name }));
+}
+
 export function SearchForm(_props: SearchFormProps) {
   const t = useTranslations('Search.official');
   const [districts, setDistricts] = useState<Option[]>([]);
@@ -38,23 +48,29 @@ export function SearchForm(_props: SearchFormProps) {
   const [resultHtml, setResultHtml] = useState('');
   const [recordReady, setRecordReady] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [liveLocations, setLiveLocations] = useState(false);
   const [error, setError] = useState('');
   const operationInFlight = useRef(false);
 
   useEffect(() => {
     let active = true;
     setBusy(true);
-    callHimBhoomi({ action: 'districts' }).then((data) => active && setDistricts(data.options ?? [])).catch((reason: Error) => active && setError(reason.message)).finally(() => active && setBusy(false));
+    const options = liveLocations
+      ? callHimBhoomi({ action: 'districts' }).then((data) => data.options ?? [])
+      : loadMapLocations('districts');
+    options.then((items) => active && setDistricts(items)).catch(() => active && setError(t('unavailable'))).finally(() => active && setBusy(false));
     return () => { active = false; };
-  }, []);
+  }, [liveLocations, t]);
 
   async function load(action: 'tehsils' | 'villages' | 'years', payload: Record<string, string>) {
     setBusy(true); setError('');
     try {
-      const data = await callHimBhoomi({ action, ...payload });
-      if (action === 'tehsils') setTehsils(data.options ?? []);
-      if (action === 'villages') setVillages(data.options ?? []);
-      if (action === 'years') setYears(data.options ?? []);
+      const options = action !== 'years' && !liveLocations
+        ? await loadMapLocations(action, payload.district, payload.tehsil)
+        : (await callHimBhoomi({ action, ...payload })).options ?? [];
+      if (action === 'tehsils') setTehsils(options);
+      if (action === 'villages') setVillages(options);
+      if (action === 'years') setYears(options);
     } catch (reason) { setError(reason instanceof Error ? reason.message : t('unavailable')); }
     finally { setBusy(false); }
   }
@@ -136,6 +152,17 @@ export function SearchForm(_props: SearchFormProps) {
   }
 
   return <div className="space-y-6">
+    {!liveLocations && (
+      <Button type="button" variant="outline" disabled={busy} onClick={() => {
+        clearAll();
+        setDistricts([]);
+        setBusy(true);
+        setLiveLocations(true);
+      }}>
+        <RefreshCw aria-hidden="true" />
+        {t('loadLiveLocations')}
+      </Button>
+    )}
     <div className="flex items-start gap-3 rounded-lg border border-primary/20 bg-primary-soft p-4 text-sm"><ShieldCheck className="mt-0.5 size-5 shrink-0 text-primary" aria-hidden="true" /><p>{t('privacy')}</p></div>
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <div><Label htmlFor="official-district">{t('district')}</Label><Select id="official-district" value={district} disabled={busy || districts.length === 0} onChange={(event) => { const value = event.target.value; setDistrict(value); setTehsil(''); setVillage(''); setYear(''); setTehsils([]); setVillages([]); setYears([]); resetAfterLocation(); if (value) void load('tehsils', { district: value }); }}><option value="">{t('districtPlaceholder')}</option>{districts.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</Select></div>
