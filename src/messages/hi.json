@@ -516,6 +516,7 @@
       "nakalReady": "आधिकारिक नकल अभिलेख",
       "receiptNumber": "रसीद संख्या: {number}",
       "labelColumn": "लेबल",
+      "parcelDetails": "भूखंड विवरण और टिप्पणियां",
       "valueColumn": "मान",
       "emptyLabel": "खाली",
       "receiptMissing": "हिमभूमि के परिणाम में पढ़ने योग्य रसीद संख्या नहीं मिली।",

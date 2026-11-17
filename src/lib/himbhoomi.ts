@@ -349,6 +349,23 @@ function nakalReceiptNumber(html: string) {
   return undefined;
 }
 
+function nakalParcelTable(html: string) {
+  const marker = html.indexOf('ctl00_ContentPlaceHolder1_Label25');
+  if (marker < 0) return undefined;
+  const start = html.lastIndexOf('<table', marker);
+  const end = html.indexOf('</table>', marker);
+  if (start < 0 || end < 0) return undefined;
+  const rows = [...html.slice(start, end).matchAll(/([\s\S]*?)<\/tr>/gi)]
+    .map((row) => [...row[1].matchAll(/<t[dh]\b[^>]*>([\s\S]*?)<\/t[dh]>/gi)]
+      .map((cell) => decodeEntities(cell[1]
+        .replace(/<br\s*\/?>/gi, '\n')
+        .replace(/<[^>]*>/g, ''))
+        .split('\n').map((line) => line.replace(/[ \t\r]+/g, ' ').trim()).join('\n').trim()))
+    .filter((cells) => cells.length === 7);
+  if (!rows.length) return undefined;
+  return { headers: rows[0], rows: rows.slice(1) };
+}
+
 function nakalLabels(html: string) {
   const labels: { id: string; value: string }[] = [];
   for (const span of html.matchAll(/<span\b(?=[^>]*\sid\s*=\s*["'](?:ctl00_)?(?:ContentPlaceHolder1_)?(?:lbl|Label)[^"']*["'])[^>]*>([\s\S]*?)<\/span>/gi)) {
@@ -433,6 +450,7 @@ export async function submitOfficialSearch(token: string, captcha: string) {
   return {
     receiptNumber: recordReady ? nakalReceiptNumber(state.html) : undefined,
     labels: recordReady ? nakalLabels(state.html) : [],
+    parcelTable: recordReady ? nakalParcelTable(state.html) : undefined,
     captchaFailed,
     submissionFailed: !recordReady && !captchaFailed,
     recordReady,
@@ -475,6 +493,7 @@ export async function continueOfficialSearch(token: string, fields: Record<strin
   return {
     receiptNumber: recordReady ? nakalReceiptNumber(state.html) : undefined,
     labels: recordReady ? nakalLabels(state.html) : [],
+    parcelTable: recordReady ? nakalParcelTable(state.html) : undefined,
     recordReady,
     controls: recordReady ? [] : officialControls(state.html),
     token: encodeSession({

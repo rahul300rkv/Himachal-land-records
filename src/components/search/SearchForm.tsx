@@ -11,7 +11,8 @@ import { loadOfficialLocations, type LocationCodes, type Option } from '@/lib/da
 
 type OfficialControl = { name: string; label: string; kind: 'select' | 'radio' | 'text'; options: Option[]; selected?: string };
 type NakalLabel = { id: string; value: string };
-type ApiResult = { options?: Option[]; image?: string; token?: string; receiptNumber?: string; labels?: NakalLabel[]; controls?: OfficialControl[]; captchaFailed?: boolean; submissionFailed?: boolean; recordReady?: boolean; error?: string };
+type ParcelTable = { headers: string[]; rows: string[][] };
+type ApiResult = { options?: Option[]; image?: string; token?: string; receiptNumber?: string; labels?: NakalLabel[]; parcelTable?: ParcelTable; controls?: OfficialControl[]; captchaFailed?: boolean; submissionFailed?: boolean; recordReady?: boolean; error?: string };
 type SearchFormProps = { initialLocation?: LocationCodes };
 
 function selectedFields(controls: OfficialControl[]) {
@@ -42,6 +43,7 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
   const [officialFields, setOfficialFields] = useState<Record<string, string>>({});
   const [receiptNumber, setReceiptNumber] = useState('');
   const [labels, setLabels] = useState<NakalLabel[]>([]);
+  const [parcelTable, setParcelTable] = useState<ParcelTable>();
   const [recordReady, setRecordReady] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -90,6 +92,7 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
     setCaptcha(''); setCaptchaImage(''); setToken(''); setControls([]); setOfficialFields({}); setRecordReady(false);
     setReceiptNumber('');
     setLabels([]);
+    setParcelTable(undefined);
   }
 
   async function requestCaptcha() {
@@ -129,6 +132,7 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
       setToken(data.token ?? token); setControls(data.controls ?? []); setRecordReady(Boolean(data.recordReady));
       setReceiptNumber(data.receiptNumber ?? '');
       setLabels(data.labels ?? []);
+      setParcelTable(data.parcelTable);
       setCaptchaImage('');
     } catch (reason) { setError(reason instanceof Error ? reason.message : t('unavailable')); }
     finally { operationInFlight.current = false; setBusy(false); }
@@ -162,6 +166,7 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
       setToken(data.token ?? token); setControls(nextControls); setRecordReady(Boolean(data.recordReady));
       setReceiptNumber(data.receiptNumber ?? '');
       setLabels(data.labels ?? []);
+      setParcelTable(data.parcelTable);
     } catch (reason) { setError(reason instanceof Error ? reason.message : t('unavailable')); }
     finally { operationInFlight.current = false; setBusy(false); }
   }
@@ -193,6 +198,25 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
           </a>
         </Button>
       </div>
+    )}
+    {recordReady && parcelTable && (
+      <section className="space-y-3">
+        <h2 className="text-xl">{t('parcelDetails')}</h2>
+        <div className="overflow-x-auto rounded-xl border bg-card" tabIndex={0} role="region" aria-label={t('parcelDetails')}>
+          <table className="w-full min-w-[1000px] border-collapse text-left text-sm">
+            <thead className="bg-muted">
+              <tr>{parcelTable.headers.map((header, index) => <th key={index} scope="col" className="border p-3 align-top">{header}</th>)}</tr>
+            </thead>
+            <tbody>
+              {parcelTable.rows.map((row, index) => (
+                <tr key={index} className="even:bg-muted/20">
+                  {row.map((cell, column) => <td key={column} className="whitespace-pre-wrap border p-3 align-top">{cell}</td>)}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
     )}
     {recordReady && (
       <div role="status" className="rounded-xl border bg-card p-4">
