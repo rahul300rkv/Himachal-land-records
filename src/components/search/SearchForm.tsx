@@ -45,6 +45,8 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
   const [labels, setLabels] = useState<NakalLabel[]>([]);
   const [parcelTable, setParcelTable] = useState<ParcelTable>();
   const [recordReady, setRecordReady] = useState(false);
+  const [downloading, setDownloading] = useState(false);
+  const [downloadError, setDownloadError] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const operationInFlight = useRef(false);
@@ -177,6 +179,30 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
     setDistrict(''); setTehsil(''); setVillage(''); setYear(''); setTehsils([]); setVillages([]); setYears([]); setError(''); resetAfterLocation();
   }
 
+  async function downloadCopy() {
+    if (!parcelTable || !receiptNumber || downloading) return;
+    setDownloading(true);
+    setDownloadError(false);
+    try {
+      const response = await fetch('/api/himbhoomi/pdf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ receiptNumber, labels, parcelTable }),
+      });
+      if (!response.ok) throw new Error('PDF failed');
+      const url = URL.createObjectURL(await response.blob());
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `HimLand-Check-information-${receiptNumber}.pdf`;
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(url), 60_000);
+    } catch {
+      setDownloadError(true);
+    } finally {
+      setDownloading(false);
+    }
+  }
+
   return <div className="space-y-6">
     {busy && <p role="status" className="text-sm text-muted-foreground">{t('loadingOfficial')}</p>}
     <div className="flex items-start gap-3 rounded-lg border border-primary/20 bg-primary-soft p-4 text-sm"><ShieldCheck className="mt-0.5 size-5 shrink-0 text-primary" aria-hidden="true" /><p>{t('privacy')}</p></div>
@@ -201,6 +227,11 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
     )}
     {recordReady && parcelTable && (
       <section className="space-y-3">
+        <Button type="button" onClick={() => void downloadCopy()} disabled={downloading || !receiptNumber}>
+          {downloading && <LoaderCircle className="animate-spin" aria-hidden="true" />}
+          {t('downloadCopy')}
+        </Button>
+        {downloadError && <p role="alert" className="text-sm text-destructive">{t('downloadFailed')}</p>}
         <h2 className="text-xl">{t('parcelDetails')}</h2>
         <div className="overflow-x-auto rounded-xl border bg-card" tabIndex={0} role="region" aria-label={t('parcelDetails')}>
           <table className="w-full min-w-[1000px] border-collapse text-left text-sm">

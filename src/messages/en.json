@@ -517,6 +517,8 @@
       "receiptNumber": "Receipt number: {number}",
       "labelColumn": "Label",
       "parcelDetails": "Parcel details and remarks",
+      "downloadCopy": "Download information copy",
+      "downloadFailed": "The PDF could not be generated. Please try again.",
       "valueColumn": "Value",
       "emptyLabel": "Empty",
       "receiptMissing": "HimBhoomi’s result did not include a readable receipt number.",

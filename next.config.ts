@@ -17,6 +17,7 @@ const nextConfig: NextConfig = {
   // Make sure the PDF fonts are shipped with the serverless function (e.g. on Vercel).
   outputFileTracingIncludes: {
     '/api/report/generate': ['./src/assets/fonts/**/*'],
+    '/api/himbhoomi/pdf': ['./src/assets/fonts/**/*'],
   },
   images: {
     remotePatterns: supabaseHostname
