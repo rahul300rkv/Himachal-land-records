@@ -27,7 +27,7 @@ export async function Hero() {
           <h1 className="font-display animate-fade-rise sketch-underline mt-6 max-w-5xl text-4xl font-normal leading-[1.02] tracking-[-1.5px] text-[#2a102d] sm:text-5xl md:text-6xl lg:text-7xl">{t('title')}</h1>
           <p className="animate-fade-rise-delay mt-6 max-w-2xl text-base leading-relaxed text-[#69566b] sm:text-lg">{t('subtitle')}</p>
           <a href="#land-search" className="animate-fade-rise-delay-2 mt-8 inline-flex min-h-12 items-center gap-3 rounded-full bg-[#2a102d] px-8 py-3 text-base font-medium text-white shadow-lg transition-transform duration-300 hover:scale-[1.03] focus-visible:ring-[#f2b134] sm:mt-10 sm:px-10">
-            {t('submit')} <ArrowDown className="size-4" aria-hidden="true" />
+            {t('chooseLocation')} <ArrowDown className="size-4" aria-hidden="true" />
           </a>
         </div>
       </section>

@@ -7,11 +7,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select } from '@/components/ui/select';
+import { loadMapLocations, type LocationCodes, type Option } from '@/lib/data/map-location-options';
 
-type Option = { value: string; label: string };
 type OfficialControl = { name: string; label: string; kind: 'select' | 'radio' | 'text'; options: Option[] };
 type ApiResult = { options?: Option[]; image?: string; token?: string; html?: string; controls?: OfficialControl[]; captchaFailed?: boolean; submissionFailed?: boolean; recordReady?: boolean; error?: string };
-type SearchFormProps = { defaultValues?: unknown };
+type SearchFormProps = { initialLocation?: LocationCodes };
 
 async function callHimBhoomi(payload: Record<string, unknown>): Promise<ApiResult> {
   const response = await fetch('/api/himbhoomi', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
@@ -20,17 +20,7 @@ async function callHimBhoomi(payload: Record<string, unknown>): Promise<ApiResul
   return data;
 }
 
-async function loadMapLocations(level: 'districts' | 'tehsils' | 'villages', district?: string, tehsil?: string): Promise<Option[]> {
-  const params = new URLSearchParams();
-  if (district) params.set('districtId', district);
-  if (tehsil) params.set('tehsilId', tehsil);
-  const response = await fetch(`/api/bhunaksha/locations?${params}`);
-  if (!response.ok) throw new Error('Location catalog unavailable');
-  const data = await response.json() as Record<string, { id: string; name: string; hi?: string }[]>;
-  return (data[level] ?? []).map(({ id, name, hi }) => ({ value: id, label: hi ?? name }));
-}
-
-export function SearchForm(_props: SearchFormProps) {
+export function SearchForm({ initialLocation }: SearchFormProps) {
   const t = useTranslations('Search.official');
   const [districts, setDistricts] = useState<Option[]>([]);
   const [tehsils, setTehsils] = useState<Option[]>([]);
@@ -58,9 +48,30 @@ export function SearchForm(_props: SearchFormProps) {
     const options = liveLocations
       ? callHimBhoomi({ action: 'districts' }).then((data) => data.options ?? [])
       : loadMapLocations('districts');
-    options.then((items) => active && setDistricts(items)).catch(() => active && setError(t('unavailable'))).finally(() => active && setBusy(false));
+    async function initialize() {
+      const items = await options;
+      if (!active) return;
+      setDistricts(items);
+      if (liveLocations || !initialLocation) return;
+      const { district, tehsil, village } = initialLocation;
+      if (!items.some((item) => item.value === district)) return;
+      setDistrict(district);
+      const nextTehsils = await loadMapLocations('tehsils', district);
+      if (!active) return;
+      setTehsils(nextTehsils);
+      if (!nextTehsils.some((item) => item.value === tehsil)) return;
+      setTehsil(tehsil);
+      const nextVillages = await loadMapLocations('villages', district, tehsil);
+      if (!active) return;
+      setVillages(nextVillages);
+      if (!nextVillages.some((item) => item.value === village)) return;
+      setVillage(village);
+      const data = await callHimBhoomi({ action: 'years', district, tehsil, village });
+      if (active) setYears(data.options ?? []);
+    }
+    void initialize().catch(() => active && setError(t('unavailable'))).finally(() => active && setBusy(false));
     return () => { active = false; };
-  }, [liveLocations, t]);
+  }, [initialLocation, liveLocations, t]);
 
   async function load(action: 'tehsils' | 'villages' | 'years', payload: Record<string, string>) {
     setBusy(true); setError('');

@@ -61,7 +61,12 @@ export default async function SearchPage({ params, searchParams }: Props) {
 
   const t = await getTranslations('Search');
   const raw = await searchParams;
-  const parsed = parseSearchParams(raw);
+  const initialLocation = typeof raw.districtCode === 'string' ? {
+    district: raw.districtCode,
+    tehsil: typeof raw.tehsilCode === 'string' ? raw.tehsilCode : '',
+    village: typeof raw.villageCode === 'string' ? raw.villageCode : '',
+  } : undefined;
+  const parsed = parseSearchParams(initialLocation ? {} : raw);
   const result = parsed.status === 'ok' ? await searchLandRecords(parsed.query) : null;
   const user = result ? await getCurrentUser() : null;
 
@@ -91,7 +96,7 @@ export default async function SearchPage({ params, searchParams }: Props) {
       </header>
 
       <section className="mt-8 rounded-xl border bg-card p-5 shadow-sm sm:p-6" aria-label={t('title')}>
-        <SearchForm defaultValues={parsed.defaults} />
+        <SearchForm key={JSON.stringify(initialLocation)} initialLocation={initialLocation} />
       </section>
 
       <section className="mt-10" aria-live="polite">

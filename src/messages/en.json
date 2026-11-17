@@ -110,8 +110,9 @@
       "title": "Check Himachal land records before you decide",
       "subtitle": "Search jamabandi, khasra, khatauni and mutation entries, view village maps and get a clear pre-purchase report, in Hindi or English.",
       "searchTitle": "Find a land record",
-      "searchHint": "Start with the district, then the tehsil, then the village.",
-      "submit": "Search records",
+      "searchHint": "Choose your location here, then continue to select the Jamabandi year and record details.",
+      "submit": "Continue to search",
+      "chooseLocation": "Choose search location",
       "trustNote": "Independent platform. Not a government website.",
       "errors": {
         "district": "Select a district",
