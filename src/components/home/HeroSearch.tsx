@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useState, useTransition } from 'react';
 import { Label } from '@/components/ui/label';
 import { Select } from '@/components/ui/select';
-import { loadMapLocations, type LocationCodes, type Option } from '@/lib/data/map-location-options';
+import { loadOfficialLocations, type LocationCodes, type Option } from '@/lib/data/himbhoomi-location-options';
 import { Button } from '@/components/ui/button';
 import { useRouter } from '@/i18n/navigation';
 
@@ -26,7 +26,7 @@ export function HeroSearch() {
     let active = true;
     const level = !district ? 'districts' : !tehsil ? 'tehsils' : 'villages';
     const setOptions = { districts: setDistricts, tehsils: setTehsils, villages: setVillages }[level];
-    void loadMapLocations(level, district, tehsil)
+    void loadOfficialLocations(level, district, tehsil)
       .then((options) => { if (active) setOptions(options); })
       .catch(() => { if (active) setError(true); });
     return () => { active = false; };

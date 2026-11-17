@@ -206,6 +206,7 @@ export type OfficialControl = {
   label: string;
   kind: 'select' | 'radio' | 'text';
   options: OfficialOption[];
+  selected?: string;
 };
 
 function plainText(value: string) {
@@ -258,8 +259,15 @@ function officialControls(html: string): OfficialControl[] {
   const order = (control: OfficialControl) => /JamShj/i.test(control.name) ? 0
     : /RBLKKK/i.test(control.name) ? 1
       : control.kind === 'text' ? 2 : 3;
+  const selected = browserFormFields(html);
   return controls
     .filter((control) => control.kind === 'text' || control.options.length > 0)
+    .map((control) => ({
+      ...control,
+      selected: control.kind === 'text' || control.options.some(({ value }) => value === selected[control.name])
+        ? selected[control.name]
+        : undefined,
+    }))
     .sort((left, right) => order(left) - order(right));
 }
 
@@ -350,14 +358,11 @@ export async function submitOfficialSearch(token: string, captcha: string) {
   const responseText = plainText(state.html);
   const captchaFailed = !recordReady && /(?:wrong|incorrect|invalid)\s*(?:captcha\s*)?code|(?:invalid|wrong|incorrect)\s*captcha|captcha.{0,80}(?:invalid|wrong|incorrect|गलत|अमान्य|स्वीकार नहीं)/i.test(responseText);
   const responseFields = browserFormFields(state.html);
-  const activeSelections = Object.fromEntries(
-    Object.entries(session.fields ?? {}).filter(([name]) => Object.hasOwn(responseFields, name)),
-  );
   const nextToken = encodeSession({
     ...session,
     cookie: state.cookie,
     hidden: hiddenFields(state.html),
-    fields: { ...responseFields, ...activeSelections },
+    fields: responseFields,
     postbacks: formPostbacks(state.html),
   });
   const replacementCaptcha = captchaFailed ? await createCaptchaSession(nextToken) : null;
@@ -401,11 +406,7 @@ export async function continueOfficialSearch(token: string, fields: Record<strin
     body,
   }, session.cookie);
   const recordReady = isNakalPage(state.url);
-  const responseFields = browserFormFields(state.html);
-  const activeSelections = Object.fromEntries(
-    Object.entries(allFields).filter(([name]) => Object.hasOwn(responseFields, name)),
-  );
-  const nextFields = { ...responseFields, ...activeSelections };
+  const nextFields = browserFormFields(state.html);
   return {
     html: recordReady ? sanitizeOfficialResult(state.html) : '',
     recordReady,

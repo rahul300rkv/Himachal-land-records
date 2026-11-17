@@ -7,11 +7,15 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select } from '@/components/ui/select';
-import { loadMapLocations, type LocationCodes, type Option } from '@/lib/data/map-location-options';
+import { loadOfficialLocations, type LocationCodes, type Option } from '@/lib/data/himbhoomi-location-options';
 
-type OfficialControl = { name: string; label: string; kind: 'select' | 'radio' | 'text'; options: Option[] };
+type OfficialControl = { name: string; label: string; kind: 'select' | 'radio' | 'text'; options: Option[]; selected?: string };
 type ApiResult = { options?: Option[]; image?: string; token?: string; html?: string; controls?: OfficialControl[]; captchaFailed?: boolean; submissionFailed?: boolean; recordReady?: boolean; error?: string };
 type SearchFormProps = { initialLocation?: LocationCodes };
+
+function selectedFields(controls: OfficialControl[]) {
+  return Object.fromEntries(controls.map(({ name, selected }) => [name, selected ?? '']));
+}
 
 async function callHimBhoomi(payload: Record<string, unknown>): Promise<ApiResult> {
   const response = await fetch('/api/himbhoomi', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
@@ -38,30 +42,26 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
   const [resultHtml, setResultHtml] = useState('');
   const [recordReady, setRecordReady] = useState(false);
   const [busy, setBusy] = useState(false);
-  const [liveLocations, setLiveLocations] = useState(false);
   const [error, setError] = useState('');
   const operationInFlight = useRef(false);
 
   useEffect(() => {
     let active = true;
     setBusy(true);
-    const options = liveLocations
-      ? callHimBhoomi({ action: 'districts' }).then((data) => data.options ?? [])
-      : loadMapLocations('districts');
     async function initialize() {
-      const items = await options;
+      const items = await loadOfficialLocations('districts');
       if (!active) return;
       setDistricts(items);
-      if (liveLocations || !initialLocation) return;
+      if (!initialLocation) return;
       const { district, tehsil, village } = initialLocation;
       if (!items.some((item) => item.value === district)) return;
       setDistrict(district);
-      const nextTehsils = await loadMapLocations('tehsils', district);
+      const nextTehsils = await loadOfficialLocations('tehsils', district);
       if (!active) return;
       setTehsils(nextTehsils);
       if (!nextTehsils.some((item) => item.value === tehsil)) return;
       setTehsil(tehsil);
-      const nextVillages = await loadMapLocations('villages', district, tehsil);
+      const nextVillages = await loadOfficialLocations('villages', district, tehsil);
       if (!active) return;
       setVillages(nextVillages);
       if (!nextVillages.some((item) => item.value === village)) return;
@@ -71,14 +71,12 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
     }
     void initialize().catch(() => active && setError(t('unavailable'))).finally(() => active && setBusy(false));
     return () => { active = false; };
-  }, [initialLocation, liveLocations, t]);
+  }, [initialLocation, t]);
 
   async function load(action: 'tehsils' | 'villages' | 'years', payload: Record<string, string>) {
     setBusy(true); setError('');
     try {
-      const options = action !== 'years' && !liveLocations
-        ? await loadMapLocations(action, payload.district, payload.tehsil)
-        : (await callHimBhoomi({ action, ...payload })).options ?? [];
+      const options = (await callHimBhoomi({ action, ...payload })).options ?? [];
       if (action === 'tehsils') setTehsils(options);
       if (action === 'villages') setVillages(options);
       if (action === 'years') setYears(options);
@@ -118,7 +116,10 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
         setError(t('submissionInvalid'));
         setCaptcha(''); setCaptchaImage('');
         setToken(data.token ?? token);
-        setControls(data.controls ?? controls);
+        if (data.controls) {
+          setControls(data.controls);
+          setOfficialFields(selectedFields(data.controls));
+        }
         return;
       }
       setToken(data.token ?? token); setControls(data.controls ?? []); setResultHtml(data.html ?? ''); setRecordReady(Boolean(data.recordReady));
@@ -134,7 +135,8 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
     setBusy(true); setError('');
     try {
       const data = await callHimBhoomi({ action: 'recordOptions', district, tehsil, village, year: nextYear });
-      setToken(data.token ?? ''); setControls(data.controls ?? []); setOfficialFields({});
+      const nextControls = data.controls ?? [];
+      setToken(data.token ?? ''); setControls(nextControls); setOfficialFields(selectedFields(nextControls));
     } catch (reason) { setError(reason instanceof Error ? reason.message : t('unavailable')); }
     finally { operationInFlight.current = false; setBusy(false); }
   }
@@ -149,8 +151,7 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
     try {
       const data = await callHimBhoomi({ action: 'continue', token, fields: nextFields, eventTarget: control.name });
       const nextControls = data.controls ?? [];
-      const names = new Set(nextControls.map((item) => item.name));
-      setOfficialFields(Object.fromEntries(Object.entries(nextFields).filter(([name]) => names.has(name))));
+      setOfficialFields(selectedFields(nextControls));
       setToken(data.token ?? token); setControls(nextControls); setRecordReady(Boolean(data.recordReady));
     } catch (reason) { setError(reason instanceof Error ? reason.message : t('unavailable')); }
     finally { operationInFlight.current = false; setBusy(false); }
@@ -163,17 +164,7 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
   }
 
   return <div className="space-y-6">
-    {!liveLocations && (
-      <Button type="button" variant="outline" disabled={busy} onClick={() => {
-        clearAll();
-        setDistricts([]);
-        setBusy(true);
-        setLiveLocations(true);
-      }}>
-        <RefreshCw aria-hidden="true" />
-        {t('loadLiveLocations')}
-      </Button>
-    )}
+    {busy && <p role="status" className="text-sm text-muted-foreground">{t('loadingOfficial')}</p>}
     <div className="flex items-start gap-3 rounded-lg border border-primary/20 bg-primary-soft p-4 text-sm"><ShieldCheck className="mt-0.5 size-5 shrink-0 text-primary" aria-hidden="true" /><p>{t('privacy')}</p></div>
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <div><Label htmlFor="official-district">{t('district')}</Label><Select id="official-district" value={district} disabled={busy || districts.length === 0} onChange={(event) => { const value = event.target.value; setDistrict(value); setTehsil(''); setVillage(''); setYear(''); setTehsils([]); setVillages([]); setYears([]); resetAfterLocation(); if (value) void load('tehsils', { district: value }); }}><option value="">{t('districtPlaceholder')}</option>{districts.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</Select></div>
