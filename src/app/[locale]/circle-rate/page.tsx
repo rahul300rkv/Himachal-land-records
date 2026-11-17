@@ -6,7 +6,7 @@ import { pageMetadata } from '@/lib/seo';
 import { meghDistricts } from '@/lib/megh-circle-rates';
 import { districtLabel } from '@/lib/data/districts';
 
-const topics = ['meaning', 'variation', 'date'] as const;
+const topics = ['lookup', 'meaning', 'variation', 'date', 'unit', 'valuation', 'missing'] as const;
 const lookupKeys = ['district', 'office', 'choose', 'submit', 'loading', 'failed', 'empty', 'file', 'uploaded', 'download'] as const;
 type Props = { params: Promise<{ locale: Locale }> };
 
@@ -35,9 +35,26 @@ export default async function CircleRatePage({ params }: Props) {
           copy={Object.fromEntries(lookupKeys.map((key) => [key, t(`form.${key}`)])) as Record<(typeof lookupKeys)[number], string>}
         />
       </section>
+      <figure className="mt-8 overflow-hidden rounded-2xl border bg-card">
+        <figcaption className="border-b px-5 py-4 text-xl font-semibold">{t('sample.title')}</figcaption>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="https://mp-sample-docs.s3.ap-south-1.amazonaws.com/hp/hp-circle-rate-sample-document.jpg"
+          alt={t('sample.alt')}
+          loading="lazy"
+          decoding="async"
+          className="mx-auto block h-auto w-full max-w-3xl"
+        />
+      </figure>
       <section aria-labelledby="circle-rate-overview" className="mt-10 max-w-3xl">
         <h2 id="circle-rate-overview" className="text-2xl">{t('overview')}</h2>
         <p className="mt-3 text-muted-foreground">{t('overviewBody')}</p>
+        <h3 className="mt-5 text-lg font-semibold">{t('readTitle')}</h3>
+        <ul className="mt-2 list-disc space-y-2 pl-5 text-muted-foreground">
+          <li>{t('readLocation')}</li>
+          <li>{t('readCategory')}</li>
+          <li>{t('readUnit')}</li>
+        </ul>
         <Link href="/stamp-duty-calculator" className="mt-2 inline-flex min-h-12 items-center font-medium text-primary underline">
           {t('stampDuty')}
         </Link>

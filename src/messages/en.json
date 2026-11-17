@@ -299,13 +299,22 @@
       "file": "File name", "uploaded": "Uploaded date", "download": "Download PDF"
     },
     "overview": "Circle rate overview",
-    "overviewBody": "Circle rates are official benchmarks used in property valuation for registration. Read the schedule for the relevant revenue village or locality, land category, effective period and unit. Where the notice distinguishes plots by road access, check which category applies.",
+    "overviewBody": "A circle-rate schedule gives you a starting point for valuing land for registration. Use it to compare the proposed purchase price with the notified valuation and budget for transaction costs. Start with the notice issued for the office that covers the property.",
+    "sample": { "title": "Sample circle-rate report", "alt": "Sample Himachal Pradesh circle-rate schedule." },
+    "readTitle": "What to check in the notice",
+    "readLocation": "Match the revenue village or locality to your land record and check when the notice applies.",
+    "readCategory": "Find the row for your land use. Check whether the schedule has a separate category based on road access or distance.",
+    "readUnit": "Read the rate and its unit together. Convert the plot area to that unit before estimating its value.",
     "stampDuty": "Open the stamp duty calculator",
     "faq": "Frequently asked questions",
     "questions": {
+      "lookup": { "q": "How do I download a circle-rate notice?", "a": "Choose your district and Sub-Registrar Office. Select Find reports, then Download PDF beside the relevant notice. Use the effective period printed in the PDF to pick the correct file." },
       "meaning": { "q": "Is the circle rate the sale price?", "a": "The circle rate is a registration valuation benchmark. The sale price is the amount the buyer and seller agree to." },
       "variation": { "q": "Can two plots in the same village have different rates?", "a": "Yes. A schedule may list different rates by land category or distance from a road. Read the row and any notes that apply to your plot." },
-      "date": { "q": "Which rate should I use?", "a": "Check the effective period in the official schedule for your transaction date. If the online report is unavailable, ask the Sub-Registrar." }
+      "date": { "q": "Which rate should I use?", "a": "Check the effective period in the official schedule for your transaction date. The date shown in the results table is the upload date." },
+      "unit": { "q": "What if my land record uses a different area unit?", "a": "Convert the recorded area into the unit listed in the notice before multiplying. For example, a rate per square metre requires the area in square metres." },
+      "valuation": { "q": "How does the circle rate help estimate stamp duty?", "a": "Use the notice to estimate the assessed value of the property. Then enter that value and the agreed price in the stamp duty calculator for a sale-deed estimate." },
+      "missing": { "q": "What if the PDF does not list my village?", "a": "Check the SRO jurisdiction and whether the village appears under another spelling or a revenue estate name. Ask the Sub-Registrar which notice and row apply if you still cannot find it." }
     }
   },
   "MapExplorer": {
