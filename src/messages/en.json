@@ -288,7 +288,7 @@
   },
   "CircleRateTool": {
     "title": "Himachal Pradesh Circle Rates",
-    "intro": "Find and download official MEGH circle-rate notices by district and Sub-Registrar office.",
+    "intro": "Find and download official government circle-rates in Himachal Pradesh.",
     "lookup": "Find the published rate",
     "lookupHelp": "Select a district and SRO to see available notices. Open the PDF and check its effective period, land category and unit.",
     "form": {
