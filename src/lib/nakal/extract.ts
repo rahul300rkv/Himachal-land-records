@@ -8,7 +8,7 @@ import { rawNakalSchema, type RawNakal } from './schema';
  */
 const ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models';
 // Keep broadly available model IDs as defaults. Override in Vercel with GEMINI_MODELS when needed.
-const MODELS = (process.env.GEMINI_MODELS ?? 'gemini-3.5-flash')
+const MODELS = (process.env.GEMINI_MODELS ?? 'gemini-3.5-flash-lite,gemini-3.5-flash')
   .split(',')
   .map((s) => s.trim())
   .filter(Boolean);
