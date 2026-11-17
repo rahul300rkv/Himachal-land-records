@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { Locale } from '@/i18n/routing';
 import { pageMetadata } from '@/lib/seo';
@@ -25,6 +26,34 @@ export default async function CheckPage({ params }: Props) {
         <p className="mt-2 text-sm text-muted-foreground">{t('intro')}</p>
       </header>
       <NakalChecker />
+      <section className="space-y-4 border-t border-border pt-8" aria-labelledby="nakal-overview">
+        <h2 id="nakal-overview" className="text-2xl sm:text-3xl">{t('guide.title')}</h2>
+        <p className="leading-relaxed text-muted-foreground">{t('guide.body')}</p>
+        <figure className="overflow-hidden rounded-xl border border-border bg-card">
+          <Image
+            src="/images/nakal-checker-sample.webp"
+            alt={t('guide.sample')}
+            width={1200}
+            height={675}
+            sizes="(max-width: 672px) 100vw, 672px"
+            className="h-auto w-full"
+          />
+          <figcaption className="border-t border-border px-4 py-3 text-sm text-muted-foreground">
+            {t('guide.caption')}
+          </figcaption>
+        </figure>
+      </section>
+      <section className="space-y-4 border-t border-border pt-8" aria-labelledby="nakal-faq">
+        <h2 id="nakal-faq" className="text-2xl sm:text-3xl">{t('guide.faqTitle')}</h2>
+        <div className="divide-y divide-border rounded-xl border border-border bg-card">
+          {(['file', 'score', 'mortgage', 'cases', 'privacy'] as const).map((key) => (
+            <details key={key} className="px-4 py-1 sm:px-5">
+              <summary className="cursor-pointer py-3 font-medium">{t(`guide.faq.${key}.q`)}</summary>
+              <p className="pb-4 leading-relaxed text-muted-foreground">{t(`guide.faq.${key}.a`)}</p>
+            </details>
+          ))}
+        </div>
+      </section>
       <DisclaimerPanel />
     </article>
   );

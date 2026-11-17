@@ -1429,6 +1429,35 @@
     "faq": { "districts": { "q": "Does the converter choose a standard by district?", "a": "No. Local practice and records can differ, so the converter leaves the choice to you." }, "which": { "q": "Which unit should I select?", "a": "Use the unit printed in the jamabandi, tatima, sale deed or other official record." }, "records": { "q": "Why verify the result?", "a": "A calculator only applies supplied numbers. Confirm the unit and area with the Patwari, Tehsil or Revenue Department." }, "rounding": { "q": "Why can results differ slightly?", "a": "Documents may round karam or biswansi values. Use the official record as the controlling value." } }
   },
   "NakalCheck": {
+    "guide": {
+      "title": "How the Nakal Checker works",
+      "body": "Upload a Himachal Pradesh Jamabandi PDF to review the recorded owners and shares, mutation entries, case references and possible charges that the checker can read. Compare highlighted findings with the original record and verify current details with the relevant offices.",
+      "faqTitle": "Frequently asked questions",
+      "sample": "Illustrated sample report",
+      "caption": "AI-generated illustration based on the checker layout. It uses fictional visual placeholders.",
+      "faq": {
+        "file": {
+          "q": "Which file should I upload?",
+          "a": "Use a HimBhoomi Jamabandi PDF up to 4 MB. Include all pages so the checker can read remarks that continue onto later pages."
+        },
+        "score": {
+          "q": "How should I read the score?",
+          "a": "The score summarizes the checks applied to the extracted data. If fields are missing or unclear, compare them with the original PDF before drawing conclusions."
+        },
+        "mortgage": {
+          "q": "What if the checker flags a mortgage?",
+          "a": "Compare the warning with the remarks in the original record. Confirm the current status with the relevant office and lender, including any release recorded since the Jamabandi was issued."
+        },
+        "cases": {
+          "q": "Does the checker search for court cases?",
+          "a": "It reports case references it can read in the uploaded record. Check the appropriate court records separately for current case status."
+        },
+        "privacy": {
+          "q": "What happens to my upload?",
+          "a": "Google Gemini processes the PDF. When the NVIDIA fallback is needed, NVIDIA receives page images. The app may reuse a result from its temporary server cache for up to six hours."
+        }
+      }
+    },
     "title": "Check a land record (nakal)",
     "intro": "Upload a jamabandi nakal PDF. We read it, run rule-based checks and show a score with the reasons. An AI model does the reading, so always compare the result with the original record.",
     "choose": "Choose a PDF (up to 4 MB)",
