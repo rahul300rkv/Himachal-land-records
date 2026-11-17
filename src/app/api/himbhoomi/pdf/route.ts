@@ -52,6 +52,9 @@ export async function POST(request: Request) {
       })),
       stack: error instanceof Error ? error.stack?.split('\n').slice(1, 5).join('\n') : undefined,
     });
-    return Response.json({ error: 'generation_failed', category }, { status: 500 });
+    // Include a short parser detail so deployment failures can be diagnosed from
+    // the browser response; never include submitted record values or the full stack.
+    const detail = message.replace(/\s+/g, ' ').slice(0, 240) || 'PDF renderer failed';
+    return Response.json({ error: 'generation_failed', category, detail }, { status: 500 });
   }
 }
