@@ -14,6 +14,7 @@ const PATHS = [
   '/reports',
   '/converter',
   '/stamp-duty-calculator',
+  '/circle-rate',
   '/map',
   '/tools',
   '/guides',

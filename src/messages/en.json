@@ -286,6 +286,24 @@
       "converter": { "title": "Area converter", "body": "Convert kanal, marla, square metres and square feet using Himachal units." }
     }
   },
+  "CircleRateTool": {
+    "title": "Himachal Pradesh Circle Rates",
+    "intro": "Find the notified rate for your land and estimate its value using the published rate and plot area.",
+    "lookup": "Find the published rate",
+    "lookupHelp": "Open the official NGDRS report and select the location and applicable period there. Check that the land category and unit match your plot before using the rate.",
+    "open": "Open official circle rates",
+    "notices": "District notices",
+    "overview": "Circle rate overview",
+    "overviewBody": "Circle rates are official benchmarks used in property valuation for registration. Read the schedule for the relevant revenue village or locality, land category, effective period and unit. Where the notice distinguishes plots by road access, check which category applies.",
+    "stampDuty": "Open the stamp duty calculator",
+    "faq": "Frequently asked questions",
+    "questions": {
+      "meaning": { "q": "Is the circle rate the sale price?", "a": "The circle rate is a registration valuation benchmark. The sale price is the amount the buyer and seller agree to." },
+      "variation": { "q": "Can two plots in the same village have different rates?", "a": "Yes. A schedule may list different rates by land category or distance from a road. Read the row and any notes that apply to your plot." },
+      "date": { "q": "Which rate should I use?", "a": "Check the effective period in the official schedule for your transaction date. If the online report is unavailable, check the district notice or ask the Sub-Registrar." },
+      "estimate": { "q": "How is the land value estimate calculated?", "a": "Multiply the published rate per unit by the plot area in the same unit. For plots with more than one applicable rate, estimate the value of each portion separately." }
+    }
+  },
   "MapExplorer": {
     "eyebrow": "Map tool",
     "title": "Find a plot on the official BhuNaksha map",

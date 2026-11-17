@@ -13,6 +13,7 @@ const TOOLS = [
   { key: 'map', href: '/map', icon: Map },
   { key: 'converter', href: '/converter', icon: Calculator },
   { key: 'stampDuty', href: '/stamp-duty-calculator', icon: Calculator },
+  { key: 'circleRate', href: '/circle-rate', icon: Calculator },
 ] as const;
 
 type Props = { params: Promise<{ locale: string }> };
@@ -28,6 +29,7 @@ export default async function ToolsPage({ params }: Props) {
   setRequestLocale(locale as Locale);
   const t = await getTranslations('Tools');
   const stampDuty = getStampDutyCopy(locale);
+  const circleRate = await getTranslations('CircleRateTool');
   return (
     <article className="container py-10 sm:py-14">
       <header className="max-w-3xl">
@@ -40,8 +42,8 @@ export default async function ToolsPage({ params }: Props) {
           <li key={key}>
             <Link href={href} className="group flex h-full flex-col rounded-xl border bg-card p-6 shadow-sm transition hover:-translate-y-1 hover:border-primary/40">
               <span className="flex size-11 items-center justify-center rounded-lg bg-primary-soft text-primary"><Icon className="size-5" aria-hidden="true" /></span>
-              <h2 className="mt-5 text-xl">{key === 'stampDuty' ? stampDuty.title : t(`items.${key}.title`)}</h2>
-              <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{key === 'stampDuty' ? stampDuty.intro : t(`items.${key}.body`)}</p>
+              <h2 className="mt-5 text-xl">{key === 'circleRate' ? circleRate('title') : key === 'stampDuty' ? stampDuty.title : t(`items.${key}.title`)}</h2>
+              <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{key === 'circleRate' ? circleRate('intro') : key === 'stampDuty' ? stampDuty.intro : t(`items.${key}.body`)}</p>
               <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-primary">{t('open')} <ArrowRight className="size-4 transition group-hover:translate-x-1" aria-hidden="true" /></span>
             </Link>
           </li>
