@@ -29,7 +29,6 @@ export default async function MapPage({ params }: Props) {
       <figure className="mt-8 overflow-hidden rounded-2xl border bg-card">
         <figcaption className="border-b px-5 py-4 sm:px-7">
           <h2 className="text-2xl">{t('sample.title')}</h2>
-          <p className="mt-1 text-sm text-muted-foreground">{t('sample.caption')}</p>
         </figcaption>
         {/* Use the supplied image directly so its report is available at full resolution. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
