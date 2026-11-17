@@ -8,12 +8,12 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'invalid_selection' }, { status: 400 });
   }
   try {
-    const offices = await getMeghOffices(district);
-    if (office === null) return NextResponse.json({ offices });
-    if (!offices.some(({ id }) => id === office)) {
+    if (office === null) return NextResponse.json({ offices: await getMeghOffices(district) });
+    const reports = await getMeghReports(district, office);
+    if (reports === null) {
       return NextResponse.json({ error: 'invalid_selection' }, { status: 400 });
     }
-    return NextResponse.json({ reports: await getMeghReports(district, office) });
+    return NextResponse.json({ reports });
   } catch {
     return NextResponse.json({ error: 'megh_unavailable' }, { status: 502 });
   }

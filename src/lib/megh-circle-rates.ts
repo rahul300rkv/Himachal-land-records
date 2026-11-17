@@ -36,10 +36,24 @@ async function meghFetch(url: URL, init?: RequestInit) {
   return result;
 }
 
-export async function getMeghOffices(district: string): Promise<MeghOffice[]> {
+async function openMeghSession() {
+  const response = await meghFetch(reportUrl);
+  const cookies = response.headers.getSetCookie?.() ?? [];
+  const cookie = cookies.map((header) => header.split(';', 1)[0]).join('; ');
+  return { html: await response.text(), cookie };
+}
+
+async function readMeghOffices(district: string, cookie: string): Promise<MeghOffice[]> {
   const url = new URL('MISReports/get_office_name', base);
   url.searchParams.set('district', district);
-  const response = await meghFetch(url, { headers: { Referer: reportUrl.href, 'X-Requested-With': 'XMLHttpRequest' } });
+  const response = await meghFetch(url, {
+    headers: {
+      Referer: reportUrl.href,
+      Accept: 'application/json, text/javascript, */*; q=0.01',
+      'X-Requested-With': 'XMLHttpRequest',
+      Cookie: cookie,
+    },
+  });
   const entries: unknown = await response.json();
   if (!entries || typeof entries !== 'object' || Array.isArray(entries)) throw new Error('Unexpected MEGH office response');
   return Object.entries(entries)
@@ -48,9 +62,15 @@ export async function getMeghOffices(district: string): Promise<MeghOffice[]> {
     .sort((a, b) => a.name.localeCompare(b.name));
 }
 
-export async function getMeghReports(district: string, office: string): Promise<MeghReport[]> {
-  const formResponse = await meghFetch(reportUrl);
-  const html = await formResponse.text();
+export async function getMeghOffices(district: string): Promise<MeghOffice[]> {
+  const { cookie } = await openMeghSession();
+  return readMeghOffices(district, cookie);
+}
+
+export async function getMeghReports(district: string, office: string): Promise<MeghReport[] | null> {
+  const { html, cookie } = await openMeghSession();
+  const offices = await readMeghOffices(district, cookie);
+  if (!offices.some(({ id }) => id === office)) return null;
   const form = [...html.matchAll(/<form\b[^>]*>[\s\S]*?<\/form>/gi)]
     .find(([markup]) => attribute(markup.split('>')[0], 'id') === 'rpt_publiccirclerates')?.[0];
   if (!form) throw new Error('MEGH lookup form missing');
@@ -63,8 +83,6 @@ export async function getMeghReports(district: string, office: string): Promise<
   }
   body.set('data[rpt_publiccirclerates][district_id]', district);
   body.set('data[rpt_publiccirclerates][office_id]', office);
-  const cookie = (formResponse.headers.getSetCookie?.() ?? [])
-    .map((header) => header.split(';', 1)[0]).join('; ');
   const response = await meghFetch(reportUrl, {
     method: 'POST',
     headers: { Origin: reportUrl.origin, Referer: reportUrl.href, ...(cookie ? { Cookie: cookie } : {}) },
