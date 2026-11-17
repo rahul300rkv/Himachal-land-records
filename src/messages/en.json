@@ -1497,6 +1497,7 @@
       "COOWNERS": "{count} share holders own this land jointly. Check that every holder agrees to the sale.",
       "RAPID_TRANSFERS": "{count} sales or gifts were recorded in the last {months} months. Check for plot-splitting or speculation.",
       "MUTATION_EXCEEDS_AREA": "Mutation {number} transfers more area than the record shows for this land.",
+      "MORTGAGE_OR_CHARGE": "{count, plural, one {A mortgage or bank charge was} other {# mortgage or bank charges were}} recorded. Obtain a current release or no-dues certificate before relying on clear title.",
       "AGRI_LAND": "This looks like agricultural land. In Himachal Pradesh, buying it as a non-agriculturist generally needs permission under Section 118 of the HP Tenancy and Land Reforms Act.",
       "LOW_CONFIDENCE": "The reader was unsure about {count} fields. Compare the details below with the original.",
       "EXTRACTION_INCOMPLETE": "Owners or the total share could not be read, so this score is not reliable."

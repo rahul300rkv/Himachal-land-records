@@ -17,7 +17,8 @@ export type FlagCode =
   | 'MUTATION_EXCEEDS_AREA'
   | 'AGRI_LAND'
   | 'LOW_CONFIDENCE'
-  | 'EXTRACTION_INCOMPLETE';
+  | 'EXTRACTION_INCOMPLETE'
+  | 'MORTGAGE_OR_CHARGE';
 
 export type Flag = {
   code: FlagCode;
@@ -75,6 +76,8 @@ export function assess(raw: RawNakal, now: Date = new Date()): AssessResult {
 
   // 1. Could we read the essentials?
   if (raw.owners.length === 0 || raw.total_share === null) add('EXTRACTION_INCOMPLETE', 'high', 20);
+  const mortgages = raw.mutations.filter((m) => m.kind === 'mortgage');
+  if (mortgages.length > 0) add('MORTGAGE_OR_CHARGE', 'critical', 30, { count: mortgages.length });
 
   // 2. Share arithmetic
   if (raw.total_share !== null && raw.owners.length > 0 && sum !== raw.total_share) {

@@ -43,7 +43,8 @@ Rules:
 - Numbers as ASCII digits. Areas stay in printed ha-are-sqm form, e.g. "00-07-15".
 - If a value is unreadable or absent use null. Never guess. List unsure fields in low_confidence_fields.
 - owners: one entry per printed share line. If several people share one line (e.g. "bhag barabar (989)") keep them together in ONE entry with the printed share number.
-- mutations: every intkal number in the khasra rows AND in the "note" lines at the bottom. kind: sale (baiy/bai), inheritance (vrasat), gift (hiba), partition (taqsim), mortgage (rahan), exchange (tabadla), else other. Take date, area transferred (rakba wake) and buyer (name before "ke naam") from the matching note line.
+- mutations: every intkal number in the khasra rows AND in the "note" lines at the bottom. kind: sale (baiy/bai), inheritance (vrasat), gift (hiba), partition (taqsim), mortgage/charge (rahan, bank, ऋण, गिरवी, बंधक), exchange (tabadla), else other. Take date, area transferred, lender/bank or buyer, and full note text when visible. A bank loan or rahan entry is an encumbrance and must never be treated as a clean record.
+- HimBhoomi PDFs may have a corrupted Hindi text layer (Crystal Reports). Read the rendered page visually. Do not infer a name or number from a broken glyph. Preserve each khasra row separately.
 - litigation: the English stamp "A Case Number ... related to ... titled as ... instituted on ... in the court of ... and is currently ...". One entry per distinct case number (the stamp repeats on pages).
 - Ignore page headers, footers and page numbers.`;
 
