@@ -10,7 +10,7 @@ import { Select } from '@/components/ui/select';
 import { loadOfficialLocations, type LocationCodes, type Option } from '@/lib/data/himbhoomi-location-options';
 
 type OfficialControl = { name: string; label: string; kind: 'select' | 'radio' | 'text'; options: Option[]; selected?: string };
-type ApiResult = { options?: Option[]; image?: string; token?: string; html?: string; pdfUrl?: string; controls?: OfficialControl[]; captchaFailed?: boolean; submissionFailed?: boolean; recordReady?: boolean; error?: string };
+type ApiResult = { options?: Option[]; image?: string; token?: string; receiptNumber?: string; controls?: OfficialControl[]; captchaFailed?: boolean; submissionFailed?: boolean; recordReady?: boolean; error?: string };
 type SearchFormProps = { initialLocation?: LocationCodes };
 
 function selectedFields(controls: OfficialControl[]) {
@@ -39,8 +39,7 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
   const [token, setToken] = useState('');
   const [controls, setControls] = useState<OfficialControl[]>([]);
   const [officialFields, setOfficialFields] = useState<Record<string, string>>({});
-  const [resultHtml, setResultHtml] = useState('');
-  const [pdfUrl, setPdfUrl] = useState('');
+  const [receiptNumber, setReceiptNumber] = useState('');
   const [recordReady, setRecordReady] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -86,8 +85,8 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
   }
 
   function resetAfterLocation() {
-    setCaptcha(''); setCaptchaImage(''); setToken(''); setControls([]); setOfficialFields({}); setResultHtml(''); setRecordReady(false);
-    setPdfUrl('');
+    setCaptcha(''); setCaptchaImage(''); setToken(''); setControls([]); setOfficialFields({}); setRecordReady(false);
+    setReceiptNumber('');
   }
 
   async function requestCaptcha() {
@@ -124,8 +123,8 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
         }
         return;
       }
-      setToken(data.token ?? token); setControls(data.controls ?? []); setResultHtml(data.html ?? ''); setRecordReady(Boolean(data.recordReady));
-      setPdfUrl(data.pdfUrl ?? '');
+      setToken(data.token ?? token); setControls(data.controls ?? []); setRecordReady(Boolean(data.recordReady));
+      setReceiptNumber(data.receiptNumber ?? '');
       setCaptchaImage('');
     } catch (reason) { setError(reason instanceof Error ? reason.message : t('unavailable')); }
     finally { operationInFlight.current = false; setBusy(false); }
@@ -157,10 +156,7 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
       const nextControls = data.controls ?? [];
       setOfficialFields(selectedFields(nextControls));
       setToken(data.token ?? token); setControls(nextControls); setRecordReady(Boolean(data.recordReady));
-      if (data.recordReady) {
-        setResultHtml(data.html ?? '');
-        setPdfUrl(data.pdfUrl ?? '');
-      }
+      setReceiptNumber(data.receiptNumber ?? '');
     } catch (reason) { setError(reason instanceof Error ? reason.message : t('unavailable')); }
     finally { operationInFlight.current = false; setBusy(false); }
   }
@@ -180,8 +176,6 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
       <div><Label htmlFor="official-village">{t('village')}</Label><Select id="official-village" value={village} disabled={busy || !tehsil} onChange={(event) => { const value = event.target.value; setVillage(value); setYear(''); setYears([]); resetAfterLocation(); if (value) void load('years', { district, tehsil, village: value }); }}><option value="">{t('villagePlaceholder')}</option>{villages.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</Select></div>
       <div><Label htmlFor="official-year">{t('year')}</Label><Select id="official-year" value={year} disabled={busy || !village} onChange={(event) => void prepareRecordOptions(event.target.value)}><option value="">{t('yearPlaceholder')}</option>{years.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</Select></div>
     </div>
-    {!captchaImage && !resultHtml && controls.length === 0 && <div className="flex flex-col gap-3 sm:flex-row"><Button type="button" size="lg" variant="ghost" disabled={busy} onClick={clearAll}><X />{t('reset')}</Button></div>}
-    {captchaImage && !resultHtml && <form className="rounded-xl border bg-background p-5" onSubmit={submitCaptcha}><h2 className="font-sans text-lg font-semibold tracking-normal">{t('captchaTitle')}</h2><p className="mt-1 text-sm text-muted-foreground">{t('captchaBody')}</p><div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-end"><div><span className="text-sm font-medium">{t('captcha')}</span><div className="mt-1 flex min-h-12 items-center rounded-md border bg-white px-3"><img src={captchaImage} alt={t('captchaAlt')} className="max-h-10 max-w-[190px]" /></div></div><div className="min-w-48 flex-1"><Label htmlFor="official-captcha">{t('captchaEntry')}</Label><Input id="official-captcha" value={captcha} maxLength={12} autoComplete="off" onChange={(event) => setCaptcha(event.target.value.toUpperCase())} /></div><Button type="submit" size="lg" disabled={busy || !captcha.trim()}>{busy ? <LoaderCircle className="animate-spin" /> : <Search />}{t('fetch')}</Button><Button type="button" variant="ghost" size="lg" disabled={busy} onClick={() => void requestCaptcha()}><RefreshCw />{t('newCaptcha')}</Button></div></form>}
     {controls.length > 0 && !captchaImage && <section className="rounded-xl border bg-background p-5"><h2 className="font-sans text-lg font-semibold tracking-normal">{t('recordChooser')}</h2><p className="mt-1 text-sm text-muted-foreground">{t('recordChooserBody')}</p><div className="mt-4 grid gap-4 sm:grid-cols-2">{controls.map((control) => <div key={control.name}><Label htmlFor={`official-${control.name}`}>{control.label}</Label>{control.kind === 'text' ? <Input id={`official-${control.name}`} value={officialFields[control.name] ?? ''} disabled={busy} autoComplete="off" onChange={(event) => void changeOfficialControl(control, event.target.value)} /> : <Select id={`official-${control.name}`} value={officialFields[control.name] ?? ''} disabled={busy} onChange={(event) => void changeOfficialControl(control, event.target.value)}><option value="">{t('choose')}</option>{control.options.map((option) => <option key={`${control.name}-${option.value}`} value={option.value}>{option.label}</option>)}</Select>}</div>)}</div><div className="mt-4 flex flex-col gap-3 sm:flex-row"><Button type="button" disabled={busy || !canRequestCaptcha} onClick={() => void requestCaptcha()}>{busy ? <LoaderCircle className="animate-spin" /> : <Search />}{t('continue')}</Button><Button type="button" variant="ghost" disabled={busy} onClick={clearAll}><X />{t('reset')}</Button></div></section>}
     {error && (
       <div className="space-y-3 rounded-md border border-destructive/30 bg-destructive/5 px-4 py-3">
@@ -193,27 +187,12 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
         </Button>
       </div>
     )}
-    {(recordReady || resultHtml) && (
-      <section className="space-y-3">
-        <h2 className="font-sans text-lg font-semibold tracking-normal">{recordReady ? t('nakalReady') : t('officialResponse')}</h2>
-        {pdfUrl ? (
-          <>
-            <Button asChild>
-              <a href={pdfUrl} target="_blank" rel="noopener noreferrer">{t('openNakalPdf')}</a>
-            </Button>
-            <iframe src={pdfUrl} title={t('openNakalPdf')} loading="lazy" className="h-[70vh] w-full rounded-xl border bg-white" />
-          </>
-        ) : (
-          <>
-            {resultHtml && <div className="official-record overflow-x-auto rounded-xl border bg-white p-4 text-sm text-foreground [&_table]:w-full [&_td]:border [&_td]:p-2 [&_th]:border [&_th]:bg-muted [&_th]:p-2" aria-label={t('officialResult')} dangerouslySetInnerHTML={{ __html: resultHtml }} />}
-            {recordReady && (
-              <Button asChild variant="outline">
-                <a href="https://himbhoomilmk.nic.in/viewlandrecords.aspx" target="_blank" rel="noopener noreferrer">{t('openOfficial')}</a>
-              </Button>
-            )}
-          </>
-        )}
-      </section>
+    {recordReady && (
+      <div role="status" className="rounded-xl border bg-card p-4">
+        {receiptNumber
+          ? <p className="text-lg font-semibold tabular-nums">{t('receiptNumber', { number: receiptNumber })}</p>
+          : <p className="text-sm text-muted-foreground">{t('receiptMissing')}</p>}
+      </div>
     )}
   </div>;
 }

@@ -342,31 +342,11 @@ export async function createCaptchaSession(token: string) {
   };
 }
 
-function officialNakalPdf(html: string, responseUrl: string) {
-  const paths = html.matchAll(/(?:https:\/\/himbhoomilmk\.nic\.in\/)?\/?pdf\/PublicRoR\/[A-Z]+\d+\.pdf(?=["'\s<>]|$)/gi);
-  for (const [path] of paths) {
-    const url = new URL(path, responseUrl);
-    if (url.hostname === 'himbhoomilmk.nic.in' && /^\/pdf\/PublicRoR\/[A-Z]+\d+\.pdf$/i.test(url.pathname)) {
-      url.protocol = 'https:';
-      return url.toString();
-    }
+function nakalReceiptNumber(html: string) {
+  for (const span of html.matchAll(/<span\b(?=[^>]*\sid\s*=\s*["']ctl00_ContentPlaceHolder1_lblRecNo["'])[^>]*>([\s\S]*?)<\/span>/gi)) {
+    return plainText(span[1]).match(/(?:^|:\s*)(\d+)$/)?.[1];
   }
   return undefined;
-}
-
-function sanitizeOfficialResult(html: string) {
-  const content = html.match(/<div\b[^>]*id=["']ctl00_ContentPlaceHolder1_UpdatePanel1["'][^>]*>([\s\S]*?)<div\b[^>]*id=["']footer_image["']/i)?.[1] ?? html;
-  return content
-    .replace(/<(script|style|form|iframe|object|embed|svg)\b[\s\S]*?<\/\1>/gi, '')
-    .replace(/<input\b[^>]*>/gi, '')
-    .replace(/\s+on\w+\s*=\s*(?:"[^"]*"|'[^']*')/gi, '')
-    .replace(/\s+(?:href|src|action)\s*=\s*(?:"[^"]*"|'[^']*')/gi, '')
-    .replace(/<(?!\/?(?:table|thead|tbody|tfoot|tr|td|th|div|span|p|br|h[1-6]|strong|b|em|ul|ol|li)\b)[^>]+>/gi, '')
-    .replace(/<(\w+)\b([^>]*)>/g, (_tag, name: string, attrs: string) => {
-      const safe = [...attrs.matchAll(/\s+(colspan|rowspan)\s*=\s*(?:"(\d+)"|'(\d+)')/gi)]
-        .map((match) => ` ${match[1]}="${match[2] ?? match[3]}"`).join('');
-      return `<${name}${safe}>`;
-    });
 }
 
 function isNakalPage(url: string) {
@@ -442,8 +422,7 @@ export async function submitOfficialSearch(token: string, captcha: string) {
   });
   const replacementCaptcha = captchaFailed ? await createCaptchaSession(nextToken) : null;
   return {
-    html: recordReady ? sanitizeOfficialResult(state.html) : '',
-    pdfUrl: recordReady ? officialNakalPdf(state.html, state.url) : undefined,
+    receiptNumber: recordReady ? nakalReceiptNumber(state.html) : undefined,
     captchaFailed,
     submissionFailed: !recordReady && !captchaFailed,
     recordReady,
@@ -484,8 +463,7 @@ export async function continueOfficialSearch(token: string, fields: Record<strin
   const recordReady = isNakalPage(state.url);
   const nextFields = browserFormFields(state.html);
   return {
-    html: recordReady ? sanitizeOfficialResult(state.html) : '',
-    pdfUrl: recordReady ? officialNakalPdf(state.html, state.url) : undefined,
+    receiptNumber: recordReady ? nakalReceiptNumber(state.html) : undefined,
     recordReady,
     controls: recordReady ? [] : officialControls(state.html),
     token: encodeSession({

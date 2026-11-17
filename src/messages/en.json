@@ -514,7 +514,8 @@
       "choose": "Select an option",
       "loadRecord": "Load official record",
       "nakalReady": "Official Nakal record",
-      "openNakalPdf": "Open official PDF",
+      "receiptNumber": "Receipt number: {number}",
+      "receiptMissing": "HimBhoomi’s result did not include a readable receipt number.",
       "officialResponse": "HimBhoomi record choices",
       "officialResult": "Official HimBhoomi response",
       "unavailable": "HimBhoomi is temporarily unavailable. Please try again."
