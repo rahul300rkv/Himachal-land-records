@@ -1,5 +1,8 @@
 {
   "functions": {
+    "src/app/api/himbhoomi/route.ts": {
+      "regions": ["bom1"]
+    },
     "src/app/api/circle-rate/route.ts": {
       "regions": ["bom1"]
     }

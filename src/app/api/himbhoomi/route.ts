@@ -49,7 +49,13 @@ export async function POST(request: Request) {
     if (input.action === 'search') return Response.json(await submitOfficialSearch(input.token, input.captcha));
     return Response.json(await continueOfficialSearch(input.token, input.fields, input.eventTarget));
   } catch (error) {
-    console.error('HimBhoomi relay failed', error);
+    console.error('HimBhoomi relay failed', {
+      region: process.env.VERCEL_REGION || 'local',
+      code: diagnosticCode(error),
+      ...(error instanceof TypeError && error.cause instanceof Error
+        ? { networkStage: error.cause.name }
+        : {}),
+    });
     const message = error instanceof z.ZodError
       ? 'Invalid request'
       : `HimBhoomi is temporarily unavailable [${diagnosticCode(error)}]`;
