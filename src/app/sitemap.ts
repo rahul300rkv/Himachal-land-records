@@ -13,6 +13,7 @@ const PATHS = [
   '/marketplace',
   '/reports',
   '/converter',
+  '/stamp-duty-calculator',
   '/map',
   '/tools',
   '/guides',
