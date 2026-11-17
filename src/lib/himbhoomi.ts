@@ -361,6 +361,23 @@ function isNakalPage(url: string) {
   return /\/viewNakal\.aspx(?:$|[?#])/i.test(url);
 }
 
+function nakalPopupUrl(html: string, responseUrl: string) {
+  const origin = new URL(RECORDS_URL).origin;
+  for (const script of html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)) {
+    for (const call of script[1].matchAll(/\bwindow\s*\.\s*open\s*\(\s*(["'])([^"'\\]+)\1\s*(?=[,)])/gi)) {
+      try {
+        const target = new URL(decodeEntities(call[2]), responseUrl);
+        if (target.origin === origin && /^\/viewNakal\.aspx$/i.test(target.pathname) && !target.username && !target.password) {
+          return target.toString();
+        }
+      } catch {
+        // The script did not contain a usable URL.
+      }
+    }
+  }
+  return null;
+}
+
 export async function submitOfficialSearch(token: string, captcha: string) {
   const session = decodeSession(token);
   const body = new URLSearchParams({
@@ -375,15 +392,19 @@ export async function submitOfficialSearch(token: string, captcha: string) {
     __EVENTTARGET: '',
     __EVENTARGUMENT: '',
   });
-  const state = await request(RECORDS_URL, {
+  const formResponse = await request(RECORDS_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded', Referer: RECORDS_URL },
     body,
   }, session.cookie);
+  const popup = isNakalPage(formResponse.url) ? null : nakalPopupUrl(formResponse.html, formResponse.url);
+  const state = popup
+    ? await request(popup, { method: 'GET', headers: { Referer: formResponse.url } }, formResponse.cookie)
+    : formResponse;
   const recordReady = isNakalPage(state.url);
   const responseText = plainText(state.html);
   const captchaFailed = !recordReady && /(?:wrong|incorrect|invalid)\s*(?:captcha\s*)?code|(?:invalid|wrong|incorrect)\s*captcha|captcha.{0,80}(?:invalid|wrong|incorrect|गलत|अमान्य|स्वीकार नहीं)/i.test(responseText);
-  const responseFields = browserFormFields(state.html);
+  const responseFields = browserFormFields(formResponse.html);
   if (!recordReady) {
     const submittedControls = Object.entries(session.fields ?? {}).filter(([name, value]) =>
       /\$(?:DDL(?:Khewat|Khatauni|Khasra)|RBLKKK|.*JamShj|txtFullName)$/i.test(name)
@@ -391,6 +412,7 @@ export async function submitOfficialSearch(token: string, captcha: string) {
     );
     console.warn('HimBhoomi search returned no record', {
       redirected: state.redirected,
+      openedNakalPopup: Boolean(popup),
       returnedSearchForm: /\/viewlandrecords\.aspx(?:$|[?#])/i.test(state.url),
       captchaRejected: captchaFailed,
       hasSessionCookie: Boolean(session.cookie),
@@ -401,10 +423,10 @@ export async function submitOfficialSearch(token: string, captcha: string) {
   }
   const nextToken = encodeSession({
     ...session,
-    cookie: state.cookie,
-    hidden: hiddenFields(state.html),
+    cookie: formResponse.cookie,
+    hidden: hiddenFields(formResponse.html),
     fields: responseFields,
-    postbacks: formPostbacks(state.html),
+    postbacks: formPostbacks(formResponse.html),
   });
   const replacementCaptcha = captchaFailed ? await createCaptchaSession(nextToken) : null;
   return {
@@ -412,7 +434,7 @@ export async function submitOfficialSearch(token: string, captcha: string) {
     captchaFailed,
     submissionFailed: !recordReady && !captchaFailed,
     recordReady,
-    controls: recordReady || captchaFailed ? [] : officialControls(state.html),
+    controls: recordReady || captchaFailed ? [] : officialControls(formResponse.html),
     image: replacementCaptcha?.image,
     token: replacementCaptcha?.token ?? nextToken,
   };
