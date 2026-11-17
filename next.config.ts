@@ -16,8 +16,15 @@ const nextConfig: NextConfig = {
   serverExternalPackages: ['@react-pdf/renderer', '@napi-rs/canvas', 'pdfjs-dist'],
   // Make sure the PDF fonts are shipped with the serverless function (e.g. on Vercel).
   outputFileTracingIncludes: {
-    '/api/report/generate': ['./src/assets/fonts/**/*'],
-    '/api/himbhoomi/pdf': ['./src/assets/fonts/**/*'],
+    '/api/report/generate': [
+      './src/assets/fonts/**/*',
+      './node_modules/pdfkit/js/standard-fonts/**/*',
+    ],
+    '/api/himbhoomi/pdf': [
+      './src/assets/fonts/**/*',
+      // pdfkit is externalized by React PDF and loads these files at runtime.
+      './node_modules/pdfkit/js/standard-fonts/**/*',
+    ],
   },
   images: {
     remotePatterns: supabaseHostname
