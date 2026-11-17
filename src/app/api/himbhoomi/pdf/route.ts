@@ -1,6 +1,8 @@
 import { renderToBuffer, type DocumentProps } from '@react-pdf/renderer';
 import { createElement, type ReactElement } from 'react';
 import { z } from 'zod';
+import { existsSync } from 'node:fs';
+import path from 'node:path';
 import { JamabandiCopy } from '@/components/reports/JamabandiCopy';
 import { registerPdfFonts } from '@/lib/pdf-fonts';
 
@@ -32,8 +34,24 @@ export async function POST(request: Request) {
       'Content-Disposition': `attachment; filename="HimLand-Check-information-${parsed.data.receiptNumber}.pdf"`,
       'Cache-Control': 'private, no-store',
     } });
-  } catch {
-    console.error('Jamabandi information PDF generation failed');
+  } catch (error) {
+    // Record diagnostic metadata without logging uploaded record values.
+    const message = error instanceof Error ? error.message : '';
+    const category = /ENOENT|font|woff/i.test(message) ? 'font_or_asset'
+      : /memory|heap|allocation/i.test(message) ? 'memory'
+        : /layout|page|height|width|render/i.test(message) ? 'rendering'
+          : 'unexpected';
+    console.error('Jamabandi information PDF generation failed', {
+      category,
+      errorType: error instanceof Error ? error.name : 'UnknownError',
+      region: process.env.VERCEL_REGION || 'local',
+      rowCount: parsed.data.parcelTable.rows.length,
+      fontFiles: ['hind-latin-400.woff', 'hind-devanagari-400.woff'].map((name) => ({
+        name,
+        exists: existsSync(path.join(process.cwd(), 'src/assets/fonts', name)),
+      })),
+      stack: error instanceof Error ? error.stack?.split('\n').slice(1, 5).join('\n') : undefined,
+    });
     return Response.json({ error: 'generation_failed' }, { status: 500 });
   }
 }
