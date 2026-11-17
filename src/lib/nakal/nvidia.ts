@@ -12,11 +12,13 @@ export async function readWithNvidia(pdf: Buffer, prompt: string, key: string, s
   const abort = () => { void loading.destroy().catch(() => {}); };
   signal.addEventListener('abort', abort, { once: true });
   const images: { type: 'image_url'; image_url: { url: string } }[] = [];
+  let pageNumber = 0;
   try {
     signal.throwIfAborted();
     const doc = await loading.promise;
     if (doc.numPages > 8) throw new Error('NVIDIA fallback supports up to 8 pages');
     for (let index = 1; index <= doc.numPages; index++) {
+      pageNumber = index;
       signal.throwIfAborted();
       const page = await doc.getPage(index);
       const base = page.getViewport({ scale: 1 });
@@ -26,6 +28,7 @@ export async function readWithNvidia(pdf: Buffer, prompt: string, key: string, s
         await page.render({ canvas: canvas as unknown as HTMLCanvasElement, viewport }).promise;
         let jpeg = canvas.toBuffer('image/jpeg', 78);
         if (jpeg.length > 130_000) jpeg = canvas.toBuffer('image/jpeg', 50);
+        if (jpeg.length > 130_000) jpeg = canvas.toBuffer('image/jpeg', 32);
         if (jpeg.length > 130_000) throw new Error('Rendered page exceeds NVIDIA inline image limit');
         images.push({ type: 'image_url', image_url: { url: `data:image/jpeg;base64,${jpeg.toString('base64')}` } });
       } finally {
@@ -33,9 +36,11 @@ export async function readWithNvidia(pdf: Buffer, prompt: string, key: string, s
         canvas.width = canvas.height = 1;
       }
     }
+  } catch {
+    throw new Error(signal.aborted ? 'NVIDIA render timeout' : `NVIDIA render failed (page ${pageNumber})`);
   } finally {
     signal.removeEventListener('abort', abort);
-    await loading.destroy();
+    await loading.destroy().catch(() => {});
   }
 
   const endpoint = model === DEFAULT_MODEL ? model : 'chat/completions';
@@ -49,12 +54,16 @@ export async function readWithNvidia(pdf: Buffer, prompt: string, key: string, s
       temperature: 0,
     }),
     signal,
+  }).catch(() => {
+    throw new Error(signal.aborted ? 'NVIDIA request timeout' : 'NVIDIA connection failed');
   });
   if (response.status !== 200) throw new Error(`NVIDIA HTTP ${response.status}`);
-  const data = await response.json() as { choices?: { finish_reason?: string; message?: { content?: string } }[] };
+  const data = await response.json().catch(() => {
+    throw new Error(signal.aborted ? 'NVIDIA response timeout' : 'NVIDIA invalid response');
+  }) as { choices?: { finish_reason?: string; message?: { content?: string } }[] };
   const choice = data.choices?.[0];
   if (choice?.finish_reason !== 'stop' || !choice.message?.content) {
-    throw new Error('NVIDIA extraction did not finish');
+    throw new Error(choice?.finish_reason === 'length' ? 'NVIDIA output truncated' : 'NVIDIA empty or unfinished output');
   }
   return { model, text: choice.message.content };
 }

@@ -113,17 +113,23 @@ export async function extractNakal(pdf: Buffer): Promise<{ raw: RawNakal; model:
     }
   }
   if (nvidiaKey && Date.now() < deadline) {
+    let stage = 'NVIDIA renderer initialization failed';
     try {
       const { readWithNvidia } = await import('./nvidia');
+      stage = 'NVIDIA processing failed';
       const { text, model } = await readWithNvidia(pdf, PROMPT, nvidiaKey, AbortSignal.timeout(Math.max(1, deadline - Date.now())));
+      stage = 'NVIDIA output failed JSON or schema validation';
       const raw = rawNakalSchema.parse(parseJson(text));
       if (!raw.owners.some((owner) => owner.names) || !raw.khasras.some((plot) => plot.number)) {
-        throw new Error('Missing ownership or parcels');
+        stage = 'NVIDIA output missing ownership or parcels';
+        throw new Error(stage);
       }
       return { raw, model };
     } catch (error) {
-      const status = error instanceof Error ? /^NVIDIA HTTP \d{3}$/.exec(error.message)?.[0] : undefined;
-      throw new ExtractionError('model_error', `${last.message}; ${status ?? 'NVIDIA extraction failed'}`);
+      const safeDetail = error instanceof Error
+        ? /^NVIDIA (?:HTTP \d{3}|render timeout|render failed \(page \d+\)|request timeout|connection failed|response timeout|invalid response|output truncated|empty or unfinished output)$/.exec(error.message)?.[0]
+        : undefined;
+      throw new ExtractionError('model_error', `${last.message}; ${safeDetail ?? stage}`);
     }
   }
   throw last;
