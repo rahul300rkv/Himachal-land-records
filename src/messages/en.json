@@ -514,6 +514,7 @@
       "choose": "Select an option",
       "loadRecord": "Load official record",
       "nakalReady": "Official Nakal record",
+      "openNakalPdf": "Open official PDF",
       "officialResponse": "HimBhoomi record choices",
       "officialResult": "Official HimBhoomi response",
       "unavailable": "HimBhoomi is temporarily unavailable. Please try again."

@@ -10,7 +10,7 @@ import { Select } from '@/components/ui/select';
 import { loadOfficialLocations, type LocationCodes, type Option } from '@/lib/data/himbhoomi-location-options';
 
 type OfficialControl = { name: string; label: string; kind: 'select' | 'radio' | 'text'; options: Option[]; selected?: string };
-type ApiResult = { options?: Option[]; image?: string; token?: string; html?: string; controls?: OfficialControl[]; captchaFailed?: boolean; submissionFailed?: boolean; recordReady?: boolean; error?: string };
+type ApiResult = { options?: Option[]; image?: string; token?: string; html?: string; pdfUrl?: string; controls?: OfficialControl[]; captchaFailed?: boolean; submissionFailed?: boolean; recordReady?: boolean; error?: string };
 type SearchFormProps = { initialLocation?: LocationCodes };
 
 function selectedFields(controls: OfficialControl[]) {
@@ -40,6 +40,7 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
   const [controls, setControls] = useState<OfficialControl[]>([]);
   const [officialFields, setOfficialFields] = useState<Record<string, string>>({});
   const [resultHtml, setResultHtml] = useState('');
+  const [pdfUrl, setPdfUrl] = useState('');
   const [recordReady, setRecordReady] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -86,6 +87,7 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
 
   function resetAfterLocation() {
     setCaptcha(''); setCaptchaImage(''); setToken(''); setControls([]); setOfficialFields({}); setResultHtml(''); setRecordReady(false);
+    setPdfUrl('');
   }
 
   async function requestCaptcha() {
@@ -123,6 +125,8 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
         return;
       }
       setToken(data.token ?? token); setControls(data.controls ?? []); setResultHtml(data.html ?? ''); setRecordReady(Boolean(data.recordReady));
+      setPdfUrl(data.pdfUrl ?? '');
+      setCaptchaImage('');
     } catch (reason) { setError(reason instanceof Error ? reason.message : t('unavailable')); }
     finally { operationInFlight.current = false; setBusy(false); }
   }
@@ -153,6 +157,10 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
       const nextControls = data.controls ?? [];
       setOfficialFields(selectedFields(nextControls));
       setToken(data.token ?? token); setControls(nextControls); setRecordReady(Boolean(data.recordReady));
+      if (data.recordReady) {
+        setResultHtml(data.html ?? '');
+        setPdfUrl(data.pdfUrl ?? '');
+      }
     } catch (reason) { setError(reason instanceof Error ? reason.message : t('unavailable')); }
     finally { operationInFlight.current = false; setBusy(false); }
   }
@@ -185,6 +193,27 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
         </Button>
       </div>
     )}
-    {resultHtml && <section className="space-y-3"><h2 className="font-sans text-lg font-semibold tracking-normal">{recordReady ? t('nakalReady') : t('officialResponse')}</h2><div className="official-record overflow-x-auto rounded-xl border bg-white p-4 text-sm text-foreground [&_table]:w-full [&_td]:border [&_td]:p-2 [&_th]:border [&_th]:bg-muted [&_th]:p-2" aria-label={t('officialResult')} dangerouslySetInnerHTML={{ __html: resultHtml }} /></section>}
+    {(recordReady || resultHtml) && (
+      <section className="space-y-3">
+        <h2 className="font-sans text-lg font-semibold tracking-normal">{recordReady ? t('nakalReady') : t('officialResponse')}</h2>
+        {pdfUrl ? (
+          <>
+            <Button asChild>
+              <a href={pdfUrl} target="_blank" rel="noopener noreferrer">{t('openNakalPdf')}</a>
+            </Button>
+            <iframe src={pdfUrl} title={t('openNakalPdf')} loading="lazy" className="h-[70vh] w-full rounded-xl border bg-white" />
+          </>
+        ) : (
+          <>
+            {resultHtml && <div className="official-record overflow-x-auto rounded-xl border bg-white p-4 text-sm text-foreground [&_table]:w-full [&_td]:border [&_td]:p-2 [&_th]:border [&_th]:bg-muted [&_th]:p-2" aria-label={t('officialResult')} dangerouslySetInnerHTML={{ __html: resultHtml }} />}
+            {recordReady && (
+              <Button asChild variant="outline">
+                <a href="https://himbhoomilmk.nic.in/viewlandrecords.aspx" target="_blank" rel="noopener noreferrer">{t('openOfficial')}</a>
+              </Button>
+            )}
+          </>
+        )}
+      </section>
+    )}
   </div>;
 }

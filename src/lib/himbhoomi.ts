@@ -342,6 +342,18 @@ export async function createCaptchaSession(token: string) {
   };
 }
 
+function officialNakalPdf(html: string, responseUrl: string) {
+  const paths = html.matchAll(/(?:https:\/\/himbhoomilmk\.nic\.in\/)?\/?pdf\/PublicRoR\/[A-Z]+\d+\.pdf(?=["'\s<>]|$)/gi);
+  for (const [path] of paths) {
+    const url = new URL(path, responseUrl);
+    if (url.hostname === 'himbhoomilmk.nic.in' && /^\/pdf\/PublicRoR\/[A-Z]+\d+\.pdf$/i.test(url.pathname)) {
+      url.protocol = 'https:';
+      return url.toString();
+    }
+  }
+  return undefined;
+}
+
 function sanitizeOfficialResult(html: string) {
   const content = html.match(/<div\b[^>]*id=["']ctl00_ContentPlaceHolder1_UpdatePanel1["'][^>]*>([\s\S]*?)<div\b[^>]*id=["']footer_image["']/i)?.[1] ?? html;
   return content
@@ -431,6 +443,7 @@ export async function submitOfficialSearch(token: string, captcha: string) {
   const replacementCaptcha = captchaFailed ? await createCaptchaSession(nextToken) : null;
   return {
     html: recordReady ? sanitizeOfficialResult(state.html) : '',
+    pdfUrl: recordReady ? officialNakalPdf(state.html, state.url) : undefined,
     captchaFailed,
     submissionFailed: !recordReady && !captchaFailed,
     recordReady,
@@ -472,6 +485,7 @@ export async function continueOfficialSearch(token: string, fields: Record<strin
   const nextFields = browserFormFields(state.html);
   return {
     html: recordReady ? sanitizeOfficialResult(state.html) : '',
+    pdfUrl: recordReady ? officialNakalPdf(state.html, state.url) : undefined,
     recordReady,
     controls: recordReady ? [] : officialControls(state.html),
     token: encodeSession({
