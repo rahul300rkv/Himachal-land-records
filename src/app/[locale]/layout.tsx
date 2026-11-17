@@ -87,6 +87,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: t('description'),
     applicationName: t('siteName'),
     category: 'real estate',
+    keywords: ['Himachal Pradesh land records', 'jamabandi', 'khasra', 'khatauni', 'khewat', 'land verification', 'circle rates', 'stamp duty'],
+    authors: [{ name: 'HimLand Check' }],
+    creator: 'HimLand Check',
+    publisher: 'HimLand Check',
+    formatDetection: { telephone: false },
     manifest: '/manifest.webmanifest',
     ...(googleVerification ? { verification: { google: googleVerification } } : {}),
     openGraph: {

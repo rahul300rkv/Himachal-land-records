@@ -35,6 +35,18 @@ export function pageMetadata({
   return {
     title,
     description,
+    keywords: [
+      'Himachal Pradesh land records',
+      'jamabandi',
+      'khasra khatauni khewat',
+      'Himachal land verification',
+      'Himachal circle rates',
+      'stamp duty calculator Himachal Pradesh',
+    ],
+    authors: [{ name: 'HimLand Check' }],
+    creator: 'HimLand Check',
+    publisher: 'HimLand Check',
+    formatDetection: { telephone: false },
     alternates: {
       canonical: `/${locale}${path}`,
       languages: { ...languages, 'x-default': `/${routing.defaultLocale}${path}` },
@@ -55,6 +67,10 @@ export function pageMetadata({
       description,
       images: [image],
     },
-    robots: noindex ? { index: false, follow: false } : undefined,
+    robots: noindex ? { index: false, follow: false } : {
+      index: true,
+      follow: true,
+      googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1, 'max-video-preview': -1 },
+    },
   };
 }
