@@ -52,6 +52,6 @@ export async function POST(request: Request) {
       })),
       stack: error instanceof Error ? error.stack?.split('\n').slice(1, 5).join('\n') : undefined,
     });
-    return Response.json({ error: 'generation_failed' }, { status: 500 });
+    return Response.json({ error: 'generation_failed', category }, { status: 500 });
   }
 }
