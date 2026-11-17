@@ -1434,7 +1434,7 @@
     "choose": "Choose a PDF (up to 4 MB)",
     "analyze": "Check this record",
     "analyzing": "Reading the record… this can take up to a minute.",
-    "privacy": "Your file is sent to Google's Gemini API to be read and is not stored by this site. On Google's free tier, inputs may be used to improve its models, so do not upload records you do not want shared.",
+    "privacy": "Google Gemini reads your PDF. If fallback processing is enabled and needed, NVIDIA receives images of its pages. On Google's free tier, inputs may be used to improve its models. Upload only records you are comfortable sharing with these providers.",
     "errors": {
       "unauthorized": "Please log in to check a record.",
       "invalid_file": "Please upload a PDF file.",

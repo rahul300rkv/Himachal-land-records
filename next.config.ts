@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   // @react-pdf/renderer must run as a normal Node.js dependency, not be bundled.
-  serverExternalPackages: ['@react-pdf/renderer'],
+  serverExternalPackages: ['@react-pdf/renderer', '@napi-rs/canvas', 'pdfjs-dist'],
   // Make sure the PDF fonts are shipped with the serverless function (e.g. on Vercel).
   outputFileTracingIncludes: {
     '/api/report/generate': ['./src/assets/fonts/**/*'],

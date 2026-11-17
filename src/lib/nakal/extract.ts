@@ -14,7 +14,7 @@ const MODELS = (process.env.GEMINI_MODELS ?? 'gemini-3.5-flash-lite,gemini-3.5-f
   .filter(Boolean);
 // PDF vision requests can take longer than text-only prompts, especially for
 // Hindi Crystal Reports documents with two rendered pages.
-const PER_MODEL_TIMEOUT_MS = 55_000;
+const EXTRACTION_TIMEOUT_MS = 55_000;
 
 export type ExtractionErrorCode = 'not_configured' | 'rate_limited' | 'model_error' | 'bad_output';
 export class ExtractionError extends Error {
@@ -58,10 +58,15 @@ function parseJson(text: string): unknown {
 
 export async function extractNakal(pdf: Buffer): Promise<{ raw: RawNakal; model: string }> {
   const key = process.env.GEMINI_API_KEY;
-  if (!key) throw new ExtractionError('not_configured', 'GEMINI_API_KEY is not set');
+  const nvidiaKey = process.env.NVIDIA_API_KEY?.trim();
+  if (!key && !nvidiaKey) throw new ExtractionError('not_configured', 'No document provider is configured');
+  const deadline = Date.now() + EXTRACTION_TIMEOUT_MS;
+  const geminiDeadline = deadline - (nvidiaKey ? 25_000 : 0);
 
   let last: ExtractionError = new ExtractionError('model_error', 'No model configured');
-  for (const model of MODELS) {
+  for (const [index, model] of MODELS.entries()) {
+    const remaining = geminiDeadline - Date.now();
+    if (!key || remaining <= 0) break;
     let res: Response;
     try {
       res = await fetch(`${ENDPOINT}/${model}:generateContent`, {
@@ -79,7 +84,7 @@ export async function extractNakal(pdf: Buffer): Promise<{ raw: RawNakal; model:
           ],
           generationConfig: { temperature: 0, responseMimeType: 'application/json' },
         }),
-        signal: AbortSignal.timeout(PER_MODEL_TIMEOUT_MS),
+        signal: AbortSignal.timeout(nvidiaKey ? Math.ceil(remaining / (MODELS.length - index)) : remaining),
       });
     } catch {
       last = new ExtractionError('model_error', `${model}: request failed or timed out`);
@@ -89,14 +94,14 @@ export async function extractNakal(pdf: Buffer): Promise<{ raw: RawNakal; model:
     if (res.status === 429) { last = new ExtractionError('rate_limited', `${model}: quota exhausted`); continue; }
     if (res.status === 404 || res.status >= 500) { last = new ExtractionError('model_error', `${model}: HTTP ${res.status}`); continue; }
     if (!res.ok) {
-      const detail = (await res.text()).slice(0, 240).replace(/\s+/g, ' ');
-      throw new ExtractionError('model_error', `${model}: HTTP ${res.status} ${detail}`);
+      last = new ExtractionError('model_error', `${model}: HTTP ${res.status}`);
+      break;
     }
 
-    const data = (await res.json()) as {
+    const data = (await res.json().catch(() => null)) as {
       candidates?: { content?: { parts?: { text?: string }[] } }[];
-    };
-    const text = data.candidates?.[0]?.content?.parts?.map((p) => p.text ?? '').join('') ?? '';
+    } | null;
+    const text = data?.candidates?.[0]?.content?.parts?.map((p) => p.text ?? '').join('') ?? '';
     if (!text) {
       last = new ExtractionError('bad_output', `${model}: empty response`);
       continue;
@@ -105,6 +110,20 @@ export async function extractNakal(pdf: Buffer): Promise<{ raw: RawNakal; model:
       return { raw: rawNakalSchema.parse(parseJson(text)), model };
     } catch {
       last = new ExtractionError('bad_output', `${model}: output was not valid`);
+    }
+  }
+  if (nvidiaKey && Date.now() < deadline) {
+    try {
+      const { readWithNvidia } = await import('./nvidia');
+      const { text, model } = await readWithNvidia(pdf, PROMPT, nvidiaKey, AbortSignal.timeout(Math.max(1, deadline - Date.now())));
+      const raw = rawNakalSchema.parse(parseJson(text));
+      if (!raw.owners.some((owner) => owner.names) || !raw.khasras.some((plot) => plot.number)) {
+        throw new Error('Missing ownership or parcels');
+      }
+      return { raw, model };
+    } catch (error) {
+      const status = error instanceof Error ? /^NVIDIA HTTP \d{3}$/.exec(error.message)?.[0] : undefined;
+      throw new ExtractionError('model_error', `${last.message}; ${status ?? 'NVIDIA extraction failed'}`);
     }
   }
   throw last;
