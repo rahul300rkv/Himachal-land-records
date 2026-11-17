@@ -160,7 +160,10 @@ export function assess(raw: RawNakal, now: Date = new Date()): AssessResult {
       pendingCases: pending.length,
     },
     owners: raw.owners.map((o) => ({
-      names: o.names ?? '',
+      // Crystal Reports often leaves a khata/khewat column number attached to
+      // the end of the owner line. Remove only a trailing numeric artifact;
+      // never alter digits inside a name or a genuine share value.
+      names: (o.names ?? '').replace(/[\s|:;,]*(?:\d{1,2})\s*$/, '').trim(),
       shareNum: o.share_num,
       sharePct: o.share_num !== null && raw.total_share ? (o.share_num / raw.total_share) * 100 : null,
     })),
