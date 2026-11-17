@@ -8,7 +8,7 @@ const POSTBACK_SETTLE_MS = 500;
 const CAPTCHA_SETTLE_MS = 750;
 
 export type OfficialOption = { value: string; label: string };
-type UpstreamState = { cookie: string; html: string; url: string };
+type UpstreamState = { cookie: string; html: string; url: string; redirected: boolean };
 
 const OFFICIAL_DISTRICTS: OfficialOption[] = [
   { value: '04', label: 'ऊना' },
@@ -148,7 +148,7 @@ async function request(url: string, init: RequestInit, cookie = ''): Promise<Ups
     signal: AbortSignal.timeout(30_000),
   });
   if (!response.ok) throw new Error(`HimBhoomi returned ${response.status}`);
-  return { cookie: mergeCookie(cookie, response), html: await response.text(), url: response.url };
+  return { cookie: mergeCookie(cookie, response), html: await response.text(), url: response.url, redirected: response.redirected };
 }
 
 async function start() {
@@ -387,6 +387,21 @@ export async function submitOfficialSearch(token: string, captcha: string) {
   const responseText = plainText(state.html);
   const captchaFailed = !recordReady && /(?:wrong|incorrect|invalid)\s*(?:captcha\s*)?code|(?:invalid|wrong|incorrect)\s*captcha|captcha.{0,80}(?:invalid|wrong|incorrect|गलत|अमान्य|स्वीकार नहीं)/i.test(responseText);
   const responseFields = browserFormFields(state.html);
+  if (!recordReady) {
+    const submittedControls = Object.entries(session.fields ?? {}).filter(([name, value]) =>
+      /\$(?:DDL(?:Khewat|Khatauni|Khasra)|RBLKKK|.*JamShj|txtFullName)$/i.test(name)
+      && Boolean(value) && !/^-?select-?$/i.test(value),
+    );
+    console.warn('HimBhoomi search returned no record', {
+      redirected: state.redirected,
+      returnedSearchForm: /\/viewlandrecords\.aspx(?:$|[?#])/i.test(state.url),
+      captchaRejected: captchaFailed,
+      hasSessionCookie: Boolean(session.cookie),
+      hasFormState: Boolean(session.hidden.__VIEWSTATE),
+      submittedRecordControls: submittedControls.length,
+      resetRecordControls: submittedControls.filter(([name, value]) => responseFields[name] !== value).length,
+    });
+  }
   const nextToken = encodeSession({
     ...session,
     cookie: state.cookie,
