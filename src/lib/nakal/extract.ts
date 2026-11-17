@@ -12,7 +12,9 @@ const MODELS = (process.env.GEMINI_MODELS ?? 'gemini-3.5-flash')
   .split(',')
   .map((s) => s.trim())
   .filter(Boolean);
-const PER_MODEL_TIMEOUT_MS = 28_000;
+// PDF vision requests can take longer than text-only prompts, especially for
+// Hindi Crystal Reports documents with two rendered pages.
+const PER_MODEL_TIMEOUT_MS = 55_000;
 
 export type ExtractionErrorCode = 'not_configured' | 'rate_limited' | 'model_error' | 'bad_output';
 export class ExtractionError extends Error {

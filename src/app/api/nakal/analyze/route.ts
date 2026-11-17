@@ -3,7 +3,7 @@ import { ExtractionError, extractNakal } from '@/lib/nakal/extract';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
-export const maxDuration = 60; // reading a PDF can take 20-50 s
+export const maxDuration = 60; // PDF vision requests can take up to 55 s
 
 const MAX_BYTES = 4 * 1024 * 1024; // Vercel rejects request bodies over ~4.5 MB
 const MAX_PER_HOUR = 20;
