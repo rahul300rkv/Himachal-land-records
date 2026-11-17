@@ -35,6 +35,7 @@ const FIELD = {
   village: 'ctl00$ContentPlaceHolder1$cmbvillage',
   year: 'ctl00$ContentPlaceHolder1$cmbjyear',
   captcha: 'ctl00$ContentPlaceHolder1$txtSearchCaptcha',
+  reloadCaptcha: 'ctl00$ContentPlaceHolder1$GenerateNewCode',
   submit: 'ctl00$ContentPlaceHolder1$btnGo',
 } as const;
 
@@ -301,10 +302,32 @@ export async function prepareOfficialSearch(selection: Required<OfficialSelectio
 
 export async function createCaptchaSession(token: string) {
   const session = decodeSession(token);
+  // The official Reload control is an image submit button. Its postback
+  // refreshes the challenge in the same form session before the image loads.
+  const body = new URLSearchParams({
+    ...session.hidden,
+    ...(session.fields ?? {}),
+    [FIELD.district]: session.district,
+    [FIELD.tehsil]: session.tehsil!,
+    [FIELD.village]: session.village!,
+    [FIELD.year]: session.year,
+    [FIELD.captcha]: '',
+    [`${FIELD.reloadCaptcha}.x`]: '1',
+    [`${FIELD.reloadCaptcha}.y`]: '1',
+    __EVENTTARGET: '',
+    __EVENTARGUMENT: '',
+  });
+  const refreshed = await request(RECORDS_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded', Referer: RECORDS_URL },
+    body,
+  }, session.cookie);
+  const refreshedHidden = hiddenFields(refreshed.html);
+  if (!refreshedHidden.__VIEWSTATE) throw new Error('HimBhoomi reload did not return the record form');
   await delay(CAPTCHA_SETTLE_MS);
   const captchaResponse = await fetch(new URL('CaptchaControl.aspx', BASE_URL), {
     cache: 'no-store',
-    headers: { Cookie: session.cookie, Referer: RECORDS_URL },
+    headers: { Cookie: refreshed.cookie, Referer: RECORDS_URL },
     signal: AbortSignal.timeout(30_000),
   });
   if (!captchaResponse.ok) throw new Error(`Captcha returned ${captchaResponse.status}`);
@@ -312,7 +335,13 @@ export async function createCaptchaSession(token: string) {
   const mediaType = captchaResponse.headers.get('content-type')?.split(';')[0] || 'image/jpeg';
   return {
     image: `data:${mediaType};base64,${bytes.toString('base64')}`,
-    token: encodeSession({ ...session, cookie: mergeCookie(session.cookie, captchaResponse) }),
+    token: encodeSession({
+      ...session,
+      cookie: mergeCookie(refreshed.cookie, captchaResponse),
+      hidden: refreshedHidden,
+      fields: browserFormFields(refreshed.html),
+      postbacks: formPostbacks(refreshed.html),
+    }),
   };
 }
 
