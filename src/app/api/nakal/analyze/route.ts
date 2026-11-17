@@ -43,7 +43,10 @@ export async function POST(request: Request) {
   } catch (e) {
     const code = e instanceof ExtractionError ? e.code : 'model_error';
     // Never log file contents or owner names.
-    console.error('nakal analyze failed:', code);
+    console.error('nakal analyze failed:', {
+      code,
+      message: e instanceof Error ? e.message.slice(0, 500) : 'unknown error',
+    });
     const status = code === 'not_configured' ? 503 : code === 'rate_limited' ? 429 : 502;
     return json({ error: code }, status);
   }
