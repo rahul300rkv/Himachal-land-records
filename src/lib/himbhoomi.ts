@@ -349,6 +349,15 @@ function nakalReceiptNumber(html: string) {
   return undefined;
 }
 
+function nakalLabels(html: string) {
+  const labels: { id: string; value: string }[] = [];
+  for (const span of html.matchAll(/<span\b(?=[^>]*\sid\s*=\s*["'](?:ctl00_)?(?:ContentPlaceHolder1_)?(?:lbl|Label)[^"']*["'])[^>]*>([\s\S]*?)<\/span>/gi)) {
+    const id = attributes(span[0].slice(0, span[0].indexOf('>') + 1)).id;
+    labels.push({ id, value: plainText(span[1]) });
+  }
+  return labels;
+}
+
 function isNakalPage(url: string) {
   return /\/viewNakal\.aspx(?:$|[?#])/i.test(url);
 }
@@ -423,6 +432,7 @@ export async function submitOfficialSearch(token: string, captcha: string) {
   const replacementCaptcha = captchaFailed ? await createCaptchaSession(nextToken) : null;
   return {
     receiptNumber: recordReady ? nakalReceiptNumber(state.html) : undefined,
+    labels: recordReady ? nakalLabels(state.html) : [],
     captchaFailed,
     submissionFailed: !recordReady && !captchaFailed,
     recordReady,
@@ -464,6 +474,7 @@ export async function continueOfficialSearch(token: string, fields: Record<strin
   const nextFields = browserFormFields(state.html);
   return {
     receiptNumber: recordReady ? nakalReceiptNumber(state.html) : undefined,
+    labels: recordReady ? nakalLabels(state.html) : [],
     recordReady,
     controls: recordReady ? [] : officialControls(state.html),
     token: encodeSession({

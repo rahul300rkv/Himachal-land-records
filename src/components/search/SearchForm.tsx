@@ -10,7 +10,8 @@ import { Select } from '@/components/ui/select';
 import { loadOfficialLocations, type LocationCodes, type Option } from '@/lib/data/himbhoomi-location-options';
 
 type OfficialControl = { name: string; label: string; kind: 'select' | 'radio' | 'text'; options: Option[]; selected?: string };
-type ApiResult = { options?: Option[]; image?: string; token?: string; receiptNumber?: string; controls?: OfficialControl[]; captchaFailed?: boolean; submissionFailed?: boolean; recordReady?: boolean; error?: string };
+type NakalLabel = { id: string; value: string };
+type ApiResult = { options?: Option[]; image?: string; token?: string; receiptNumber?: string; labels?: NakalLabel[]; controls?: OfficialControl[]; captchaFailed?: boolean; submissionFailed?: boolean; recordReady?: boolean; error?: string };
 type SearchFormProps = { initialLocation?: LocationCodes };
 
 function selectedFields(controls: OfficialControl[]) {
@@ -40,6 +41,7 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
   const [controls, setControls] = useState<OfficialControl[]>([]);
   const [officialFields, setOfficialFields] = useState<Record<string, string>>({});
   const [receiptNumber, setReceiptNumber] = useState('');
+  const [labels, setLabels] = useState<NakalLabel[]>([]);
   const [recordReady, setRecordReady] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -87,6 +89,7 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
   function resetAfterLocation() {
     setCaptcha(''); setCaptchaImage(''); setToken(''); setControls([]); setOfficialFields({}); setRecordReady(false);
     setReceiptNumber('');
+    setLabels([]);
   }
 
   async function requestCaptcha() {
@@ -125,6 +128,7 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
       }
       setToken(data.token ?? token); setControls(data.controls ?? []); setRecordReady(Boolean(data.recordReady));
       setReceiptNumber(data.receiptNumber ?? '');
+      setLabels(data.labels ?? []);
       setCaptchaImage('');
     } catch (reason) { setError(reason instanceof Error ? reason.message : t('unavailable')); }
     finally { operationInFlight.current = false; setBusy(false); }
@@ -157,6 +161,7 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
       setOfficialFields(selectedFields(nextControls));
       setToken(data.token ?? token); setControls(nextControls); setRecordReady(Boolean(data.recordReady));
       setReceiptNumber(data.receiptNumber ?? '');
+      setLabels(data.labels ?? []);
     } catch (reason) { setError(reason instanceof Error ? reason.message : t('unavailable')); }
     finally { operationInFlight.current = false; setBusy(false); }
   }
@@ -194,6 +199,24 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
         {receiptNumber
           ? <p className="text-lg font-semibold tabular-nums">{t('receiptNumber', { number: receiptNumber })}</p>
           : <p className="text-sm text-muted-foreground">{t('receiptMissing')}</p>}
+        <div className="mt-4 overflow-x-auto rounded-lg border">
+          <table className="w-full text-left text-sm">
+            <thead className="bg-muted">
+              <tr>
+                <th scope="col" className="p-3">{t('labelColumn')}</th>
+                <th scope="col" className="p-3">{t('valueColumn')}</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y">
+              {labels.map(({ id, value }, index) => (
+                <tr key={id + index}>
+                  <th scope="row" className="max-w-64 break-all p-3 font-normal text-muted-foreground">{id.replace(/^ctl00_(?:ContentPlaceHolder1_)?/, '')}</th>
+                  <td className="min-w-40 whitespace-pre-wrap break-words p-3">{value || t('emptyLabel')}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     )}
   </div>;
