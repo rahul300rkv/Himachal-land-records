@@ -317,13 +317,8 @@
     "copied": "Copied",
     "sample": {
       "title": "Sample plot report",
-      "caption": "Fictional example. The highlighted parcel and details are for illustration only.",
-      "mapAlt": "Illustrative village map with six parcels and plot 5 highlighted in yellow.",
-      "district": "Sample district",
-      "tehsil": "Sample tehsil",
-      "village": "Sample village",
-      "area": "Plot area",
-      "areaValue": "520 m²"
+      "caption": "Example report provided by MyPatta for reference.",
+      "mapAlt": "Sample Himachal Pradesh BhuNaksha report with a parcel map and plot details."
     },
     "overview": {
       "title": "Himachal Pradesh BhuNaksha overview",
