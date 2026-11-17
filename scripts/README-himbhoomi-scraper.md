@@ -51,6 +51,16 @@ latest-year run is complete. Use `--district 04` and `--max-villages 10` for a
 small test. The default delay is 0.75 seconds plus jitter after every request;
 do not reduce it for a full scrape.
 
+If `years.csv` is already complete, run only the Khasra stage with three workers:
+
+```powershell
+.\.venv-scraper\Scripts\python.exe scripts\scrape_himbhoomi.py --depth numbers --record-keys Khasra --numbers-only --workers 3
+```
+
+Each worker uses a separate HTTP session and keeps the request delay. Use fewer
+workers if the portal responds slowly or returns rate-limit errors. Run one
+scraper process per output directory so CSV writes remain coordinated.
+
 Output is written as UTF-8 CSV to `data/himbhoomi/`:
 
 - `locations.csv`

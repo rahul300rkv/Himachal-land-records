@@ -8,7 +8,9 @@ import csv
 import random
 import sys
 import time
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
+from itertools import islice
 from pathlib import Path
 from typing import Iterable, Iterator, Sequence
 from urllib.parse import urljoin
@@ -102,6 +104,7 @@ def successful_fields(html: str) -> dict[str, str]:
 
 class HimBhoomiClient:
     def __init__(self, base_url: str, delay: float, timeout: float) -> None:
+        self.base_url = base_url
         self.records_url = urljoin(base_url.rstrip("/") + "/", RECORDS_PATH)
         self.delay, self.timeout = delay, timeout
         self.session = requests.Session()
@@ -242,30 +245,59 @@ def latest_year_rows(rows: Iterable[dict[str, str]], all_years: bool) -> Iterato
 
 
 def scrape_numbers(client: HimBhoomiClient, years: Path, output: Path, errors: Path,
-                   record_keys: Sequence[str], all_years: bool, limit: int | None) -> None:
+                   record_keys: Sequence[str], all_years: bool, limit: int | None,
+                   workers: int, districts: set[str]) -> None:
     unique = ("district_code", "tehsil_code", "village_code", "year_value", "record_key", "number_value")
     existing = read_keys(output, unique)
-    for index, row in enumerate(latest_year_rows(iter_csv(years), all_years), start=1):
+    rows = (row for row in iter_csv(years) if not districts
+            or row["district_code"] in districts or row["district_name"] in districts)
+    jobs = islice(latest_year_rows(rows, all_years), limit)
+
+    def fetch_numbers(row: dict[str, str]):
+        worker = HimBhoomiClient(client.base_url, client.delay, client.timeout)
+        results = []
         try:
-            base = client.load(row["district_code"], row["tehsil_code"], row["village_code"], row["year_value"])
+            base = worker.load(row["district_code"], row["tehsil_code"], row["village_code"], row["year_value"])
             for record_key in record_keys:
                 state, target = base, NUMBER_POSTBACK[record_key]
                 if target is not None:
-                    state = client.postback(state, target, {
+                    state = worker.postback(state, target, {
                         FIELD["record_type"]: "J", FIELD["record_key"]: record_key,
                     })
                 for number in option_list(state.html, SELECT_ID[record_key]):
-                    key = (row["district_code"], row["tehsil_code"], row["village_code"],
-                           row["year_value"], record_key, number.value)
-                    if key not in existing:
-                        append_row(output, NUMBER_FIELDS, {**row, "record_key": record_key,
-                                                          "number_value": number.value,
-                                                          "number_label": number.label})
-                        existing.add(key)
+                    if number.value.casefold() != "-select-":
+                        results.append({**row, "record_key": record_key,
+                                        "number_value": number.value, "number_label": number.label})
         except Exception as error:
-            record_error(errors, "numbers", row, error)
-        if limit is not None and index >= limit:
-            return
+            return row, results, error
+        finally:
+            worker.session.close()
+        return row, results, None
+
+    processed = 0
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        while batch := list(islice(jobs, workers)):
+            for row, results, error in pool.map(fetch_numbers, batch):
+                pending = []
+                for result in results:
+                    key = tuple(result[column] for column in unique)
+                    if key not in existing:
+                        pending.append(result)
+                        existing.add(key)
+                if pending:
+                    output.parent.mkdir(parents=True, exist_ok=True)
+                    new_file = not output.exists() or output.stat().st_size == 0
+                    with output.open("a", encoding="utf-8-sig", newline="") as handle:
+                        writer = csv.DictWriter(handle, fieldnames=NUMBER_FIELDS, extrasaction="ignore")
+                        if new_file:
+                            writer.writeheader()
+                        writer.writerows(pending)
+                if error is not None:
+                    record_error(errors, "numbers", row, error)
+                processed += 1
+                if processed == 1 or processed % 25 == 0:
+                    print(f"Number lookups processed: {processed}", flush=True)
+    print(f"Number lookups processed in total: {processed}", flush=True)
 
 
 def parse_args() -> argparse.Namespace:
@@ -282,6 +314,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--all-years", action="store_true",
                         help="numbers depth defaults to the latest year per village")
     parser.add_argument("--max-villages", type=int, help="small test/resume batch size")
+    parser.add_argument("--workers", type=int, choices=range(1, 5), default=1,
+                        help="parallel number lookups (1 to 4); delay applies per worker")
+    parser.add_argument("--numbers-only", action="store_true",
+                        help="with --depth numbers, use the existing years.csv without refreshing it")
     return parser.parse_args()
 
 
@@ -294,11 +330,16 @@ def main() -> int:
     numbers, errors = root / "record_numbers.csv", root / "errors.csv"
     client = HimBhoomiClient(args.base_url, args.delay, args.timeout)
     print(f"Output: {root.resolve()} | depth={args.depth}")
-    scrape_locations(client, locations, errors, set(args.district), args.max_villages)
-    if args.depth in {"years", "numbers"}:
-        scrape_years(client, locations, years, errors, args.max_villages)
+    if args.numbers_only:
+        if args.depth != "numbers" or not years.is_file():
+            raise SystemExit("--numbers-only requires --depth numbers and an existing years.csv")
+    else:
+        scrape_locations(client, locations, errors, set(args.district), args.max_villages)
+        if args.depth in {"years", "numbers"}:
+            scrape_years(client, locations, years, errors, args.max_villages)
     if args.depth == "numbers":
-        scrape_numbers(client, years, numbers, errors, args.record_keys, args.all_years, args.max_villages)
+        scrape_numbers(client, years, numbers, errors, args.record_keys, args.all_years,
+                       args.max_villages, args.workers, set(args.district))
     print("Done. Re-run the same command to resume; existing CSV keys are skipped.")
     return 0
 
