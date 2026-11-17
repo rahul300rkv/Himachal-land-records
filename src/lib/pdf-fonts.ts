@@ -8,7 +8,8 @@ let registered = false;
  * Registers the Hind font for PDFs. The font files are split by script, so two families are
  * registered and used together as a fallback list: ['Hind', 'HindDeva'] renders Latin
  * letters, digits, ₹ and Devanagari in the same line. (Fonts: SIL Open Font License, see
- * src/assets/fonts/OFL-LICENSE.txt.)
+ * src/assets/fonts/OFL-LICENSE.txt.) TTF is used because fontkit's WOFF support
+ * varies between serverless package versions.
  */
 export function registerPdfFonts() {
   if (registered) return;
@@ -17,15 +18,15 @@ export function registerPdfFonts() {
   Font.register({
     family: 'Hind',
     fonts: [
-      { src: path.join(dir, 'hind-latin-400.woff'), fontWeight: 400 },
-      { src: path.join(dir, 'hind-latin-700.woff'), fontWeight: 700 },
+      { src: path.join(dir, 'hind-latin-400.ttf'), fontWeight: 400 },
+      { src: path.join(dir, 'hind-latin-700.ttf'), fontWeight: 700 },
     ],
   });
   Font.register({
     family: 'HindDeva',
     fonts: [
-      { src: path.join(dir, 'hind-devanagari-400.woff'), fontWeight: 400 },
-      { src: path.join(dir, 'hind-devanagari-700.woff'), fontWeight: 700 },
+      { src: path.join(dir, 'hind-devanagari-400.ttf'), fontWeight: 400 },
+      { src: path.join(dir, 'hind-devanagari-700.ttf'), fontWeight: 700 },
     ],
   });
   // Never hyphenate: automatic hyphenation breaks Devanagari words and long numbers.

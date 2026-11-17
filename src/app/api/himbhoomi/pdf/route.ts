@@ -46,12 +46,12 @@ export async function POST(request: Request) {
       errorType: error instanceof Error ? error.name : 'UnknownError',
       region: process.env.VERCEL_REGION || 'local',
       rowCount: parsed.data.parcelTable.rows.length,
-      fontFiles: ['hind-latin-400.woff', 'hind-devanagari-400.woff'].map((name) => ({
+      fontFiles: ['hind-latin-400.ttf', 'hind-devanagari-400.ttf'].map((name) => ({
         name,
         exists: existsSync(path.join(process.cwd(), 'src/assets/fonts', name)),
       })),
       stack: error instanceof Error ? error.stack?.split('\n').slice(1, 5).join('\n') : undefined,
     });
-    return Response.json({ error: 'generation_failed' }, { status: 500 });
+    return Response.json({ error: 'generation_failed', category }, { status: 500 });
   }
 }
