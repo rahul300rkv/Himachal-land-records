@@ -622,7 +622,7 @@
     "kanal": "kanal",
     "marla": "marla",
     "acre": "acre",
-    "sq_ft": "sq ft"
+    "sq_ft": "sq ft", "karam": "karam", "sq_karam": "sq karam", "biswansi": "biswansi", "ghumao": "ghumao"
   },
   "About": {
     "title": "About HimLand Check",
@@ -1407,16 +1407,26 @@
   },
   "Converter": {
     "title": "Land unit converter",
-    "intro": "Convert land area between kanal, marla, square metres and square feet using Himachal Pradesh rates.",
+    "intro": "Convert Himachal land measurements without assuming one district-wide standard.",
     "value": "Area",
     "from": "From",
     "to": "To",
     "enterValue": "Enter an area to see the conversion.",
     "result": "{value} {from} = {result} {to}",
-    "rateMarla": "1 marla = 19.2 sq m",
-    "rateKanal": "1 kanal = 20 marla = 384 sq m",
+    "rateMarla": "1 marla = 19.19754225 sq m",
+    "rateKanal": "1 kanal = 20 marla",
     "rateSqft": "1 sq m = 10.7639 sq ft",
-    "note": "For guidance only. Always confirm the area in official revenue records."
+    "note": "For guidance only. Measurement practice can differ by locality. Confirm the unit and area in official revenue records before relying on a conversion.",
+    "standardsTitle": "Himachal measurement standards",
+    "standardsIntro": "These reference values are not automatic district rules. Select the unit stated in your record and verify it with the Patwari or Revenue Department.",
+    "kanalTitle": "Kanal and marla standard",
+    "kanalStandards": "1 kanal = 20 marla; 1 marla = 19.19754225 sq m; therefore 1 kanal = 383.950845 sq m. 1 karam = 57.5 inches = 1.4605 m; 1 sq karam (sarshai) = 2.13306025 sq m; 1 ghumao = 3071.60676 sq m.",
+    "bighaTitle": "Biswa and bigha standard",
+    "bighaStandards": "1 karam (56 inches) = 1.4224 m; 1 sq karam (biswansi) = 2.02322176 sq m; 1 biswa = 40.4644352 sq m = 20 biswansi; 1 bigha = 809.288704 sq m = 20 biswa.",
+    "exampleTitle": "Worked example",
+    "exampleBody": "If a record states 2 kanal, convert it to 767.90169 sq m. If it states 3 biswa, the result is 121.3933056 sq m. These examples show arithmetic only; they do not decide which standard applies.",
+    "faqTitle": "Frequently asked questions",
+    "faq": { "districts": { "q": "Does the converter choose a standard by district?", "a": "No. Local practice and records can differ, so the converter leaves the choice to you." }, "which": { "q": "Which unit should I select?", "a": "Use the unit printed in the jamabandi, tatima, sale deed or other official record." }, "records": { "q": "Why verify the result?", "a": "A calculator only applies supplied numbers. Confirm the unit and area with the Patwari, Tehsil or Revenue Department." }, "rounding": { "q": "Why can results differ slightly?", "a": "Documents may round karam or biswansi values. Use the official record as the controlling value." } }
   },
   "NakalCheck": {
     "title": "Check a land record (nakal)",

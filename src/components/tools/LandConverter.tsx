@@ -6,10 +6,21 @@ import { ArrowRight } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
-/** User-specified Himachal rates; a square foot is exactly 0.09290304 sq m. */
-const SQ_M_PER_UNIT = { marla: 19.2, kanal: 384, sq_m: 1, sq_ft: 0.09290304 } as const;
+/** Commonly stated Himachal standards. District practice can vary; this tool does not infer a district standard. */
+const SQ_M_PER_UNIT = {
+  marla: 19.19754225,
+  kanal: 19.19754225 * 20,
+  karam: 1.4605,
+  sq_karam: 2.13306025,
+  biswansi: 2.02322176,
+  biswa: 40.4644352,
+  bigha: 809.288704,
+  ghumao: 3071.60676,
+  sq_m: 1,
+  sq_ft: 0.09290304,
+} as const;
 type Unit = keyof typeof SQ_M_PER_UNIT;
-const UNITS: Unit[] = ['marla', 'kanal', 'sq_m', 'sq_ft'];
+const UNITS: Unit[] = ['marla', 'kanal', 'karam', 'sq_karam', 'biswansi', 'biswa', 'bigha', 'ghumao', 'sq_m', 'sq_ft'];
 
 export function LandConverter() {
   const t = useTranslations('Converter');
