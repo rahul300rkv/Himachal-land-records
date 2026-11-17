@@ -5,6 +5,8 @@
     "description": "Read, understand and check Himachal Pradesh land records in one place: jamabandi, khasra, khatauni, khewat, mutations, maps and shajra, pre-purchase reports and a land marketplace. An independent private platform, not a government website."
   },
   "Navigation": {
+    "circleRates": "Circle rates",
+    "nakalChecker": "Nakal checker",
     "home": "Home",
     "search": "Search records",
     "marketplace": "Marketplace",
