@@ -19,6 +19,11 @@ const SEVERITY_TONE: Record<Severity, 'danger' | 'warning' | 'neutral'> = {
   medium: 'warning',
   low: 'neutral',
 };
+const BAND_STYLE: Record<Band, { ring: string; bar: string; label: string }> = {
+  low: { ring: 'border-emerald-500/40 bg-emerald-500/10', bar: 'bg-emerald-500', label: 'text-emerald-700 dark:text-emerald-300' },
+  moderate: { ring: 'border-amber-500/40 bg-amber-500/10', bar: 'bg-amber-500', label: 'text-amber-700 dark:text-amber-300' },
+  high: { ring: 'border-red-500/40 bg-red-500/10', bar: 'bg-red-500', label: 'text-red-700 dark:text-red-300' },
+};
 
 export function NakalChecker() {
   const t = useTranslations('NakalCheck');
@@ -97,13 +102,25 @@ export function NakalChecker() {
 
       {result && s && (
         <div className="space-y-6" aria-live="polite">
+          <div className={`rounded-2xl border p-5 sm:p-7 ${BAND_STYLE[result.band].ring}`}>
+            <div className="flex flex-wrap items-center gap-5">
+              <div className="relative grid size-28 shrink-0 place-items-center rounded-full border-[10px] border-current/20" style={{ color: result.band === 'low' ? '#10b981' : result.band === 'moderate' ? '#f59e0b' : '#ef4444' }}>
+                <div className="text-center"><p className="text-4xl font-semibold leading-none tabular-nums">{result.score}</p><span className="text-xs text-muted-foreground">/100</span></div>
+              </div>
+              <div className="min-w-[180px] flex-1 space-y-2"><Badge tone={BAND_TONE[result.band]}>{tx(`bands.${result.band}`)}</Badge><p className={`text-lg font-medium ${BAND_STYLE[result.band].label}`}>{t('scoreHelp')}</p><div className="h-2 overflow-hidden rounded-full bg-black/10"><div className={`h-full rounded-full ${BAND_STYLE[result.band].bar}`} style={{ width: `${result.score}%` }} /></div></div>
+            </div>
+            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+              {[['ownership', s.shareHolders > 0 ? 100 : 0, t('threeChecks.ownership.title'), t('threeChecks.ownership.body', { count: s.shareHolders })], ['history', Math.min(100, s.mutationCount * 20), t('threeChecks.encumbrances.title'), t('threeChecks.encumbrances.body', { count: s.mutationCount })], ['litigation', s.pendingCases > 0 ? 20 : 100, t('threeChecks.litigation.title'), t('threeChecks.litigation.body', { count: s.pendingCases })]].map(([key, value, title, body]) => <div key={key} className="rounded-lg bg-background/70 p-3"><div className="flex items-center justify-between gap-2 text-sm font-medium"><span>{title}</span><span className="tabular-nums text-muted-foreground">{value}%</span></div><div className="mt-2 h-1.5 rounded-full bg-muted"><div className={`h-full rounded-full ${key === 'litigation' && s.pendingCases > 0 ? 'bg-red-500' : 'bg-primary'}`} style={{ width: `${value}%` }} /></div><p className="mt-2 text-xs text-muted-foreground">{body}</p></div>)}
+            </div>
+          </div>
+          <div className="hidden">
           <div className="flex flex-wrap items-center gap-4 border-y border-border py-5">
             <p className="text-5xl font-semibold tabular-nums text-primary">{result.score}<span className="text-2xl text-muted-foreground">/100</span></p>
             <div className="space-y-1">
               <Badge tone={BAND_TONE[result.band]}>{tx(`bands.${result.band}`)}</Badge>
               <p className="text-sm text-muted-foreground">{t('scoreHelp')}</p>
             </div>
-          </div>
+          </div></div>
 
           <div>
             <h2 className="mb-3 text-xl">{t('threeChecks.title')}</h2>
