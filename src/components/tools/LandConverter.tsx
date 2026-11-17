@@ -45,7 +45,7 @@ export function LandConverter() {
   return (
     <section aria-label={t('title')} className="space-y-5">
       <div>
-        <Label htmlFor="conv-value">{t('value')}</Label>
+        <Label className="text-base font-medium" htmlFor="conv-value">{t('value')}</Label>
         <Input id="conv-value" type="number" inputMode="decimal" min={0} step="any"
           className="h-14 text-2xl shadow-none" value={value}
           onChange={(e) => setValue(e.target.value)} />
@@ -53,21 +53,21 @@ export function LandConverter() {
 
       <div className="grid grid-cols-[minmax(0,1fr)_24px_minmax(0,1fr)] items-end gap-3">
         <div className="min-w-0">
-          <Label htmlFor="conv-from">{t('from')}</Label>
+          <Label className="text-base font-medium" htmlFor="conv-from">{t('from')}</Label>
           <select id="conv-from" className={selectClass} value={from} onChange={(e) => setFrom(e.target.value as Unit)}>
             {UNITS.map((unit) => <option key={unit} value={unit}>{u(unit)}</option>)}
           </select>
         </div>
         <ArrowRight aria-hidden="true" className="mb-3 h-6 w-6 text-muted-foreground" />
         <div className="min-w-0">
-          <Label htmlFor="conv-to">{t('to')}</Label>
+          <Label className="text-base font-medium" htmlFor="conv-to">{t('to')}</Label>
           <select id="conv-to" className={selectClass} value={to} onChange={(e) => setTo(e.target.value as Unit)}>
             {UNITS.map((unit) => <option key={unit} value={unit}>{u(unit)}</option>)}
           </select>
         </div>
       </div>
 
-      <div role="status" aria-live="polite" aria-atomic="true" className="border-y border-border py-6">
+      <div role="status" aria-live="polite" aria-atomic="true" className="border-y border-border bg-muted/20 py-8">
         {result === null ? (
           <p className="text-sm text-muted-foreground">{t('enterValue')}</p>
         ) : (
