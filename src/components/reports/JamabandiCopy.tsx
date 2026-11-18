@@ -25,10 +25,10 @@ export function JamabandiCopy({ data }: { data: JamabandiData }) {
         <Text style={{ marginVertical: 5, fontSize: 8 }}>रसीद संख्या : {data.receiptNumber}</Text>
         <Text style={{ fontSize: 7.5, marginBottom: 8, color: '#444444' }}>यह प्रति केवल प्राप्त अभिलेख की सूचनात्मक प्रस्तुति है। प्रमाणित सरकारी प्रति के लिए HimBhoomi से मूल दस्तावेज प्राप्त करें।</Text>
         <View style={{ borderWidth: 0.6, borderColor: '#888888' }}>
-          {[fields.slice(0, 8), fields.slice(8, 10)].map((row, rowIndex) => (
+          {[fields.slice(0, 4), fields.slice(4, 8), fields.slice(8, 10)].map((row, rowIndex) => (
             <View key={rowIndex} style={{ flexDirection: 'row' }} wrap={false}>
               {row.map(([label, id]) => (
-                <View key={id} style={{ width: rowIndex === 1 ? '50%' : '25%', flexDirection: 'row', borderRightWidth: 0.5, borderBottomWidth: 0.5, borderColor: '#aaaaaa', minHeight: 24 }}>
+                  <View key={id} style={{ width: rowIndex === 2 ? '50%' : '25%', flexDirection: 'row', borderRightWidth: 0.5, borderBottomWidth: 0.5, borderColor: '#aaaaaa', minHeight: 24 }}>
                   <Text style={{ width: '42%', padding: 3, fontSize: 7, backgroundColor: '#f1f2f3' }}>{label}</Text>
                   <Text style={{ width: '58%', padding: 3, fontSize: 8 }}>{values.get(id) || '—'}</Text>
                 </View>
