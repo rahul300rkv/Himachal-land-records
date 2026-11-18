@@ -345,7 +345,7 @@
     "requiredTehsil": "Select a tehsil or sub-tehsil",
     "requiredVillage": "Select a village",
     "requiredPlot": "Enter a plot or Khasra number",
-    "openOfficial": "Open Map",
+      "openOfficial": "Open map report",
     "officialEyebrow": "Himachal Pradesh BhuNaksha",
     "officialTitle": "How to open your plot map",
     "step1": "Select the district, tehsil or sub-tehsil, and village.",
