@@ -230,7 +230,6 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
         <div className="flex flex-col items-start justify-between gap-5 sm:flex-row sm:items-center">
           <div>
             <h2 className="text-xl font-semibold tracking-tight">{t('parcelDetails')}</h2>
-            <p className="mt-1 max-w-xl text-sm text-muted-foreground">Download a clean information copy of the retrieved Jamabandi record.</p>
           </div>
           <Button type="button" size="lg" className="h-14 rounded-full bg-primary px-7 shadow-lg shadow-primary/20 transition-transform hover:-translate-y-0.5 hover:bg-primary/90" onClick={() => void downloadCopy()} disabled={downloading || !receiptNumber}>
             {downloading ? <LoaderCircle className="animate-spin" aria-hidden="true" /> : <Download aria-hidden="true" />}

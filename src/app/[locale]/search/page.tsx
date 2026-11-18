@@ -114,6 +114,20 @@ export default async function SearchPage({ params, searchParams }: Props) {
           </div>
         )}
 
+        {parsed.status === 'idle' && (
+          <section className="mt-8 rounded-xl border bg-card p-6" aria-labelledby="search-faq-title">
+            <h2 id="search-faq-title" className="text-2xl">{t('results.faq.title')}</h2>
+            <div className="mt-4 divide-y">
+              {(['a', 'b', 'c'] as const).map((key) => (
+                <details key={key} className="group py-4 first:pt-0 last:pb-0">
+                  <summary className="cursor-pointer list-none font-semibold marker:hidden">{t(`results.faq.${key}.q`)}</summary>
+                  <p className="mt-2 text-muted-foreground">{t(`results.faq.${key}.a`)}</p>
+                </details>
+              ))}
+            </div>
+          </section>
+        )}
+
         {parsed.status === 'invalid' && (
           <Message icon={Info} title={t('results.invalid.title')} body={t('results.invalid.body')} />
         )}

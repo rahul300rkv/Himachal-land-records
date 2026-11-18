@@ -516,8 +516,8 @@
       "nakalReady": "Official Nakal record",
       "receiptNumber": "Receipt number: {number}",
       "labelColumn": "Label",
-      "parcelDetails": "Parcel details and remarks",
-      "downloadCopy": "Download information copy",
+      "parcelDetails": "Download copy of Jamabandi record",
+      "downloadCopy": "Download report",
       "downloadFailed": "The PDF could not be generated. Please try again.",
       "valueColumn": "Value",
       "emptyLabel": "Empty",
@@ -595,6 +595,12 @@
           "b": "Know the plot? Add the khasra number exactly as written in the record, for example 123/4.",
           "c": "Enter a Jamabandi year available for that village on HimBhoomi."
         }
+      },
+      "faq": {
+        "title": "Search FAQ",
+        "a": { "q": "Why must I choose the village from the official directory?", "a": "HimBhoomi uses the official district, tehsil and village codes. Selecting a listed village helps match your request to the correct revenue records." },
+        "b": { "q": "What if I do not know the khasra number?", "a": "You can continue with the available record-number choices. If you know it, enter the khasra exactly as printed, including a slash such as 123/4." },
+        "c": { "q": "Why does the Jamabandi year list change by village?", "a": "Years are supplied by HimBhoomi for the selected village, so older or newer records may differ between villages." }
       }
     },
     "card": {
