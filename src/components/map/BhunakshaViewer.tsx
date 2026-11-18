@@ -26,7 +26,7 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
         const height = ymax - ymin;
         map = L.map(containerRef.current, { crs: L.CRS.Simple, minZoom: -2, maxZoom: 4, scrollWheelZoom: false, attributionControl: false });
         const bounds: [[number, number], [number, number]] = [[0, 0], [1000, 1000]];
-        const wms = `https://bhunakshahp.nic.in/bhunakshaserver/WMS/tile?REQUEST=GetMap&SERVICE=WMS&VERSION=1.3.0&FORMAT=image/png&STYLES=VILLAGE_MAP&TRANSPARENT=TRUE&LAYERS=VILLAGE_MAP&CRS=EPSG:32643&FORMAT_OPTIONS=dpi:99&WIDTH=1000&HEIGHT=1000&gis_code=${encodeURIComponent(gisCode)}&BBOX=${xmin},${ymin},${xmax},${ymax}`;
+        const wms = `https://bhunakshahp.nic.in/bhunakshaserver/WMS?REQUEST=GetMap&SERVICE=WMS&VERSION=1.3.0&FORMAT=image%2Fpng&STYLES=VILLAGE_MAP&TRANSPARENT=TRUE&LAYERS=VILLAGE_MAP&transparent=true&state=&gis_code=${encodeURIComponent(gisCode)}&overlay_codes=&CRS=EPSG%3A32643&FORMAT_OPTIONS=dpi%3A99&WIDTH=1000&HEIGHT=1000&BBOX=${encodeURIComponent(`${xmin},${ymin},${xmax},${ymax}`)}`;
         L.imageOverlay(wms, bounds, { opacity: 0.95 }).addTo(map);
         map.fitBounds(bounds);
         setState('ready');
