@@ -1,8 +1,8 @@
 {
   "Metadata": {
     "siteName": "HimLand Check",
-    "title": "HimLand Check: search and check land records in Himachal Pradesh",
-    "description": "Read, understand and check Himachal Pradesh land records in one place: jamabandi, khasra, khatauni, khewat, mutations, maps and shajra, pre-purchase reports and a land marketplace. An independent private platform, not a government website."
+    "title": "Himachal Land Records Search | Jamabandi & Khasra | HimLand Check",
+    "description": "Search Himachal Pradesh land records by district, tehsil and village. Check Jamabandi, Khasra, Khatauni, Khewat and mutations before buying land. Independent reference platform, not a government website."
   },
   "Navigation": {
     "circleRates": "Circle rates",
@@ -107,10 +107,10 @@
   },
   "Home": {
     "hero": {
-      "title": "Check Himachal land records before you decide",
-      "subtitle": "Search jamabandi, khasra, khatauni and mutation entries, view village maps and get a clear pre-purchase report, in Hindi or English.",
-      "searchTitle": "Find a land record",
-      "searchHint": "Choose your location here, then continue to select the Jamabandi year and record details.",
+      "title": "Search Himachal Pradesh land records before you buy",
+      "subtitle": "Find Jamabandi, Khasra, Khatauni, Khewat and mutation entries by district, tehsil and village, then verify the official record before any land transaction.",
+      "searchTitle": "Search official HimBhoomi records",
+      "searchHint": "Select the official district, tehsil or sub-tehsil and village first. Continue to choose the Jamabandi year and record number.",
       "submit": "Continue to search",
       "chooseLocation": "Choose search location",
       "trustNote": "Independent platform. Not a government website.",
@@ -122,7 +122,7 @@
     "dueDiligence": {
       "eyebrow": "Before the money moves",
       "title": "Know what the records say about the plot",
-      "intro": "A sound land check connects the current revenue entry with the transaction history and any dispute that may affect the seller's right to transfer it. HimLand Check brings those questions into one reviewable file.",
+      "intro": "Before buying land in Himachal Pradesh, compare the current revenue entry with ownership, mutation history, mortgages and possible disputes. HimLand Check organises these checks into one reviewable file.",
       "checks": {
         "ownership": {
           "title": "Who owns it?",
@@ -146,7 +146,7 @@
     },
     "whatWeDo": {
       "title": "What we do",
-      "body": "We make public revenue records searchable in one place, show them on maps and shajra drawings, and produce pre-purchase check reports. There is also a marketplace where people list land themselves.",
+      "body": "We help people search Himachal Pradesh revenue records, understand Jamabandi and plot identifiers, explore village maps and prepare pre-purchase verification reports. Marketplace listings are separate third-party information.",
       "glossary": "The records we cover",
       "records": {
         "jamabandi": {
@@ -181,7 +181,7 @@
       "items": {
         "search": {
           "title": "Search records",
-          "description": "Find a plot by district, tehsil and village, then by khasra number or owner name."
+          "description": "Start with the official district, tehsil or sub-tehsil and village, then choose the Jamabandi year and record number."
         },
         "maps": {
           "title": "Maps and shajra",
@@ -202,7 +202,7 @@
       "steps": {
         "search": {
           "title": "Search",
-          "description": "Choose the district, tehsil and village, then enter a khasra number or an owner name."
+          "description": "Choose the official district, tehsil or sub-tehsil and village, then select the Jamabandi year and record type."
         },
         "review": {
           "title": "Review",
