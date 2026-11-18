@@ -27,10 +27,10 @@ export function VerificationWorkspace() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => { void loadOfficialLocations('districts').then(setDistricts).catch(() => setDistricts([])); }, []);
-  async function loadLevel(level: 'tehsils' | 'villages' | 'years', districtValue = district, tehsilValue = tehsil) {
+  async function loadLevel(level: 'tehsils' | 'villages' | 'years', districtValue = district, tehsilValue = tehsil, villageValue = village) {
     setLoading(true);
     try {
-      const options = await loadOfficialLocations(level, districtValue, tehsilValue, village);
+      const options = await loadOfficialLocations(level, districtValue, tehsilValue, villageValue);
       if (level === 'tehsils') setTehsils(options);
       if (level === 'villages') setVillages(options);
       if (level === 'years') setYears(options);
@@ -71,7 +71,7 @@ export function VerificationWorkspace() {
             return (
               <label key={fieldKey} className="space-y-1.5 text-sm font-medium">
                 <span>{t(`fields.${fieldKey}`)}</span>
-                <select value={value as string} disabled={loading || (fieldKey === 'tehsil' && !district) || (fieldKey === 'village' && !tehsil) || (fieldKey === 'year' && !village)} onChange={(event) => { const next = event.target.value; (setter as (value: string) => void)(next); if (fieldKey === 'district') { setTehsil(''); setVillage(''); setYear(''); setTehsils([]); setVillages([]); setYears([]); if (next) void loadLevel('tehsils', next); } if (fieldKey === 'tehsil') { setVillage(''); setYear(''); setVillages([]); setYears([]); if (next) void loadLevel('villages', district, next); } if (fieldKey === 'village') { setYear(''); setYears([]); if (next) void loadLevel('years', district, tehsil); } }} className="h-10 w-full rounded-md border border-input bg-background px-3 font-normal"><option value="">{t(`fields.${fieldKey}Placeholder`)}</option>{typedOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select>
+                <select value={value as string} disabled={loading || (fieldKey === 'tehsil' && !district) || (fieldKey === 'village' && !tehsil) || (fieldKey === 'year' && (!village || years.length === 0))} onChange={(event) => { const next = event.target.value; (setter as (value: string) => void)(next); if (fieldKey === 'district') { setTehsil(''); setVillage(''); setYear(''); setTehsils([]); setVillages([]); setYears([]); if (next) void loadLevel('tehsils', next); } if (fieldKey === 'tehsil') { setVillage(''); setYear(''); setVillages([]); setYears([]); if (next) void loadLevel('villages', district, next); } if (fieldKey === 'village') { setYear(''); setYears([]); if (next) void loadLevel('years', district, tehsil, next); } }} className="h-10 w-full cursor-pointer rounded-md border border-input bg-background px-3 font-normal disabled:cursor-not-allowed disabled:opacity-60"><option value="">{t(`fields.${fieldKey}Placeholder`)}</option>{typedOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select>
               </label>
             );
           })}
