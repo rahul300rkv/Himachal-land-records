@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select } from '@/components/ui/select';
+import { BhunakshaViewer } from './BhunakshaViewer';
 
 type Option = { id: string; name: string; hi?: string };
 
@@ -23,6 +24,7 @@ export function PlotMapLookup() {
   const [plot, setPlot] = useState('');
   const [copied, setCopied] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [viewerOpen, setViewerOpen] = useState(false);
 
   useEffect(() => {
     fetch('/api/bhunaksha/locations')
@@ -76,6 +78,7 @@ export function PlotMapLookup() {
 
   function openOfficialMap() {
     if (!validate()) return;
+    setViewerOpen(true);
     const locationCode = `${districtId}${tehsilId}${villageId}`;
     window.open(`https://bhunakshahp.nic.in/plotreport/${locationCode}/${encodeURIComponent(plot.trim())}`, '_blank', 'noopener,noreferrer');
   }
@@ -178,6 +181,9 @@ export function PlotMapLookup() {
           </div>
         )}
       </aside>
+      {viewerOpen && districtId && tehsilId && villageId && (
+        <div className="lg:col-span-2"><BhunakshaViewer gisCode={`${districtId}${tehsilId}${villageId}`} plot={plot.trim()} attribution={reference} /></div>
+      )}
     </div>
   );
 }
