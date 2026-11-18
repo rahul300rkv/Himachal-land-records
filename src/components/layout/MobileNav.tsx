@@ -1,6 +1,5 @@
 'use client';
 
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
@@ -18,7 +17,6 @@ import { NAV_ITEMS } from './nav-items';
 export function MobileNav({ className }: { className?: string }) {
   const t = useTranslations('Navigation');
   const pathname = usePathname();
-  const reduceMotion = useReducedMotion();
   const [open, setOpen] = useState(false);
 
   // Close after navigating
@@ -50,15 +48,10 @@ export function MobileNav({ className }: { className?: string }) {
         {open ? <X className="!size-5" /> : <Menu className="!size-5" />}
       </Button>
 
-      <AnimatePresence>
-        {open && (
-          <motion.div
+      {open && (
+          <div
             id="mobile-nav"
-            initial={reduceMotion ? false : { opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
-            transition={{ duration: 0.16, ease: 'easeOut' }}
-            className="absolute inset-x-0 top-full border-b bg-background shadow-lg"
+            className="animate-menu-in absolute inset-x-0 top-full border-b bg-background shadow-lg"
           >
             <nav aria-label={t('mainNavigation')} className="container flex flex-col py-3">
               {NAV_ITEMS.map((item) => {
@@ -82,9 +75,8 @@ export function MobileNav({ className }: { className?: string }) {
 
               <AuthActions variant="mobile" />
             </nav>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
     </div>
   );
 }

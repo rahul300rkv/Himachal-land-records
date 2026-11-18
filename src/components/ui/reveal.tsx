@@ -1,7 +1,7 @@
 'use client';
 
-import { motion, useReducedMotion } from 'framer-motion';
 import type { ReactNode } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 type RevealProps = {
   children: ReactNode;
@@ -22,36 +22,15 @@ type RevealProps = {
  * system to reduce motion.
  */
 export function Reveal({ children, className, delay = 0, y = 14, trigger = 'inView' }: RevealProps) {
-  const reduceMotion = useReducedMotion();
-
-  if (reduceMotion) {
-    return <div className={className}>{children}</div>;
-  }
-
-  const transition = { duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] as const };
-
-  if (trigger === 'mount') {
-    return (
-      <motion.div
-        className={className}
-        initial={{ opacity: 0, y }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={transition}
-      >
-        {children}
-      </motion.div>
-    );
-  }
-
-  return (
-    <motion.div
-      className={className}
-      initial={{ opacity: 0, y }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '0px 0px -60px 0px' }}
-      transition={transition}
-    >
-      {children}
-    </motion.div>
-  );
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(trigger === 'mount');
+  useEffect(() => {
+    if (trigger === 'mount' || !ref.current) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) { setVisible(true); observer.disconnect(); }
+    }, { rootMargin: '0px 0px -60px 0px' });
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [trigger]);
+  return <div ref={ref} className={className} style={{ opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : `translateY(${y}px)`, transition: `opacity .5s ease-out ${delay}s, transform .5s cubic-bezier(.22,1,.36,1) ${delay}s` }}>{children}</div>;
 }
