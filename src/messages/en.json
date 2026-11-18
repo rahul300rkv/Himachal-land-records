@@ -327,7 +327,7 @@
   },
   "MapExplorer": {
     "eyebrow": "Map tool",
-    "title": "Find a plot on the official BhuNaksha map",
+    "title": "Search Plot by Khasra Number on Himachal BhuNaksha Map",
     "intro": "Prepare the exact district, tehsil, village and Khasra number, then continue to the Himachal Pradesh government map viewer.",
     "formTitle": "Locate your plot",
     "formIntro": "Choose the official BhuNaksha location in order. The report opens directly for the selected plot.",
@@ -489,7 +489,7 @@
     }
   },
   "Search": {
-    "title": "Search land records",
+    "title": "Search Himachal land records",
     "subtitle": "Choose the district, tehsil, village and Jamabandi year used by HimBhoomi.",
     "official": {
       "privacy": "The selectors and record choices below are loaded from HimBhoomi through HimLand Check. You remain on this website throughout the search.",
