@@ -4,9 +4,10 @@ const BASE = 'https://bhunakshahp.nic.in/bhunakshaserver';
 
 export async function GET(request: NextRequest) {
   const gisCode = request.nextUrl.searchParams.get('gisCode')?.trim() ?? '';
-  if (!/^\d{8}$/.test(gisCode)) return NextResponse.json({ error: 'Invalid BhuNaksha code' }, { status: 400 });
+  // BhuNaksha codes are district (2) + tehsil/sub-tehsil (2) + village (6).
+  if (!/^\d{10}$/.test(gisCode)) return NextResponse.json({ error: 'Invalid BhuNaksha code' }, { status: 400 });
   try {
-    const form = new URLSearchParams({ gisLevels: `${gisCode.slice(0, 2)},${gisCode.slice(2, 4)},${gisCode.slice(4)}` });
+    const form = new URLSearchParams({ gisLevels: `${gisCode.slice(0, 2)},${gisCode.slice(2, 4)},${gisCode.slice(4, 10)}` });
     const [extentResponse, plotsResponse, attributionResponse] = await Promise.all([
       fetch(`${BASE}/MapInfo/getVVVVExtentGeoref`, { method: 'POST', body: form, cache: 'no-store' }),
       fetch(`${BASE}/masterdata/getPlotNosByBhucode?bhucode=${gisCode}`, { cache: 'no-store' }),
