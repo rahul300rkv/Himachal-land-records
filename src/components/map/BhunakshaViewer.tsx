@@ -23,6 +23,17 @@ function utm43ToLatLng(easting: number, northing: number): [number, number] {
   return [lat * 180 / Math.PI, lon * 180 / Math.PI];
 }
 
+function latLngToUtm43(lat: number, lon: number): [number, number] {
+  const a = 6378137; const eccSquared = 0.00669438; const k0 = 0.9996;
+  const latRad = lat * Math.PI / 180; const lonRad = lon * Math.PI / 180; const lonOrigin = 75 * Math.PI / 180;
+  const eccPrimeSquared = eccSquared / (1 - eccSquared); const n = a / Math.sqrt(1 - eccSquared * Math.sin(latRad) ** 2);
+  const t = Math.tan(latRad) ** 2; const c = eccPrimeSquared * Math.cos(latRad) ** 2; const A = Math.cos(latRad) * (lonRad - lonOrigin);
+  const m = a * ((1 - eccSquared / 4 - 3 * eccSquared ** 2 / 64 - 5 * eccSquared ** 3 / 256) * latRad - (3 * eccSquared / 8 + 3 * eccSquared ** 2 / 32 + 45 * eccSquared ** 3 / 1024) * Math.sin(2 * latRad) + (15 * eccSquared ** 2 / 256 + 45 * eccSquared ** 3 / 1024) * Math.sin(4 * latRad) - 35 * eccSquared ** 3 / 3072 * Math.sin(6 * latRad));
+  const easting = k0 * n * (A + (1 - t + c) * A ** 3 / 6 + (5 - 18 * t + t ** 2 + 72 * c - 58 * eccPrimeSquared) * A ** 5 / 120) + 500000;
+  const northing = k0 * (m + n * Math.tan(latRad) * (A ** 2 / 2 + (5 - t + 9 * c + 4 * c ** 2) * A ** 4 / 24 + (61 - 58 * t + t ** 2 + 600 * c - 330 * eccPrimeSquared) * A ** 6 / 720));
+  return [easting, northing];
+}
+
 export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [state, setState] = useState<'loading' | 'ready' | 'error'>('loading');
@@ -54,14 +65,22 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
         const southWest = utm43ToLatLng(xmin, ymin); const northEast = utm43ToLatLng(xmax, ymax);
         const bounds: [[number, number], [number, number]] = [southWest, northEast];
         if (satellite) L.tileLayer('https://bhuvan-ras2.nrsc.gov.in/tilecache/tilecache.py/1.0.0/bhuvan_imagery2/{z}/{x}/{y}.jpg', { maxZoom: 22 }).addTo(map);
-        const common = `REQUEST=GetMap&SERVICE=WMS&VERSION=1.3.0&FORMAT=image%2Fpng&TRANSPARENT=TRUE&CRS=EPSG%3A32643&FORMAT_OPTIONS=dpi%3A99&WIDTH=1233&HEIGHT=964&BBOX=${encodeURIComponent(`${xmin},${ymin},${xmax},${ymax}`)}`;
-        const base = `https://bhunakshahp.nic.in/bhunakshaserver/WMS?${common}&STYLES=VILLAGE_MAP&LAYERS=VILLAGE_MAP&transparent=true&state=&gis_code=${encodeURIComponent(gisCode)}&overlay_codes=`;
-        L.imageOverlay(base, bounds, { opacity: 0.95 }).addTo(map);
+        const createWmsGrid = (style: string, layerName: string, extra: Record<string, string>, opacity: number) => {
+          const Grid = L.GridLayer.extend({
+            createTile(this: L.GridLayer & { _map: import('leaflet').Map }, coords: { x: number; y: number; z: number }, done: (error?: Error | null, tile?: HTMLElement) => void) {
+              const size = 282; const nw = this._map.unproject(L.point(coords.x * size, coords.y * size), coords.z); const se = this._map.unproject(L.point((coords.x + 1) * size, (coords.y + 1) * size), coords.z);
+              const [minx, maxy] = latLngToUtm43(nw.lat, nw.lng); const [maxx, miny] = latLngToUtm43(se.lat, se.lng);
+              const params = new URLSearchParams({ REQUEST: 'GetMap', SERVICE: 'WMS', VERSION: '1.3.0', FORMAT: 'image/png', STYLES: style, TRANSPARENT: 'TRUE', LAYERS: layerName, CRS: 'EPSG:32643', FORMAT_OPTIONS: 'dpi:99', WIDTH: String(size), HEIGHT: String(size), BBOX: `${minx},${miny},${maxx},${maxy}`, ...extra });
+              const tile = document.createElement('img'); tile.alt = ''; tile.width = size; tile.height = size; tile.onload = () => done(null, tile); tile.onerror = () => done(new Error('WMS tile failed'), tile); tile.src = `https://bhunakshahp.nic.in/bhunakshaserver/WMS/tile?${params}`; return tile;
+            },
+          });
+          const GridConstructor = Grid as unknown as new (options: L.GridLayerOptions) => L.GridLayer;
+          return new GridConstructor({ tileSize: 282, opacity, updateWhenZooming: false, keepBuffer: 2 });
+        };
+        createWmsGrid('VILLAGE_MAP', 'VILLAGE_MAP', { transparent: 'true', state: '', gis_code: gisCode, overlay_codes: '' }, 0.95).addTo(map);
         if (data.selectedPlot) {
-          const owners = `https://bhunakshahp.nic.in/bhunakshaserver/WMS?${common}&STYLES=OWNER_PLOTS&LAYERS=SAME_OWNER_PLOT_LIST&state=&giscode=${encodeURIComponent(gisCode)}&plot_no=${encodeURIComponent(plot)}`;
-          const selected = `https://bhunakshahp.nic.in/bhunakshaserver/WMS?${common}&STYLES=PLOT_SELECTION&LAYERS=PLOT_LIST&transparent=true&state=&gis_code=${encodeURIComponent(gisCode)}&overlay_codes=&plot_id=${encodeURIComponent(data.selectedPlot.id)}`;
-          L.imageOverlay(owners, bounds, { opacity: 0.8 }).addTo(map);
-          L.imageOverlay(selected, bounds, { opacity: 1 }).addTo(map);
+          createWmsGrid('OWNER_PLOTS', 'SAME_OWNER_PLOT_LIST', { state: '', giscode: gisCode, plot_no: plot }, 0.8).addTo(map);
+          createWmsGrid('PLOT_SELECTION', 'PLOT_LIST', { transparent: 'true', state: '', gis_code: gisCode, overlay_codes: '', plot_id: data.selectedPlot.id }, 1).addTo(map);
         }
         map.fitBounds(bounds);
         map.on('mousemove', (event) => setCoordinates(`${event.latlng.lat.toFixed(6)}, ${event.latlng.lng.toFixed(6)}`));
