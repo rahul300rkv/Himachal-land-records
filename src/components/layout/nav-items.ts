@@ -5,5 +5,6 @@ export const NAV_ITEMS = [
   { href: '/map', key: 'map' },
   { href: '/tools', key: 'tools' },
   { href: '/blog', key: 'blog' },
+{ href: '/guides', key: 'guides' },
   { href: '/marketplace', key: 'marketplace' },
 ] as const;
