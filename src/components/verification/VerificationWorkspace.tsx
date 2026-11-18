@@ -1,9 +1,10 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Check, Copy, ExternalLink, Gavel, Landmark, UserRoundSearch } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { LAND_SOURCES, type LandSource } from '@/lib/integrations/land-sources';
+import { loadOfficialLocations, type Option } from '@/lib/data/himbhoomi-location-options';
 
 const ICONS: Record<LandSource['id'], typeof Landmark> = {
   himbhoomi: Landmark,
@@ -19,18 +20,36 @@ export function VerificationWorkspace() {
   const [village, setVillage] = useState('');
   const [khasra, setKhasra] = useState('');
   const [year, setYear] = useState('');
+  const [districts, setDistricts] = useState<Option[]>([]);
+  const [tehsils, setTehsils] = useState<Option[]>([]);
+  const [villages, setVillages] = useState<Option[]>([]);
+  const [years, setYears] = useState<Option[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => { void loadOfficialLocations('districts').then(setDistricts).catch(() => setDistricts([])); }, []);
+  async function loadLevel(level: 'tehsils' | 'villages' | 'years', districtValue = district, tehsilValue = tehsil) {
+    setLoading(true);
+    try {
+      const options = await loadOfficialLocations(level, districtValue, tehsilValue, village);
+      if (level === 'tehsils') setTehsils(options);
+      if (level === 'villages') setVillages(options);
+      if (level === 'years') setYears(options);
+    } finally { setLoading(false); }
+  }
+
+  function optionLabel(options: Option[], value: string) { return options.find((option) => option.value === value)?.label || value; }
   const [copied, setCopied] = useState(false);
 
   const brief = useMemo(
     () => [
       `${t('fields.owner')}: ${owner || '—'}`,
-      `${t('fields.district')}: ${district || '—'}`,
-      `${t('fields.tehsil')}: ${tehsil || '—'}`,
-      `${t('fields.village')}: ${village || '—'}`,
+      `${t('fields.district')}: ${optionLabel(districts, district) || '—'}`,
+      `${t('fields.tehsil')}: ${optionLabel(tehsils, tehsil) || '—'}`,
+      `${t('fields.village')}: ${optionLabel(villages, village) || '—'}`,
       `${t('fields.khasra')}: ${khasra || '—'}`,
-      `${t('fields.year')}: ${year || '—'}`,
+      `${t('fields.year')}: ${optionLabel(years, year) || '—'}`,
     ].join('\n'),
-    [district, khasra, owner, t, tehsil, village, year],
+    [district, districts, khasra, owner, t, tehsil, tehsils, village, villages, year, years],
   );
 
   async function copyBrief() {
@@ -45,19 +64,14 @@ export function VerificationWorkspace() {
         <h2 className="text-2xl">{t('brief.title')}</h2>
         <p className="mt-2 text-sm text-muted-foreground">{t('brief.body')}</p>
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {(['owner', 'district', 'tehsil', 'village', 'khasra', 'year'] as const).map((field) => {
-            const values = { owner, district, tehsil, village, khasra, year };
-            const setters = { setOwner, setDistrict, setTehsil, setVillage, setKhasra, setYear };
-            const setter = setters[`set${field[0].toUpperCase()}${field.slice(1)}` as keyof typeof setters];
+          <label className="space-y-1.5 text-sm font-medium"><span>{t('fields.owner')}</span><input value={owner} onChange={(event) => setOwner(event.target.value)} className="h-10 w-full rounded-md border border-input bg-background px-3 font-normal" autoComplete="off" /></label>
+          {[['district', district, districts, setDistrict], ['tehsil', tehsil, tehsils, setTehsil], ['village', village, villages, setVillage], ['year', year, years, setYear]].map(([field, value, options, setter]) => {
+            const typedOptions = options as Option[];
+            const fieldKey = field as 'district' | 'tehsil' | 'village' | 'year';
             return (
-              <label key={field} className="space-y-1.5 text-sm font-medium">
-                <span>{t(`fields.${field}`)}</span>
-                <input
-                  value={values[field]}
-                  onChange={(event) => setter(event.target.value)}
-                  className="h-10 w-full rounded-md border border-input bg-background px-3 font-normal"
-                  autoComplete="off"
-                />
+              <label key={fieldKey} className="space-y-1.5 text-sm font-medium">
+                <span>{t(`fields.${fieldKey}`)}</span>
+                <select value={value as string} disabled={loading || (fieldKey !== 'district' && !(fieldKey === 'tehsil' ? district : tehsil))} onChange={(event) => { const next = event.target.value; (setter as (value: string) => void)(next); if (fieldKey === 'district') { setTehsil(''); setVillage(''); setYear(''); setTehsils([]); setVillages([]); setYears([]); if (next) void loadLevel('tehsils', next); } if (fieldKey === 'tehsil') { setVillage(''); setYear(''); setVillages([]); setYears([]); if (next) void loadLevel('villages', district, next); } if (fieldKey === 'village') { setYear(''); setYears([]); if (next) void loadLevel('years', district, tehsil); } }} className="h-10 w-full rounded-md border border-input bg-background px-3 font-normal"><option value="">{t(`fields.${fieldKey}Placeholder`)}</option>{typedOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select>
               </label>
             );
           })}

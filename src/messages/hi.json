@@ -243,7 +243,11 @@
       "tehsil": "तहसील",
       "village": "गाँव",
       "khasra": "खसरा नंबर",
-      "year": "जमाबंदी वर्ष"
+      "year": "जमाबंदी वर्ष",
+      "districtPlaceholder": "जिला चुनें",
+      "tehsilPlaceholder": "तहसील या उप-तहसील चुनें",
+      "villagePlaceholder": "गाँव चुनें",
+      "yearPlaceholder": "वर्ष चुनें"
     },
     "sourcesTitle": "हर स्रोत खोलें और प्रमाण सुरक्षित रखें",
     "sources": {

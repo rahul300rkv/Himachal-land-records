@@ -243,7 +243,11 @@
       "tehsil": "Tehsil",
       "village": "Village",
       "khasra": "Khasra number",
-      "year": "Jamabandi year"
+      "year": "Jamabandi year",
+      "districtPlaceholder": "Select district",
+      "tehsilPlaceholder": "Select tehsil or sub-tehsil",
+      "villagePlaceholder": "Select village",
+      "yearPlaceholder": "Select year"
     },
     "sourcesTitle": "Open each source and preserve the evidence",
     "sources": {
