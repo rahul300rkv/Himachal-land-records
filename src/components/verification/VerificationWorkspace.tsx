@@ -18,6 +18,7 @@ export function VerificationWorkspace() {
   const [tehsil, setTehsil] = useState('');
   const [village, setVillage] = useState('');
   const [khasra, setKhasra] = useState('');
+  const [year, setYear] = useState('');
   const [copied, setCopied] = useState(false);
 
   const brief = useMemo(
@@ -27,8 +28,9 @@ export function VerificationWorkspace() {
       `${t('fields.tehsil')}: ${tehsil || '—'}`,
       `${t('fields.village')}: ${village || '—'}`,
       `${t('fields.khasra')}: ${khasra || '—'}`,
+      `${t('fields.year')}: ${year || '—'}`,
     ].join('\n'),
-    [district, khasra, owner, t, tehsil, village],
+    [district, khasra, owner, t, tehsil, village, year],
   );
 
   async function copyBrief() {
@@ -42,10 +44,10 @@ export function VerificationWorkspace() {
       <section className="rounded-xl border bg-card p-5 shadow-sm sm:p-7">
         <h2 className="text-2xl">{t('brief.title')}</h2>
         <p className="mt-2 text-sm text-muted-foreground">{t('brief.body')}</p>
-        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-          {(['owner', 'district', 'tehsil', 'village', 'khasra'] as const).map((field) => {
-            const values = { owner, district, tehsil, village, khasra };
-            const setters = { setOwner, setDistrict, setTehsil, setVillage, setKhasra };
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {(['owner', 'district', 'tehsil', 'village', 'khasra', 'year'] as const).map((field) => {
+            const values = { owner, district, tehsil, village, khasra, year };
+            const setters = { setOwner, setDistrict, setTehsil, setVillage, setKhasra, setYear };
             const setter = setters[`set${field[0].toUpperCase()}${field.slice(1)}` as keyof typeof setters];
             return (
               <label key={field} className="space-y-1.5 text-sm font-medium">

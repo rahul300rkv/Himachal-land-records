@@ -242,7 +242,8 @@
       "district": "District",
       "tehsil": "Tehsil",
       "village": "Village",
-      "khasra": "Khasra number"
+      "khasra": "Khasra number",
+      "year": "Jamabandi year"
     },
     "sourcesTitle": "Open each source and preserve the evidence",
     "sources": {
