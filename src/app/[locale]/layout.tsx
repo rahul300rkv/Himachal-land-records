@@ -15,7 +15,8 @@ import '../globals.css';
 // Hind: one family that covers both Latin and Devanagari for body/UI text.
 const hind = Hind({
   subsets: ['latin', 'devanagari'],
-  weight: ['400', '500', '600', '700'],
+  // Keep only weights used by the public UI; fewer font files improve mobile LCP.
+  weight: ['400', '600', '700'],
   variable: '--font-sans',
   display: 'swap',
 });
@@ -30,6 +31,8 @@ const serifDeva = Noto_Serif_Devanagari({
   subsets: ['devanagari'],
   variable: '--font-serif-deva',
   display: 'swap',
+  // Hindi headings are uncommon on the default English route; avoid blocking its LCP.
+  preload: false,
 });
 
 // Only these message namespaces are sent to the browser (for Client Components). Long legal
