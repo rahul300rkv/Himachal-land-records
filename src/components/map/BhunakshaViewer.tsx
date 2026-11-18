@@ -36,6 +36,8 @@ function latLngToUtm43(lat: number, lon: number): [number, number] {
 
 export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<import('leaflet').Map | null>(null);
+  const viewRef = useRef<{ center: [number, number]; zoom: number } | null>(null);
   const [state, setState] = useState<'loading' | 'ready' | 'error'>('loading');
   const [satellite, setSatellite] = useState(false);
   const [coordinates, setCoordinates] = useState('');
@@ -62,6 +64,7 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
           ymin = centerY - viewHeight / 2; ymax = centerY + viewHeight / 2;
         }
         map = L.map(containerRef.current, { scrollWheelZoom: false, attributionControl: false });
+        mapRef.current = map;
         const southWest = utm43ToLatLng(xmin, ymin); const northEast = utm43ToLatLng(xmax, ymax);
         const bounds: [[number, number], [number, number]] = [southWest, northEast];
         if (satellite) L.tileLayer('https://bhuvan-ras2.nrsc.gov.in/tilecache/tilecache.py/1.0.0/bhuvan_imagery2/{z}/{x}/{y}.jpg', { maxZoom: 22 }).addTo(map);
@@ -82,17 +85,28 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
           createWmsGrid('OWNER_PLOTS', 'SAME_OWNER_PLOT_LIST', { state: '', giscode: gisCode, plot_no: plot }, 0.8).addTo(map);
           createWmsGrid('PLOT_SELECTION', 'PLOT_LIST', { transparent: 'true', state: '', gis_code: gisCode, overlay_codes: '', plot_id: data.selectedPlot.id }, 1).addTo(map);
         }
-        map.fitBounds(bounds);
+        if (viewRef.current) {
+          map.setView(viewRef.current.center, viewRef.current.zoom, { animate: false });
+        } else if (data.selectedPlot) {
+          const center = utm43ToLatLng((data.selectedPlot.minx + data.selectedPlot.maxx) / 2, (data.selectedPlot.miny + data.selectedPlot.maxy) / 2);
+          map.setView(center, 17, { animate: false });
+        } else {
+          map.fitBounds(bounds, { padding: [24, 24], maxZoom: 15 });
+        }
+        map.on('moveend', () => {
+          if (!map) return;
+          const center = map.getCenter(); viewRef.current = { center: [center.lat, center.lng], zoom: map.getZoom() };
+        });
         map.on('mousemove', (event) => setCoordinates(`${event.latlng.lat.toFixed(6)}, ${event.latlng.lng.toFixed(6)}`));
         map.on('mouseout', () => setCoordinates(''));
         setState('ready');
       } catch { if (!cancelled) setState('error'); }
     })();
-    return () => { cancelled = true; map?.remove(); };
+    return () => { cancelled = true; map?.remove(); mapRef.current = null; };
   }, [gisCode, plot, satellite]);
   return <div className="overflow-hidden rounded-2xl border bg-white shadow-inner">
     <div className="flex flex-wrap items-center justify-between gap-3 border-b bg-white px-4 py-3 text-sm"><span className="flex items-center gap-2 font-semibold"><MapPinned className="size-4 text-primary" /> {plot ? `Khasra ${plot}` : 'Village map'}</span><div className="flex items-center gap-3"><span className="font-mono text-xs text-muted-foreground">{coordinates || attribution || 'Himachal BhuNaksha'}</span><button type="button" onClick={() => setSatellite((value) => !value)} className="inline-flex min-h-10 items-center gap-2 rounded-full border bg-white px-3 font-semibold hover:bg-muted" aria-pressed={satellite}><Layers className="size-4" /> {satellite ? 'Map only' : 'Satellite'}</button></div></div>
-    <div ref={containerRef} role="region" aria-label="BhuNaksha village map" className="h-[26rem] w-full bg-white sm:h-[34rem]" />
+    <div ref={containerRef} role="region" aria-label="BhuNaksha village map" className="h-[26rem] w-full bg-white sm:h-[34rem]" style={{ backgroundColor: '#ffffff' }} />
     {state !== 'ready' && <div className="flex items-center justify-center gap-2 border-t bg-card px-4 py-3 text-sm text-muted-foreground">{state === 'loading' ? <><LoaderCircle className="size-4 animate-spin" /> Loading official map…</> : 'The official map could not be loaded. Use Open map report to continue.'}</div>}
   </div>;
 }
