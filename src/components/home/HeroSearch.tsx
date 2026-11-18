@@ -53,7 +53,7 @@ export function HeroSearch() {
           <p className="field-note text-primary">01 / 01</p>
           <h2 className="mt-2 text-3xl sm:text-4xl">{t('searchTitle')}</h2>
         </div>
-        <p className="max-w-md text-sm text-muted-foreground sm:text-right">{t('searchHint')}</p>
+        {t('searchHint') && <p className="max-w-md text-sm text-muted-foreground sm:text-right">{t('searchHint')}</p>}
       </div>
 
       <div className="mt-8 grid items-start gap-4 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_auto]">
