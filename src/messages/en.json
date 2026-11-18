@@ -1,12 +1,12 @@
 {
   "Metadata": {
     "siteName": "HimLand Check",
-    "title": "Himachal Land Records Search | Jamabandi & Khasra | HimLand Check",
-    "description": "Search Himachal Pradesh land records by district, tehsil and village. Check Jamabandi, Khasra, Khatauni, Khewat and mutations before buying land. Independent reference platform, not a government website."
+    "title": "Himachal Jamabandi Map & Land Records Search | HimLand Check",
+    "description": "Search Himachal jamabandi and Land records. Check plot map and circle rates before you buy. Independent site, not a government portal."
   },
   "Navigation": {
     "circleRates": "Circle rates",
-    "nakalChecker": "Nakal checker",
+    "nakalChecker": "Jamabandi checker",
     "home": "Home",
     "search": "Search records",
     "marketplace": "Marketplace",
@@ -56,7 +56,7 @@
     "home": "Go to home"
   },
   "Disclaimer": {
-    "banner": "Private, independent platform. Not a government website. Information is not an official record: verify with the Revenue Department before you act.",
+    "banner": "Independent site, not a government portal. For reference only. Confirm with a certified nakal.",
     "bannerLink": "Read the full disclaimer",
     "points": {
       "independent": "This is a private, independent platform. It is not owned, operated, endorsed or authorised by the Government of Himachal Pradesh, the Revenue Department or any government agency.",
@@ -107,7 +107,7 @@
   },
   "Home": {
     "hero": {
-      "title": "Search Himachal Pradesh land records before you buy",
+      "title": "Search Himachal jamabandi and land records before you buy",
       "subtitle": "Find Jamabandi, Khasra, Khatauni, Khewat and mutation entries by district, tehsil and village, then verify the official record before any land transaction.",
       "searchTitle": "Search official land revenue records",
       "searchHint": "",
@@ -122,7 +122,7 @@
     "dueDiligence": {
       "eyebrow": "Before the money moves",
       "title": "Know what the records say about the plot",
-      "intro": "Before buying land in Himachal Pradesh, compare the current revenue entry with ownership, mutation history, mortgages and possible disputes. HimLand Check organises these checks into one reviewable file.",
+      "intro": "Before buying land in Himachal Pradesh, compare the current revenue entry with ownership, mutation history, mortgages and possible disputes. HimLand Check gives you a checklist and links to the right official portal for each check.",
       "checks": {
         "ownership": {
           "title": "Who owns it?",
@@ -135,8 +135,8 @@
           "evidence": "Review: intkal history, registered deeds and mortgage releases"
         },
         "litigation": {
-          "title": "Is anyone in court over it?",
-          "description": "Use every owner and predecessor named in the records to check relevant court filings. A name match is only a lead; identity and connection to the plot must be verified from the order.",
+          "title": "Is the plot in a court case?",
+          "description": "Use every owner and predecessor named in the records to check relevant court filings. A name match is only a lead; identity and connection to the plot must be verified from the order.We show you where to search.",
           "evidence": "Review: case number, party identity, status and order copy"
         }
       },
@@ -290,8 +290,8 @@
       "verify": { "title": "Plot verification", "body": "Work through ownership, revenue entries and official court searches in a consistent order." },
       "search": { "title": "Land-record search", "body": "Find records by district, tehsil, village, khasra or owner name." },
       "nakal": { "title": "Nakal checker", "body": "Upload a jamabandi PDF for an explainable, rule-based review." },
-      "map": { "title": "Plot map", "body": "View an available GeoJSON boundary and understand how map evidence is presented." },
-      "converter": { "title": "Area converter", "body": "Convert kanal, marla, square metres and square feet using Himachal units." }
+      "map": { "title": "Plot map", "body": "See a plot’s outline on the BhuNaksha map using its khasra number." },
+      "converter": { "title": "Himachal land converter", "body": "Convert kanal, marla, bigha, biswa, square metres and square feet using Himachal units." }
     }
   },
   "CircleRateTool": {
@@ -504,14 +504,14 @@
       "continue": "Continue to CAPTCHA",
       "reset": "Clear",
       "captchaTitle": "Verify the official search",
-      "captchaBody": "Your record type and number are now fixed. Enter the final HimBhoomi code to open the record.",
+      "captchaBody": "Type the characters from the image to load the record from HimBhoomi.",
       "captcha": "HimBhoomi CAPTCHA",
       "captchaAlt": "HimBhoomi verification code",
       "captchaEntry": "Enter the code",
       "fetch": "Open official record",
       "newCaptcha": "New code",
       "captchaInvalid": "The CAPTCHA was not accepted. Request a new code and try again.",
-      "submissionInvalid": "HimBhoomi returned the search form instead of a record. Check the displayed details and request a fresh CAPTCHA to retry.",
+      "submissionInvalid": "HimBhoomi didn’t return a record. Check your selections and enter a new CAPTCHA code.",
       "recordChooser": "Choose the official record",
       "loadingOfficial": "Waiting for HimBhoomi to refresh…",
       "openOfficial": "Open official HimBhoomi",
@@ -1481,7 +1481,7 @@
         }
       }
     },
-    "title": "Check a land record (nakal)",
+    "title": "Check a land record (jamabandi)",
     "intro": "Upload a Jamabandi nakal PDF. We read it, run rule-based checks and show a score with the reasons. An AI model does the reading, so always compare the result with the original record.",
     "choose": "Choose a PDF (up to 4 MB)",
     "analyze": "Check this record",
