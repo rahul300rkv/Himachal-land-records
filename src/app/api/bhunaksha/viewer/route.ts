@@ -39,14 +39,19 @@ function requestJson<T>(url: string, method: 'GET' | 'POST' = 'GET', body = '', 
 
 export async function GET(request: NextRequest) {
   const gisCode = request.nextUrl.searchParams.get('gisCode')?.trim() ?? '';
+  const plot = request.nextUrl.searchParams.get('plot')?.trim() ?? '';
   // BhuNaksha codes are district (2) + tehsil/sub-tehsil (2) + village (6).
   if (!/^\d{10}$/.test(gisCode)) return NextResponse.json({ error: 'Invalid BhuNaksha code' }, { status: 400 });
   try {
     const form = new URLSearchParams({ gisLevels: `${gisCode.slice(0, 2)},${gisCode.slice(2, 4)},${gisCode.slice(4, 10)}` });
-    const [extentResult, plotsResult, attributionResult] = await Promise.allSettled([
+    const plotBody = new URLSearchParams({ giscode: gisCode, plotno: plot }).toString();
+    const [extentResult, plotsResult, attributionResult, plotResult] = await Promise.allSettled([
       requestJson<{ xmin: number; ymin: number; xmax: number; ymax: number; crs?: string }>(`${BASE}/MapInfo/getVVVVExtentGeoref`, 'POST', form.toString(), 'application/x-www-form-urlencoded;charset=UTF-8'),
       requestJson<unknown>(`${BASE}/masterdata/getPlotNosByBhucode?bhucode=${encodeURIComponent(gisCode)}`),
       requestJson<{ attribution?: string }>(`${BASE}/masterdata/getAttributionInfo?gisCode=${encodeURIComponent(gisCode)}`, 'POST', '{}', 'application/json'),
+      plot
+        ? requestJson<{ minx: number; miny: number; maxx: number; maxy: number; id: string; kide: string }>(`${BASE}/MapInfo/getPlotByPlotNo`, 'POST', plotBody, 'application/x-www-form-urlencoded;charset=UTF-8')
+        : Promise.resolve(null),
     ]);
     if (extentResult.status === 'rejected') {
       const code = extentResult.reason instanceof Error ? extentResult.reason.message : 'UNKNOWN';
@@ -56,7 +61,8 @@ export async function GET(request: NextRequest) {
     const plots = plotsResult.status === 'fulfilled' ? plotsResult.value : [];
     const attribution = attributionResult.status === 'fulfilled' ? attributionResult.value : {};
     if (![extent.xmin, extent.ymin, extent.xmax, extent.ymax].every(Number.isFinite)) throw new Error('invalid_extent');
-    return NextResponse.json({ extent, plots: Array.isArray(plots) ? plots : [], attribution: attribution.attribution ?? '', gisCode });
+    const selectedPlot = plotResult.status === 'fulfilled' ? plotResult.value : null;
+    return NextResponse.json({ extent, plots: Array.isArray(plots) ? plots : [], selectedPlot, attribution: attribution.attribution ?? '', gisCode });
   } catch {
     return NextResponse.json({ error: 'BhuNaksha viewer is temporarily unavailable' }, { status: 502 });
   }
