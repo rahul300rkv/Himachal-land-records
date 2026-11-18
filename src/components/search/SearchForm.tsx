@@ -249,30 +249,5 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
         </div>
       </section>
     )}
-    {recordReady && (
-      <div role="status" className="rounded-xl border bg-card p-4">
-        {receiptNumber
-          ? <p className="text-lg font-semibold tabular-nums">{t('receiptNumber', { number: receiptNumber })}</p>
-          : <p className="text-sm text-muted-foreground">{t('receiptMissing')}</p>}
-        <div className="mt-4 overflow-x-auto rounded-lg border">
-          <table className="w-full text-left text-sm">
-            <thead className="bg-muted">
-              <tr>
-                <th scope="col" className="p-3">{t('labelColumn')}</th>
-                <th scope="col" className="p-3">{t('valueColumn')}</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y">
-              {labels.map(({ id, value }, index) => (
-                <tr key={id + index}>
-                  <th scope="row" className="max-w-64 break-all p-3 font-normal text-muted-foreground">{id.replace(/^ctl00_(?:ContentPlaceHolder1_)?/, '')}</th>
-                  <td className="min-w-40 whitespace-pre-wrap break-words p-3">{value || t('emptyLabel')}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    )}
   </div>;
 }
