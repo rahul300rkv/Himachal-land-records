@@ -1,6 +1,6 @@
 'use client';
 
-import { LoaderCircle, RefreshCw, Search, ShieldCheck, X } from 'lucide-react';
+import { Download, LoaderCircle, RefreshCw, Search, ShieldCheck, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -226,27 +226,18 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
       </div>
     )}
     {recordReady && parcelTable && (
-      <section className="space-y-3">
-        <Button type="button" onClick={() => void downloadCopy()} disabled={downloading || !receiptNumber}>
-          {downloading && <LoaderCircle className="animate-spin" aria-hidden="true" />}
-          {t('downloadCopy')}
-        </Button>
-        {downloadError && <p role="alert" className="text-sm text-destructive">{t('downloadFailed')}</p>}
-        <h2 className="text-xl">{t('parcelDetails')}</h2>
-        <div className="overflow-x-auto rounded-xl border bg-card" tabIndex={0} role="region" aria-label={t('parcelDetails')}>
-          <table className="w-full min-w-[1000px] border-collapse text-left text-sm">
-            <thead className="bg-muted">
-              <tr>{parcelTable.headers.map((header, index) => <th key={index} scope="col" className="border p-3 align-top">{header}</th>)}</tr>
-            </thead>
-            <tbody>
-              {parcelTable.rows.map((row, index) => (
-                <tr key={index} className="even:bg-muted/20">
-                  {row.map((cell, column) => <td key={column} className="whitespace-pre-wrap border p-3 align-top">{cell}</td>)}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      <section className="rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/5 via-background to-accent/10 p-6 shadow-sm">
+        <div className="flex flex-col items-start justify-between gap-5 sm:flex-row sm:items-center">
+          <div>
+            <h2 className="text-xl font-semibold tracking-tight">{t('parcelDetails')}</h2>
+            <p className="mt-1 max-w-xl text-sm text-muted-foreground">Download a clean information copy of the retrieved Jamabandi record.</p>
+          </div>
+          <Button type="button" size="lg" className="h-14 rounded-full bg-primary px-7 shadow-lg shadow-primary/20 transition-transform hover:-translate-y-0.5 hover:bg-primary/90" onClick={() => void downloadCopy()} disabled={downloading || !receiptNumber}>
+            {downloading ? <LoaderCircle className="animate-spin" aria-hidden="true" /> : <Download aria-hidden="true" />}
+            {t('downloadCopy')}
+          </Button>
         </div>
+        {downloadError && <p role="alert" className="mt-4 text-sm text-destructive">{t('downloadFailed')}</p>}
       </section>
     )}
   </div>;
