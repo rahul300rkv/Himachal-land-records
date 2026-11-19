@@ -144,7 +144,7 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
       let switchedToFallback = false;
       const primary = L.tileLayer(
         'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-        { maxNativeZoom: 18, maxZoom: 22, zIndex: 1 },
+        { maxNativeZoom: 18, maxZoom: 21, zIndex: 1 },
       );
       primary.on('tileerror', () => {
         if (switchedToFallback) return;
@@ -190,10 +190,12 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
         const L = ('default' in mod ? mod.default : mod) as typeof import('leaflet');
         if (cancelled || !containerRef.current) return;
 
-        // tear down any previous instance
+        // tear down any previous instance and clear the saved view so the
+        // new plot always opens at its own location, not the old pan/zoom
         if (mapRef.current) { mapRef.current.remove(); mapRef.current = null; }
         satLayerRef.current = null;
-        LRef.current = L;
+        viewRef.current     = null;
+        LRef.current        = L;
 
         let { xmin, ymin, xmax, ymax } = data.extent;
         if (data.selectedPlot) {
@@ -207,7 +209,7 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
           ymin = cy - viewH / 2; ymax = cy + viewH / 2;
         }
 
-        const map = L.map(containerRef.current, { scrollWheelZoom: false, attributionControl: false });
+        const map = L.map(containerRef.current, { scrollWheelZoom: false, attributionControl: true });
         mapRef.current = map;
 
         const sw = utm43ToLatLng(xmin, ymin);
@@ -247,9 +249,16 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
           return new C({ tileSize: 282, opacity, updateWhenZooming: false, keepBuffer: 2, zIndex: 10 });
         };
 
+        // Base map — roads, village names, place labels (zIndex 0, below everything)
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 21,
+          zIndex: 0,
+          attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        }).addTo(map);
+
         // WMS layers always present — zIndex 10 so satellite (1) stays underneath
         createWmsGrid('VILLAGE_MAP', 'VILLAGE_MAP',
-          { transparent: 'true', state: '', gis_code: gisCode, overlay_codes: '' }, 0.95).addTo(map);
+          { transparent: 'true', state: '', gis_code: gisCode, overlay_codes: '' }, 0.6).addTo(map);
         if (data.selectedPlot) {
           createWmsGrid('OWNER_PLOTS', 'SAME_OWNER_PLOT_LIST',
             { state: '', giscode: gisCode, plot_no: plot }, 0.8).addTo(map);
