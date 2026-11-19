@@ -112,12 +112,35 @@ useEffect(() => {
   document.addEventListener('keydown', onKeyDown);
   return () => document.removeEventListener('keydown', onKeyDown);
 }, [isFullscreen]);
-  /* ── invalidate Leaflet size after fullscreen transition ─────────── */
-  useEffect(() => {
-    // give the browser a frame to repaint the new dimensions
-    const id = window.setTimeout(() => mapRef.current?.invalidateSize(), 120);
-    return () => window.clearTimeout(id);
-  }, [isFullscreen]);
+ /* ── keep Leaflet sized & tiles drawn across fullscreen / resize ─── */
+useEffect(() => {
+  const el = containerRef.current;
+  if (!el) return;
+
+  const syncMapSize = () => {
+    const map = mapRef.current;
+    if (!map) return;
+    if (el.clientWidth === 0 || el.clientHeight === 0) return;
+
+    map.invalidateSize({ animate: false });
+    map.eachLayer((layer) => {
+      if ('redraw' in layer && typeof (layer as { redraw?: () => void }).redraw === 'function') {
+        (layer as { redraw: () => void }).redraw();
+      }
+    });
+  };
+
+  const observer = new ResizeObserver(() => {
+    requestAnimationFrame(syncMapSize);
+  });
+  observer.observe(el);
+
+  const id = window.setTimeout(syncMapSize, 150);
+  return () => {
+    observer.disconnect();
+    window.clearTimeout(id);
+  };
+}, [isFullscreen]);
 
   /* ── map initialisation (unchanged logic) ────────────────────────── */
   useEffect(() => {
@@ -148,11 +171,37 @@ useEffect(() => {
         const northEast = utm43ToLatLng(xmax, ymax);
         const bounds: [[number, number], [number, number]] = [southWest, northEast];
         if (satellite) {
-          L.tileLayer(
-            'https://bhuvan-ras2.nrsc.gov.in/tilecache/tilecache.py/1.0.0/bhuvan_imagery2/{z}/{x}/{y}.jpg',
-            { maxZoom: 22 },
-          ).addTo(map);
-        }
+  let errorCount = 0;
+  let switchedToFallback = false;
+
+  const primaryLayer = L.tileLayer(
+    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    {
+      maxNativeZoom: 18,
+      maxZoom: 21,
+      attribution: 'Tiles &copy; Esri',
+    },
+  ).addTo(map);
+
+  primaryLayer.on('tileerror', () => {
+    if (switchedToFallback) return;
+    errorCount += 1;
+
+    if (errorCount >= 3) {
+      switchedToFallback = true;
+      if (map.hasLayer(primaryLayer)) {
+        map.removeLayer(primaryLayer);
+      }
+      L.tileLayer(
+        'https://bhuvan-ras2.nrsc.gov.in/tilecache/tilecache.py/1.0.0/bhuvan_imagery2/{z}/{x}/{y}.jpg',
+        {
+          maxZoom: 22,
+          attribution: 'Satellite &copy; NRSC / Bhuvan',
+        },
+      ).addTo(map);
+    }
+  });
+}
         const createWmsGrid = (style: string, layerName: string, extra: Record<string, string>, opacity: number) => {
           const Grid = L.GridLayer.extend({
             createTile(this: L.GridLayer & { _map: import('leaflet').Map }, coords: { x: number; y: number; z: number }, done: (error?: Error | null, tile?: HTMLElement) => void) {
@@ -190,7 +239,8 @@ useEffect(() => {
           map.fitBounds(bounds, { padding: [24, 24], maxZoom: 15 });
         }
         map.on('moveend', () => {
-          if (!map) return;
+          if (!map || !containerRef.current) return;
+if (containerRef.current.clientHeight === 0) return;
           const center = map.getCenter();
           viewRef.current = { center: [center.lat, center.lng], zoom: map.getZoom() };
         });
