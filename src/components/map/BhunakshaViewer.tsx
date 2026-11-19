@@ -9,8 +9,8 @@ type Extent = { xmin: number; ymin: number; xmax: number; ymax: number };
 type SelectedPlot = { minx: number; miny: number; maxx: number; maxy: number; id: string; kide: string };
 type WebkitEl  = HTMLElement & { webkitRequestFullscreen?: () => Promise<void> | void };
 type WebkitDoc = Document   & { webkitExitFullscreen?: () => void; webkitFullscreenElement?: Element | null };
-const DATUM_OFFSET_LAT =  0.00022; // ~24 m northward
-const DATUM_OFFSET_LNG =  0.00018; // ~17 m eastward
+const DATUM_OFFSET_LAT =  0.000225; 
+const DATUM_OFFSET_LNG =  0.000190; 
 function utm43ToLatLng(easting: number, northing: number): [number, number] {
   const a = 6378137; const eccSquared = 0.00669438; const k0 = 0.9996;
   const x = easting - 500000; const y = northing;
@@ -22,8 +22,8 @@ function utm43ToLatLng(easting: number, northing: number): [number, number] {
   const r1 = a * (1 - eccSquared) / (1 - eccSquared * Math.sin(phi1) ** 2) ** 1.5; const d = x / (n1 * k0);
   const lat = phi1 - (n1 * Math.tan(phi1) / r1) * (d ** 2 / 2 - (5 + 3 * t1 + 10 * c1 - 4 * c1 ** 2 - 9 * eccPrimeSquared) * d ** 4 / 24 + (61 + 90 * t1 + 298 * c1 + 45 * t1 ** 2 - 252 * eccPrimeSquared - 3 * c1 ** 2) * d ** 6 / 720);
   const lon = (75 * Math.PI / 180) + (d - (1 + 2 * t1 + c1) * d ** 3 / 6 + (5 - 2 * c1 + 28 * t1 - 3 * c1 ** 2 + 8 * eccPrimeSquared + 24 * t1 ** 2) * d ** 5 / 120) / Math.cos(phi1);
-  return [lat * 180 / Math.PI + DATUM_OFFSET_LAT,
-    lon * 180 / Math.PI + DATUM_OFFSET_LNG,];
+  return [lat * 180 / Math.PI - DATUM_OFFSET_LAT,
+    lon * 180 / Math.PI - DATUM_OFFSET_LNG,];
 }
 
 function latLngToUtm43(lat: number, lon: number): [number, number] {
