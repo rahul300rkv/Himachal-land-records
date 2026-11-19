@@ -261,40 +261,51 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
         // The WMS reprojects mathematically but skips the datum shift, leaving
         // the overlay ~20-25 m north and ~15-20 m east of true WGS84 position.
         //
-        // We correct this by creating a dedicated Leaflet pane for all WMS
-        // layers and applying a CSS pixel translate to it. This shifts the
-        // rendered overlay pixels without touching any coordinates, so the
-        // BBOX math inside createTile stays correct and the right tiles load.
+        // Strategy: add all WMS layers normally, then after they are mounted
+        // find their container divs inside the overlayPane and move them into
+        // a new dedicated div that has a CSS translate applied to it.
+        // This shifts rendered pixels without touching any BBOX coordinates.
         //
-        // Pixel offset = metres ÷ metres-per-pixel-at-current-zoom.
-        // At zoom 17 (default plot view), 1 pixel ≈ 1.19 m at lat 32°.
-        // We want ~25 m south (-lat) and ~18 m west (-lng):
-        //   25 m ÷ 1.19 m/px ≈ 21 px  up   → translateY(-21px)
-        //   18 m ÷ 1.19 m/px ≈ 15 px  left → translateX(-15px)
-        //
-        // These are fixed pixel values chosen for zoom 17. They remain a
-        // reasonable approximation across zoom 15–19 (error < 5 px).
-        // Tune SHIFT_PX_X / SHIFT_PX_Y against your satellite imagery.
-        const SHIFT_PX_X = -15; // negative = move overlay westward (left)
-        const SHIFT_PX_Y = -21; // negative = move overlay southward (up in screen = south)
+        // Pixel offset at zoom 17 (1 px ≈ 1.19 m at lat 32°):
+        //   25 m south → ~21 px   |   18 m west → ~15 px
+        // Tune these two constants against your satellite imagery.
+        const SHIFT_PX_X = -15; // negative = move overlay westward
+        const SHIFT_PX_Y = -21; // negative = move overlay southward
 
-        map.createPane('wmsPane');
-        const wmsPane = map.getPane('wmsPane');
-        if (wmsPane) {
-          wmsPane.style.zIndex = '10';
-          wmsPane.style.transform = `translate(${SHIFT_PX_X}px, ${SHIFT_PX_Y}px)`;
-          // pointer events pass through to the map
-          wmsPane.style.pointerEvents = 'none';
-        }
+        // Add WMS layers the normal way (no custom pane)
+        const wmsLayers = [
+          createWmsGrid('VILLAGE_MAP', 'VILLAGE_MAP',
+            { transparent: 'true', state: '', gis_code: gisCode, overlay_codes: '' }, 0.6),
+          ...(data.selectedPlot ? [
+            createWmsGrid('OWNER_PLOTS', 'SAME_OWNER_PLOT_LIST',
+              { state: '', giscode: gisCode, plot_no: plot }, 0.8),
+            createWmsGrid('PLOT_SELECTION', 'PLOT_LIST',
+              { transparent: 'true', state: '', gis_code: gisCode, overlay_codes: '', plot_id: data.selectedPlot.id }, 1),
+          ] : []),
+        ];
+        wmsLayers.forEach((l) => l.addTo(map));
 
-        // WMS layers — all placed in wmsPane so the shift applies to all of them
-        createWmsGrid('VILLAGE_MAP', 'VILLAGE_MAP',
-          { transparent: 'true', state: '', gis_code: gisCode, overlay_codes: '' }, 0.6).addTo(map);
-        if (data.selectedPlot) {
-          createWmsGrid('OWNER_PLOTS', 'SAME_OWNER_PLOT_LIST',
-            { state: '', giscode: gisCode, plot_no: plot }, 0.8).addTo(map);
-          createWmsGrid('PLOT_SELECTION', 'PLOT_LIST',
-            { transparent: 'true', state: '', gis_code: gisCode, overlay_codes: '', plot_id: data.selectedPlot.id }, 1).addTo(map);
+        // After layers are added their container divs exist inside overlayPane.
+        // Wrap them all in a single shifted div.
+        const overlayPane = map.getPane('overlayPane');
+        if (overlayPane) {
+          const shiftDiv = document.createElement('div');
+          shiftDiv.style.cssText = `
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            transform: translate(${SHIFT_PX_X}px, ${SHIFT_PX_Y}px);
+            pointer-events: none;
+            will-change: transform;
+          `;
+          // Move each layer's container div into the shift wrapper
+          wmsLayers.forEach((layer) => {
+            const container = (layer as unknown as { _container?: HTMLElement })._container;
+            if (container && container.parentNode === overlayPane) {
+              shiftDiv.appendChild(container);
+            }
+          });
+          overlayPane.appendChild(shiftDiv);
         }
 
         // apply initial view
