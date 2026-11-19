@@ -287,11 +287,26 @@
     "intro": "Search, read, map and cross-check a plot without jumping through the rest of the site.",
     "open": "Open tool",
     "items": {
-      "verify": { "title": "Plot verification", "body": "Work through ownership, revenue entries and official court searches in a consistent order." },
-      "search": { "title": "Land-record search", "body": "Find records by district, tehsil, village, khasra or owner name." },
-      "nakal": { "title": "Jamabandi checker", "body": "Upload a jamabandi PDF for an explainable, rule-based review." },
-      "map": { "title": "Plot map", "body": "See a plot’s outline on the BhuNaksha map using its khasra number." },
-      "converter": { "title": "Himachal land converter", "body": "Convert kanal, marla, bigha, biswa, square metres and square feet using Himachal units." }
+      "verify": {
+        "title": "Plot verification",
+        "body": "Work through ownership, revenue entries and official court searches in a consistent order."
+      },
+      "search": {
+        "title": "Land-record search",
+        "body": "Find records by district, tehsil, village, khasra or owner name."
+      },
+      "nakal": {
+        "title": "Jamabandi checker",
+        "body": "Upload a jamabandi PDF for an explainable, rule-based review."
+      },
+      "map": {
+        "title": "Plot map",
+        "body": "See a plot’s outline on the BhuNaksha map using its khasra number."
+      },
+      "converter": {
+        "title": "Himachal land converter",
+        "body": "Convert kanal, marla, bigha, biswa, square metres and square feet using Himachal units."
+      }
     }
   },
   "CircleRateTool": {
@@ -300,15 +315,23 @@
     "lookup": "Find the published rate",
     "lookupHelp": "Select a district and SRO to see available notices. Open the PDF and check its effective period, land category and unit.",
     "form": {
-      "district": "District", "office": "Sub-Registrar Office", "choose": "Select",
-      "submit": "Find reports", "loading": "Loading from MEGH…",
+      "district": "District",
+      "office": "Sub-Registrar Office",
+      "choose": "Select",
+      "submit": "Find reports",
+      "loading": "Loading from MEGH…",
       "failed": "MEGH could not return results. Try searching again or reselect the district.",
       "empty": "MEGH returned no downloadable reports for this office.",
-      "file": "File name", "uploaded": "Uploaded date", "download": "Download PDF"
+      "file": "File name",
+      "uploaded": "Uploaded date",
+      "download": "Download PDF"
     },
     "overview": "Circle rate overview",
     "overviewBody": "A circle-rate schedule gives you a starting point for valuing land for registration. Use it to compare the proposed purchase price with the notified valuation and budget for transaction costs. Start with the notice issued for the office that covers the property.",
-    "sample": { "title": "Sample circle-rate report", "alt": "Sample Himachal Pradesh circle-rate schedule." },
+    "sample": {
+      "title": "Sample circle-rate report",
+      "alt": "Sample Himachal Pradesh circle-rate schedule."
+    },
     "readTitle": "What to check in the notice",
     "readLocation": "Match the revenue village or locality to your land record and check when the notice applies.",
     "readCategory": "Find the row for your land use. Check whether the schedule has a separate category based on road access or distance.",
@@ -316,13 +339,34 @@
     "stampDuty": "Open the stamp duty calculator",
     "faq": "Frequently asked questions",
     "questions": {
-      "lookup": { "q": "How do I download a circle-rate notice?", "a": "Choose your district and Sub-Registrar Office. Select Find reports, then Download PDF beside the relevant notice. Use the effective period printed in the PDF to pick the correct file." },
-      "meaning": { "q": "Is the circle rate the sale price?", "a": "The circle rate is a registration valuation benchmark. The sale price is the amount the buyer and seller agree to." },
-      "variation": { "q": "Can two plots in the same village have different rates?", "a": "Yes. A schedule may list different rates by land category or distance from a road. Read the row and any notes that apply to your plot." },
-      "date": { "q": "Which rate should I use?", "a": "Check the effective period in the official schedule for your transaction date. The date shown in the results table is the upload date." },
-      "unit": { "q": "What if my land record uses a different area unit?", "a": "Convert the recorded area into the unit listed in the notice before multiplying. For example, a rate per square metre requires the area in square metres." },
-      "valuation": { "q": "How does the circle rate help estimate stamp duty?", "a": "Use the notice to estimate the assessed value of the property. Then enter that value and the agreed price in the stamp duty calculator for a sale-deed estimate." },
-      "missing": { "q": "What if the PDF does not list my village?", "a": "Check the SRO jurisdiction and whether the village appears under another spelling or a revenue estate name. Ask the Sub-Registrar which notice and row apply if you still cannot find it." }
+      "lookup": {
+        "q": "How do I download a circle-rate notice?",
+        "a": "Choose your district and Sub-Registrar Office. Select Find reports, then Download PDF beside the relevant notice. Use the effective period printed in the PDF to pick the correct file."
+      },
+      "meaning": {
+        "q": "Is the circle rate the sale price?",
+        "a": "The circle rate is a registration valuation benchmark. The sale price is the amount the buyer and seller agree to."
+      },
+      "variation": {
+        "q": "Can two plots in the same village have different rates?",
+        "a": "Yes. A schedule may list different rates by land category or distance from a road. Read the row and any notes that apply to your plot."
+      },
+      "date": {
+        "q": "Which rate should I use?",
+        "a": "Check the effective period in the official schedule for your transaction date. The date shown in the results table is the upload date."
+      },
+      "unit": {
+        "q": "What if my land record uses a different area unit?",
+        "a": "Convert the recorded area into the unit listed in the notice before multiplying. For example, a rate per square metre requires the area in square metres."
+      },
+      "valuation": {
+        "q": "How does the circle rate help estimate stamp duty?",
+        "a": "Use the notice to estimate the assessed value of the property. Then enter that value and the agreed price in the stamp duty calculator for a sale-deed estimate."
+      },
+      "missing": {
+        "q": "What if the PDF does not list my village?",
+        "a": "Check the SRO jurisdiction and whether the village appears under another spelling or a revenue estate name. Ask the Sub-Registrar which notice and row apply if you still cannot find it."
+      }
     }
   },
   "MapExplorer": {
@@ -345,7 +389,7 @@
     "requiredTehsil": "Select a tehsil or sub-tehsil",
     "requiredVillage": "Select a village",
     "requiredPlot": "Enter a plot or Khasra number",
-      "openOfficial": "Open map report",
+    "openOfficial": "Open map report",
     "officialEyebrow": "Himachal Pradesh BhuNaksha",
     "officialTitle": "How to open your plot map",
     "step1": "Select the district, tehsil or sub-tehsil, and village.",
@@ -390,319 +434,386 @@
     "notice": "Always compare the online outline with the official shajra, field book and demarcation on the ground."
   },
   "Guides": {
-  "eyebrow": "Practical guides",
-  "title": "Understand the record before you rely on it",
-  "intro": "Short, plain-language explainers for common Himachal land-record questions.",
-  "reviewNote": "General information only. Not legal advice. Laws and procedures change, so confirm with the Patwari, the Tehsil office or a Himachal property lawyer.",
-  "relatedTitle": "Keep reading",
-  "tryTool": "Try the tool",
- "guideLabel": "GUIDE {number}",
-
-  "items": {
-    "jamabandi": {
-      "title": "How to read a jamabandi",
-      "body": "Read the ownership and cultivation columns together, then connect the khata, khewat and khasra numbers before drawing any conclusion.",
-      "point1": "Match every owner and recorded share.",
-      "point2": "Check area and land classification khasra by khasra.",
-      "point3": "Read remarks and the latest mutation references.",
-      "metaTitle": "How to Read a Himachal Jamabandi Nakal: Khewat, Khatauni, Khasra Explained",
-      "metaDescription": "A column-by-column guide to a Himachal Pradesh jamabandi nakal: owners, shares, khewat, khatauni, khasra, area, land type and remarks, with a worked example.",
-      "page": {
-        "intro": "A jamabandi is the main revenue record for a village. It lists who holds each piece of land, in what share, and how the land is classified. Buyers often glance at the owner's name and stop. That misses most of what the record can tell you. This guide walks through the columns in the order you should read them.",
-        "sections": {
-          "what": {
-            "title": "What a jamabandi is, and what it is not",
-            "body": [
-              "The jamabandi is the record of rights prepared by the Revenue Department for each revenue village. It is the record you receive when you ask the Patwari or Tehsil office for a nakal (a certified copy), and it is also what HimBhoomi shows online.",
-              "It shows who is recorded as holding the land. It does not, on its own, prove that the person has a clean title. Revenue entries are made on the basis of mutations and other documents, and courts treat them as evidence, not as a final decision on ownership. Always read the jamabandi together with the registered deeds and the mutation orders behind it."
-            ]
-          },
-          "columns": {
-            "title": "The columns, one by one",
-            "intro": "Layouts differ slightly between years and tehsils, but these are the entries to look for.",
-            "items": {
-              "khewat": "Khewat number: the group of owners who hold land jointly in the village. Land held by the same set of owners sits under one khewat.",
-              "khatauni": "Khatauni number: the account of who cultivates or holds the land under that khewat. One khewat can have several khatauni numbers.",
-              "khasra": "Khasra number: the number of the individual plot, as drawn on the village map. This is the number you use to find the plot on BhuNaksha.",
-              "owner": "Owner and father's name: check the spelling against the seller's identity documents. Small spelling differences are common, but a different name or a missing co-owner is a warning sign.",
-              "share": "Share: the fraction each owner holds, for example 1/2 or 3/16. If the shares are not divided on the ground, one owner usually cannot sell a specific plot without the others.",
-              "cultivator": "Cultivator: who is in possession and farming the land. If this is not the owner, ask why. It may be a tenant, a relative or a lessee.",
-              "area": "Area: written in local units such as kanal-marla or bigha-biswa. Convert it to square metres before comparing it with a sale deed or the seller's claim.",
-              "landType": "Land type (kism zamin): the revenue classification, such as irrigated, unirrigated, orchard, grassland or uncultivable. It affects what you may do with the land and whether Section 118 applies. Terms vary by area, so confirm what a local term means.",
-              "remarks": "Remarks: where mortgages, court stays, tenancy claims and mutation numbers are noted. Read this column last, but never skip it."
-            }
-          },
-          "connect": {
-            "title": "How the numbers connect",
-            "body": [
-              "Start with the khasra number of the plot you want. Find the khatauni that lists it, then the khewat that holds that khatauni. The owners and shares under that khewat are the people who hold the land jointly.",
-              "If you cannot trace a khasra back to a khatauni and khewat, or the numbers in the seller's copy differ from a fresh copy, stop and ask the Patwari to explain the difference."
-            ]
-          },
-          "area": {
-            "title": "Reading area and shares together",
-            "body": [
-              "Area in a jamabandi is often the total for the khasra, not the part owned by one person. To find what one owner holds, apply that owner's share to the area. For example, if a khasra is 4 kanal and an owner holds 1/4, that owner's part is 1 kanal.",
-              "Units differ by locality. Use the unit printed in your record, and check the conversion before you rely on it. Our land converter lets you choose the unit instead of assuming a district standard."
-            ]
-          },
-          "example": {
-            "title": "A worked example (fictional)",
-            "body": [
-              "Suppose a copy shows khewat 12, khatauni 25, khasra 128/2, area 3 kanal 10 marla, land type unirrigated. Three owners are listed, each with a 1/3 share. The remarks column says: mutation 874, mortgage entered 2019.",
-              "What this tells you: the seller is one of three co-owners, so you need the other two to sign the sale, or the land must have been partitioned. The mutation number is your next document to request. The mortgage entry needs a release before you can treat the land as free of charge. None of this appears in the owner's name alone."
-            ],
-            "note": "This example is invented for explanation and does not describe a real plot."
-          },
-          "mistakes": {
-            "title": "Common mistakes buyers make",
-            "items": {
-              "a": "Relying on the copy the seller provides instead of a fresh certified nakal.",
-              "b": "Reading an old jamabandi year and missing later mutations.",
-              "c": "Ignoring the share column and assuming one named owner can sell the whole plot.",
-              "d": "Skipping the remarks column, where mortgages and disputes are often noted.",
-              "e": "Comparing area without converting units first."
-            }
-          }
-        },
-        "faq": {
-          "title": "Frequently asked questions",
-          "items": {
-            "proof": {
-              "q": "Is a jamabandi proof of ownership?",
-              "a": "It is strong evidence of who is recorded as holding the land, but it does not by itself prove title. Check the registered deeds and mutation orders that led to the entry."
+    "eyebrow": "Practical guides",
+    "title": "Understand the record before you rely on it",
+    "intro": "Short, plain-language explainers for common Himachal land-record questions.",
+    "reviewNote": "General information only. Not legal advice. Laws and procedures change, so confirm with the Patwari, the Tehsil office or a Himachal property lawyer.",
+    "relatedTitle": "Keep reading",
+    "tryTool": "Try the tool",
+    "guideLabel": "GUIDE {number}",
+    "items": {
+      "buyLand": {
+        "title": "How to buy land in Himachal Pradesh",
+        "body": "Work in order: first whether you are allowed to buy, then the record, the permission, the cost and the registration. Skipping a step is how most buyers end up with land they cannot register or use.",
+        "point1": "Confirm whether Section 118 permission applies to you.",
+        "point2": "Verify the plot on HimBhoomi before paying anything.",
+        "point3": "Budget for stamp duty, registration and mutation.",
+        "metaTitle": "How to Buy Land in Himachal Pradesh: Section 118, Stamp Duty and Buyer Checklist",
+        "metaDescription": "A buyer’s guide to Himachal Pradesh land: who needs Section 118 permission, stamp duty, HimBhoomi checks, registration steps, NRI routes and red flags.",
+        "page": {
+          "intro": "Himachal Pradesh is one of the most sought-after and most tightly regulated land markets in India. The rules depend on who you are, what kind of land you are buying and where it sits. This guide follows the order a careful buyer should work in: eligibility first, then the record, the cost, the registration and the steps after it.",
+          "sections": {
+            "overview": {
+              "title": "Why Himachal is different",
+              "body": [
+                "Section 118 of the Himachal Pradesh Tenancy and Land Reforms Act, 1972 restricts the transfer of land to people who are not agriculturists in the state. It is not only an outsider rule: a Himachali who does not hold agricultural land can also need permission.",
+                "On top of that, a very large part of the state is recorded forest, many areas sit inside eco-sensitive or heritage zones, and stamp duty differs between residents and non-residents. A plot that looks cheap and clear can still be impossible to register or build on."
+              ]
             },
-            "year": {
-              "q": "Which jamabandi year should I check?",
-              "a": "Use the latest year available for the village, then follow every mutation made after it. A mutation entered after the latest jamabandi will not appear in that copy."
+            "whoNeeds": {
+              "title": "Who needs Section 118 permission",
+              "intro": "This is a simplified view. Your exact position depends on your status and on how the land is classified, so confirm it before you sign an agreement.",
+              "items": {
+                "exemptAgri": "Usually no permission: a Himachal agriculturist buying agricultural land, supported by the agricultural records.",
+                "exemptBuilt": "Usually no permission: built-up property inside a municipal corporation, municipal committee or notified area.",
+                "exemptHimuda": "Usually no permission: property allotted by HIMUDA, which is why it is often the simplest route for outsiders.",
+                "exemptInherit": "Usually no permission: transfer to legal heirs by inheritance or gift. Stamp duty and mutation still apply.",
+                "needNonAgri": "Permission needed: a Himachali who is not an agriculturist and wants to buy land.",
+                "needOutsider": "Permission needed: a non-Himachali Indian citizen buying land, including plain plots outside municipal limits."
+              },
+              "note": "If permission is required and not obtained, the sale deed cannot be registered, and a transaction built to get around the rule is at serious risk of being treated as void."
+            },
+            "permission": {
+              "title": "What the permission covers, and the clock that starts running",
+              "body": [
+                "Permission is granted for a stated purpose and a limited area. Figures commonly quoted are up to 500 square metres for a residential house and up to 300 square metres for a shop or office, with larger limits for horticulture or other approved purposes. Treat these as a starting point and read the actual order.",
+                "Once permission is granted, the land has to be put to the stated use within the time given in the order, commonly two years with a possible extension. Land left unused beyond that can vest in the State. If you are buying a plot that already carries a permission, check the date and confirm the deadline has not passed."
+              ],
+              "note": "Ask the seller for the original permission order and check it against the khasra number, the area and the purpose, not just the date."
+            },
+            "amendments": {
+              "title": "The December 2024 amendments",
+              "body": [
+                "Proposals to let non-agriculturists buy completed flats of up to 500 square metres in RERA-registered projects without permission drew strong opposition and remain contested. Because the core law has constitutional protection, do not rely on any such exemption until a Himachal lawyer has confirmed that it is in force and applies to your purchase."
+              ]
+            },
+            "cost": {
+              "title": "Stamp duty and registration costs",
+              "intro": "Commonly reported rates are listed below. Slabs and concessions change, so confirm the current figures with the Sub-Registrar or the registration portal before you fix your budget.",
+              "items": {
+                "resMale": "Resident male buyer: stamp duty of about 6% for higher-value property, with lower slabs for smaller ones.",
+                "resFemale": "Resident female buyer: about 4% up to a value threshold, and higher above it.",
+                "resJoint": "Resident joint buyers (male and female): about 5%.",
+                "nonRes": "Non-resident buyer: a flat 12%, regardless of gender. A second home or a temporary stay in the state does not make you a resident.",
+                "reg": "Registration fee: about 2% of the value, subject to a cap of ₹25,000.",
+                "estamp": "Payment: e-stamping is mandatory, and physical stamp paper has been discontinued since April 2024."
+              },
+              "note": "Duty is charged on the higher of the circle rate or the agreement value. On a ₹1 crore property, 12% is ₹12 lakh against ₹6 lakh at 6%, so your resident status can change the budget by lakhs."
+            },
+            "records": {
+              "title": "Check the records before you pay",
+              "intro": "Run these checks yourself on a fresh record, not on printouts supplied by the seller.",
+              "items": {
+                "jamabandi": "Jamabandi: confirm the seller is the recorded owner, the land is private (not government or forest) and the area matches.",
+                "girdawari": "Khasra girdawari: confirm how the land is actually being used and that it matches what the seller says.",
+                "mutation": "Mutation (intkal): confirm the seller’s own purchase or inheritance has been mutated in their name. A pending mutation means title has not fully moved.",
+                "govtBank": "Government land bank: confirm the plot is not listed as government land, which cannot be sold privately.",
+                "circle": "Circle rate: find the road-proximity category for the khasra, because it sets the value on which duty is charged.",
+                "encumbrance": "Encumbrance: look for any mortgage, charge or earlier unresolved sale against the property.",
+                "residency": "Your status: confirm whether you will be treated as a resident or a non-resident for stamp duty.",
+                "s118": "Section 118: confirm which category you fall in, and whether permission is needed, already held or exempt."
+              }
+            },
+            "process": {
+              "title": "The registration process, step by step",
+              "items": {
+                "a": "Verify the jamabandi, khasra and mutation on HimBhoomi and obtain a fresh certified nakal.",
+                "b": "Settle Section 118: hold the permission, or get written confirmation of why an exemption applies.",
+                "c": "Work out the circle rate category, the stamp duty and the registration fee.",
+                "d": "Pay the stamp duty by e-stamp and keep the certificate.",
+                "e": "Draft the sale deed with the khasra and khewat numbers, village, tehsil, district, area and the permission reference.",
+                "f": "Enter the document on the registration portal and book an appointment with the Sub-Registrar.",
+                "g": "Attend in person: buyer, seller and two witnesses with identity documents, including biometric verification.",
+                "h": "After registration, apply for mutation so the revenue record shows you as the owner."
+              },
+              "note": "For a purchase above ₹50 lakh, the buyer may have to deduct 1% TDS and deposit it using Form 26QB. Ask your adviser how this applies to your deal."
+            },
+            "zones": {
+              "title": "Special zones that can limit what you build",
+              "items": {
+                "shimla": "Shimla: a heritage precinct, height limits and construction orders from the courts and the NGT. Check the current development plan.",
+                "manali": "Manali and Kullu: parts are eco-sensitive, with restrictions near the Beas river and forested slopes.",
+                "kasauli": "Kasauli: cantonment rules apply alongside state law, so Cantonment Board clearance may be needed.",
+                "parks": "Near national parks and sanctuaries: land inside the eco-sensitive zone, commonly up to 10 km, may need wildlife board clearance before construction.",
+                "tribal": "Kinnaur, Spiti and Lahaul: extra restrictions can apply in some high-altitude and border areas. Ask the District Collector.",
+                "industrial": "Baddi, Barotiwala and Nalagarh: industrial investment can have separate routes, but residential plots still need permission for non-Himachalis."
+              }
+            },
+            "nri": {
+              "title": "If you are an NRI or OCI",
+              "body": [
+                "For NRIs, the practical route is usually built-up property in a municipal area or a HIMUDA allotment, both of which avoid the Section 118 permission process. Payments should come through NRE or NRO accounts, and a power of attorney signed abroad has to be notarised or attested as required and then registered here.",
+                "Agricultural land and undeveloped plots are far harder: you need Section 118 permission and must also satisfy FEMA rules, which restrict NRIs from buying agricultural land. Non-resident stamp duty applies even to built-up property. Get advice before you commit."
+              ]
+            },
+            "redflags": {
+              "title": "Red flags: walk away or pause",
+              "items": {
+                "a": "A non-agriculturist buying land with no Section 118 permission.",
+                "b": "A permission whose use deadline has passed with the land still unused.",
+                "c": "A jamabandi that shows forest or government land.",
+                "d": "A seller whose own mutation is not yet complete.",
+                "e": "A plot in a heritage, eco-sensitive or cantonment area with no clearance for what you plan to build.",
+                "f": "A builder project that is not registered with HP RERA.",
+                "g": "A claim that an exemption applies, with no written confirmation from a lawyer.",
+                "h": "A budget that ignores non-resident stamp duty, or a deed on physical stamp paper after April 2024."
+              }
+            }
+          },
+          "faq": {
+            "title": "Frequently asked questions",
+            "items": {
+              "outsider": {
+                "q": "Can an outsider buy land in Himachal Pradesh?",
+                "a": "Not freely. A non-agriculturist, whether from outside the state or from within it, generally needs Section 118 permission to buy land. Built-up property in a municipal area and HIMUDA allotments are commonly treated differently, but confirm this for your specific property."
+              },
+              "unpermitted": {
+                "q": "What happens if I buy without the required permission?",
+                "a": "The sale deed cannot normally be registered, and a transaction structured to avoid the rule can be challenged and treated as void. Do not pay large sums before the permission position is clear."
+              },
+              "himuda": {
+                "q": "Why is HIMUDA often the simplest option?",
+                "a": "HIMUDA allotments are generally outside the Section 118 permission process, so buyers avoid the longest step. You still need to verify the allotment documents and pay the applicable duty."
+              },
+              "rera": {
+                "q": "Do I need to check RERA?",
+                "a": "If you are buying into a builder project, yes. Confirm that the project is registered with HP RERA and review its approvals and progress reports before paying."
+              },
+              "mutation": {
+                "q": "Why does mutation after registration matter?",
+                "a": "Registration creates the sale deed, but the revenue record changes only through mutation. Without it, the jamabandi keeps showing the old owner, which causes problems later when you sell, borrow against the land or pass it on."
+              }
+            }
+          },
+          "cta": {
+            "title": "Before you pay a token amount",
+            "body": "Pull a fresh nakal, locate the khasra on the village map, and ask a Himachal property lawyer to review the permission position and the chain of title."
+          }
+        }
+      },
+      "legalHeir": {
+        "title": "Legal heir certificate in Himachal Pradesh",
+        "body": "A legal heir certificate names the surviving heirs of a deceased owner. When land is inherited, check that every heir is listed and has agreed to the sale.",
+        "point1": "Check that every heir, including married daughters, is listed.",
+        "point2": "Look for written consent from each heir, with a guardian for any minor.",
+        "point3": "Match the deceased’s name and date of death to the jamabandi.",
+        "metaTitle": "Legal Heir Certificate in Himachal Pradesh: How to Apply and What Buyers Must Check",
+        "metaDescription": "How a legal heir certificate works in Himachal Pradesh: who issues it, how to apply online or offline, what it contains, common defects and what land buyers should verify.",
+        "page": {
+          "intro": "When a landowner dies without a registered will, the land passes to the legal heirs together. A legal heir certificate is the revenue document that records who those heirs are. It matters to a buyer because a sale of inherited land is only safe if every heir is accounted for.",
+          "sections": {
+            "what": {
+              "title": "What the certificate is",
+              "body": [
+                "It is issued by the Tehsildar or Naib Tehsildar of the Revenue Department after the Patwari checks the family details on the ground. It lists each heir with their relationship to the deceased, their age and their marital status.",
+                "It is used to update the jamabandi, to transfer inherited property, and to claim pensions, provident fund, bank balances and insurance. Where there is a valid will, the will governs, and the certificate is for cases without one."
+              ]
+            },
+            "quick": {
+              "title": "Quick facts",
+              "items": {
+                "issuer": "Issued by: the Tehsildar or Naib Tehsildar, after Patwari verification.",
+                "fee": "Fee: reported as a very small official fee of about ₹7, with duplicates from a Lok Mitra Kendra charged per page. Confirm the current fee on the portal.",
+                "time": "Time: usually a day or two once the application is complete, though it can take longer if the field inquiry is slow.",
+                "validity": "Validity: no expiry, but it reflects the family as it stood on the date of issue.",
+                "where": "Where to apply: the HP e-District portal, or a Sugam Centre or Lok Mitra Kendra."
+              }
             },
             "online": {
-              "q": "Is the online copy the same as a certified nakal?",
-              "a": "No. The online copy is useful for a first check. Only a certified nakal from the competent revenue office is valid for official use."
+              "title": "How to apply online",
+              "items": {
+                "a": "Register or log in on the HP e-District portal.",
+                "b": "Choose the Revenue Department and then the legal heirs certificate service.",
+                "c": "Enter the deceased’s name and date of death, then list every surviving heir: the spouse, all sons and daughters (married or not) and the parents if alive. Pay the fee online.",
+                "d": "Track the application. After the Patwari’s inquiry and the Tehsildar’s approval, download the digitally signed certificate."
+              },
+              "note": "Never leave out an heir to keep things simple. An incomplete list makes the certificate defective and open to challenge later."
             },
-            "name": {
-              "q": "The seller's name is spelled differently. Is that a problem?",
-              "a": "Minor spelling differences are common. Ask the Patwari to confirm the person is the same, and check the father's name and identity documents."
+            "offline": {
+              "title": "How to apply offline",
+              "items": {
+                "a": "Collect and fill in the application form at the Tehsildar’s office or a Sugam Centre, listing all surviving family members.",
+                "b": "Attach the death certificate, the applicant’s identity proof such as Aadhaar or voter ID, and any other document the office asks for.",
+                "c": "Submit the form at the counter and keep the reference number.",
+                "d": "Once the Patwari reports and the Tehsildar approves, collect the certificate. If it is lost, ask the nearest Lok Mitra Kendra for a duplicate, carrying the death certificate and your ID."
+              }
             },
-            "cultivator": {
-              "q": "What if the cultivator is not the owner?",
-              "a": "Ask who the cultivator is and on what terms. Possession by someone else can affect the sale, so get the facts in writing before you pay."
+            "contents": {
+              "title": "What to read on the certificate",
+              "items": {
+                "name": "Deceased’s name and date of death: they should match the death certificate and the name in the jamabandi.",
+                "heirs": "List of heirs: the spouse, children and, where applicable, parents should all appear. A missing heir is the most common source of later disputes.",
+                "relation": "Relationship: check that each relationship is recorded correctly and that no daughter has been left out.",
+                "age": "Age and marital status: shows whether any heir is a minor, which changes how the sale must be done.",
+                "authority": "Issuing authority: look for the officer’s signature, the official seal and an issue date. Online copies should be digitally signed."
+              }
+            },
+            "issues": {
+              "title": "Common problems",
+              "items": {
+                "a": "A married daughter is left out. Courts in Himachal have treated this as a defect, and an omitted daughter can challenge the sale.",
+                "b": "A minor heir has no guardian. A minor cannot consent, so the sale needs a court-appointed guardian and, where the law requires it, court permission.",
+                "c": "Only some heirs sign. A complete certificate does not help if the sale is signed by part of the family: the others keep their share and can seek partition.",
+                "d": "A thin family inquiry. Heirs who live away or abroad can be missed, and a later claimant can contest the certificate.",
+                "e": "The certificate is used where a court order is needed. It is a revenue document, not a court order. Lenders, high-value transfers and disputed estates may require a succession certificate from a civil court.",
+                "f": "An out-of-date certificate. If a listed heir has since died, that heir’s own heirs now have a share, and the old certificate no longer shows the full picture."
+              }
+            },
+            "buyers": {
+              "title": "Why it matters when you buy",
+              "body": [
+                "For inherited land, no single heir can sell the whole plot alone. The certificate shows who the owners are, and every one of them has to agree before the sale is safe. A buyer who registers a deed signed by fewer than all heirs risks a partition or cancellation suit, sometimes years later.",
+                "Banks look for the same three things: the certificate, consent from every heir, and proof that no minor is involved without a guardian. A file missing any of them usually stalls at the lender’s legal check."
+              ],
+              "note": "Red flag: a certificate that lists only sons, a seller who cannot produce written consent from the listed heirs, or one who discourages you from speaking to the rest of the family."
             }
+          },
+          "faq": {
+            "title": "Frequently asked questions",
+            "items": {
+              "when": {
+                "q": "When is a legal heir certificate needed?",
+                "a": "When land or other assets pass from a person who died without a registered will: for mutation, for selling inherited land, and for pension, bank and insurance claims."
+              },
+              "docs": {
+                "q": "What documents are needed to apply?",
+                "a": "The death certificate, identity proof of the applicant and a complete list of the surviving family members."
+              },
+              "daughter": {
+                "q": "Can a married daughter be left out?",
+                "a": "She should not be. Daughters are generally entitled heirs, and Himachal courts have treated their omission as a defect. A certificate that leaves out a living daughter is open to challenge."
+              },
+              "succession": {
+                "q": "Legal heir certificate or succession certificate?",
+                "a": "The legal heir certificate comes from the Tehsildar and suits routine mutation and transfers. A succession certificate comes from a civil court and may be needed for disputed estates, high-value transfers or where a lender or the Sub-Registrar asks for stronger proof."
+              },
+              "mandatory": {
+                "q": "Do I need one to sell inherited land?",
+                "a": "In practice, yes. A Sub-Registrar will usually ask for proof of who the heirs are, and all of them must consent. Without these, the deed may be refused or later challenged."
+              },
+              "validity": {
+                "q": "Does it expire?",
+                "a": "No, but it only reflects the family on the date of issue. If a listed heir has died since, a fresh or supplementary certificate may be needed."
+              }
+            }
+          },
+          "cta": {
+            "title": "Before you sign for inherited land",
+            "body": "Ask for the certificate, written consent from every heir and the death certificate of any heir who has died. Compare the names with a fresh jamabandi and have a lawyer review the chain."
           }
-        },
-        "cta": {
-          "title": "Check a jamabandi you already have",
-          "body": "Upload a jamabandi PDF to get a plain-language checklist of owners, shares, mutations and red flags."
         }
-      }
-    },
-
-    "beforeBuy": {
-      "title": "What to collect before paying",
-      "body": "The seller's copy is only the start. Build a dated file that ties the current revenue entry to registered transfers and dispute searches.",
-      "point1": "Current certified nakal and shajra.",
-      "point2": "Sale deeds, mutation orders and mortgage releases.",
-      "point3": "Court searches for every present and previous owner.",
-      "metaTitle": "Documents to Collect Before Buying Land in Himachal Pradesh: A Buyer's Checklist",
-      "metaDescription": "A stage-by-stage checklist for buying land in Himachal Pradesh: what to collect before token money, before the agreement, and before registration, and where to get each document.",
-      "page": {
-        "intro": "Most land disputes begin before the money is paid, when a buyer accepts a seller's photocopies. The aim of this checklist is to build one dated file that shows the land, the owner and the history behind both. Collect the documents in three stages, and stop at any stage where something does not match.",
-        "sections": {
-          "principle": {
-            "title": "The one rule: get everything from the source",
-            "body": [
-              "Ask for each document from the office that issues it, not from the seller. A seller's copy may be old, partial or altered. Date every document you collect, because a record that was correct six months ago may have changed."
-            ]
-          },
-          "stage1": {
-            "title": "Stage 1: Before you pay any token money",
-            "items": {
-              "a": "Current certified nakal of the jamabandi, from the Patwari or Tehsil office.",
-              "b": "Tatima or plot map showing the khasra and its neighbours.",
-              "c": "The seller's identity proof, to match against the owner and father's name in the record.",
-              "d": "Details of every co-owner and their shares.",
-              "e": "A first check of buyer eligibility, because Section 118 may restrict the transfer."
-            },
-            "note": "If any of these cannot be obtained, do not pay token money."
-          },
-          "stage2": {
-            "title": "Stage 2: Before you sign an agreement to sell",
-            "items": {
-              "a": "Every mutation order referred to in the jamabandi, with its status.",
-              "b": "The previous sale deeds, gift deeds or partition deeds that form the chain back to an earlier owner.",
-              "c": "Proof that any mortgage has been released, such as the lender's no-dues certificate and release deed.",
-              "d": "Court searches for the seller and each earlier owner on the eCourts portals.",
-              "e": "Land-use details and any construction or conversion approvals.",
-              "f": "Section 118 permission, where the buyer needs it, checked with the issuing authority."
-            }
-          },
-          "stage3": {
-            "title": "Stage 3: Before registration and final payment",
-            "items": {
-              "a": "A fresh nakal dated close to the registration date.",
-              "b": "Confirmation that no new mutation, mortgage or court order has appeared since stage 2.",
-              "c": "The circle rate for the property and an estimate of stamp duty and registration costs.",
-              "d": "A lawyer's review of the full file, including the draft sale deed.",
-              "e": "Payment made through traceable banking channels, with the amount stated in the deed."
-            }
-          },
-          "where": {
-            "title": "Where to get each document",
-            "items": {
-              "nakal": "Jamabandi, khatauni, khasra: HimBhoomi for a first view, then a certified nakal from the Patwari or Tehsil office.",
-              "map": "Tatima and plot map: BhuNaksha where available, otherwise the Patwari or Tehsil office.",
-              "mutation": "Mutation orders: the Patwari or Tehsil office that handled the mutation.",
-              "deeds": "Registered deeds: the Sub-Registrar office. Certified copies are better than photocopies.",
-              "court": "Court cases: the High Court and district eCourts portals, searching every present and previous owner.",
-              "section118": "Section 118 permission: the issuing authority, to confirm the order is genuine and covers this buyer, land and purpose."
-            }
-          },
-          "redflags": {
-            "title": "Stop and ask questions if you see these",
-            "items": {
-              "a": "The seller refuses to let you get a fresh certified copy.",
-              "b": "Only some co-owners are involved in the sale.",
-              "c": "The area or khasra in the offer differs from the record.",
-              "d": "A mortgage or court entry has no matching release or outcome.",
-              "e": "You are pressured to pay before the checks are done.",
-              "f": "The land is being sold through a power of attorney and you cannot reach the owner."
-            }
-          }
-        },
-        "faq": {
-          "title": "Frequently asked questions",
-          "items": {
-            "token": {
-              "q": "Is it safe to pay token money before checking the documents?",
-              "a": "It is safer to complete the stage 1 checks first. Token money paid on an unchecked plot is hard to recover if the checks fail."
-            },
-            "lawyer": {
-              "q": "When should I involve a lawyer?",
-              "a": "Before you sign an agreement to sell. A lawyer is most useful at stage 2, when the full chain of documents can be reviewed."
+      },
+      "forestLand": {
+        "title": "How to check for forest land in Himachal Pradesh",
+        "body": "About two-thirds of Himachal is recorded forest. Read the land type in the jamabandi, then confirm with the Forest Department before you rely on a seller’s word.",
+        "point1": "Read the land type in a fresh jamabandi.",
+        "point2": "Get written confirmation from the Range Forest Officer.",
+        "point3": "Check the distance from national parks and sanctuaries.",
+        "metaTitle": "Forest Land Check in Himachal Pradesh: How to Verify Before You Buy",
+        "metaDescription": "How to check whether a plot in Himachal Pradesh is forest land: jamabandi land type, Forest Department confirmation, eco-sensitive zones, common seller tricks and red flags.",
+        "page": {
+          "intro": "A forest land check tells you whether a plot is recorded forest, protected forest, or close enough to a protected area to face restrictions. In Himachal, where roughly 68% of the geographic area is recorded forest, this is one of the most important checks a buyer can make, because land you cannot lawfully own or build on has little value.",
+          "sections": {
+            "what": {
+              "title": "What the check covers",
+              "body": [
+                "Forest status is decided under the Indian Forest Act, 1927, the Forest (Conservation) Act, 1980 and the Wildlife (Protection) Act, 1972. The Revenue Department’s jamabandi shows the land type, while the Forest Department holds the forest and protected-area records.",
+                "Recorded forest is a legal classification. A plot can be recorded forest even if it has no dense tree cover, and it is the legal record that counts, not how the land looks."
+              ],
+              "note": "A khasra recorded as Van or any forest type in the current jamabandi cannot be privately bought or built on."
             },
             "online": {
-              "q": "Can I rely on online records alone?",
-              "a": "No. Online records are a good first check but may be delayed or incomplete. Get certified copies before you pay."
+              "title": "How to check online",
+              "items": {
+                "a": "On HimBhoomi, open the land records, choose the district, tehsil and village, enter the khasra number and read the land type. If it shows Van or any forest class, stop.",
+                "b": "On the Forest Department website, look at the notified areas and any forest clearance or diversion records for the village or khasra.",
+                "c": "Compare the district and village against the list of national parks, sanctuaries and eco-sensitive zones.",
+                "d": "Save the jamabandi and any references to take to your lawyer."
+              },
+              "note": "A plot outside a town planning area may not appear in planning records but can still overlap recorded forest. Run both checks separately."
             },
-            "poa": {
-              "q": "Can I buy through a power of attorney?",
-              "a": "This needs extra care. Confirm the power of attorney is genuine, still valid, and covers the sale, and take legal advice before proceeding."
+            "offline": {
+              "title": "How to check at the forest office",
+              "items": {
+                "a": "Find the Range Forest Officer for the tehsil. The department has offices across all districts.",
+                "b": "Submit the khasra number, village, tehsil and a copy of the jamabandi, and ask in writing whether the plot is recorded forest, protected forest or inside an eco-sensitive zone.",
+                "c": "Allow the Divisional or Range Forest Officer to check the forest maps and notified boundaries.",
+                "d": "Collect the confirmation in writing on official letterhead. A verbal assurance has no legal value."
+              },
+              "note": "Near a district boundary, ask both neighbouring divisions, because forest boundaries do not always follow tehsil lines."
             },
-            "time": {
-              "q": "How long do these checks take?",
-              "a": "It depends on the offices involved. Allow time for certified copies and court searches, and do not let a seller's deadline rush you."
+            "fields": {
+              "title": "What to look at",
+              "items": {
+                "khasra": "Khasra number: it must match the plot you are buying exactly.",
+                "landType": "Land type in the jamabandi: it should be private, agricultural or non-agricultural. Van or any forest class means do not proceed without proper legal verification.",
+                "recorded": "Recorded forest status: confirm with the Range Forest Officer whether the parcel sits inside a notified forest boundary.",
+                "protected": "Protected-area distance: check whether the plot lies within the eco-sensitive zone of a national park or sanctuary.",
+                "diversion": "Diversion status: if forest land was diverted for non-forest use, confirm the approval and its conditions.",
+                "authority": "Issuing officer and date: the confirmation should rely on current records and be signed and sealed by the competent authority."
+              }
+            },
+            "issues": {
+              "title": "Problems buyers run into",
+              "items": {
+                "a": "The jamabandi shows Van but the seller says it is private, pointing to old records. The current jamabandi governs, so pull it yourself from HimBhoomi.",
+                "b": "The plot partly overlaps forest. On steep terrain one khasra can straddle private and forest land. Ask the Range Forest Officer for a boundary overlay before agreeing on area or price.",
+                "c": "The eco-sensitive zone is not mentioned. Plots near national parks and sanctuaries can need wildlife board clearance before construction. Check the coordinates against the notified boundaries.",
+                "d": "Forest land is sold as agricultural. Revenue and forest records sometimes disagree, especially in older villages. Run both checks together.",
+                "e": "A clearance is described as in process. A pending diversion application is not an approval, and building before clearance can be an offence. Ask for the application number and track it on the PARIVESH portal.",
+                "f": "Forest rights claims. Unresolved claims under the Forest Rights Act, 2006 can block development even after purchase. Ask the Divisional Forest Officer whether any are pending on the parcel."
+              }
+            },
+            "why": {
+              "title": "Why this check matters",
+              "body": [
+                "Land recorded as forest cannot be the subject of a valid private sale. A deed registered on it is void, and any non-forest use or construction needs central clearance.",
+                "Even private land near a protected area can face permanent limits on construction. Banks also check forest classification and eco-sensitive proximity, and a plot with any forest class will fail technical sanction."
+              ],
+              "note": "Red flag: a seller who discourages you from visiting the forest office, says the jamabandi will be corrected after registration, or offers hillside land near forest at a price far below market."
             }
-          }
-        },
-        "cta": {
-          "title": "Start your file with the record",
-          "body": "Search the village, load the jamabandi and note the khasra, khewat and khatauni numbers you will need for every other document."
-        }
-      }
-    },
-
-    "section118": {
-      "title": "Section 118 in plain language",
-      "body": "Transfers of land to a person who is not an agriculturist of Himachal Pradesh may be restricted or require prior permission. Eligibility depends on the parties, the land and the transaction.",
-      "point1": "Confirm the buyer's legal status.",
-      "point2": "Check the recorded land classification.",
-      "point3": "Obtain local legal advice before signing or paying.",
-      "metaTitle": "Section 118 Himachal Pradesh Explained: Who Needs Permission to Buy Land",
-      "metaDescription": "A plain-language guide to Section 118 of the HP Tenancy and Land Reforms Act: who it affects, how permission works, what to check, and what to ask a lawyer.",
-      "page": {
-        "intro": "Section 118 of the H.P. Tenancy and Land Reforms Act, 1972 is the rule most buyers hear about first. It controls who may acquire land in Himachal Pradesh. This guide explains the idea in plain language. It is not a substitute for the Act or for legal advice, and the law can change.",
-        "sections": {
-          "what": {
-            "title": "What Section 118 does",
-            "body": [
-              "In simple terms, Section 118 restricts the transfer of land to people who are not agriculturists of Himachal Pradesh. A transfer can be a sale, gift, exchange, lease or mortgage with possession, among others. Unless an exception applies, a person who is not an agriculturist needs the permission of the State Government.",
-              "The section is about who may acquire the land. It is separate from questions about what the land may be used for, such as conversion or building permission. Both need to be checked."
-            ]
           },
-          "who": {
-            "title": "Who is affected",
-            "body": [
-              "An agriculturist, broadly, is a landowner who personally cultivates land in an estate in Himachal Pradesh. People who are not agriculturists in this sense need permission to acquire land, and that includes some people who were born in or live in Himachal. Being a Himachali is not the same as being an agriculturist under the Act.",
-              "Companies and other organisations are generally not agriculturists, so they also need permission. Check this carefully, because the position can depend on the structure and the exact wording of the Act."
-            ]
-          },
-          "permission": {
-            "title": "How permission works in outline",
+          "faq": {
+            "title": "Frequently asked questions",
             "items": {
-              "a": "The buyer applies to the State Government under the Act and the Himachal Pradesh Tenancy and Land Reforms Rules, using the prescribed form and giving the purpose of the purchase.",
-              "b": "The application is examined and an order granting or refusing permission is issued.",
-              "c": "If granted, the order is specific. It names the buyer, the land and the purpose, and may set conditions and time limits.",
-              "d": "The sale deed is executed and registered after permission, and the land is used for the stated purpose within the time allowed."
-            },
-            "note": "Details such as forms, fees and processing time are set by the rules and by the department, so confirm the current process with the Revenue Department."
-          },
-          "exceptions": {
-            "title": "Exceptions exist, but they are narrow",
-            "body": [
-              "The Act lists some categories of people and situations where permission is not needed, and some limited allowances, for example for small dwelling plots under conditions. These depend on the buyer's circumstances, such as what land or houses they already own in the State.",
-              "Do not assume that an exception applies. Ask a lawyer to confirm it against your facts."
-            ]
-          },
-          "check": {
-            "title": "What to check in a permission order",
-            "items": {
-              "a": "The buyer's name matches the person who will sign the deed.",
-              "b": "The khasra, village and area match the land being sold.",
-              "c": "The purpose matches your intended use.",
-              "d": "The order has not expired, and any deadline for using the land has not been missed.",
-              "e": "The order is genuine: confirm it with the issuing authority."
+              "what": {
+                "q": "What is a forest land check?",
+                "a": "It is a verification that a plot is not recorded forest, protected forest or inside a restricted zone. It combines the land type in the jamabandi with confirmation from the Forest Department."
+              },
+              "online": {
+                "q": "How do I check online?",
+                "a": "Look up the khasra on HimBhoomi and read the land type. Any forest entry means the land is off limits for private purchase. Then get written confirmation from the Range Forest Officer."
+              },
+              "buy": {
+                "q": "Can I buy forest land?",
+                "a": "No. Recorded, protected or reserved forest cannot be validly sold privately, and a deed on such land is void. Non-forest use also needs central clearance."
+              },
+              "mistake": {
+                "q": "What if I buy forest land by mistake?",
+                "a": "The sale is void under forest law, the authorities can take back the land, and structures on it can face demolition. Recourse is very limited once the deed is registered, so check first."
+              },
+              "near": {
+                "q": "Does living near a national park affect me?",
+                "a": "Yes. Plots inside the eco-sensitive zone, commonly up to 10 km from the boundary, may need wildlife board clearance before building. The exact extent is notified for each area, so check it for the park concerned."
+              },
+              "cover": {
+                "q": "What is the difference between recorded forest and forest cover?",
+                "a": "Recorded forest is the legal classification, whether or not trees grow there. Forest cover is land that actually has tree canopy. For a purchase, the legal record is what matters."
+              },
+              "proof": {
+                "q": "What proves that land is not forest?",
+                "a": "A current jamabandi showing a non-forest land type, plus written confirmation from the Range Forest Officer that the parcel is outside recorded forest and eco-sensitive boundaries."
+              }
             }
           },
-          "risk": {
-            "title": "Why shortcuts are risky",
-            "body": [
-              "A transfer made in breach of Section 118 can be challenged, and the Act contains consequences for contravention. Arrangements that try to get around the rules, such as using a local name to hold land for an outside buyer, have been questioned in public inquiries. Treat any offer to skip permission as a serious warning sign."
-            ]
-          },
-          "changes": {
-            "title": "The law is under discussion",
-            "body": [
-              "Amendments to Section 118 have been proposed, so the rules may change. Until a change is in force and published, the existing Act and rules apply. Check the current position with the Revenue Department or a lawyer before you act, and treat any summary, including this one, as a starting point."
-            ]
+          "cta": {
+            "title": "Before you commit",
+            "body": "Pull the latest jamabandi yourself, get written confirmation from the forest office, and keep both on file for your lawyer’s review."
           }
-        },
-        "faq": {
-          "title": "Frequently asked questions",
-          "items": {
-            "himachali": {
-              "q": "I am from Himachal. Do I still need permission?",
-              "a": "It depends on whether you are an agriculturist under the Act, not on where you were born. A Himachali who is not an agriculturist may still need permission."
-            },
-            "agricultural": {
-              "q": "Does Section 118 apply only to farmland?",
-              "a": "It is mostly discussed in connection with agricultural land, but the exact scope depends on the Act and how the land is classified. Ask a lawyer to confirm for your plot."
-            },
-            "inherit": {
-              "q": "What about land received by inheritance?",
-              "a": "Inheritance is treated differently from a purchase, but the details depend on the facts. Get legal advice for your case."
-            },
-            "company": {
-              "q": "Can a company buy land?",
-              "a": "A company is generally not an agriculturist and needs permission for the specific purpose. Seek legal advice on structure and purpose."
-            },
-            "check": {
-              "q": "How do I know a permission order is genuine?",
-              "a": "Confirm it directly with the issuing authority and compare its details with the sale documents."
-            },
-            "sell": {
-              "q": "Does the seller need permission too?",
-              "a": "The buyer is the one who usually needs it. A seller should still confirm that the buyer is eligible, because a defective transfer causes problems for both sides."
-            }
-          }
-        },
-        "cta": {
-          "title": "Check the land classification first",
-          "body": "The land type in the jamabandi is a good starting point for working out whether Section 118 is likely to matter."
         }
       }
     }
-  }
-},
+  },
   "Blog": {
     "eyebrow": "Land due-diligence library",
     "title": "Himachal land guides",
@@ -894,9 +1005,18 @@
       },
       "faq": {
         "title": "Search FAQ",
-        "a": { "q": "Why must I choose the village from the official directory?", "a": "HimBhoomi uses the official district, tehsil and village codes. Selecting a listed village helps match your request to the correct revenue records." },
-        "b": { "q": "What if I do not know the khasra number?", "a": "You can continue with the available record-number choices. If you know it, enter the khasra exactly as printed, including a slash such as 123/4." },
-        "c": { "q": "Why does the Jamabandi year list change by village?", "a": "Years are supplied by HimBhoomi for the selected village, so older or newer records may differ between villages." }
+        "a": {
+          "q": "Why must I choose the village from the official directory?",
+          "a": "HimBhoomi uses the official district, tehsil and village codes. Selecting a listed village helps match your request to the correct revenue records."
+        },
+        "b": {
+          "q": "What if I do not know the khasra number?",
+          "a": "You can continue with the available record-number choices. If you know it, enter the khasra exactly as printed, including a slash such as 123/4."
+        },
+        "c": {
+          "q": "Why does the Jamabandi year list change by village?",
+          "a": "Years are supplied by HimBhoomi for the selected village, so older or newer records may differ between villages."
+        }
       }
     },
     "card": {
@@ -937,7 +1057,11 @@
     "kanal": "kanal",
     "marla": "marla",
     "acre": "acre",
-    "sq_ft": "sq ft", "karam": "karam", "sq_karam": "sq karam", "biswansi": "biswansi", "ghumao": "ghumao"
+    "sq_ft": "sq ft",
+    "karam": "karam",
+    "sq_karam": "sq karam",
+    "biswansi": "biswansi",
+    "ghumao": "ghumao"
   },
   "About": {
     "title": "About HimLand Check",
@@ -1741,7 +1865,24 @@
     "exampleTitle": "Worked example",
     "exampleBody": "If a record states 2 kanal, convert it to 767.90169 sq m. If it states 3 biswa, the result is 121.3933056 sq m. These examples show arithmetic only; they do not decide which standard applies.",
     "faqTitle": "Frequently asked questions",
-    "faq": { "districts": { "q": "Does the converter choose a standard by district?", "a": "No. Local practice and records can differ, so the converter leaves the choice to you." }, "which": { "q": "Which unit should I select?", "a": "Use the unit printed in the jamabandi, tatima, sale deed or other official record." }, "records": { "q": "Why verify the result?", "a": "A calculator only applies supplied numbers. Confirm the unit and area with the Patwari, Tehsil or Revenue Department." }, "rounding": { "q": "Why can results differ slightly?", "a": "Documents may round karam or biswansi values. Use the official record as the controlling value." } }
+    "faq": {
+      "districts": {
+        "q": "Does the converter choose a standard by district?",
+        "a": "No. Local practice and records can differ, so the converter leaves the choice to you."
+      },
+      "which": {
+        "q": "Which unit should I select?",
+        "a": "Use the unit printed in the jamabandi, tatima, sale deed or other official record."
+      },
+      "records": {
+        "q": "Why verify the result?",
+        "a": "A calculator only applies supplied numbers. Confirm the unit and area with the Patwari, Tehsil or Revenue Department."
+      },
+      "rounding": {
+        "q": "Why can results differ slightly?",
+        "a": "Documents may round karam or biswansi values. Use the official record as the controlling value."
+      }
+    }
   },
   "NakalCheck": {
     "guide": {
