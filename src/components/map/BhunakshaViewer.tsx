@@ -170,7 +170,8 @@ useEffect(() => {
         const southWest = utm43ToLatLng(xmin, ymin);
         const northEast = utm43ToLatLng(xmax, ymax);
         const bounds: [[number, number], [number, number]] = [southWest, northEast];
-        if (satellite) {
+       if (satellite) {
+  const activeMap = map;
   let errorCount = 0;
   let switchedToFallback = false;
 
@@ -181,7 +182,7 @@ useEffect(() => {
       maxZoom: 21,
       attribution: 'Tiles &copy; Esri',
     },
-  ).addTo(map);
+  ).addTo(activeMap);
 
   primaryLayer.on('tileerror', () => {
     if (switchedToFallback) return;
@@ -189,8 +190,8 @@ useEffect(() => {
 
     if (errorCount >= 3) {
       switchedToFallback = true;
-      if (map.hasLayer(primaryLayer)) {
-        map.removeLayer(primaryLayer);
+      if (activeMap.hasLayer(primaryLayer)) {
+        activeMap.removeLayer(primaryLayer);
       }
       L.tileLayer(
         'https://bhuvan-ras2.nrsc.gov.in/tilecache/tilecache.py/1.0.0/bhuvan_imagery2/{z}/{x}/{y}.jpg',
@@ -198,7 +199,7 @@ useEffect(() => {
           maxZoom: 22,
           attribution: 'Satellite &copy; NRSC / Bhuvan',
         },
-      ).addTo(map);
+      ).addTo(activeMap);
     }
   });
 }
