@@ -261,26 +261,15 @@ useEffect(() => {
 
       {/* ── map canvas ──────────────────────────────────────────────── */}
       <div
-        ref={containerRef}
-        role="region"
-        aria-label="BhuNaksha village map"
-        className="w-full bg-white"
-        style={{
-          /*
-           * Normal: fixed heights matching the original component.
-           * Fullscreen: flex-grow fills the remaining height between
-           * the toolbar and the status bar.
-           */
-          height: isFullscreen ? undefined : undefined,
-          flex: isFullscreen ? '1 1 0' : undefined,
-          minHeight: isFullscreen ? 0 : undefined,
-        }}
-        /*
-         * Tailwind can't handle the conditional height cleanly across
-         * the fullscreen boundary, so we use inline style for height
-         * and keep the Tailwind class for the normal case via a wrapper.
-         */
-      />
+  ref={containerRef}
+  role="region"
+  aria-label="BhuNaksha village map"
+  className={
+    isFullscreen
+      ? 'w-full flex-1 min-h-0 bg-white'
+      : 'h-[420px] w-full bg-white sm:h-[480px]'
+  }
+/>
 
       {/* ── status bar ──────────────────────────────────────────────── */}
       {state !== 'ready' && (
