@@ -117,28 +117,27 @@ useEffect(() => {
   const el = containerRef.current;
   if (!el) return;
 
-  const syncMapSize = () => {
+  const refreshMap = () => {
     const map = mapRef.current;
-    if (!map) return;
-    if (el.clientWidth === 0 || el.clientHeight === 0) return;
-
+    if (!map || el.clientWidth === 0 || el.clientHeight === 0) return;
     map.invalidateSize({ animate: false });
     map.eachLayer((layer) => {
-      if ('redraw' in layer && typeof (layer as { redraw?: () => void }).redraw === 'function') {
-        (layer as { redraw: () => void }).redraw();
+      const candidate = layer as { redraw?: () => void };
+      if (typeof candidate.redraw === 'function') {
+        candidate.redraw();
       }
     });
   };
 
   const observer = new ResizeObserver(() => {
-    requestAnimationFrame(syncMapSize);
+    window.requestAnimationFrame(refreshMap);
   });
   observer.observe(el);
 
-  const id = window.setTimeout(syncMapSize, 150);
+  const timer = window.setTimeout(refreshMap, 150);
   return () => {
     observer.disconnect();
-    window.clearTimeout(id);
+    window.clearTimeout(timer);
   };
 }, [isFullscreen]);
 
