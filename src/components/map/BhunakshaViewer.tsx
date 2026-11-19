@@ -7,8 +7,8 @@ import { useEffect, useRef, useState } from 'react';
 type Props = { gisCode: string; plot: string; attribution?: string };
 type Extent = { xmin: number; ymin: number; xmax: number; ymax: number };
 type SelectedPlot = { minx: number; miny: number; maxx: number; maxy: number; id: string; kide: string };
-type WebkitEl  = HTMLElement  & { webkitRequestFullscreen?: () => Promise<void> | void };
-type WebkitDoc = Document     & { webkitExitFullscreen?: () => void; webkitFullscreenElement?: Element | null };
+type WebkitEl  = HTMLElement & { webkitRequestFullscreen?: () => Promise<void> | void };
+type WebkitDoc = Document   & { webkitExitFullscreen?: () => void; webkitFullscreenElement?: Element | null };
 
 function utm43ToLatLng(easting: number, northing: number): [number, number] {
   const a = 6378137; const eccSquared = 0.00669438; const k0 = 0.9996;
@@ -40,20 +40,19 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
   const wrapperRef   = useRef<HTMLDivElement>(null);
   const toolbarRef   = useRef<HTMLDivElement>(null);
   const statusRef    = useRef<HTMLDivElement>(null);
-  const mapRef       = useRef<import('leaflet').Map | null>(null);
-  const viewRef      = useRef<{ center: [number, number]; zoom: number } | null>(null);
+
+  // keep live Leaflet objects in refs — never in state
+  const mapRef        = useRef<import('leaflet').Map | null>(null);
+  const satLayerRef   = useRef<import('leaflet').Layer | null>(null);  // current satellite tile layer
+  const viewRef       = useRef<{ center: [number, number]; zoom: number } | null>(null);
+  const LRef          = useRef<typeof import('leaflet') | null>(null);
 
   const [state,        setState]        = useState<'loading' | 'ready' | 'error'>('loading');
   const [satellite,    setSatellite]    = useState(false);
   const [coordinates,  setCoordinates]  = useState('');
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  /* ─── measure wrapper and set an explicit pixel height on the canvas ─
-   *
-   * We NEVER change the canvas height via className or CSS transitions.
-   * We always write an explicit px value via element.style.height so
-   * Leaflet never sees a 0-height element during the transition.
-   * -------------------------------------------------------------------- */
+  /* ─── canvas sizing (never touches height via className) ─────────── */
   function setCanvasHeight() {
     const wrapper   = wrapperRef.current;
     const container = containerRef.current;
@@ -61,53 +60,41 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
     const status    = statusRef.current;
     if (!wrapper || !container) return;
 
-    const isFs = !!( document.fullscreenElement ?? (document as WebkitDoc).webkitFullscreenElement );
-
+    const isFs = !!(document.fullscreenElement ?? (document as WebkitDoc).webkitFullscreenElement);
     let height: number;
     if (isFs) {
-      // fill the whole screen minus the toolbar and optional status bar
       const toolbarH = toolbar?.offsetHeight ?? 48;
       const statusH  = status?.offsetHeight  ?? 0;
       height = window.innerHeight - toolbarH - statusH;
     } else {
-      // normal: match what the original component used (420 / 480 px breakpoint)
       height = window.innerWidth >= 640 ? 480 : 420;
     }
-
     container.style.height = `${height}px`;
 
-    // tell Leaflet about the new size after the DOM has painted
     window.requestAnimationFrame(() => {
-      const map = mapRef.current;
-      if (!map || container.clientHeight === 0) return;
-      map.invalidateSize({ animate: false });
+      mapRef.current?.invalidateSize({ animate: false });
     });
   }
 
-  /* ─── fullscreen API ───────────────────────────────────────────────── */
+  /* ─── fullscreen API ─────────────────────────────────────────────── */
   function enterFullscreen() {
     const el = wrapperRef.current as WebkitEl | null;
     if (!el) return;
-    if (el.requestFullscreen)        void el.requestFullscreen();
+    if (el.requestFullscreen)            void el.requestFullscreen();
     else if (el.webkitRequestFullscreen) void el.webkitRequestFullscreen();
   }
-
   function exitFullscreen() {
     const doc = document as WebkitDoc;
-    if (doc.exitFullscreen)          void doc.exitFullscreen();
-    else if (doc.webkitExitFullscreen) doc.webkitExitFullscreen();
+    if (doc.exitFullscreen)              void doc.exitFullscreen();
+    else if (doc.webkitExitFullscreen)   doc.webkitExitFullscreen();
   }
-
   function toggleFullscreen() { isFullscreen ? exitFullscreen() : enterFullscreen(); }
 
-  /* ─── sync isFullscreen state + immediately resize canvas ─────────── */
   useEffect(() => {
     function onFsChange() {
       const doc  = document as WebkitDoc;
       const fsEl = doc.fullscreenElement ?? doc.webkitFullscreenElement;
-      const entering = fsEl === wrapperRef.current;
-      setIsFullscreen(entering);
-      // run after the browser has finished painting the new viewport size
+      setIsFullscreen(fsEl === wrapperRef.current);
       window.requestAnimationFrame(() => window.requestAnimationFrame(setCanvasHeight));
     }
     document.addEventListener('fullscreenchange', onFsChange);
@@ -116,9 +103,9 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
       document.removeEventListener('fullscreenchange', onFsChange);
       document.removeEventListener('webkitfullscreenchange', onFsChange);
     };
-  }, []); // no deps — setCanvasHeight reads DOM, never stale
+  }, []);
 
-  /* ─── keyboard shortcut: F ─────────────────────────────────────────── */
+  /* ─── keyboard shortcut F ────────────────────────────────────────── */
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
       if (e.key !== 'f' && e.key !== 'F') return;
@@ -131,20 +118,62 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
     return () => document.removeEventListener('keydown', onKeyDown);
   }, [isFullscreen]);
 
-  /* ─── ResizeObserver on wrapper (handles page layout shifts too) ───── */
+  /* ─── ResizeObserver keeps canvas sized correctly ────────────────── */
   useEffect(() => {
     const wrapper = wrapperRef.current;
     if (!wrapper) return;
     const ro = new ResizeObserver(() => window.requestAnimationFrame(setCanvasHeight));
     ro.observe(wrapper);
-    setCanvasHeight(); // initial
+    setCanvasHeight();
     return () => ro.disconnect();
   }, []);
 
-  /* ─── map initialisation ────────────────────────────────────────────── */
+  /* ─── satellite toggle: imperatively add/remove layer, NO map rebuild */
+  useEffect(() => {
+    const map = mapRef.current;
+    const L   = LRef.current;
+    if (!map || !L) return; // map not ready yet — initial mount handled below
+
+    if (satellite) {
+      // remove any existing satellite layer first (defensive)
+      if (satLayerRef.current && map.hasLayer(satLayerRef.current)) {
+        map.removeLayer(satLayerRef.current);
+        satLayerRef.current = null;
+      }
+      let errorCount = 0;
+      let switchedToFallback = false;
+      const primary = L.tileLayer(
+        'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+        { maxNativeZoom: 18, maxZoom: 22, zIndex: 1 },
+      );
+      primary.on('tileerror', () => {
+        if (switchedToFallback) return;
+        errorCount += 1;
+        if (errorCount >= 3) {
+          switchedToFallback = true;
+          if (map.hasLayer(primary)) map.removeLayer(primary);
+          const fallback = L.tileLayer(
+            'https://bhuvan-ras2.nrsc.gov.in/tilecache/tilecache.py/1.0.0/bhuvan_imagery2/{z}/{x}/{y}.jpg',
+            { maxZoom: 22, zIndex: 1 },
+          );
+          fallback.addTo(map);
+          satLayerRef.current = fallback;
+        }
+      });
+      primary.addTo(map);
+      satLayerRef.current = primary;
+    } else {
+      // remove satellite layer, keep WMS layers untouched
+      if (satLayerRef.current && map.hasLayer(satLayerRef.current)) {
+        map.removeLayer(satLayerRef.current);
+        satLayerRef.current = null;
+      }
+    }
+  }, [satellite]);
+
+  /* ─── map init: runs once per gisCode+plot change ───────────────── */
   useEffect(() => {
     let cancelled = false;
-    let map: import('leaflet').Map | undefined;
 
     (async () => {
       try {
@@ -155,78 +184,56 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
         const data = await response.json() as {
           extent: Extent;
           selectedPlot?: SelectedPlot | null;
-          attribution?: string;
         };
 
         const mod = await import('leaflet');
         const L = ('default' in mod ? mod.default : mod) as typeof import('leaflet');
         if (cancelled || !containerRef.current) return;
 
+        // tear down any previous instance
+        if (mapRef.current) { mapRef.current.remove(); mapRef.current = null; }
+        satLayerRef.current = null;
+        LRef.current = L;
+
         let { xmin, ymin, xmax, ymax } = data.extent;
         if (data.selectedPlot) {
-          const plotWidth  = Math.max(1, data.selectedPlot.maxx - data.selectedPlot.minx);
-          const plotHeight = Math.max(1, data.selectedPlot.maxy - data.selectedPlot.miny);
-          const viewWidth  = Math.max(620, plotWidth  * 40);
-          const viewHeight = Math.max(485, plotHeight * 28);
-          const centerX    = (data.selectedPlot.minx + data.selectedPlot.maxx) / 2;
-          const centerY    = (data.selectedPlot.miny + data.selectedPlot.maxy) / 2;
-          xmin = centerX - viewWidth  / 2; xmax = centerX + viewWidth  / 2;
-          ymin = centerY - viewHeight / 2; ymax = centerY + viewHeight / 2;
+          const plotW  = Math.max(1, data.selectedPlot.maxx - data.selectedPlot.minx);
+          const plotH  = Math.max(1, data.selectedPlot.maxy - data.selectedPlot.miny);
+          const viewW  = Math.max(620, plotW * 40);
+          const viewH  = Math.max(485, plotH * 28);
+          const cx     = (data.selectedPlot.minx + data.selectedPlot.maxx) / 2;
+          const cy     = (data.selectedPlot.miny + data.selectedPlot.maxy) / 2;
+          xmin = cx - viewW / 2; xmax = cx + viewW / 2;
+          ymin = cy - viewH / 2; ymax = cy + viewH / 2;
         }
 
-        map = L.map(containerRef.current, { scrollWheelZoom: false, attributionControl: false });
+        const map = L.map(containerRef.current, { scrollWheelZoom: false, attributionControl: false });
         mapRef.current = map;
 
-        const southWest = utm43ToLatLng(xmin, ymin);
-        const northEast = utm43ToLatLng(xmax, ymax);
-        const bounds: [[number, number], [number, number]] = [southWest, northEast];
-
-        if (satellite) {
-          let errorCount = 0;
-          let switchedToFallback = false;
-          const primary = L.tileLayer(
-            'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-            { maxNativeZoom: 18, maxZoom: 21 },
-          ).addTo(map);
-          primary.on('tileerror', () => {
-            if (switchedToFallback) return;
-            errorCount += 1;
-            if (errorCount >= 3) {
-              switchedToFallback = true;
-              if (map && map.hasLayer(primary)) map.removeLayer(primary);
-              if (map) {
-                L.tileLayer(
-                  'https://bhuvan-ras2.nrsc.gov.in/tilecache/tilecache.py/1.0.0/bhuvan_imagery2/{z}/{x}/{y}.jpg',
-                  { maxZoom: 22 },
-                ).addTo(map);
-              }
-            }
-          });
-        }
+        const sw = utm43ToLatLng(xmin, ymin);
+        const ne = utm43ToLatLng(xmax, ymax);
 
         const createWmsGrid = (
-          style: string,
-          layerName: string,
-          extra: Record<string, string>,
-          opacity: number,
+          style: string, layerName: string,
+          extra: Record<string, string>, opacity: number,
         ) => {
           const Grid = L.GridLayer.extend({
             createTile(
               this: L.GridLayer & { _map: import('leaflet').Map },
               coords: { x: number; y: number; z: number },
-              done: (error?: Error | null, tile?: HTMLElement) => void,
+              done: (err?: Error | null, tile?: HTMLElement) => void,
             ) {
               const size = 282;
               const nw = this._map.unproject(L.point(coords.x * size,       coords.y * size),       coords.z);
               const se = this._map.unproject(L.point((coords.x + 1) * size, (coords.y + 1) * size), coords.z);
-              const [minx, maxy] = latLngToUtm43(nw.lat, nw.lng);
-              const [maxx, miny] = latLngToUtm43(se.lat, se.lng);
+              const [mnx, may] = latLngToUtm43(nw.lat, nw.lng);
+              const [mxx, mny] = latLngToUtm43(se.lat, se.lng);
               const params = new URLSearchParams({
                 REQUEST: 'GetMap', SERVICE: 'WMS', VERSION: '1.3.0',
                 FORMAT: 'image/png', STYLES: style, TRANSPARENT: 'TRUE',
                 LAYERS: layerName, CRS: 'EPSG:32643', FORMAT_OPTIONS: 'dpi:99',
                 WIDTH: String(size), HEIGHT: String(size),
-                BBOX: `${minx},${miny},${maxx},${maxy}`, ...extra,
+                BBOX: `${mnx},${mny},${mxx},${may}`, ...extra,
               });
               const tile = document.createElement('img');
               tile.alt = ''; tile.width = size; tile.height = size;
@@ -237,9 +244,10 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
             },
           });
           const C = Grid as unknown as new (o: L.GridLayerOptions) => L.GridLayer;
-          return new C({ tileSize: 282, opacity, updateWhenZooming: false, keepBuffer: 2 });
+          return new C({ tileSize: 282, opacity, updateWhenZooming: false, keepBuffer: 2, zIndex: 10 });
         };
 
+        // WMS layers always present — zIndex 10 so satellite (1) stays underneath
         createWmsGrid('VILLAGE_MAP', 'VILLAGE_MAP',
           { transparent: 'true', state: '', gis_code: gisCode, overlay_codes: '' }, 0.95).addTo(map);
         if (data.selectedPlot) {
@@ -249,16 +257,17 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
             { transparent: 'true', state: '', gis_code: gisCode, overlay_codes: '', plot_id: data.selectedPlot.id }, 1).addTo(map);
         }
 
+        // apply initial view
         if (viewRef.current) {
           map.setView(viewRef.current.center, viewRef.current.zoom, { animate: false });
         } else if (data.selectedPlot) {
-          const center = utm43ToLatLng(
+          const c = utm43ToLatLng(
             (data.selectedPlot.minx + data.selectedPlot.maxx) / 2,
             (data.selectedPlot.miny + data.selectedPlot.maxy) / 2,
           );
-          map.setView(center, 17, { animate: false });
+          map.setView(c, 17, { animate: false });
         } else {
-          map.fitBounds(bounds, { padding: [24, 24], maxZoom: 15 });
+          map.fitBounds([sw, ne], { padding: [24, 24], maxZoom: 15 });
         }
 
         map.on('moveend', () => {
@@ -266,8 +275,19 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
           const c = map.getCenter();
           viewRef.current = { center: [c.lat, c.lng], zoom: map.getZoom() };
         });
-        map.on('mousemove', (e) => setCoordinates(`${e.latlng.lat.toFixed(6)}, ${e.latlng.lng.toFixed(6)}`));
-        map.on('mouseout',  () => setCoordinates(''));
+        map.on('mousemove', (e) =>
+          setCoordinates(`${e.latlng.lat.toFixed(6)}, ${e.latlng.lng.toFixed(6)}`),
+        );
+        map.on('mouseout', () => setCoordinates(''));
+
+        // if satellite was already on when plot changed, re-add it now
+        if (satellite) {
+          const satL = L.tileLayer(
+            'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+            { maxNativeZoom: 18, maxZoom: 21, zIndex: 1 },
+          ).addTo(map);
+          satLayerRef.current = satL;
+        }
 
         setState('ready');
       } catch {
@@ -275,10 +295,16 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
       }
     })();
 
-    return () => { cancelled = true; map?.remove(); mapRef.current = null; };
-  }, [gisCode, plot, satellite]);
+    return () => {
+      cancelled = true;
+      // do NOT destroy the map here — only destroy when gisCode/plot changes
+      // (the next run handles teardown at the top of its async block)
+    };
+    // satellite intentionally NOT in deps — toggled imperatively above
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gisCode, plot]);
 
-  /* ─── render ─────────────────────────────────────────────────────────── */
+  /* ─── render ─────────────────────────────────────────────────────── */
   return (
     <div
       ref={wrapperRef}
@@ -322,17 +348,13 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
         </div>
       </div>
 
-      {/*
-       * Map canvas.
-       * height is ALWAYS set via element.style.height by setCanvasHeight().
-       * No className height classes — no transition flicker, no 0-height flash.
-       */}
+      {/* map canvas — height owned entirely by setCanvasHeight(), never by className */}
       <div
         ref={containerRef}
         role="region"
         aria-label="BhuNaksha village map"
         className="w-full bg-white"
-        style={{ height: '420px' /* overwritten immediately by setCanvasHeight */ }}
+        style={{ height: '420px' }}
       />
 
       {/* status bar */}
