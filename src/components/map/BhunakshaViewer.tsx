@@ -43,7 +43,7 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
 
   // keep live Leaflet objects in refs — never in state
   const mapRef        = useRef<import('leaflet').Map | null>(null);
-  const satLayerRef   = useRef<import('leaflet').Layer | null>(null);  // current satellite tile layer
+  const satLayerRef   = useRef<import('leaflet').Layer | null>(null);
   const viewRef       = useRef<{ center: [number, number]; zoom: number } | null>(null);
   const LRef          = useRef<typeof import('leaflet') | null>(null);
 
@@ -132,10 +132,9 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
   useEffect(() => {
     const map = mapRef.current;
     const L   = LRef.current;
-    if (!map || !L) return; // map not ready yet — initial mount handled below
+    if (!map || !L) return;
 
     if (satellite) {
-      // remove any existing satellite layer first (defensive)
       if (satLayerRef.current && map.hasLayer(satLayerRef.current)) {
         map.removeLayer(satLayerRef.current);
         satLayerRef.current = null;
@@ -163,7 +162,6 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
       primary.addTo(map);
       satLayerRef.current = primary;
     } else {
-      // remove satellite layer, keep WMS layers untouched
       if (satLayerRef.current && map.hasLayer(satLayerRef.current)) {
         map.removeLayer(satLayerRef.current);
         satLayerRef.current = null;
@@ -190,9 +188,11 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
         const L = ('default' in mod ? mod.default : mod) as typeof import('leaflet');
         if (cancelled || !containerRef.current) return;
 
-        // tear down any previous instance and clear the saved view so the
-        // new plot always opens at its own location, not the old pan/zoom
-        if (mapRef.current) { mapRef.current.remove(); mapRef.current = null; }
+        // tear down any previous instance
+        if (mapRef.current) {
+          mapRef.current.remove();
+          mapRef.current = null;
+        }
         satLayerRef.current = null;
         viewRef.current     = null;
         LRef.current        = L;
@@ -209,15 +209,34 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
           ymin = cy - viewH / 2; ymax = cy + viewH / 2;
         }
 
-        const map = L.map(containerRef.current, { scrollWheelZoom: false, attributionControl: true });
+        const map = L.map(containerRef.current, {
+          scrollWheelZoom: false,
+          attributionControl: true,
+        });
         mapRef.current = map;
+
+        // ── Create custom pane BEFORE adding any layer that uses it ──
+        // This is the critical fix for the _updateLevels / _isValidTile crashes.
+        const wmsPane = map.createPane('wmsPane');
+        wmsPane.style.zIndex = '450';
+        wmsPane.style.pointerEvents = 'none';
+
+        // Datum-shift correction applied on the pane itself (safe)
+        // BhuNaksha cadastral data was surveyed on Everest-1830.
+        // Approximate pixel offset at zoom 17 (~1.19 m/px at lat 32°):
+        const SHIFT_PX_X = -15; // negative = westward
+        const SHIFT_PX_Y = -21; // negative = southward
+        wmsPane.style.transform = `translate(${SHIFT_PX_X}px, ${SHIFT_PX_Y}px)`;
+        wmsPane.style.willChange = 'transform';
 
         const sw = utm43ToLatLng(xmin, ymin);
         const ne = utm43ToLatLng(xmax, ymax);
 
         const createWmsGrid = (
-          style: string, layerName: string,
-          extra: Record<string, string>, opacity: number,
+          style: string,
+          layerName: string,
+          extra: Record<string, string>,
+          opacity: number,
         ) => {
           const Grid = L.GridLayer.extend({
             createTile(
@@ -231,14 +250,24 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
               const [mnx, may] = latLngToUtm43(nw.lat, nw.lng);
               const [mxx, mny] = latLngToUtm43(se.lat, se.lng);
               const params = new URLSearchParams({
-                REQUEST: 'GetMap', SERVICE: 'WMS', VERSION: '1.3.0',
-                FORMAT: 'image/png', STYLES: style, TRANSPARENT: 'TRUE',
-                LAYERS: layerName, CRS: 'EPSG:32643', FORMAT_OPTIONS: 'dpi:99',
-                WIDTH: String(size), HEIGHT: String(size),
-                BBOX: `${mnx},${mny},${mxx},${may}`, ...extra,
+                REQUEST: 'GetMap',
+                SERVICE: 'WMS',
+                VERSION: '1.3.0',
+                FORMAT: 'image/png',
+                STYLES: style,
+                TRANSPARENT: 'TRUE',
+                LAYERS: layerName,
+                CRS: 'EPSG:32643',
+                FORMAT_OPTIONS: 'dpi:99',
+                WIDTH: String(size),
+                HEIGHT: String(size),
+                BBOX: `${mnx},${mny},${mxx},${may}`,
+                ...extra,
               });
               const tile = document.createElement('img');
-              tile.alt = ''; tile.width = size; tile.height = size;
+              tile.alt = '';
+              tile.width = size;
+              tile.height = size;
               tile.onload  = () => done(null, tile);
               tile.onerror = () => done(new Error('WMS tile failed'), tile);
               tile.src = `https://bhunakshahp.nic.in/bhunakshaserver/WMS/tile?${params}`;
@@ -246,33 +275,23 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
             },
           });
           const C = Grid as unknown as new (o: L.GridLayerOptions) => L.GridLayer;
-          return new C({ tileSize: 282, opacity, updateWhenZooming: false, keepBuffer: 2, pane: 'wmsPane' });
+          return new C({
+            tileSize: 282,
+            opacity,
+            updateWhenZooming: false,
+            keepBuffer: 2,
+            pane: 'wmsPane',          // pane now exists
+          });
         };
 
-        // Base map — roads, village names, place labels (zIndex 0, below everything)
+        // Base map — roads, village names, place labels
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
           maxZoom: 21,
           zIndex: 0,
           attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         }).addTo(map);
 
-        // ── Datum-shift correction ────────────────────────────────────────
-        // BhuNaksha cadastral data was surveyed on the Everest-1830 datum.
-        // The WMS reprojects mathematically but skips the datum shift, leaving
-        // the overlay ~20-25 m north and ~15-20 m east of true WGS84 position.
-        //
-        // Strategy: add all WMS layers normally, then after they are mounted
-        // find their container divs inside the overlayPane and move them into
-        // a new dedicated div that has a CSS translate applied to it.
-        // This shifts rendered pixels without touching any BBOX coordinates.
-        //
-        // Pixel offset at zoom 17 (1 px ≈ 1.19 m at lat 32°):
-        //   25 m south → ~21 px   |   18 m west → ~15 px
-        // Tune these two constants against your satellite imagery.
-        const SHIFT_PX_X = -15; // negative = move overlay westward
-        const SHIFT_PX_Y = -21; // negative = move overlay southward
-
-        // Add WMS layers the normal way (no custom pane)
+        // WMS layers (now safely attached to the custom pane)
         const wmsLayers = [
           createWmsGrid('VILLAGE_MAP', 'VILLAGE_MAP',
             { transparent: 'true', state: '', gis_code: gisCode, overlay_codes: '' }, 0.6),
@@ -285,31 +304,8 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
         ];
         wmsLayers.forEach((l) => l.addTo(map));
 
-        // After layers are added their container divs exist inside overlayPane.
-        // Wrap them all in a single shifted div.
-        const overlayPane = map.getPane('overlayPane');
-        if (overlayPane) {
-          const shiftDiv = document.createElement('div');
-          shiftDiv.style.cssText = `
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            transform: translate(${SHIFT_PX_X}px, ${SHIFT_PX_Y}px);
-            pointer-events: none;
-            will-change: transform;
-          `;
-          // Move each layer's container div into the shift wrapper
-          wmsLayers.forEach((layer) => {
-            const container = (layer as unknown as { _container?: HTMLElement })._container;
-            if (container && container.parentNode === overlayPane) {
-              shiftDiv.appendChild(container);
-            }
-          });
-          overlayPane.appendChild(shiftDiv);
-        }
-
-        // apply initial view
-        const savedView = viewRef.current as { center: [number, number]; zoom: number } | null;
+        // Initial view
+        const savedView = viewRef.current;
         if (savedView) {
           map.setView(savedView.center, savedView.zoom, { animate: false });
         } else if (data.selectedPlot) {
@@ -332,7 +328,7 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
         );
         map.on('mouseout', () => setCoordinates(''));
 
-        // if satellite was already on when plot changed, re-add it now
+        // Re-add satellite if it was already enabled
         if (satellite) {
           const satL = L.tileLayer(
             'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
@@ -349,10 +345,14 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
 
     return () => {
       cancelled = true;
-      // do NOT destroy the map here — only destroy when gisCode/plot changes
-      // (the next run handles teardown at the top of its async block)
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
+      }
+      satLayerRef.current = null;
+      viewRef.current = null;
+      LRef.current = null;
     };
-    // satellite intentionally NOT in deps — toggled imperatively above
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gisCode, plot]);
 
@@ -400,7 +400,7 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
         </div>
       </div>
 
-      {/* map canvas — height owned entirely by setCanvasHeight(), never by className */}
+      {/* map canvas */}
       <div
         ref={containerRef}
         role="region"
