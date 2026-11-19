@@ -7,13 +7,13 @@ import { pageMetadata } from '@/lib/seo';
 import { getStampDutyCopy } from '@/lib/stamp-duty-copy';
 
 const TOOLS = [
-  { key: 'verify', href: '/verify', icon: ShieldCheck },
+ { key: 'map', href: '/map', icon: Map },
   { key: 'search', href: '/search', icon: Search },
   { key: 'nakal', href: '/check', icon: FileSearch },
-  { key: 'map', href: '/map', icon: Map },
   { key: 'converter', href: '/converter', icon: Calculator },
   { key: 'stampDuty', href: '/stamp-duty-calculator', icon: Calculator },
   { key: 'circleRate', href: '/circle-rate', icon: Calculator },
+ { key: 'verify', href: '/verify', icon: ShieldCheck },
 ] as const;
 
 type Props = { params: Promise<{ locale: string }> };
