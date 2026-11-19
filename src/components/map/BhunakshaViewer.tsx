@@ -194,8 +194,10 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
           mapRef.current = null;
         }
         satLayerRef.current = null;
-        viewRef.current     = null;
-        LRef.current        = L;
+        // capture previous view BEFORE clearing the ref (avoids TS "never" error)
+        const savedView = viewRef.current;
+        viewRef.current = null;
+        LRef.current = L;
 
         let { xmin, ymin, xmax, ymax } = data.extent;
         if (data.selectedPlot) {
@@ -215,15 +217,13 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
         });
         mapRef.current = map;
 
-        // ── Create custom pane BEFORE adding any layer that uses it ──
-        // This is the critical fix for the _updateLevels / _isValidTile crashes.
+        // Create custom pane BEFORE adding any layer that uses it
+        // This fixes the _updateLevels / _isValidTile crashes
         const wmsPane = map.createPane('wmsPane');
         wmsPane.style.zIndex = '450';
         wmsPane.style.pointerEvents = 'none';
 
-        // Datum-shift correction applied on the pane itself (safe)
-        // BhuNaksha cadastral data was surveyed on Everest-1830.
-        // Approximate pixel offset at zoom 17 (~1.19 m/px at lat 32°):
+        // Datum-shift correction applied on the pane (safe)
         const SHIFT_PX_X = -15; // negative = westward
         const SHIFT_PX_Y = -21; // negative = southward
         wmsPane.style.transform = `translate(${SHIFT_PX_X}px, ${SHIFT_PX_Y}px)`;
@@ -280,7 +280,7 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
             opacity,
             updateWhenZooming: false,
             keepBuffer: 2,
-            pane: 'wmsPane',          // pane now exists
+            pane: 'wmsPane',
           });
         };
 
@@ -291,7 +291,7 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
           attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         }).addTo(map);
 
-        // WMS layers (now safely attached to the custom pane)
+        // WMS layers
         const wmsLayers = [
           createWmsGrid('VILLAGE_MAP', 'VILLAGE_MAP',
             { transparent: 'true', state: '', gis_code: gisCode, overlay_codes: '' }, 0.6),
@@ -305,7 +305,6 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
         wmsLayers.forEach((l) => l.addTo(map));
 
         // Initial view
-        const savedView = viewRef.current;
         if (savedView) {
           map.setView(savedView.center, savedView.zoom, { animate: false });
         } else if (data.selectedPlot) {
