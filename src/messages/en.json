@@ -289,7 +289,7 @@
     "items": {
       "verify": { "title": "Plot verification", "body": "Work through ownership, revenue entries and official court searches in a consistent order." },
       "search": { "title": "Land-record search", "body": "Find records by district, tehsil, village, khasra or owner name." },
-      "nakal": { "title": "Nakal checker", "body": "Upload a jamabandi PDF for an explainable, rule-based review." },
+      "nakal": { "title": "Jamabandi checker", "body": "Upload a jamabandi PDF for an explainable, rule-based review." },
       "map": { "title": "Plot map", "body": "See a plot’s outline on the BhuNaksha map using its khasra number." },
       "converter": { "title": "Himachal land converter", "body": "Convert kanal, marla, bigha, biswa, square metres and square feet using Himachal units." }
     }
@@ -1745,7 +1745,7 @@
   },
   "NakalCheck": {
     "guide": {
-      "title": "How the Nakal Checker works",
+      "title": "How the Jamabandi Checker works",
       "body": "Upload a Himachal Pradesh Jamabandi PDF to review the recorded owners and shares, mutation entries, case references and possible charges that the checker can read. Compare highlighted findings with the original record and verify current details with the relevant offices.",
       "faqTitle": "Frequently asked questions",
       "sample": "Illustrated sample report",
