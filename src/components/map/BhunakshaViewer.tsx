@@ -267,8 +267,9 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
         }
 
         // apply initial view
-        if (viewRef.current) {
-          map.setView(viewRef.current.center, viewRef.current.zoom, { animate: false });
+        const savedView = viewRef.current as { center: [number, number]; zoom: number } | null;
+        if (savedView) {
+          map.setView(savedView.center, savedView.zoom, { animate: false });
         } else if (data.selectedPlot) {
           const c = utm43ToLatLng(
             (data.selectedPlot.minx + data.selectedPlot.maxx) / 2,
