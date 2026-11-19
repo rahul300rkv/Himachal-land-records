@@ -33,7 +33,14 @@ function latLngToUtm43(lat: number, lon: number): [number, number] {
   const northing = k0 * (m + n * Math.tan(latRad) * (A ** 2 / 2 + (5 - t + 9 * c + 4 * c ** 2) * A ** 4 / 24 + (61 - 58 * t + t ** 2 + 600 * c - 330 * eccPrimeSquared) * A ** 6 / 720));
   return [easting, northing];
 }
+type WebkitFullscreenElement = HTMLElement & {
+  webkitRequestFullscreen?: () => Promise<void> | void;
+};
 
+type WebkitFullscreenDocument = Document & {
+  webkitExitFullscreen?: () => Promise<void> | void;
+  webkitFullscreenElement?: Element | null;
+};
 export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
   const containerRef  = useRef<HTMLDivElement>(null);
   const wrapperRef    = useRef<HTMLDivElement>(null);  // ← fullscreen target
@@ -46,52 +53,65 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   /* ── fullscreen helpers ──────────────────────────────────────────── */
-  function enterFullscreen() {
-    const el = wrapperRef.current;
-    if (!el) return;
-    if (el.requestFullscreen)                          el.requestFullscreen();
-    else if ((el as any).webkitRequestFullscreen)      (el as any).webkitRequestFullscreen();
+function enterFullscreen() {
+  const el = wrapperRef.current as WebkitFullscreenElement | null;
+  if (!el) return;
+  if (el.requestFullscreen) {
+    void el.requestFullscreen();
+  } else if (el.webkitRequestFullscreen) {
+    void el.webkitRequestFullscreen();
   }
+}
 
-  function exitFullscreen() {
-    if (document.exitFullscreen)                       document.exitFullscreen();
-    else if ((document as any).webkitExitFullscreen)   (document as any).webkitExitFullscreen();
+function exitFullscreen() {
+  const doc = document as WebkitFullscreenDocument;
+  if (doc.exitFullscreen) {
+    void doc.exitFullscreen();
+  } else if (doc.webkitExitFullscreen) {
+    void doc.webkitExitFullscreen();
   }
+}
 
-  function toggleFullscreen() {
-    isFullscreen ? exitFullscreen() : enterFullscreen();
+function toggleFullscreen() {
+  if (isFullscreen) {
+    exitFullscreen();
+  } else {
+    enterFullscreen();
   }
+}
 
-  /* ── sync React state with native fullscreen changes (Esc key etc.) */
-  useEffect(() => {
-    function onFsChange() {
-      const fsEl = document.fullscreenElement ?? (document as any).webkitFullscreenElement;
-      setIsFullscreen(fsEl === wrapperRef.current);
+/* ── sync React state with native fullscreen changes (Esc key etc.) */
+useEffect(() => {
+  function onFsChange() {
+    const doc = document as WebkitFullscreenDocument;
+    const fsEl = doc.fullscreenElement ?? doc.webkitFullscreenElement;
+    setIsFullscreen(fsEl === wrapperRef.current);
+  }
+  document.addEventListener('fullscreenchange', onFsChange);
+  document.addEventListener('webkitfullscreenchange', onFsChange);
+  return () => {
+    document.removeEventListener('fullscreenchange', onFsChange);
+    document.removeEventListener('webkitfullscreenchange', onFsChange);
+  };
+}, []);
+
+/* ── keyboard shortcut: F to toggle fullscreen ───────────────────── */
+useEffect(() => {
+  function onKeyDown(e: KeyboardEvent) {
+    if (e.key !== 'f' && e.key !== 'F') return;
+    const tag = (document.activeElement?.tagName ?? '').toLowerCase();
+    if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
+    if (!wrapperRef.current) return;
+    e.preventDefault();
+    if (isFullscreen) {
+      exitFullscreen();
+    } else {
+      enterFullscreen();
     }
-    document.addEventListener('fullscreenchange', onFsChange);
-    document.addEventListener('webkitfullscreenchange', onFsChange);
-    return () => {
-      document.removeEventListener('fullscreenchange', onFsChange);
-      document.removeEventListener('webkitfullscreenchange', onFsChange);
-    };
-  }, []);
-
-  /* ── keyboard shortcut: F to toggle fullscreen ───────────────────── */
-  useEffect(() => {
-    function onKeyDown(e: KeyboardEvent) {
-      // only fire when the map wrapper (or something inside it) has focus
-      // or when the key is F and the active element isn't an input/textarea
-      if (e.key !== 'f' && e.key !== 'F') return;
-      const tag = (document.activeElement?.tagName ?? '').toLowerCase();
-      if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
-      if (!wrapperRef.current) return;
-      e.preventDefault();
-      toggleFullscreen();
-    }
-    document.addEventListener('keydown', onKeyDown);
-    return () => document.removeEventListener('keydown', onKeyDown);
-  }, [isFullscreen]); // re-bind when isFullscreen flips so toggleFullscreen closes over fresh value
-
+  }
+  document.addEventListener('keydown', onKeyDown);
+  return () => document.removeEventListener('keydown', onKeyDown);
+}, [isFullscreen]);
   /* ── invalidate Leaflet size after fullscreen transition ─────────── */
   useEffect(() => {
     // give the browser a frame to repaint the new dimensions
