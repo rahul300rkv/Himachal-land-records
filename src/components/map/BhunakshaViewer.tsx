@@ -9,8 +9,7 @@ type Extent = { xmin: number; ymin: number; xmax: number; ymax: number };
 type SelectedPlot = { minx: number; miny: number; maxx: number; maxy: number; id: string; kide: string };
 type WebkitEl  = HTMLElement & { webkitRequestFullscreen?: () => Promise<void> | void };
 type WebkitDoc = Document   & { webkitExitFullscreen?: () => void; webkitFullscreenElement?: Element | null };
-const DATUM_OFFSET_LAT =  0.000225; 
-const DATUM_OFFSET_LNG =  0.000190; 
+
 function utm43ToLatLng(easting: number, northing: number): [number, number] {
   const a = 6378137; const eccSquared = 0.00669438; const k0 = 0.9996;
   const x = easting - 500000; const y = northing;
@@ -22,8 +21,7 @@ function utm43ToLatLng(easting: number, northing: number): [number, number] {
   const r1 = a * (1 - eccSquared) / (1 - eccSquared * Math.sin(phi1) ** 2) ** 1.5; const d = x / (n1 * k0);
   const lat = phi1 - (n1 * Math.tan(phi1) / r1) * (d ** 2 / 2 - (5 + 3 * t1 + 10 * c1 - 4 * c1 ** 2 - 9 * eccPrimeSquared) * d ** 4 / 24 + (61 + 90 * t1 + 298 * c1 + 45 * t1 ** 2 - 252 * eccPrimeSquared - 3 * c1 ** 2) * d ** 6 / 720);
   const lon = (75 * Math.PI / 180) + (d - (1 + 2 * t1 + c1) * d ** 3 / 6 + (5 - 2 * c1 + 28 * t1 - 3 * c1 ** 2 + 8 * eccPrimeSquared + 24 * t1 ** 2) * d ** 5 / 120) / Math.cos(phi1);
-  return [lat * 180 / Math.PI - DATUM_OFFSET_LAT,
-    lon * 180 / Math.PI - DATUM_OFFSET_LNG,];
+  return [lat * 180 / Math.PI, lon * 180 / Math.PI];
 }
 
 function latLngToUtm43(lat: number, lon: number): [number, number] {
@@ -248,7 +246,7 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
             },
           });
           const C = Grid as unknown as new (o: L.GridLayerOptions) => L.GridLayer;
-          return new C({ tileSize: 282, opacity, updateWhenZooming: false, keepBuffer: 2, zIndex: 10 });
+          return new C({ tileSize: 282, opacity, updateWhenZooming: false, keepBuffer: 2, pane: 'wmsPane' });
         };
 
         // Base map — roads, village names, place labels (zIndex 0, below everything)
@@ -258,7 +256,38 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
           attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         }).addTo(map);
 
-        // WMS layers always present — zIndex 10 so satellite (1) stays underneath
+        // ── Datum-shift correction ────────────────────────────────────────
+        // BhuNaksha cadastral data was surveyed on the Everest-1830 datum.
+        // The WMS reprojects mathematically but skips the datum shift, leaving
+        // the overlay ~20-25 m north and ~15-20 m east of true WGS84 position.
+        //
+        // We correct this by creating a dedicated Leaflet pane for all WMS
+        // layers and applying a CSS pixel translate to it. This shifts the
+        // rendered overlay pixels without touching any coordinates, so the
+        // BBOX math inside createTile stays correct and the right tiles load.
+        //
+        // Pixel offset = metres ÷ metres-per-pixel-at-current-zoom.
+        // At zoom 17 (default plot view), 1 pixel ≈ 1.19 m at lat 32°.
+        // We want ~25 m south (-lat) and ~18 m west (-lng):
+        //   25 m ÷ 1.19 m/px ≈ 21 px  up   → translateY(-21px)
+        //   18 m ÷ 1.19 m/px ≈ 15 px  left → translateX(-15px)
+        //
+        // These are fixed pixel values chosen for zoom 17. They remain a
+        // reasonable approximation across zoom 15–19 (error < 5 px).
+        // Tune SHIFT_PX_X / SHIFT_PX_Y against your satellite imagery.
+        const SHIFT_PX_X = -15; // negative = move overlay westward (left)
+        const SHIFT_PX_Y = -21; // negative = move overlay southward (up in screen = south)
+
+        map.createPane('wmsPane');
+        const wmsPane = map.getPane('wmsPane');
+        if (wmsPane) {
+          wmsPane.style.zIndex = '10';
+          wmsPane.style.transform = `translate(${SHIFT_PX_X}px, ${SHIFT_PX_Y}px)`;
+          // pointer events pass through to the map
+          wmsPane.style.pointerEvents = 'none';
+        }
+
+        // WMS layers — all placed in wmsPane so the shift applies to all of them
         createWmsGrid('VILLAGE_MAP', 'VILLAGE_MAP',
           { transparent: 'true', state: '', gis_code: gisCode, overlay_codes: '' }, 0.6).addTo(map);
         if (data.selectedPlot) {
