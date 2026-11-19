@@ -272,9 +272,9 @@ export default async function GuidesPage({
 
         {GUIDES.map(({ key, icon: Icon }, index) => {
 
-          const guide = t.raw(
-            `items.${key}`,
-          ) as GuideContent;
+          const guide = (t.raw as (key: string) => unknown)(
+  `items.${key}`,
+) as GuideContent;
 
           return (
             <section
