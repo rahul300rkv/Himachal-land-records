@@ -55,7 +55,7 @@ export const BLOG_GUIDES: BlogGuide[] = [
     ],
     takeaway: { en: 'Treat Section 118 as a transaction-specific legal gateway, not a checkbox. Establish the buyer’s status, classify the transfer, verify the precise land and purpose, protect payments with conditions, authenticate the final order and complete the rest of the title investigation. Because amendments and instructions can change, rely on the current official text and transaction-specific legal advice at the time of purchase.', hi: 'धारा 118 को सामान्य चेकबॉक्स नहीं बल्कि विशेष लेन-देन की कानूनी शर्त मानें। खरीदार की स्थिति, हस्तांतरण, भूमि और उद्देश्य तय करें; भुगतान सुरक्षित रखें; अंतिम आदेश सत्यापित करें और बाकी टाइटल जाँच पूरी करें। खरीद के समय वर्तमान कानून और विशेष कानूनी सलाह लें।' },
     sources: [
-      { label: 'H.P. Tenancy and Land Reforms Act, 1972', url: 'https://himachal.nic.in/WriteReadData/l892s/10_l892s/THE%20HIMACHAL%20PRADESH%20TENANCY%20AND%20LAND%20REFORMS%20ACT%2C%201972%20-72222668.pdf' },
+      { label: 'H.P. Tenancy and Land Reforms Act, 1972', url: 'https://emerginghimachal.hp.gov.in/themes/backend/uploads/landreformAct1972.pdf' },
       { label: 'Government Section 118 compendium', url: 'https://himachal.nic.in/WriteReadData/l892s/13_l892s/3618435Section118-Compendium.pdf' },
     ],
   },
