@@ -74,7 +74,7 @@ function renderSectionContent(language: 'en' | 'hi', section: {
     href={section.link.href}
     target="_blank"
     rel="noopener noreferrer"
-    className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+    className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
   >
     {section.link.label[language]} →
   </a>
