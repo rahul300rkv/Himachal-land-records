@@ -25,7 +25,6 @@ export type BlogGuide = {
   takeaway: Localized;
   sources: Array<{ label: string; url: string }>;
 };
-
 export const BLOG_GUIDES: BlogGuide[] = [
   {
     slug: 'how-to-read-jamabandi-khewat-khatauni-khasra',
