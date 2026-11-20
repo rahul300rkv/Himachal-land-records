@@ -5,7 +5,7 @@ export function absoluteUrl(locale: string, path: string) {
   return `${SITE_URL}/${locale}${path === '/' ? '' : path}`;
 }
 
-export function JsonLd({ data }: { data: Record<string, unknown> }) {
+export function JsonLd({ data }: { data: Record<string, unknown> | Record<string, unknown>[] }) {
   // Escape "<" so the JSON can never close the script tag early.
   const json = JSON.stringify(data).replace(/</g, '\\u003c');
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: json }} />;
