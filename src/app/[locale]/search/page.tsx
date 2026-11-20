@@ -5,6 +5,8 @@ import { Filters } from '@/components/search/Filters';
 import { Pagination } from '@/components/search/Pagination';
 import { ResultCard } from '@/components/search/ResultCard';
 import { SaveSearchButton } from '@/components/search/SaveSearchButton';
+import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
+import { RelatedTools } from '@/components/seo/RelatedTools';
 import { SearchForm } from '@/components/search/SearchForm';
 import { districtLabel, tehsilLabel } from '@/lib/data/districts';
 import { getCurrentUser } from '@/lib/auth';
@@ -90,6 +92,7 @@ export default async function SearchPage({ params, searchParams }: Props) {
 
   return (
     <div className="container py-10 sm:py-14">
+      <Breadcrumbs current="search" className="mb-6" />
       <header className="max-w-2xl">
         <h1 className="text-3xl sm:text-4xl">{t('title')}</h1>
         <p className="mt-3 text-lg text-muted-foreground">{t('subtitle')}</p>
@@ -206,6 +209,7 @@ export default async function SearchPage({ params, searchParams }: Props) {
           </>
         )}
       </section>
+      <RelatedTools current="search" />
     </div>
   );
 }
