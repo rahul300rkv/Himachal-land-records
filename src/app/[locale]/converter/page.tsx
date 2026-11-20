@@ -3,6 +3,8 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { Locale } from '@/i18n/routing';
 import { pageMetadata } from '@/lib/seo';
 import { LandConverter } from '@/components/tools/LandConverter';
+import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
+import { RelatedTools } from '@/components/seo/RelatedTools';
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -19,6 +21,7 @@ export default async function ConverterPage({ params }: Props) {
 
   return (
     <article className="container max-w-5xl py-10 sm:py-16">
+      <Breadcrumbs current="converter" className="mb-6" />
       <header className="mx-auto mb-10 max-w-3xl text-center">
         <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-primary">HimLand Check · Field guide</p>
         <h1 className="text-4xl leading-tight sm:text-6xl">{t('title')}</h1>
@@ -38,6 +41,7 @@ export default async function ConverterPage({ params }: Props) {
         <div className="rounded-xl bg-primary p-6 text-primary-foreground sm:p-8"><h2 className="text-2xl">{t('exampleTitle')}</h2><p className="mt-3 leading-7 opacity-90">{t('exampleBody')}</p></div>
         <div><h2 className="text-3xl sm:text-4xl">{t('faqTitle')}</h2><dl className="mt-5 divide-y divide-border rounded-xl border border-border">{(['districts', 'which', 'records', 'rounding'] as const).map((key) => <div className="p-5 sm:p-6" key={key}><dt className="text-lg font-medium">{t(`faq.${key}.q`)}</dt><dd className="mt-2 text-muted-foreground">{t(`faq.${key}.a`)}</dd></div>)}</dl></div>
       </section>
+      <RelatedTools current="converter" />
     </article>
   );
 }

@@ -1884,6 +1884,49 @@
       }
     }
   },
+"Seo": {
+    "breadcrumb": {
+      "label": "Breadcrumb",
+      "home": "Home",
+      "tools": "Tools"
+    },
+    "related": {
+      "title": "Related land-record tools",
+      "intro": "Most land checks take more than one step. These tools work well alongside this one.",
+      "all": "See all Himachal land-record tools"
+    },
+    "tools": {
+      "search": {
+        "name": "Jamabandi search",
+        "hint": "Load a village's jamabandi from HimBhoomi and open it by khewat, khatauni or khasra number."
+      },
+      "map": {
+        "name": "Plot map",
+        "hint": "See a plot's outline on the BhuNaksha map and match it to the khasra number in the record."
+      },
+      "nakal": {
+        "name": "Nakal checker",
+        "hint": "Upload a jamabandi PDF for a plain-language checklist of owners, shares, mutations and red flags."
+      },
+      "converter": {
+        "name": "Land converter",
+        "hint": "Convert kanal, marla, bigha and biswa to square metres and square feet."
+      },
+      "stampDuty": {
+        "name": "Stamp duty calculator",
+        "hint": "Estimate the stamp duty payable on a Himachal property transfer."
+      },
+      "circleRate": {
+        "name": "Circle rates",
+        "hint": "Find and download circle-rate notices by district and sub-registrar office."
+      },
+      "verify": {
+        "name": "Verification checklist",
+        "hint": "Work through the pre-purchase checks and see where to confirm each one."
+      }
+    }
+  }
+
   "NakalCheck": {
     "guide": {
       "title": "How the Jamabandi Checker works",

@@ -5,6 +5,8 @@ import type { Locale } from '@/i18n/routing';
 import { pageMetadata } from '@/lib/seo';
 import { NakalChecker } from '@/components/nakal/NakalChecker';
 import { DisclaimerPanel } from '@/components/layout/DisclaimerPanel';
+import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
+import { RelatedTools } from '@/components/seo/RelatedTools';
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -21,6 +23,7 @@ export default async function CheckPage({ params }: Props) {
 
   return (
     <article className="container max-w-2xl space-y-6 py-8 sm:py-12">
+      <Breadcrumbs current="nakal" />
       <header>
         <h1 className="text-3xl leading-tight sm:text-4xl">{t('title')}</h1>
         <p className="mt-2 text-sm text-muted-foreground">{t('intro')}</p>
@@ -51,6 +54,7 @@ export default async function CheckPage({ params }: Props) {
           ))}
         </div>
       </section>
+      <RelatedTools current="nakal" />
       <DisclaimerPanel />
     </article>
   );

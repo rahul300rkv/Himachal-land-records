@@ -1,0 +1,389 @@
+diff --git a/src/app/[locale]/check/page.tsx b/src/app/[locale]/check/page.tsx
+index 38c5d26..bf7137f 100644
+--- a/src/app/[locale]/check/page.tsx
++++ b/src/app/[locale]/check/page.tsx
+@@ -5,6 +5,8 @@ import type { Locale } from '@/i18n/routing';
+ import { pageMetadata } from '@/lib/seo';
+ import { NakalChecker } from '@/components/nakal/NakalChecker';
+ import { DisclaimerPanel } from '@/components/layout/DisclaimerPanel';
++import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
++import { RelatedTools } from '@/components/seo/RelatedTools';
+ 
+ type Props = { params: Promise<{ locale: string }> };
+ 
+@@ -21,6 +23,7 @@ export default async function CheckPage({ params }: Props) {
+ 
+   return (
+     <article className="container max-w-2xl space-y-6 py-8 sm:py-12">
++      <Breadcrumbs current="nakal" />
+       <header>
+         <h1 className="text-3xl leading-tight sm:text-4xl">{t('title')}</h1>
+         <p className="mt-2 text-sm text-muted-foreground">{t('intro')}</p>
+@@ -51,6 +54,7 @@ export default async function CheckPage({ params }: Props) {
+           ))}
+         </div>
+       </section>
++      <RelatedTools current="nakal" />
+       <DisclaimerPanel />
+     </article>
+   );
+diff --git a/src/app/[locale]/circle-rate/page.tsx b/src/app/[locale]/circle-rate/page.tsx
+index 4fc365f..ecb10ea 100644
+--- a/src/app/[locale]/circle-rate/page.tsx
++++ b/src/app/[locale]/circle-rate/page.tsx
+@@ -5,6 +5,8 @@ import type { Locale } from '@/i18n/routing';
+ import { pageMetadata } from '@/lib/seo';
+ import { meghDistricts } from '@/lib/megh-circle-rates';
+ import { districtLabel } from '@/lib/data/districts';
++import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
++import { RelatedTools } from '@/components/seo/RelatedTools';
+ 
+ const topics = ['lookup', 'meaning', 'variation', 'date', 'unit', 'valuation', 'missing'] as const;
+ const lookupKeys = ['district', 'office', 'choose', 'submit', 'loading', 'failed', 'empty', 'file', 'uploaded', 'download'] as const;
+@@ -23,6 +25,7 @@ export default async function CircleRatePage({ params }: Props) {
+ 
+   return (
+     <article className="container max-w-6xl py-10 sm:py-14">
++      <Breadcrumbs current="circleRate" className="mb-6" />
+       <header className="max-w-3xl">
+         <h1 className="text-4xl sm:text-5xl">{t('title')}</h1>
+         <p className="mt-4 text-lg text-muted-foreground">{t('intro')}</p>
+@@ -70,6 +73,7 @@ export default async function CircleRatePage({ params }: Props) {
+           ))}
+         </div>
+       </section>
++      <RelatedTools current="circleRate" />
+     </article>
+   );
+ }
+diff --git a/src/app/[locale]/converter/page.tsx b/src/app/[locale]/converter/page.tsx
+index ef4b7ad..b7f2875 100644
+--- a/src/app/[locale]/converter/page.tsx
++++ b/src/app/[locale]/converter/page.tsx
+@@ -3,6 +3,8 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
+ import type { Locale } from '@/i18n/routing';
+ import { pageMetadata } from '@/lib/seo';
+ import { LandConverter } from '@/components/tools/LandConverter';
++import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
++import { RelatedTools } from '@/components/seo/RelatedTools';
+ 
+ type Props = { params: Promise<{ locale: string }> };
+ 
+@@ -19,6 +21,7 @@ export default async function ConverterPage({ params }: Props) {
+ 
+   return (
+     <article className="container max-w-5xl py-10 sm:py-16">
++      <Breadcrumbs current="converter" className="mb-6" />
+       <header className="mx-auto mb-10 max-w-3xl text-center">
+         <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-primary">HimLand Check · Field guide</p>
+         <h1 className="text-4xl leading-tight sm:text-6xl">{t('title')}</h1>
+@@ -38,6 +41,7 @@ export default async function ConverterPage({ params }: Props) {
+         <div className="rounded-xl bg-primary p-6 text-primary-foreground sm:p-8"><h2 className="text-2xl">{t('exampleTitle')}</h2><p className="mt-3 leading-7 opacity-90">{t('exampleBody')}</p></div>
+         <div><h2 className="text-3xl sm:text-4xl">{t('faqTitle')}</h2><dl className="mt-5 divide-y divide-border rounded-xl border border-border">{(['districts', 'which', 'records', 'rounding'] as const).map((key) => <div className="p-5 sm:p-6" key={key}><dt className="text-lg font-medium">{t(`faq.${key}.q`)}</dt><dd className="mt-2 text-muted-foreground">{t(`faq.${key}.a`)}</dd></div>)}</dl></div>
+       </section>
++      <RelatedTools current="converter" />
+     </article>
+   );
+ }
+diff --git a/src/app/[locale]/map/page.tsx b/src/app/[locale]/map/page.tsx
+index 55209c4..e8f2996 100644
+--- a/src/app/[locale]/map/page.tsx
++++ b/src/app/[locale]/map/page.tsx
+@@ -1,6 +1,8 @@
+ import type { Metadata } from 'next';
+ import { getTranslations, setRequestLocale } from 'next-intl/server';
+ import { PlotMapLookup } from '@/components/map/PlotMapLookup';
++import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
++import { RelatedTools } from '@/components/seo/RelatedTools';
+ import type { Locale } from '@/i18n/routing';
+ import { pageMetadata } from '@/lib/seo';
+ 
+@@ -20,6 +22,7 @@ export default async function MapPage({ params }: Props) {
+   const t = await getTranslations('MapExplorer');
+   return (
+     <article className="container max-w-6xl py-10 sm:py-14">
++      <Breadcrumbs current="map" className="mb-6" />
+       <header className="max-w-3xl">
+         <p className="text-sm font-semibold uppercase tracking-[0.18em] text-leaf">{t('eyebrow')}</p>
+         <h1 className="mt-3 text-4xl sm:text-5xl">{t('title')}</h1>
+@@ -62,6 +65,7 @@ export default async function MapPage({ params }: Props) {
+         </div>
+       </section>
+       <p className="mt-5 rounded-xl border border-notice-border bg-notice px-4 py-3 text-sm text-notice-foreground">{t('notice')}</p>
++      <RelatedTools current="map" />
+     </article>
+   );
+ }
+diff --git a/src/app/[locale]/stamp-duty-calculator/page.tsx b/src/app/[locale]/stamp-duty-calculator/page.tsx
+index d7e5a8e..2954bec 100644
+--- a/src/app/[locale]/stamp-duty-calculator/page.tsx
++++ b/src/app/[locale]/stamp-duty-calculator/page.tsx
+@@ -1,5 +1,7 @@
+ import { setRequestLocale } from 'next-intl/server';
+ import { StampDutyCalculator } from '@/components/tools/StampDutyCalculator';
++import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
++import { RelatedTools } from '@/components/seo/RelatedTools';
+ import type { Locale } from '@/i18n/routing';
+ import { pageMetadata } from '@/lib/seo';
+ import { getStampDutyCopy } from '@/lib/stamp-duty-copy';
+@@ -19,6 +21,7 @@ export default async function StampDutyPage({ params }: Props) {
+   const copy = getStampDutyCopy(locale);
+   return (
+     <article className="container max-w-6xl py-10 sm:py-14">
++      <Breadcrumbs current="stampDuty" className="mb-6" />
+       <header className="max-w-3xl">
+         <h1 className="text-4xl sm:text-5xl">{copy.title}</h1>
+         <p className="mt-4 text-lg text-muted-foreground">{copy.intro}</p>
+@@ -42,6 +45,7 @@ export default async function StampDutyPage({ params }: Props) {
+           ))}
+         </div>
+       </section>
++      <RelatedTools current="stampDuty" />
+     </article>
+   );
+ }
+diff --git a/src/app/[locale]/tools/page.tsx b/src/app/[locale]/tools/page.tsx
+index af8287e..9036692 100644
+--- a/src/app/[locale]/tools/page.tsx
++++ b/src/app/[locale]/tools/page.tsx
+@@ -1,19 +1,21 @@
+ import type { Metadata } from 'next';
+ import { ArrowRight, Calculator, FileSearch, Map, Search, ShieldCheck } from 'lucide-react';
+ import { getTranslations, setRequestLocale } from 'next-intl/server';
++import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
++import { JsonLd, absoluteUrl } from '@/components/seo/JsonLd';
+ import { Link } from '@/i18n/navigation';
+ import type { Locale } from '@/i18n/routing';
+ import { pageMetadata } from '@/lib/seo';
+ import { getStampDutyCopy } from '@/lib/stamp-duty-copy';
+ 
+ const TOOLS = [
+- { key: 'map', href: '/map', icon: Map },
+   { key: 'search', href: '/search', icon: Search },
+   { key: 'nakal', href: '/check', icon: FileSearch },
+-  { key: 'converter', href: '/converter', icon: Calculator },
+-  { key: 'stampDuty', href: '/stamp-duty-calculator', icon: Calculator },
++  { key: 'map', href: '/map', icon: Map },
+   { key: 'circleRate', href: '/circle-rate', icon: Calculator },
+- { key: 'verify', href: '/verify', icon: ShieldCheck },
++  { key: 'stampDuty', href: '/stamp-duty-calculator', icon: Calculator },
++  { key: 'converter', href: '/converter', icon: Calculator },
++  { key: 'verify', href: '/verify', icon: ShieldCheck },
+ ] as const;
+ 
+ type Props = { params: Promise<{ locale: string }> };
+@@ -30,8 +32,24 @@ export default async function ToolsPage({ params }: Props) {
+   const t = await getTranslations('Tools');
+   const stampDuty = getStampDutyCopy(locale);
+   const circleRate = await getTranslations('CircleRateTool');
++  const toolTitle = (key: (typeof TOOLS)[number]['key']) =>
++    key === 'circleRate' ? circleRate('title') : key === 'stampDuty' ? stampDuty.title : t(`items.${key}.title`);
++  const toolBody = (key: (typeof TOOLS)[number]['key']) =>
++    key === 'circleRate' ? circleRate('intro') : key === 'stampDuty' ? stampDuty.intro : t(`items.${key}.body`);
++  const itemList = {
++    '@context': 'https://schema.org',
++    '@type': 'ItemList',
++    name: t('title'),
++    itemListElement: TOOLS.map(({ key, href }, index) => ({
++      '@type': 'ListItem',
++      position: index + 1,
++      name: toolTitle(key),
++      url: absoluteUrl(locale, href),
++    })),
++  };
+   return (
+     <article className="container py-10 sm:py-14">
++      <Breadcrumbs className="mb-6" />
+       <header className="max-w-3xl">
+         <p className="text-sm font-semibold uppercase tracking-[0.18em] text-leaf">{t('eyebrow')}</p>
+         <h1 className="mt-3 text-4xl sm:text-5xl">{t('title')}</h1>
+@@ -42,13 +60,14 @@ export default async function ToolsPage({ params }: Props) {
+           <li key={key}>
+             <Link href={href} className="group flex h-full flex-col rounded-xl border bg-card p-6 shadow-sm transition hover:-translate-y-1 hover:border-primary/40">
+               <span className="flex size-11 items-center justify-center rounded-lg bg-primary-soft text-primary"><Icon className="size-5" aria-hidden="true" /></span>
+-              <h2 className="mt-5 text-xl">{key === 'circleRate' ? circleRate('title') : key === 'stampDuty' ? stampDuty.title : t(`items.${key}.title`)}</h2>
+-              <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{key === 'circleRate' ? circleRate('intro') : key === 'stampDuty' ? stampDuty.intro : t(`items.${key}.body`)}</p>
++              <h2 className="mt-5 text-xl">{toolTitle(key)}</h2>
++              <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{toolBody(key)}</p>
+               <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-primary">{t('open')} <ArrowRight className="size-4 transition group-hover:translate-x-1" aria-hidden="true" /></span>
+             </Link>
+           </li>
+         ))}
+       </ul>
++      <JsonLd data={itemList} />
+     </article>
+   );
+ }
+diff --git a/src/app/[locale]/verify/page.tsx b/src/app/[locale]/verify/page.tsx
+index a641f14..226ac33 100644
+--- a/src/app/[locale]/verify/page.tsx
++++ b/src/app/[locale]/verify/page.tsx
+@@ -1,6 +1,8 @@
+ import type { Metadata } from 'next';
+ import { getTranslations, setRequestLocale } from 'next-intl/server';
+ import { VerificationWorkspace } from '@/components/verification/VerificationWorkspace';
++import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
++import { RelatedTools } from '@/components/seo/RelatedTools';
+ import type { Locale } from '@/i18n/routing';
+ import { pageMetadata } from '@/lib/seo';
+ 
+@@ -18,12 +20,14 @@ export default async function VerifyPage({ params }: Props) {
+   const t = await getTranslations('Verification');
+   return (
+     <article className="container max-w-6xl py-8 sm:py-12">
++      <Breadcrumbs current="verify" className="mb-6" />
+       <header className="max-w-3xl">
+         <p className="text-sm font-semibold uppercase tracking-[0.18em] text-leaf">{t('eyebrow')}</p>
+         <h1 className="mt-3 text-3xl leading-tight sm:text-5xl">{t('title')}</h1>
+         <p className="mt-4 text-lg leading-relaxed text-muted-foreground">{t('intro')}</p>
+       </header>
+       <div className="mt-10"><VerificationWorkspace /></div>
++      <RelatedTools current="verify" />
+     </article>
+   );
+ }
+diff --git a/src/components/seo/Breadcrumbs.tsx b/src/components/seo/Breadcrumbs.tsx
+new file mode 100644
+index 0000000..8b2c5c2
+--- /dev/null
++++ b/src/components/seo/Breadcrumbs.tsx
+@@ -0,0 +1,55 @@
++import { ChevronRight } from 'lucide-react';
++import { getLocale, getTranslations } from 'next-intl/server';
++import { JsonLd, absoluteUrl } from '@/components/seo/JsonLd';
++import { Link } from '@/i18n/navigation';
++import { TOOL_HREFS, type ToolKey } from '@/lib/tool-links';
++
++type Props = {
++  /** Omit on the /tools index page. */
++  current?: ToolKey;
++  className?: string;
++};
++
++/** Visible breadcrumb trail plus matching BreadcrumbList structured data. */
++export async function Breadcrumbs({ current, className }: Props) {
++  const [locale, t] = await Promise.all([getLocale(), getTranslations('Seo')]);
++  const trail = [
++    { name: t('breadcrumb.home'), href: '/' as const },
++    { name: t('breadcrumb.tools'), href: '/tools' as const },
++    ...(current ? [{ name: t(`tools.${current}.name`), href: TOOL_HREFS[current] }] : []),
++  ];
++
++  const schema = {
++    '@context': 'https://schema.org',
++    '@type': 'BreadcrumbList',
++    itemListElement: trail.map((item, index) => ({
++      '@type': 'ListItem',
++      position: index + 1,
++      name: item.name,
++      item: absoluteUrl(locale, item.href),
++    })),
++  };
++
++  return (
++    <nav aria-label={t('breadcrumb.label')} className={className}>
++      <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
++        {trail.map((item, index) => {
++          const isLast = index === trail.length - 1;
++          return (
++            <li key={item.href} className="flex items-center gap-2">
++              {index > 0 && <ChevronRight className="size-4 shrink-0" aria-hidden="true" />}
++              {isLast ? (
++                <span aria-current="page" className="font-medium text-foreground">{item.name}</span>
++              ) : (
++                <Link href={item.href} className="inline-flex min-h-10 items-center underline-offset-4 hover:text-foreground hover:underline">
++                  {item.name}
++                </Link>
++              )}
++            </li>
++          );
++        })}
++      </ol>
++      <JsonLd data={schema} />
++    </nav>
++  );
++}
+diff --git a/src/components/seo/JsonLd.tsx b/src/components/seo/JsonLd.tsx
+new file mode 100644
+index 0000000..9e4cc98
+--- /dev/null
++++ b/src/components/seo/JsonLd.tsx
+@@ -0,0 +1,12 @@
++const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://himachal-land-records.vercel.app').replace(/\/$/, '');
++
++/** Absolute URL for a locale-prefixed path. Reuse your lib/seo helper instead if it already has one. */
++export function absoluteUrl(locale: string, path: string) {
++  return `${SITE_URL}/${locale}${path === '/' ? '' : path}`;
++}
++
++export function JsonLd({ data }: { data: Record<string, unknown> }) {
++  // Escape "<" so the JSON can never close the script tag early.
++  const json = JSON.stringify(data).replace(/</g, '\\u003c');
++  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: json }} />;
++}
+diff --git a/src/components/seo/RelatedTools.tsx b/src/components/seo/RelatedTools.tsx
+new file mode 100644
+index 0000000..2620953
+--- /dev/null
++++ b/src/components/seo/RelatedTools.tsx
+@@ -0,0 +1,27 @@
++import { getTranslations } from 'next-intl/server';
++import { Link } from '@/i18n/navigation';
++import { RELATED_TOOLS, TOOL_HREFS, type ToolKey } from '@/lib/tool-links';
++
++/** Descriptive internal links to the next logical tools, driven by lib/tool-links.ts. */
++export async function RelatedTools({ current }: { current: ToolKey }) {
++  const t = await getTranslations('Seo');
++  return (
++    <section aria-labelledby="related-tools" className="mt-12 border-t border-border pt-8">
++      <h2 id="related-tools" className="text-2xl sm:text-3xl">{t('related.title')}</h2>
++      <p className="mt-2 max-w-3xl text-muted-foreground">{t('related.intro')}</p>
++      <ul className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
++        {RELATED_TOOLS[current].map((key) => (
++          <li key={key}>
++            <Link href={TOOL_HREFS[key]} className="flex h-full min-h-12 flex-col rounded-xl border border-border bg-card p-5 hover:border-primary/40">
++              <span className="font-semibold text-primary">{t(`tools.${key}.name`)}</span>
++              <span className="mt-2 text-sm leading-relaxed text-muted-foreground">{t(`tools.${key}.hint`)}</span>
++            </Link>
++          </li>
++        ))}
++      </ul>
++      <Link href="/tools" className="mt-4 inline-flex min-h-12 items-center font-medium text-primary underline underline-offset-4">
++        {t('related.all')}
++      </Link>
++    </section>
++  );
++}
+diff --git a/src/lib/tool-links.ts b/src/lib/tool-links.ts
+new file mode 100644
+index 0000000..6f85b2f
+--- /dev/null
++++ b/src/lib/tool-links.ts
+@@ -0,0 +1,27 @@
++/**
++ * Single source of truth for tool URLs and which tools link to which.
++ * Add a tool here once and every breadcrumb / "related tools" block picks it up.
++ */
++export const TOOL_KEYS = ['search', 'map', 'nakal', 'converter', 'stampDuty', 'circleRate', 'verify'] as const;
++export type ToolKey = (typeof TOOL_KEYS)[number];
++
++export const TOOL_HREFS = {
++  search: '/search',
++  map: '/map',
++  nakal: '/check',
++  converter: '/converter',
++  stampDuty: '/stamp-duty-calculator',
++  circleRate: '/circle-rate',
++  verify: '/verify',
++} as const satisfies Record<ToolKey, string>;
++
++/** Ordered by how a buyer usually moves from one check to the next. */
++export const RELATED_TOOLS = {
++  search: ['nakal', 'map', 'circleRate', 'verify'],
++  map: ['search', 'nakal', 'converter', 'verify'],
++  nakal: ['search', 'verify', 'map', 'circleRate'],
++  converter: ['search', 'map', 'circleRate', 'stampDuty'],
++  circleRate: ['stampDuty', 'converter', 'search', 'verify'],
++  stampDuty: ['circleRate', 'converter', 'verify', 'search'],
++  verify: ['nakal', 'search', 'map', 'circleRate', 'stampDuty'],
++} as const satisfies Record<ToolKey, readonly ToolKey[]>;

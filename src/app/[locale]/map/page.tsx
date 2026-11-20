@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { PlotMapLookup } from '@/components/map/PlotMapLookup';
+import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
+import { RelatedTools } from '@/components/seo/RelatedTools';
 import type { Locale } from '@/i18n/routing';
 import { pageMetadata } from '@/lib/seo';
 
@@ -20,6 +22,7 @@ export default async function MapPage({ params }: Props) {
   const t = await getTranslations('MapExplorer');
   return (
     <article className="container max-w-6xl py-10 sm:py-14">
+      <Breadcrumbs current="map" className="mb-6" />
       <header className="max-w-3xl">
         <p className="text-sm font-semibold uppercase tracking-[0.18em] text-leaf">{t('eyebrow')}</p>
         <h1 className="mt-3 text-4xl sm:text-5xl">{t('title')}</h1>
@@ -62,6 +65,7 @@ export default async function MapPage({ params }: Props) {
         </div>
       </section>
       <p className="mt-5 rounded-xl border border-notice-border bg-notice px-4 py-3 text-sm text-notice-foreground">{t('notice')}</p>
+      <RelatedTools current="map" />
     </article>
   );
 }

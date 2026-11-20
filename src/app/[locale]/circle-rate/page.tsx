@@ -5,6 +5,8 @@ import type { Locale } from '@/i18n/routing';
 import { pageMetadata } from '@/lib/seo';
 import { meghDistricts } from '@/lib/megh-circle-rates';
 import { districtLabel } from '@/lib/data/districts';
+import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
+import { RelatedTools } from '@/components/seo/RelatedTools';
 
 const topics = ['lookup', 'meaning', 'variation', 'date', 'unit', 'valuation', 'missing'] as const;
 const lookupKeys = ['district', 'office', 'choose', 'submit', 'loading', 'failed', 'empty', 'file', 'uploaded', 'download'] as const;
@@ -23,6 +25,7 @@ export default async function CircleRatePage({ params }: Props) {
 
   return (
     <article className="container max-w-6xl py-10 sm:py-14">
+      <Breadcrumbs current="circleRate" className="mb-6" />
       <header className="max-w-3xl">
         <h1 className="text-4xl sm:text-5xl">{t('title')}</h1>
         <p className="mt-4 text-lg text-muted-foreground">{t('intro')}</p>
@@ -70,6 +73,7 @@ export default async function CircleRatePage({ params }: Props) {
           ))}
         </div>
       </section>
+      <RelatedTools current="circleRate" />
     </article>
   );
 }

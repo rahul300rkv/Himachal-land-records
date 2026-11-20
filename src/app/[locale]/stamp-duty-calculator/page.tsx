@@ -1,5 +1,7 @@
 import { setRequestLocale } from 'next-intl/server';
 import { StampDutyCalculator } from '@/components/tools/StampDutyCalculator';
+import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
+import { RelatedTools } from '@/components/seo/RelatedTools';
 import type { Locale } from '@/i18n/routing';
 import { pageMetadata } from '@/lib/seo';
 import { getStampDutyCopy } from '@/lib/stamp-duty-copy';
@@ -19,6 +21,7 @@ export default async function StampDutyPage({ params }: Props) {
   const copy = getStampDutyCopy(locale);
   return (
     <article className="container max-w-6xl py-10 sm:py-14">
+      <Breadcrumbs current="stampDuty" className="mb-6" />
       <header className="max-w-3xl">
         <h1 className="text-4xl sm:text-5xl">{copy.title}</h1>
         <p className="mt-4 text-lg text-muted-foreground">{copy.intro}</p>
@@ -42,6 +45,7 @@ export default async function StampDutyPage({ params }: Props) {
           ))}
         </div>
       </section>
+      <RelatedTools current="stampDuty" />
     </article>
   );
 }
