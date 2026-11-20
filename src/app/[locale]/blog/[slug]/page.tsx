@@ -70,10 +70,15 @@ function renderSectionContent(language: 'en' | 'hi', section: {
         </div>
       )}
       {section.link && (
-        <a href={section.link.href} target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex items-center gap-2 rounded-md border border-primary bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 transition">
-          {section.link.label[language]}
-        </a>
-      )}
+  <a
+    href={section.link.href}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+  >
+    {section.link.label[language]} →
+  </a>
+)}
     </div>
   );
 }
