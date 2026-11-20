@@ -93,7 +93,7 @@ export default async function GuidePage({ params }: Props) {
 
       <section className="mt-10 rounded-xl bg-primary p-6 text-primary-foreground sm:p-8">
         <h2 className="text-2xl text-primary-foreground">{labels.takeaway}</h2>
-        <p className="mt-3 leading-7 text-primary-foreground/85">{guide.takeaway[language]}</p>
+        <p className="mt-3 leading-7 text-primary-foreground/85" dangerouslySetInnerHTML={{ __html: guide.takeaway[language].replace(/class="takeaway-link"/g, 'style="color: inherit; text-decoration: underline; text-underline-offset: 2px; font-weight: 600; transition: opacity 0.2s;" onmouseover="this.style.opacity=0.8" onmouseout="this.style.opacity=1"') }} />
       </section>
 
       <section className="mt-8 rounded-xl border bg-muted/50 p-6">
