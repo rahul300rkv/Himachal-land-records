@@ -1905,7 +1905,7 @@
         "hint": "See a plot's outline on the BhuNaksha map and match it to the khasra number in the record."
       },
       "nakal": {
-        "name": "Nakal checker",
+        "name": "Jamabandi checker",
         "hint": "Upload a jamabandi PDF for a plain-language checklist of owners, shares, mutations and red flags."
       },
       "converter": {
