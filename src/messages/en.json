@@ -80,7 +80,8 @@
         "landLaws": "Land laws and permissions",
         "marketplace": "Marketplace listings",
         "reports": "Pre-purchase check reports",
-        "liability": "Limitation of liability"
+        "liability": "Limitation of liability",
+        "grievance": "Grievance officer"
       },
       "reports": "A pre-purchase check report summarises the entries we hold for a plot and highlights points you may want to verify. It is an informational aid. It is not a title search, a title opinion, or a guarantee that a plot is free of dispute, mortgage, encumbrance or litigation.",
       "howToVerify": {
@@ -91,7 +92,11 @@
           "c": "Compare the certified copy with what you saw here: owner names, shares, area and land type.",
           "d": "Check for mutations, mortgages and court orders, and ask a qualified advocate to review the documents before you pay any money."
         }
-      }
+      },
+      "grievance": "For questions, correction requests or personal-data concerns, write to us at the address on the contact page. We will acknowledge within three working days and reply within a reasonable time. If a record shown on the platform contains data about you that you believe is incorrect, state the khasra number, district, tehsil and village, and describe the error. We will review and respond. Requests are handled in English and Hindi.",
+      "sectionNote": "This disclaimer is part of a set of documents that govern your use of HimLand Check. Please also read the Terms of Use and the Privacy Policy. If there is any conflict between this disclaimer and those documents, the more specific document applies. If you are unsure whether this disclaimer applies to a specific use, treat it as applying. The purpose of the platform is to help you ask better questions before a transaction — not to remove the need for professional legal advice or certified official documents.",
+      "permissionsTitle": "Land-use and permission requirements",
+      "permissionsBody": "In addition to Section 118, land in Himachal Pradesh may be subject to forest regulations, eco-sensitive zone notifications, municipal building by-laws, agricultural land-use restrictions and other central or state rules that limit what a buyer can do with the land after purchase. HimLand Check does not check compliance with any of these rules. Before completing a purchase, ask a qualified advocate and the relevant department — Revenue, Forest, Town and Country Planning or Municipal — whether any restriction, permission requirement or pending proceeding affects the plot. HimLand Check does not carry out any check under the Forest (Conservation) Act, the Environment Protection Act, the Himachal Pradesh Town and Country Planning Act or under any municipal scheme. Those checks require specialist knowledge and official records that are not publicly available online. Before purchasing any land, ask the Revenue Department whether the plot is subject to a land ceiling notification, and ask the Forest Department whether any part of the plot falls within a reserved or protected forest boundary. These checks are outside what HimLand Check can provide."
     },
     "title": "Important legal disclaimer"
   },
@@ -146,7 +151,7 @@
     },
     "whatWeDo": {
       "title": "What we do",
-      "body": "We help people search Himachal Pradesh revenue records, understand Jamabandi and plot identifiers, explore village maps and prepare pre-purchase verification reports. Marketplace listings are separate third-party information.",
+      "body": "We help people search Himachal Pradesh revenue records, understand Jamabandi and plot identifiers, explore village maps and prepare pre-purchase verification reports. The search covers every district, tehsil and village served by HimBhoomi. The map tool uses BhuNaksha parcel data. Circle-rate schedules come from the MEGH portal. Marketplace listings are separate third-party information — we do not own, inspect or verify listed plots.",
       "glossary": "The records we cover",
       "records": {
         "jamabandi": {
@@ -224,7 +229,13 @@
       "body": "Look up a plot by district, village and khasra number.",
       "button": "Search land records",
       "secondary": "Browse marketplace"
-    }
+    },
+    "section118": {
+      "title": "Section 118 and who can buy land",
+      "body": "Section 118 of the H.P. Tenancy and Land Reforms Act, 1972 restricts the purchase of agricultural land in Himachal Pradesh by non-agriculturists. If you are not an agriculturist as defined by the Act, you need prior permission from the state government before buying agricultural land. The restriction applies regardless of whether the land is currently being farmed. HimLand Check does not assess eligibility — confirm your status and the land's classification with a qualified advocate and the Revenue Department before entering into any agreement."
+    },
+    "checklistTitle": "A pre-purchase check is not optional",
+    "checklistBody": "Land disputes in Himachal Pradesh can remain unresolved for years. A plot may show a clear jamabandi entry and still have a pending civil suit, an unattested mutation, or a mortgage that was not released on the records. The only way to surface these issues before money changes hands is to check every relevant document and official portal in a consistent order. HimLand Check gives you the tools and the checklist; the checks themselves require you to open the official portals, complete the CAPTCHAs and retrieve certified copies. The nakal checker is a starting point, not a conclusion. Use it to identify the entries that need follow-up, then verify each one at the official source. A clean checker result means only that the uploaded document had no flags the rules detected — it does not mean the plot is free of issues that the document does not record."
   },
   "Verification": {
     "eyebrow": "Source-by-source verification",
@@ -278,34 +289,70 @@
     },
     "limits": {
       "title": "Why these checks require a person",
-      "body": "HimBhoomi and eCourts use CAPTCHAs. HimLand Check does not bypass those controls or impersonate a user. The workspace standardises the search and evidence trail while you complete protected steps at the official source."
-    }
+      "body": "HimBhoomi and eCourts use CAPTCHAs to prevent automated access. HimLand Check does not bypass those controls or impersonate a user at any official source. The verification workspace standardises the information you carry into each portal, keeps your plot brief consistent, and structures your evidence trail — but every step that touches an official portal requires you to open it, complete any CAPTCHA, and retrieve the document yourself. That is by design: the official record you retrieve is the evidence; a screenshot of a third-party summary is not."
+    },
+    "whyTitle": "Why each check matters",
+    "whyOwnership": "The jamabandi records who holds the land and in what share, but ownership can be more complicated than a single entry. Where multiple khewats exist, or where a mutation has been recorded but not yet attested, the picture in the current nakal may not match what the seller claims. Always read every khasra entry for the plot, trace the mutation chain, and confirm that the seller's name appears as the recorded owner in the most recent attested entry.",
+    "whyMutation": "A mutation (intkal) is the revenue entry made when ownership or occupancy changes — through sale, inheritance, gift, court order or partition. A mutation that is pending or rejected does not establish title. If the jamabandi shows a pending mutation, do not proceed until you have confirmed its current status at the Tehsil office and obtained an attested copy of the entry.",
+    "whyCourt": "An adverse court order — a stay, an injunction or a decree — may not appear in the jamabandi at all. Revenue records and civil court records are maintained separately. Searching the eCourts portal for every person named in the jamabandi as an owner or prior owner is the only way to identify litigation that has not yet been reflected in the revenue entry.",
+    "evidenceTitle": "Preserving evidence",
+    "evidenceBody": "Save a copy of everything you retrieve: the jamabandi nakal with its receipt number, the HimBhoomi or BhuNaksha screenshots, and any court-portal search results. Keep the date and time of each search. If a dispute arises later, a dated record of what the official portals showed at the time of your enquiry demonstrates the due diligence you carried out. If you use the verification workspace, the brief it generates records the plot identifiers, owner names and search terms in a consistent form. Use the same brief for every portal you search. Consistency in spelling and in the khasra number format matters: HimBhoomi, HimRIS and the eCourts portal each have different search interfaces, and a name entered differently in each portal may return different results. The workspace helps you carry the same information through every check without variation.",
+    "summaryTitle": "Summary checklist",
+    "summaryBody": "Before completing a purchase: retrieve the current attested jamabandi nakal from HimBhoomi and confirm the recorded owner, khasra number and area; check that all mutations in the chain are attested and that none are pending; search the eCourts portal for every person named in the ownership column; check the BhuNaksha map and confirm the boundary and area match the nakal; look up the applicable circle rate and confirm that the agreed price meets the minimum; obtain certified copies of every document the seller provides; and confirm with an advocate that no Section 118 or other restriction applies to your transaction. Keep all retrieved documents and screenshots in a single folder with the retrieval date in the file name. A dated evidence record is your best protection if a dispute arises after the sale is complete."
   },
   "Tools": {
     "eyebrow": "Himachal land toolkit",
     "title": "Useful tools, in one place",
-    "intro": "Search, read, map and cross-check a plot without jumping through the rest of the site.",
+    "intro": "Search, read, map and cross-check a plot without jumping between different government portals. Every tool here works with the official records held by HimBhoomi, BhuNaksha and the MEGH document store.",
     "open": "Open tool",
     "items": {
       "verify": {
         "title": "Plot verification",
-        "body": "Work through ownership, revenue entries and official court searches in a consistent order."
+        "body": "Work through ownership, revenue entries and official court searches in a consistent order. The workspace keeps your plot reference and links directly to the right portal for each check."
       },
       "search": {
         "title": "Land-record search",
-        "body": "Find records by district, tehsil, village, khasra or owner name."
+        "body": "Find records by district, tehsil, village, khasra or owner name. Results link directly to HimBhoomi so you can open the latest official jamabandi."
       },
       "nakal": {
         "title": "Jamabandi checker",
-        "body": "Upload a jamabandi PDF for an explainable, rule-based review."
+        "body": "Upload a jamabandi PDF for an explainable, rule-based review. The checker reads owner shares, mutation history, case references and mortgage remarks, then scores the record and lists what needs further attention."
       },
       "map": {
         "title": "Plot map",
-        "body": "See a plot’s outline on the BhuNaksha map using its khasra number."
+        "body": "See a plot's outline on the BhuNaksha map using its khasra number. Confirm the shape, area and adjoining parcels match what the seller described."
       },
       "converter": {
         "title": "Himachal land converter",
-        "body": "Convert kanal, marla, bigha, biswa, square metres and square feet using Himachal units."
+        "body": "Convert kanal, marla, bigha, biswa, square metres and square feet using Himachal units. The converter keeps the two measurement standards — kanal/marla and bigha/biswa — separate so you use the right one for your record."
+      }
+    },
+    "howTitle": "How the tools fit together",
+    "howBody": "Most land checks in Himachal Pradesh require more than one document. Start with the jamabandi search to retrieve the current record of rights for the village and khasra. Upload the nakal to the checker to scan for mutation entries, court-case remarks and mortgage notes that need follow-up. Open the plot map to confirm the parcel boundary matches the khasra number and the area stated in the record. Look up the circle rate for the district and Sub-Registrar office to understand the government valuation benchmark, then use the stamp duty calculator to estimate registration costs. Run the full verification checklist last, using the brief the workspace generates, before you open the official portals to confirm each item. Each tool is independent — use them in any order that suits your review.",
+    "recordsTitle": "Records the tools cover",
+    "recordsBody": "The search and nakal checker work with jamabandi records from HimBhoomi. A jamabandi is Himachal Pradesh's principal record of rights: it records each khewat (estate), the khasra plots within it, the recorded owners and their shares, the land area and use, and the mutation history up to the last settlement. The map tool covers parcels indexed in BhuNaksha for the districts where parcel data is published. Circle-rate schedules are the PDFs published by the Registration and Stamps Department through the MEGH portal.",
+    "disclaimerNote": "All tools are for reference only. They are not a substitute for a certified nakal, a registered deed or professional legal advice. Confirm every detail with the Patwari, Tehsil office or Sub-Registrar before any transaction.",
+    "whoBenefits": {
+      "title": "Who benefits from these tools",
+      "body": "Prospective buyers use the search and nakal checker to verify ownership, trace mutations and spot remarks before making an offer. Sellers use the search to pull the current nakal and confirm that the revenue entry matches what they intend to transfer. Advocates and property consultants use the verification checklist to run a structured due-diligence review for clients. Patwaris and revenue officers can cross-check the circle-rate schedules and confirm land-area conversions when preparing records. The land converter is also useful for anyone reading an older revenue record where the area is stated in bigha or biswa and needs to be compared with a new survey in square metres."
+    },
+    "faqTitle": "Frequently asked questions",
+    "faq": {
+      "doIneed": {
+        "q": "Do I need an account to use the tools?",
+        "a": "The search, map, converter, circle-rate and stamp-duty tools are available without an account. The nakal checker and the verification checklist require a sign-in. Saving a search and generating a pre-purchase report also require an account."
+      },
+      "official": {
+        "q": "Are the results official records?",
+        "a": "The search retrieves records directly from HimBhoomi and displays what that portal returns. The map opens the official BhuNaksha viewer. Circle-rate PDFs are linked from MEGH. These are copies of official data, not certified originals. For a legally valid copy, obtain a certified nakal from the Patwari or Tehsil office."
+      },
+      "coverage": {
+        "q": "Which districts and tehsils are covered?",
+        "a": "The search covers every district, tehsil and revenue village that HimBhoomi makes available through its public interface. BhuNaksha coverage varies by tehsil — some areas have complete parcel data and others do not. Circle-rate schedules are available for the Sub-Registrar offices whose notices the MEGH portal lists."
+      },
+      "languages": {
+        "q": "Are the tools available in Hindi?",
+        "a": "Yes. The platform supports English and Hindi throughout. Switch language using the selector in the navigation bar. The revenue record content — owner names, village names, khasra numbers — appears as HimBhoomi returns it, which is typically in Hindi or transliterated form regardless of the interface language you have chosen. The converter labels — kanal, marla, bigha, biswa — are fixed in English in both language modes because they are technical terms that do not translate cleanly into the measurement names used in everyday Hindi conversation in every district."
       }
     }
   },
@@ -327,7 +374,7 @@
       "download": "Download PDF"
     },
     "overview": "Circle rate overview",
-    "overviewBody": "A circle-rate schedule gives you a starting point for valuing land for registration. Use it to compare the proposed purchase price with the notified valuation and budget for transaction costs. Start with the notice issued for the office that covers the property.",
+    "overviewBody": "A circle-rate schedule gives you a starting point for valuing land for registration. Use it to compare the proposed purchase price with the notified valuation and budget for transaction costs. Start with the notice issued for the office that covers the property. If the circle rate for a category is not listed separately, check whether the schedule has a default rate that applies to all unlisted categories, or ask the Sub-Registrar.",
     "sample": {
       "title": "Sample circle-rate report",
       "alt": "Sample Himachal Pradesh circle-rate schedule."
@@ -366,8 +413,20 @@
       "missing": {
         "q": "What if the PDF does not list my village?",
         "a": "Check the SRO jurisdiction and whether the village appears under another spelling or a revenue estate name. Ask the Sub-Registrar which notice and row apply if you still cannot find it."
+      },
+      "update": {
+        "q": "How often are circle rates updated?",
+        "a": "Circle rates in Himachal Pradesh are revised periodically by the state government. The effective period is printed in the official schedule PDF. Download the most recent notice for your Sub-Registrar office and verify its effective date before using it for a transaction. Rates in force at the date of registration are the ones that apply."
+      },
+      "convert": {
+        "q": "How do I apply the rate to a plot in kanal?",
+        "a": "If the circle-rate schedule states a rate per square metre, convert the recorded area to square metres first using the Himachal converter. Multiply the converted area by the rate to get the circle-rate value. Then compare that value with the agreed sale price to determine which is higher — the higher figure is the base for stamp duty."
       }
-    }
+    },
+    "contextTitle": "What circle rates are used for",
+    "contextBody": "Circle rates in Himachal Pradesh are set by the Registration and Stamps Department and published through the MEGH portal as district- and office-specific schedules. They serve as the minimum valuation floor for registration: the stamp duty on a transfer cannot be calculated on a value lower than the applicable circle rate for the land category and location. If the agreed sale price is higher than the circle rate, stamp duty is calculated on the sale price. If the agreed price is lower, the circle rate value is used instead. Understanding the applicable circle rate before negotiating a price helps you budget accurately for registration costs and avoids surprises at the Sub-Registrar office.",
+    "categoryTitle": "Land category and road access",
+    "categoryBody": "Most circle-rate schedules in Himachal Pradesh separate land into categories — agricultural, orchard, residential, commercial — and may further subdivide by distance from a metalled road or by the revenue village or locality. A plot described as agricultural in the jamabandi may attract a different rate than the same plot after a land-use change has been approved. Read the category row that matches the current land-use entry in the official record, not what the seller describes it as. If the schedule lists a road-distance criterion, check the measurement against the actual access route."
   },
   "MapExplorer": {
     "eyebrow": "Map tool",
@@ -429,9 +488,23 @@
       "boundary": {
         "question": "How do I confirm the boundary on the ground?",
         "answer": "Compare the mapped outline with the village shajra or Tatima. For a boundary stakeout or dispute, ask the local revenue office about official demarcation."
+      },
+      "subdivision": {
+        "question": "What if a khasra number has been sub-divided?",
+        "answer": "Sub-divisions are recorded as mutations in the jamabandi and are reflected in the BhuNaksha map once the digital cadastre is updated. If the revenue record shows a sub-divided khasra (for example, 128/1 and 128/2) and the map only shows the original parcel, ask the Patwari to confirm the boundary of the specific sub-plot. The jamabandi entry remains the controlling record for area and ownership."
+      },
+      "section118map": {
+        "question": "Does the map show Section 118 restrictions?",
+        "answer": "No. BhuNaksha shows parcel boundaries, not legal restrictions on transfer. Section 118 of the H.P. Tenancy and Land Reforms Act, 1972 restricts agricultural land transfers to non-agriculturists. That restriction must be checked separately — through the Tehsil office and with a qualified advocate — before entering into any agreement."
       }
     },
-    "notice": "Always compare the online outline with the official shajra, field book and demarcation on the ground."
+    "notice": "Always compare the online outline with the official shajra, field book and demarcation on the ground.",
+    "contextTitle": "What BhuNaksha shows and what it does not",
+    "contextBody": "BhuNaksha is Himachal Pradesh's online parcel mapping system. It publishes the cadastral boundaries — the mapped outlines — of khasra plots as they were drawn at the last revenue settlement. The map shows each parcel's shape, its khasra number, and its relationship to neighbouring plots and to the revenue village boundary. It does not show current ownership, pending mutations, encumbrances or court orders; those are recorded in the jamabandi and are available through HimBhoomi. BhuNaksha coverage is not uniform across the state — some tehsils have fully digitised parcel maps while others have partial or no published data. If the map does not load for a plot, the parcel may not yet be in the digital BhuNaksha layer for that village. Where parcel data is not yet published for a tehsil, the BhuNaksha viewer will return an empty result or show no parcel for the entered khasra number. In that case, ask the Patwari for a manual tatima sketch and use it alongside the revenue record to understand the plot's boundaries.",
+    "tatima": {
+      "title": "BhuNaksha and the Tatima",
+      "body": "A tatima is the official field sketch prepared by the Patwari for a specific khasra or sub-division. It shows the plot's boundaries in relation to neighbouring parcels, roads, water channels and landmarks. A tatima is different from BhuNaksha: BhuNaksha is the digital cadastral map for the whole revenue village, while a tatima is a Patwari-certified sketch for a specific plot. If a seller provides a tatima, compare it against the BhuNaksha outline for the same khasra number. Discrepancies in shape, area or boundary points should be verified with the Patwari before you proceed."
+    }
   },
   "Guides": {
     "eyebrow": "Practical guides",
@@ -1036,7 +1109,12 @@
       "previous": "Previous",
       "next": "Next",
       "page": "Page {page}"
-    }
+    },
+    "howTitle": "How the search works",
+    "howBody": "The search connects to HimBhoomi — Himachal Pradesh's official land records portal — through the public interface. When you choose a district, tehsil, village and jamabandi year, the selectors load the options that HimBhoomi makes available for that combination. After you complete the CAPTCHA, HimBhoomi returns the record choices available for the selected location: Jamabandi (by khewat, khatauni or khasra number) or Shajra Nasab. Choose the identifier that matches the number in your record and load the official nakal. The receipt number returned by HimBhoomi is your reference for that specific record retrieval.",
+    "whatTitle": "What to look for in the record",
+    "whatBody": "Once the jamabandi loads, check four things. First, confirm the owner entries: the name, share and basis of ownership for every khata. Second, trace the mutation chain: each intkal entry records a change — sale, inheritance, gift, court order — with a date and status. A pending or rejected mutation needs follow-up at the Tehsil. Third, check the khasra area and land-use classification against what the seller stated. Fourth, read the remarks column: entries about mortgages, court stays or other charges appear there and are easy to miss when reading quickly. Use the nakal checker to scan these fields automatically and flag items that need attention.",
+    "captchaNote": "The CAPTCHA is controlled by HimBhoomi and cannot be bypassed or automated. If the CAPTCHA image does not load or the code is not accepted, use the New code button to request a fresh one. If HimBhoomi is temporarily unavailable, the search will show an error — this is a condition of the official portal and is outside our control."
   },
   "LandTypes": {
     "irrigated": "Irrigated",
@@ -1066,20 +1144,40 @@
   "About": {
     "title": "About HimLand Check",
     "lastUpdated": "Last updated {date}",
-    "intro": "HimLand Check is a simpler way to read, understand and check government land records — for villages in Himachal Pradesh.",
+    "intro": "HimLand Check is a simpler way to read, understand and check government land records — for villages in Himachal Pradesh. We bring together the records held by HimBhoomi, BhuNaksha and the official Sub-Registrar notices and present them in a form that is easier to navigate before a property transaction.",
     "whatWeDo": {
       "title": "What we do",
-      "body": "We make public revenue records — jamabandi, khasra, khatauni, khewat, mutations — searchable in one place, show them on maps and shajra drawings, and produce pre-purchase check reports. There is also a marketplace where people list land themselves."
+      "body": "We make public revenue records — jamabandi, khasra, khatauni, khewat, mutations — searchable in one place, show them on maps and shajra drawings, and produce pre-purchase check reports. The search covers every district, tehsil and revenue village served by the HimBhoomi portal. The map tool links each khasra number to the corresponding parcel on the BhuNaksha viewer. The nakal checker reads an uploaded jamabandi PDF and flags items — pending mutations, case references, mortgage remarks — that you would otherwise have to find by reading the document line by line. There is also a marketplace where people list land themselves; those listings are separate from the revenue data."
     },
     "whatWeAreNot": {
       "title": "What we are not",
-      "body": "HimLand Check is an independent private platform. It is not affiliated with or authorised by the Government of Himachal Pradesh or any revenue department. Our copies are not a substitute for a certified government copy. Always confirm with the relevant Tehsil / Patwari office before any transaction."
+      "body": "HimLand Check is an independent private platform. It is not affiliated with or authorised by the Government of Himachal Pradesh, the Revenue Department, the Registration and Stamps Department or any other government agency. The records shown here are compiled from public sources and are for reference only. They are not a substitute for a certified government copy (nakal). A nakal issued by the competent Revenue authority — the Patwari, Tehsildar or their office — is the only document that carries legal weight in a court or transaction. Always confirm current ownership, mutation status and encumbrances with the relevant Tehsil or Patwari office before entering into any agreement."
     },
     "whoRuns": {
       "title": "Who runs it",
-      "body": "Operated by {company} LLP, a limited liability partnership registered in India."
+      "body": "Operated by {company} LLP, a limited liability partnership registered in India. The platform is built and maintained by a small team focused on making land due-diligence accessible before purchase decisions."
     },
-    "related": "Read more"
+    "related": "Read more",
+    "howItWorks": {
+      "title": "How it works",
+      "body": "Records are sourced from HimBhoomi, the official Himachal Pradesh land records portal, through the public interface. The nakal checker uses an AI model — Google Gemini — to extract structured fields from the uploaded PDF, then applies a fixed set of rules to flag items for review. Circle-rate schedules are fetched directly from the MEGH document management portal and linked by district and Sub-Registrar office. BhuNaksha map reports are opened on the official government viewer; we do not store or copy map data. No data is sold and no advertising is shown."
+    },
+    "whenToUse": {
+      "title": "When to use HimLand Check",
+      "body": "HimLand Check is most useful in the period between first showing interest in a plot and signing a sale agreement. Use the search to pull the current jamabandi for the village and khasra. Use the nakal checker to scan for mutations, case remarks and mortgage entries. Use the map to confirm that the plot's shape and location match what the seller showed you. Use the circle-rate tool to check the government valuation benchmark and estimate stamp duty. Use the verification checklist to record and preserve your checks in a consistent order. At every step, confirm what you find with the Patwari or Tehsil office and obtain certified copies before any money changes hands."
+    },
+    "contact": {
+      "title": "Questions and corrections",
+      "body": "If you have a question about how the platform works, want to report an error in the data shown, or have a request about personal information that appears in a land record, use the contact page or write to us at the address shown there. We will acknowledge the message and reply within a reasonable time."
+    },
+    "recordTypes": {
+      "title": "Records the platform covers",
+      "body": "The search and nakal checker work with jamabandi records from HimBhoomi. The jamabandi is Himachal Pradesh's principal record of rights: it records each khewat, the khasra plots within it, the recorded owners and their shares, the land area and use, the soil type, and the mutation history to the last settlement. A khewat number identifies the estate; a khatauni number identifies the occupancy record; a khasra number identifies the individual plot. The shajra-nasab is the genealogical pedigree associated with an ownership entry. The map tool covers parcels indexed in BhuNaksha. Circle-rate and stamp-duty tools use schedules from the Registration and Stamps Department published through MEGH."
+    },
+    "limitations": {
+      "title": "Known limitations",
+      "body": "Coverage depends on what HimBhoomi and BhuNaksha make publicly available. Older settlements and remote tehsils may have incomplete digital records. The nakal checker works best on clearly scanned PDFs from HimBhoomi; handwritten remarks or low-resolution scans reduce extraction quality. Circle-rate schedules on MEGH are updated when the state government revises rates, but the upload date in the portal may lag the gazette notification date — always check the effective period printed in the PDF. HimLand Check has no access to unpublished or confidential records. If a record is unavailable here, go to the Tehsil or Patwari office in person. Request a physical inspection copy from the Patwari for any plot where the digital record is incomplete."
+    }
   },
   "Legal": {
     "lastUpdated": "Last updated {date}",
@@ -1158,7 +1256,9 @@
       "retention": {
         "title": "How long we keep data",
         "body": [
-          "We keep account data while your account is active and for a reasonable period afterwards. Server logs are kept for a limited period. We may keep some information for longer where the law requires or to resolve disputes. When data is no longer needed we delete or anonymise it."
+          "We keep your account data for as long as your account is open. If you close your account, we delete or anonymise your personal data within a reasonable period, subject to legal obligations that require us to keep certain records.",
+          "Search activity and report logs are retained for a limited period for security, error analysis and service improvement, then deleted. Land record data compiled from public sources is not personal data about you — it is not deleted when you close your account.",
+          "If the law requires us to retain data for a longer period, we keep it only for the period required and in a secure manner."
         ]
       },
       "security": {
@@ -1170,13 +1270,9 @@
       "rights": {
         "title": "Your rights",
         "body": [
-          "Under the Digital Personal Data Protection Act, 2023 you may:",
-          "- ask for a summary of the personal data we hold about you;",
-          "- ask us to correct or complete inaccurate data;",
-          "- ask us to erase data that is no longer needed;",
-          "- nominate another person to exercise your rights if you die or become unable to do so;",
-          "- raise a grievance with us and, if it is not resolved, complain to the Data Protection Board of India.",
-          "To use these rights, write to {email}. We may ask you to verify your identity first."
+          "Under the Digital Personal Data Protection Act, 2023, you have the right to know what personal data we hold about you, to have inaccurate data corrected, to have your data erased where the law permits, and to withdraw consent at any time.",
+          "To exercise any of these rights, write to us at the address on the contact page. We will respond within a reasonable time. If you withdraw consent for processing that is necessary to run a feature, that feature will stop working for your account.",
+          "You also have the right to file a complaint with the Data Protection Board of India if you believe your rights under the Act have not been respected. We encourage you to contact us first so we can try to resolve the matter directly."
         ]
       },
       "children": {
@@ -1270,7 +1366,9 @@
       "thirdParty": {
         "title": "Third-party services and links",
         "body": [
-          "The service may rely on, or link to, third-party services. We are not responsible for their content or practices."
+          "The service links to official government portals — HimBhoomi, BhuNaksha, eCourts, MEGH — and to other external sites. We do not control those sites, cannot guarantee their availability, and are not responsible for their content or practices.",
+          "When you follow a link to an external site, you leave HimLand Check. Any data you submit at an external site, including CAPTCHAs and search inputs at HimBhoomi, is subject to that site's own terms and privacy policy.",
+          "AI processing for the nakal checker uses Google Gemini as the primary model. Where the NVIDIA fallback is enabled and needed, page images from the uploaded PDF are sent to NVIDIA's inference API. By using the checker you consent to this processing."
         ]
       },
       "warranty": {
@@ -1307,7 +1405,8 @@
       "changes": {
         "title": "Changes to these terms",
         "body": [
-          "We may update these terms. The updated version applies from the “last updated” date shown above. If you keep using the service after that date, you accept the changes."
+          "We may update these terms from time to time to reflect changes to the service, the law or our practices. We will post the revised terms on this page with an updated date. If the change is material, we will try to give you reasonable notice — for example, by email or by a notice on the service.",
+          "Your continued use of the service after the revised terms are posted means you accept them. If you do not accept the revised terms, please stop using the service and close your account."
         ]
       },
       "contact": {
@@ -1823,6 +1922,16 @@
     "error": {
       "title": "Dashboard unavailable",
       "body": "We could not load some of your data. Please refresh the page."
+    },
+    "aboutTitle": "About your dashboard",
+    "aboutBody": "Your dashboard collects the searches you have saved, the pre-purchase check reports you have generated and the land listings you have posted on the marketplace. Saved searches let you re-run a specific district, tehsil, village and year combination without re-selecting every field. Generated reports are the PDF summaries produced from a jamabandi search — download them here and keep them as part of your due-diligence record. If you have listed land for sale on the marketplace, you can track, update or withdraw your listing from the listings panel.",
+    "savedSearchNote": "A saved search stores the location parameters only — district, tehsil, village and jamabandi year. The records themselves are retrieved from HimBhoomi each time you run the search. Because HimBhoomi data is updated periodically by the Revenue Department, the same search can return a different result over time as mutations are attested and new entries are added. Run the search again and compare the current nakal against any copy you saved previously. If a village has been renamed or re-mapped in HimBhoomi, an older saved search may no longer return results — in that case, run a new search with the updated village name.",
+    "reportNote": "A pre-purchase check report is generated from a jamabandi record retrieved through the search. It summarises the ownership entries, mutation history, khasra area and remarks in a structured PDF and flags items that need further verification. The report is an informational summary — it is not a title opinion, a legal search or a certified nakal. Use it as a checklist alongside the original official documents, not as a substitute for them. Reports are stored against your account and can be downloaded again from this page.",
+    "listingNote": "If you have listed land on the marketplace, the listings panel shows the current status — active, withdrawn or sold — and lets you edit, withdraw or delete the listing. A listing is visible to other users until you withdraw it or mark it as sold. We do not verify the accuracy of listing information and are not a party to any transaction that may arise. If a listing you posted contains an error, update or delete it promptly.",
+    "privacyNote": "Saved searches, reports and listing data are stored against your account and are not visible to other users. When you delete a saved search or report, it is removed from your dashboard. If you close your account, all data associated with it is deleted within a reasonable period as described in our Privacy Policy. Listings that have already been viewed by other users may remain briefly in search results during the deletion period.",
+    "gettingStarted": {
+      "title": "Getting started",
+      "body": "To use the dashboard, sign in with your account. If you do not have an account, register on the login page — registration requires a name, email address and phone number. Once signed in, the dashboard loads your saved searches, reports and listings automatically. The first time you sign in, all three panels will be empty. Start by running a search, uploading a nakal to the checker, or posting a land listing to populate your dashboard. If the dashboard shows an error, refresh the page. If the error persists, the database connection may be temporarily unavailable — try again after a few minutes. You can sign in with an email and password or through a supported OAuth provider if one is configured. If you have forgotten your password, use the Reset password link on the login page — a reset link will be sent to the email address registered to your account. Account registration is free. Some features — the nakal checker, report generation and saved searches — are only available to signed-in users. The nakal checker and report generator may take up to a minute to process a document — the page will show a progress indicator while the AI model reads the PDF. Do not close the tab while processing is in progress. If a timeout occurs, return to the dashboard and check whether the report was saved before the timeout. If it was not, run the check again from the search results page."
     }
   },
   "SaveSearch": {
@@ -1855,7 +1964,7 @@
     "rateMarla": "1 marla = 19.19754225 sq m",
     "rateKanal": "1 kanal = 20 marla",
     "rateSqft": "1 sq m = 10.7639 sq ft",
-    "note": "For guidance only. Measurement practice can differ by locality. Confirm the unit and area in official revenue records before relying on a conversion.",
+    "note": "For guidance only. Measurement practice can differ by locality. Confirm the unit and area in official revenue records before relying on a conversion. For high-value transactions, have the Patwari verify the measurement on site.",
     "standardsTitle": "Himachal measurement standards",
     "standardsIntro": "These reference values are not automatic district rules. Select the unit stated in your record and verify it with the Patwari or Revenue Department.",
     "kanalTitle": "Kanal and marla standard",
@@ -1863,7 +1972,7 @@
     "bighaTitle": "Biswa and bigha standard",
     "bighaStandards": "1 karam (56 inches) = 1.4224 m; 1 sq karam (biswansi) = 2.02322176 sq m; 1 biswa = 40.4644352 sq m = 20 biswansi; 1 bigha = 809.288704 sq m = 20 biswa.",
     "exampleTitle": "Worked example",
-    "exampleBody": "If a record states 2 kanal, convert it to 767.90169 sq m. If it states 3 biswa, the result is 121.3933056 sq m. These examples show arithmetic only; they do not decide which standard applies.",
+    "exampleBody": "If a record states 2 kanal, convert it to 767.90169 sq m. If it states 3 biswa, the result is 121.3933056 sq m. These examples show arithmetic only; they do not decide which standard applies. A common situation is a plot recorded as 1 kanal 5 marla. To convert: 1 kanal = 20 marla, so the total is 25 marla. 25 × 19.19754225 sq m = 479.938556 sq m. Confirm the unit with the Patwari before using this in any agreement. If the record uses the bigha system, work from the karam value stated in that settlement — do not mix the two standards.",
     "faqTitle": "Frequently asked questions",
     "faq": {
       "districts": {
@@ -1881,8 +1990,26 @@
       "rounding": {
         "q": "Why can results differ slightly?",
         "a": "Documents may round karam or biswansi values. Use the official record as the controlling value."
+      },
+      "ownership": {
+        "q": "Can I use the result for a registered deed?",
+        "a": "No. The converter gives an arithmetic estimate. Confirm the recorded area and applicable unit directly in the official land record and with the Patwari before using any figure in a deed or agreement."
+      },
+      "biswa": {
+        "q": "What is the difference between a biswa and a biswansi?",
+        "a": "A biswansi is one twentieth of a biswa. Under the bigha/biswa standard used in parts of Himachal Pradesh, 1 biswa equals 20 biswansi and 1 bigha equals 20 biswa. The karam length under this standard is 56 inches, giving 1 biswansi = 2.02322176 sq m."
+      },
+      "kanal": {
+        "q": "What is a kanal in Himachal Pradesh?",
+        "a": "A kanal equals 20 marla. Under the standard used in most of Himachal Pradesh, 1 marla equals 19.19754225 sq m, so 1 kanal equals 383.950845 sq m. The karam under this standard is 57.5 inches. Some tehsils use slightly different values — always read the unit stated in your official record and confirm with the local Patwari."
+      },
+      "section118": {
+        "q": "Does area conversion affect Section 118 eligibility?",
+        "a": "Section 118 of the H.P. Tenancy and Land Reforms Act, 1972 restricts the transfer of agricultural land to non-agriculturists. Eligibility depends on the nature of the transaction and the category of buyer, not on the area unit used. The converter has no bearing on Section 118 — confirm eligibility with a qualified advocate before entering into any agreement."
       }
-    }
+    },
+    "contextTitle": "Why area units matter in Himachal land records",
+    "contextBody": "Himachal Pradesh uses two parallel measurement systems inherited from pre-settlement surveys. The kanal-marla system is common in the northern and western districts and in areas that follow the Patwari karam of 57.5 inches. The bigha-biswa system is used in parts of the Shimla and Sirmour divisions and is based on a karam of 56 inches. The same plot can be described in different units depending on which settlement survey it was last entered under. When you read a jamabandi, the recorded area appears alongside the khasra number in the unit the Patwari used at settlement. The converter lets you translate that figure into square metres or square feet for comparison, but the official figure in the revenue record is always the controlling value. When a plot is sub-divided and both the original and the sub-division appear in the revenue record, check that the areas of the sub-divisions add up to the recorded area of the parent khasra. Discrepancies may indicate an unattested mutation or an error in the settlement record — flag them for confirmation with the Patwari before relying on the area in any agreement or deed."
   },
   "Seo": {
     "breadcrumb": {
@@ -1955,7 +2082,9 @@
           "q": "What happens to my upload?",
           "a": "Google Gemini processes the PDF. When the NVIDIA fallback is needed, NVIDIA receives page images. The app may reuse a result from its temporary server cache for up to six hours."
         }
-      }
+      },
+      "contextTitle": "What the checker reads and what it cannot",
+      "contextBody": "The checker extracts text from the uploaded PDF and applies a fixed set of rules: it looks for owner entries and shares, mutation status codes, case-reference patterns and remarks that match known mortgage or charge formats. It does not search external databases — it reads only what is in the document you uploaded. If the PDF was scanned at low resolution, or if the Patwari's handwriting in the remarks column was not captured clearly, the extraction may miss entries that are present on the paper copy. Always compare the checker's output with the original PDF before drawing any conclusions."
     },
     "title": "Check a land record (jamabandi)",
     "intro": "Upload a Jamabandi nakal PDF. We read it, run rule-based checks and show a score with the reasons. An AI model does the reading, so always compare the result with the original record.",
