@@ -1,0 +1,209 @@
+diff -ruN '--exclude=*.json' Himachal-land-records-main/src/app/[locale]/blog/[slug]/page.tsx himachal-patched/src/app/[locale]/blog/[slug]/page.tsx
+--- Himachal-land-records-main/src/app/[locale]/blog/[slug]/page.tsx	2026-11-20 17:39:22.000000000 +0000
++++ himachal-patched/src/app/[locale]/blog/[slug]/page.tsx	2026-11-21 08:02:48.268415985 +0000
+@@ -4,6 +4,7 @@
+ import { ArrowRight, CalendarDays, ChevronDown, ExternalLink, ListOrdered, ShieldAlert } from 'lucide-react';
+ import { setRequestLocale } from 'next-intl/server';
+ import { JsonLd } from '@/components/seo/JsonLd';
++import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
+ import type { Locale } from '@/i18n/routing';
+ import { BLOG_GUIDES, getBlogGuide, type BlogGuide } from '@/lib/blog-guides';
+ import { pageMetadata } from '@/lib/seo';
+@@ -283,13 +284,14 @@
+       <JsonLd data={jsonLd} />
+ 
+       {/* Breadcrumb */}
+-      <nav aria-label="Breadcrumb" className="mb-6 text-sm text-muted-foreground">
+-        <ol className="flex flex-wrap items-center gap-2">
+-          <li><a href={`/${locale}`} className="hover:underline">{labels.home}</a></li>
+-          <li aria-hidden="true">/</li>
+-          <li><a href={`/${locale}/blog`} className="hover:underline">{labels.blog}</a></li>
+-        </ol>
+-      </nav>
++      <Breadcrumbs
++        trail={[
++          { name: labels.home, href: '/' },
++          { name: labels.blog, href: '/blog' },
++          { name: guide.title[language], href: `/blog/${slug}` },
++        ]}
++        className="mb-6"
++      />
+ 
+       <header>
+         <p className="text-sm font-semibold uppercase tracking-[0.18em] text-leaf">{labels.eyebrow}</p>
+diff -ruN '--exclude=*.json' Himachal-land-records-main/src/app/[locale]/blog/page.tsx himachal-patched/src/app/[locale]/blog/page.tsx
+--- Himachal-land-records-main/src/app/[locale]/blog/page.tsx	2026-11-20 17:39:22.000000000 +0000
++++ himachal-patched/src/app/[locale]/blog/page.tsx	2026-11-21 08:02:38.222477290 +0000
+@@ -6,6 +6,7 @@
+ import type { Locale } from '@/i18n/routing';
+ import { BLOG_GUIDES } from '@/lib/blog-guides';
+ import { pageMetadata } from '@/lib/seo';
++import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
+ 
+ type Props = { params: Promise<{ locale: string }> };
+ 
+@@ -19,8 +20,14 @@
+   const { locale } = await params;
+   setRequestLocale(locale as Locale);
+   const t = await getTranslations('Blog');
++  const tSeo = await getTranslations('Seo');
++  const breadcrumbTrail = [
++    { name: tSeo('breadcrumb.home'), href: '/' },
++    { name: tSeo('breadcrumb.blog'), href: '/blog' },
++  ];
+   return (
+     <article className="container max-w-5xl py-10 sm:py-14">
++      <Breadcrumbs trail={breadcrumbTrail} className="mb-6" />
+       <header className="max-w-3xl"><p className="text-sm font-semibold uppercase tracking-[0.18em] text-leaf">{t('eyebrow')}</p><h1 className="mt-3 text-4xl sm:text-5xl">{t('title')}</h1><p className="mt-4 text-lg text-muted-foreground">{t('intro')}</p></header>
+       <Link href="/blog/7-documents-before-buying-land" className="concept-card group mt-10 grid overflow-hidden rounded-3xl border bg-card shadow-[8px_9px_0_rgba(42,16,45,0.08)] transition hover:-translate-y-1 hover:border-primary/40 lg:grid-cols-[1.15fr_1fr]">
+         <div className="relative min-h-64 overflow-hidden lg:min-h-[28rem]">
+diff -ruN '--exclude=*.json' Himachal-land-records-main/src/app/[locale]/guides/page.tsx himachal-patched/src/app/[locale]/guides/page.tsx
+--- Himachal-land-records-main/src/app/[locale]/guides/page.tsx	2026-11-20 17:39:22.000000000 +0000
++++ himachal-patched/src/app/[locale]/guides/page.tsx	2026-11-21 08:03:01.208841590 +0000
+@@ -4,6 +4,7 @@
+ import { getTranslations, setRequestLocale } from 'next-intl/server';
+ import type { Locale } from '@/i18n/routing';
+ import { pageMetadata } from '@/lib/seo';
++import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
+ 
+ const GUIDES = [
+   { key: 'buyLand',    icon: Landmark  },
+@@ -218,9 +219,15 @@
+   const { locale } = await params;
+   setRequestLocale(locale as Locale);
+   const t = await getTranslations('Guides');
++  const tSeo = await getTranslations('Seo');
++  const breadcrumbTrail = [
++    { name: tSeo('breadcrumb.home'), href: '/' },
++    { name: tSeo('breadcrumb.guides'), href: '/guides' },
++  ];
+ 
+   return (
+     <article className="container max-w-5xl py-10 sm:py-16">
++      <Breadcrumbs trail={breadcrumbTrail} className="mb-6" />
+ 
+       {/* ══════════════════════════════════════════
+           HEADER
+diff -ruN '--exclude=*.json' Himachal-land-records-main/src/components/seo/Breadcrumbs.tsx himachal-patched/src/components/seo/Breadcrumbs.tsx
+--- Himachal-land-records-main/src/components/seo/Breadcrumbs.tsx	2026-11-20 17:39:22.000000000 +0000
++++ himachal-patched/src/components/seo/Breadcrumbs.tsx	2026-11-21 08:02:15.262783691 +0000
+@@ -4,25 +4,37 @@
+ import { Link } from '@/i18n/navigation';
+ import { TOOL_HREFS, type ToolKey } from '@/lib/tool-links';
+ 
++/** A manually-specified crumb for non-tool pages. */
++export type BreadcrumbItem = { name: string; href: string };
++
+ type Props = {
+-  /** Omit on the /tools index page. */
++  /**
++   * Pass a ToolKey to get the standard Home › Tools › [Tool] trail.
++   * Pass an explicit `trail` array to override the full path (omit the
++   * current/last crumb's href to render it as plain text with aria-current).
++   * Omit both on the /tools index page.
++   */
+   current?: ToolKey;
++  trail?: BreadcrumbItem[];
+   className?: string;
+ };
+ 
+ /** Visible breadcrumb trail plus matching BreadcrumbList structured data. */
+-export async function Breadcrumbs({ current, className }: Props) {
++export async function Breadcrumbs({ current, trail, className }: Props) {
+   const [locale, t] = await Promise.all([getLocale(), getTranslations('Seo')]);
+-  const trail = [
+-    { name: t('breadcrumb.home'), href: '/' as const },
+-    { name: t('breadcrumb.tools'), href: '/tools' as const },
+-    ...(current ? [{ name: t(`tools.${current}.name`), href: TOOL_HREFS[current] }] : []),
+-  ];
++
++  const items: BreadcrumbItem[] = trail
++    ? trail
++    : [
++        { name: t('breadcrumb.home'), href: '/' },
++        { name: t('breadcrumb.tools'), href: '/tools' },
++        ...(current ? [{ name: t(`tools.${current}.name`), href: TOOL_HREFS[current] }] : []),
++      ];
+ 
+   const schema = {
+     '@context': 'https://schema.org',
+     '@type': 'BreadcrumbList',
+-    itemListElement: trail.map((item, index) => ({
++    itemListElement: items.map((item, index) => ({
+       '@type': 'ListItem',
+       position: index + 1,
+       name: item.name,
+@@ -33,15 +45,15 @@
+   return (
+     <nav aria-label={t('breadcrumb.label')} className={className}>
+       <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
+-        {trail.map((item, index) => {
+-          const isLast = index === trail.length - 1;
++        {items.map((item, index) => {
++          const isLast = index === items.length - 1;
+           return (
+-            <li key={item.href} className="flex items-center gap-2">
++            <li key={item.href + index} className="flex items-center gap-2">
+               {index > 0 && <ChevronRight className="size-4 shrink-0" aria-hidden="true" />}
+               {isLast ? (
+                 <span aria-current="page" className="font-medium text-foreground">{item.name}</span>
+               ) : (
+-                <Link href={item.href} className="inline-flex min-h-10 items-center underline-offset-4 hover:text-foreground hover:underline">
++                <Link href={item.href as Parameters<typeof Link>[0]['href']} className="inline-flex min-h-10 items-center underline-offset-4 hover:text-foreground hover:underline">
+                   {item.name}
+                 </Link>
+               )}
+diff -ruN Himachal-land-records-main/src/messages/en.json himachal-patched/src/messages/en.json
+--- Himachal-land-records-main/src/messages/en.json	2026-11-20 17:39:22.000000000 +0000
++++ himachal-patched/src/messages/en.json	2026-11-21 08:02:18.565763374 +0000
+@@ -1884,11 +1884,13 @@
+       }
+     }
+   },
+-"Seo": {
++  "Seo": {
+     "breadcrumb": {
+       "label": "Breadcrumb",
+       "home": "Home",
+-      "tools": "Tools"
++      "tools": "Tools",
++      "blog": "Blog",
++      "guides": "Land guides"
+     },
+     "related": {
+       "title": "Related land-record tools",
+@@ -1926,7 +1928,6 @@
+       }
+     }
+   },
+-
+   "NakalCheck": {
+     "guide": {
+       "title": "How the Jamabandi Checker works",
+diff -ruN Himachal-land-records-main/src/messages/hi.json himachal-patched/src/messages/hi.json
+--- Himachal-land-records-main/src/messages/hi.json	2026-11-20 17:39:22.000000000 +0000
++++ himachal-patched/src/messages/hi.json	2026-11-21 08:02:21.090638164 +0000
+@@ -1884,11 +1884,13 @@
+       }
+     }
+   },
+-"Seo": {
++  "Seo": {
+     "breadcrumb": {
+       "label": "ब्रेडक्रम्ब नेविगेशन",
+       "home": "होम",
+-      "tools": "टूल्स"
++      "tools": "टूल्स",
++      "blog": "ब्लॉग",
++      "guides": "भूमि मार्गदर्शिकाएँ"
+     },
+     "related": {
+       "title": "संबंधित भूमि-रिकॉर्ड टूल",
+@@ -1926,7 +1928,6 @@
+       }
+     }
+   },
+-
+   "NakalCheck": {
+     "guide": {
+       "title": "जमाबंदी जाँच कैसे काम करता है",

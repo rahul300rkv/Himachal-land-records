@@ -4,6 +4,7 @@ import { Landmark, TreePine, Users } from 'lucide-react';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { Locale } from '@/i18n/routing';
 import { pageMetadata } from '@/lib/seo';
+import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
 
 const GUIDES = [
   { key: 'buyLand',    icon: Landmark  },
@@ -218,9 +219,15 @@ export default async function GuidesPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale as Locale);
   const t = await getTranslations('Guides');
+  const tSeo = await getTranslations('Seo');
+  const breadcrumbTrail = [
+    { name: tSeo('breadcrumb.home'), href: '/' },
+    { name: tSeo('breadcrumb.guides'), href: '/guides' },
+  ];
 
   return (
     <article className="container max-w-5xl py-10 sm:py-16">
+      <Breadcrumbs trail={breadcrumbTrail} className="mb-6" />
 
       {/* ══════════════════════════════════════════
           HEADER

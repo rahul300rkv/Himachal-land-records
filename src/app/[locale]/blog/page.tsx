@@ -6,6 +6,7 @@ import { Link } from '@/i18n/navigation';
 import type { Locale } from '@/i18n/routing';
 import { BLOG_GUIDES } from '@/lib/blog-guides';
 import { pageMetadata } from '@/lib/seo';
+import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -19,8 +20,14 @@ export default async function BlogPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale as Locale);
   const t = await getTranslations('Blog');
+  const tSeo = await getTranslations('Seo');
+  const breadcrumbTrail = [
+    { name: tSeo('breadcrumb.home'), href: '/' },
+    { name: tSeo('breadcrumb.blog'), href: '/blog' },
+  ];
   return (
     <article className="container max-w-5xl py-10 sm:py-14">
+      <Breadcrumbs trail={breadcrumbTrail} className="mb-6" />
       <header className="max-w-3xl"><p className="text-sm font-semibold uppercase tracking-[0.18em] text-leaf">{t('eyebrow')}</p><h1 className="mt-3 text-4xl sm:text-5xl">{t('title')}</h1><p className="mt-4 text-lg text-muted-foreground">{t('intro')}</p></header>
       <Link href="/blog/7-documents-before-buying-land" className="concept-card group mt-10 grid overflow-hidden rounded-3xl border bg-card shadow-[8px_9px_0_rgba(42,16,45,0.08)] transition hover:-translate-y-1 hover:border-primary/40 lg:grid-cols-[1.15fr_1fr]">
         <div className="relative min-h-64 overflow-hidden lg:min-h-[28rem]">

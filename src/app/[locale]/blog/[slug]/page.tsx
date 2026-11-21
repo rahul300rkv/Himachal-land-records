@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { ArrowRight, CalendarDays, ChevronDown, ExternalLink, ListOrdered, ShieldAlert } from 'lucide-react';
 import { setRequestLocale } from 'next-intl/server';
 import { JsonLd } from '@/components/seo/JsonLd';
+import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
 import type { Locale } from '@/i18n/routing';
 import { BLOG_GUIDES, getBlogGuide, type BlogGuide } from '@/lib/blog-guides';
 import { pageMetadata } from '@/lib/seo';
@@ -283,13 +284,14 @@ export default async function GuidePage({ params }: Props) {
       <JsonLd data={jsonLd} />
 
       {/* Breadcrumb */}
-      <nav aria-label="Breadcrumb" className="mb-6 text-sm text-muted-foreground">
-        <ol className="flex flex-wrap items-center gap-2">
-          <li><a href={`/${locale}`} className="hover:underline">{labels.home}</a></li>
-          <li aria-hidden="true">/</li>
-          <li><a href={`/${locale}/blog`} className="hover:underline">{labels.blog}</a></li>
-        </ol>
-      </nav>
+      <Breadcrumbs
+        trail={[
+          { name: labels.home, href: '/' },
+          { name: labels.blog, href: '/blog' },
+          { name: guide.title[language], href: `/blog/${slug}` },
+        ]}
+        className="mb-6"
+      />
 
       <header>
         <p className="text-sm font-semibold uppercase tracking-[0.18em] text-leaf">{labels.eyebrow}</p>

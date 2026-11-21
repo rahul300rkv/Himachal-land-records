@@ -1884,11 +1884,13 @@
       }
     }
   },
-"Seo": {
+  "Seo": {
     "breadcrumb": {
       "label": "Breadcrumb",
       "home": "Home",
-      "tools": "Tools"
+      "tools": "Tools",
+      "blog": "Blog",
+      "guides": "Land guides"
     },
     "related": {
       "title": "Related land-record tools",
@@ -1926,7 +1928,6 @@
       }
     }
   },
-
   "NakalCheck": {
     "guide": {
       "title": "How the Jamabandi Checker works",
