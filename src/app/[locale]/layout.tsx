@@ -134,6 +134,7 @@ export default async function LocaleLayout({ children, params }: Props) {
       name: SITE.name,
       url: absoluteUrl('/'),
       logo: absoluteUrl('/icon.svg'),
+      ...(SITE.bloggerUrl ? { sameAs: [SITE.bloggerUrl] } : {}),
       description: metadata('description'),
       areaServed: { '@type': 'AdministrativeArea', name: 'Himachal Pradesh, India' },
       contactPoint: { '@type': 'ContactPoint', email: SITE.contactEmail, contactType: 'customer support', availableLanguage: ['English', 'Hindi'] },

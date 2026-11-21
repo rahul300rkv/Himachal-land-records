@@ -8,6 +8,8 @@ export const SITE = {
   name: 'HimachalLand Check',
   companyName: 'Himland Check',
   contactEmail: 'himlandcheck@gmail.com',
+  /** TODO: set your Blogger address (e.g. https://yourblog.blogspot.com). Leave empty to hide the footer link. */
+  bloggerUrl: 'https://himlandcheck.blogspot.com/',
   /** TODO: confirm the place whose courts have jurisdiction (see Terms of use). */
   jurisdiction: 'Shimla, Himachal Pradesh',
   /** Update this date (YYYY-MM-DD) whenever the legal pages change. */

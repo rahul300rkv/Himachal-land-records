@@ -1,4 +1,5 @@
-import { Mail, TriangleAlert } from 'lucide-react';
+import { ExternalLink, Mail, TriangleAlert } from 'lucide-react';
+import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { Logo } from './Logo';
@@ -52,6 +53,15 @@ export function Footer() {
               </li>
               <li><Link href="/contact" className={linkClass}>{nav('contact')}</Link></li>
               <li><a href={`mailto:${SITE.contactEmail}`} className={linkClass}><Mail className="mr-2 size-4" aria-hidden="true" />{SITE.contactEmail}</a></li>
+              {SITE.bloggerUrl && (
+                <li>
+                  <a href={SITE.bloggerUrl} target="_blank" rel="noopener noreferrer" className={linkClass}>
+                    <Image src="/images/blogger-logo.webp" alt="" width={16} height={16} className="mr-2 size-4 rounded-[3px]" />
+                    Blogger
+                    <ExternalLink className="ml-1.5 size-3.5" aria-hidden="true" />
+                  </a>
+                </li>
+              )}
             </ul>
           </nav>
 
