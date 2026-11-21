@@ -1,16 +1,56 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import { Landmark, TreePine, Users } from 'lucide-react';
+import { ArrowRight, Check, ChevronDown, Info, Landmark, TreePine, Users } from 'lucide-react';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
+import { JsonLd } from '@/components/seo/JsonLd';
+import { Link } from '@/i18n/navigation';
 import type { Locale } from '@/i18n/routing';
 import { pageMetadata } from '@/lib/seo';
-import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
+import { GUIDES as SITE_GUIDES, TOOLS } from '@/lib/site-tools';
+import { absoluteUrl } from '@/lib/utils';
+
+type Lang = 'en' | 'hi';
 
 const GUIDES = [
-  { key: 'buyLand',    icon: Landmark  },
-  { key: 'legalHeir', icon: Users      },
-  { key: 'forestLand',icon: TreePine   },
+  { key: 'buyLand', icon: Landmark },
+  { key: 'legalHeir', icon: Users },
+  { key: 'forestLand', icon: TreePine },
 ] as const;
+
+/** Where each guide hands the reader next (tool or related article). */
+const NEXT_STEP: Record<(typeof GUIDES)[number]['key'], { href: string; label: Record<Lang, string> }> = {
+  buyLand: { href: TOOLS.check.path, label: TOOLS.check.name },
+  legalHeir: {
+    href: '/blog/himachal-land-mutation-intkal-guide',
+    label: SITE_GUIDES['himachal-land-mutation-intkal-guide'],
+  },
+  forestLand: { href: TOOLS.map.path, label: TOOLS.map.name },
+};
+
+const COPY: Record<
+  Lang,
+  { jump: string; keyPoint: string; inGuide: string; note: string; questions: (n: number) => string; faq: string; next: string }
+> = {
+  en: {
+    jump: 'Jump to guide',
+    keyPoint: 'Key point',
+    inGuide: 'In this guide',
+    note: 'Good to know',
+    questions: (n) => `${n} ${n === 1 ? 'question' : 'questions'}`,
+    faq: 'Frequently asked questions',
+    next: 'Next step',
+  },
+  hi: {
+    jump: 'गाइड पर जाएँ',
+    keyPoint: 'मुख्य बिंदु',
+    inGuide: 'इस गाइड में',
+    note: 'ध्यान दें',
+    questions: (n) => `${n} प्रश्न`,
+    faq: 'अक्सर पूछे जाने वाले प्रश्न',
+    next: 'अगला कदम',
+  },
+};
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -70,11 +110,12 @@ function ContentList({ items }: { items?: ContentItems }) {
           key={i}
           className="flex gap-3 rounded-xl border border-border/60 bg-muted/40 p-4 text-sm leading-relaxed"
         >
-          {/* small filled bullet */}
           <span
-            className="mt-[3px] size-2 shrink-0 rounded-full bg-primary/60"
+            className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary"
             aria-hidden="true"
-          />
+          >
+            <Check className="size-3" strokeWidth={3} />
+          </span>
           <span>{item}</span>
         </li>
       ))}
@@ -82,127 +123,171 @@ function ContentList({ items }: { items?: ContentItems }) {
   );
 }
 
-/* ─── Callout / note ──────────────────────────────────────────────────── */
-function Note({ text }: { text: string }) {
+/* ─── Note: amber, icon + label, so it never reads as body text or CTA ── */
+function Note({ text, label }: { text: string; label: string }) {
   return (
-    <div className="mt-5 flex gap-3 rounded-xl border border-primary/20 bg-primary/5 p-4 text-sm leading-relaxed">
-      <span className="mt-px shrink-0 text-primary" aria-hidden="true">
-        ↳
-      </span>
-      <p>{text}</p>
-    </div>
+    <aside
+      role="note"
+      className="mt-6 flex gap-3 rounded-r-xl border-l-4 border-amber-500 bg-amber-50 p-4 text-amber-950 dark:bg-amber-950/30 dark:text-amber-100"
+    >
+      <Info className="mt-0.5 size-5 shrink-0 text-amber-600 dark:text-amber-400" aria-hidden="true" />
+      <div className="text-sm leading-relaxed">
+        <p className="font-semibold">{label}</p>
+        <p className="mt-1">{text}</p>
+      </div>
+    </aside>
+  );
+}
+
+/* ─── FAQ ─────────────────────────────────────────────────────────────── */
+function Faq({
+  guideKey,
+  title,
+  items,
+  copy,
+}: {
+  guideKey: string;
+  title?: string;
+  items: FAQItem[];
+  copy: (typeof COPY)[Lang];
+}) {
+  if (items.length === 0) return null;
+  const headingId = `${guideKey}-faq`;
+
+  return (
+    <section className="mt-12 scroll-mt-24" id={headingId} aria-labelledby={`${headingId}-title`}>
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <h3 id={`${headingId}-title`} className="text-xl font-semibold tracking-tight">
+          {title ?? copy.faq}
+        </h3>
+        <span className="text-sm text-muted-foreground">{copy.questions(items.length)}</span>
+      </div>
+
+      <div className="mt-5 space-y-3">
+        {items.map((faq, i) => (
+          <details
+            key={i}
+            className="group rounded-xl border border-border/70 bg-card transition-colors open:border-primary/40 open:bg-primary/[0.03]"
+          >
+            <summary className="flex cursor-pointer list-none items-start justify-between gap-4 rounded-xl px-5 py-4 font-medium leading-snug outline-none hover:bg-muted/40 focus-visible:ring-2 focus-visible:ring-primary/50 [&::-webkit-details-marker]:hidden">
+              <span>{faq.q}</span>
+              <span
+                className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full border border-border text-muted-foreground transition-transform duration-200 group-open:rotate-180 group-open:border-primary/40 group-open:text-primary"
+                aria-hidden="true"
+              >
+                <ChevronDown className="size-4" />
+              </span>
+            </summary>
+            <div className="mx-5 mb-5 border-l-2 border-primary/30 pl-4 text-sm leading-[1.8] text-muted-foreground">
+              {faq.a}
+            </div>
+          </details>
+        ))}
+      </div>
+    </section>
   );
 }
 
 /* ─── Full guide detail block ─────────────────────────────────────────── */
-function GuideDetails({ page }: { page?: GuidePageContent }) {
+function GuideDetails({
+  guideKey,
+  page,
+  lang,
+}: {
+  guideKey: (typeof GUIDES)[number]['key'];
+  page?: GuidePageContent;
+  lang: Lang;
+}) {
   if (!page) return null;
 
-  const sections  = Object.entries(page.sections ?? {});
-  const faqItems  = getValues(page.faq?.items);
+  const copy = COPY[lang];
+  const sections = Object.entries(page.sections ?? {});
+  const faqItems = getValues(page.faq?.items);
+  const next = NEXT_STEP[guideKey];
+  const titled = sections.filter(([, s]) => s.title);
 
   return (
     <div className="mt-8 border-t border-border/60 pt-8">
+      {page.intro && <p className="mb-8 text-base leading-[1.8] text-muted-foreground">{page.intro}</p>}
 
-      {/* Intro paragraph */}
-      {page.intro && (
-        <p className="mb-10 text-base leading-[1.8] text-muted-foreground">
-          {page.intro}
-        </p>
+      {/* In-guide navigation */}
+      {titled.length >= 3 && (
+        <nav aria-label={copy.inGuide} className="mb-10 rounded-xl border border-border/60 bg-muted/30 p-4">
+          <p className="text-sm font-semibold">{copy.inGuide}</p>
+          <ul className="mt-2 grid gap-x-6 gap-y-1.5 text-sm sm:grid-cols-2">
+            {titled.map(([sectionKey, section]) => (
+              <li key={sectionKey}>
+                <a href={`#${guideKey}-${sectionKey}`} className="text-muted-foreground hover:text-foreground hover:underline">
+                  {section.title}
+                </a>
+              </li>
+            ))}
+            {faqItems.length > 0 && (
+              <li>
+                <a href={`#${guideKey}-faq`} className="text-muted-foreground hover:text-foreground hover:underline">
+                  {page.faq?.title ?? copy.faq}
+                </a>
+              </li>
+            )}
+          </ul>
+        </nav>
       )}
 
       {/* Sections */}
       <div className="space-y-10">
         {sections.map(([sectionKey, section], idx) => (
-          <section key={sectionKey}>
-
+          <section key={sectionKey} id={`${guideKey}-${sectionKey}`} className="scroll-mt-24">
             {section.title && (
               <div className="flex items-baseline gap-3">
-                {/* step counter */}
                 <span
                   className="shrink-0 font-mono text-xs font-semibold tabular-nums text-primary/50"
                   aria-hidden="true"
                 >
                   {String(idx + 1).padStart(2, '0')}
                 </span>
-                <h3 className="text-lg font-semibold tracking-tight">
-                  {section.title}
-                </h3>
-              </div>
-            )}
-
-            {section.intro && (
-              <p className="mt-3 pl-8 leading-relaxed text-muted-foreground">
-                {section.intro}
-              </p>
-            )}
-
-            {section.body && (
-              <div className="mt-3 space-y-3 pl-8 leading-[1.8] text-muted-foreground">
-                {(Array.isArray(section.body)
-                  ? section.body
-                  : [section.body]
-                ).map((p, i) => (
-                  <p key={i}>{p}</p>
-                ))}
+                <h3 className="text-lg font-semibold tracking-tight">{section.title}</h3>
               </div>
             )}
 
             <div className={section.title ? 'pl-8' : ''}>
-              <ContentList items={section.items} />
-              {section.note && <Note text={section.note} />}
-            </div>
+              {section.intro && <p className="mt-3 leading-relaxed text-muted-foreground">{section.intro}</p>}
 
+              {section.body && (
+                <div className="mt-3 space-y-3 leading-[1.8] text-muted-foreground">
+                  {(Array.isArray(section.body) ? section.body : [section.body]).map((p, i) => (
+                    <p key={i}>{p}</p>
+                  ))}
+                </div>
+              )}
+
+              <ContentList items={section.items} />
+              {section.note && <Note text={section.note} label={copy.note} />}
+            </div>
           </section>
         ))}
       </div>
 
-      {/* FAQ accordion */}
-      {faqItems.length > 0 && (
-        <section className="mt-12">
-          {page.faq?.title && (
-            <h3 className="mb-5 text-lg font-semibold tracking-tight">
-              {page.faq.title}
-            </h3>
-          )}
+      <Faq guideKey={guideKey} title={page.faq?.title} items={faqItems} copy={copy} />
 
-          <div className="divide-y divide-border/60 rounded-xl border border-border/60 overflow-hidden">
-            {faqItems.map((faq, i) => (
-              <details key={i} className="group bg-card">
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 font-medium hover:bg-muted/40 transition-colors">
-                  <span>{faq.q}</span>
-                  <span
-                    className="shrink-0 size-5 flex items-center justify-center rounded-full border border-border text-xs text-muted-foreground transition-transform group-open:rotate-180"
-                    aria-hidden="true"
-                  >
-                    ↓
-                  </span>
-                </summary>
-                <p className="border-t border-border/60 bg-muted/20 px-5 py-4 text-sm leading-[1.8] text-muted-foreground">
-                  {faq.a}
-                </p>
-              </details>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* CTA strip */}
-      {page.cta && (
-        <div className="mt-10 grid gap-1 rounded-xl border border-primary/25 bg-primary/5 p-6 sm:grid-cols-[1fr_auto] sm:items-center">
-          <div>
-            {page.cta.title && (
-              <p className="font-semibold">{page.cta.title}</p>
-            )}
-            {page.cta.body && (
-              <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                {page.cta.body}
-              </p>
+      {/* Next step: solid block, clearly an action */}
+      {(page.cta || next) && (
+        <div className="mt-12 flex flex-col gap-4 rounded-xl bg-primary p-6 text-primary-foreground sm:flex-row sm:items-center sm:justify-between sm:p-7">
+          <div className="min-w-0">
+            {page.cta?.title && <p className="text-lg font-semibold text-primary-foreground">{page.cta.title}</p>}
+            {page.cta?.body && (
+              <p className="mt-1 text-sm leading-relaxed text-primary-foreground/85">{page.cta.body}</p>
             )}
           </div>
+          <Link
+            href={next.href}
+            className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-lg bg-background px-4 py-2 text-sm font-semibold text-foreground transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-background"
+          >
+            <span className="sr-only">{copy.next}: </span>
+            {next.label[lang]}
+            <ArrowRight className="size-4" aria-hidden="true" />
+          </Link>
         </div>
       )}
-
     </div>
   );
 }
@@ -218,6 +303,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function GuidesPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale as Locale);
+  const lang: Lang = locale === 'hi' ? 'hi' : 'en';
+  const copy = COPY[lang];
   const t = await getTranslations('Guides');
   const tSeo = await getTranslations('Seo');
   const breadcrumbTrail = [
@@ -225,48 +312,79 @@ export default async function GuidesPage({ params }: Props) {
     { name: tSeo('breadcrumb.guides'), href: '/guides' },
   ];
 
+  const guides = GUIDES.map(({ key, icon }) => ({
+    key,
+    icon,
+    content: (t.raw as (k: string) => unknown)(`items.${key}`) as GuideContent,
+  }));
+
+  const pageUrl = absoluteUrl(`/${locale}/guides`);
+  const inLanguage = lang === 'hi' ? 'hi-IN' : 'en-IN';
+  const allFaqs = guides.flatMap(({ content }) => getValues(content.page?.faq?.items));
+
+  const jsonLd: Record<string, unknown>[] = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'CollectionPage',
+      '@id': `${pageUrl}#page`,
+      url: pageUrl,
+      name: t('title'),
+      description: t('intro'),
+      inLanguage,
+      publisher: { '@id': `${absoluteUrl('/')}#organization` },
+      mainEntity: {
+        '@type': 'ItemList',
+        numberOfItems: guides.length,
+        itemListElement: guides.map(({ key, content }, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          name: content.title,
+          url: `${pageUrl}#${key}`,
+        })),
+      },
+    },
+  ];
+  // One FAQPage per URL: merge every guide's questions into it.
+  if (allFaqs.length > 0) {
+    jsonLd.push({
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      '@id': `${pageUrl}#faq`,
+      inLanguage,
+      mainEntity: allFaqs.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    });
+  }
+
   return (
     <article className="container max-w-5xl py-10 sm:py-16">
+      <JsonLd data={jsonLd} />
       <Breadcrumbs trail={breadcrumbTrail} className="mb-6" />
 
-      {/* ══════════════════════════════════════════
-          HEADER
-      ══════════════════════════════════════════ */}
+      {/* Header */}
       <header className="grid items-center gap-10 lg:grid-cols-[0.9fr_1.1fr]">
-
         <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-leaf">
-            {t('eyebrow')}
-          </p>
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-leaf">{t('eyebrow')}</p>
 
-          <h1 className="mt-3 text-4xl font-semibold leading-tight sm:text-5xl">
-            {t('title')}
-          </h1>
+          <h1 className="mt-3 text-4xl font-semibold leading-tight sm:text-5xl">{t('title')}</h1>
 
-          <p className="mt-5 text-lg leading-relaxed text-muted-foreground">
-            {t('intro')}
-          </p>
+          <p className="mt-5 text-lg leading-relaxed text-muted-foreground">{t('intro')}</p>
 
           {/* Quick-jump nav */}
-          <nav
-            className="mt-7 flex flex-wrap gap-2"
-            aria-label="Jump to guide"
-          >
-            {GUIDES.map(({ key }, i) => {
-              const guide = (t.raw as (k: string) => unknown)(
-                `items.${key}`,
-              ) as GuideContent;
-              return (
-                <a
-                  key={key}
-                  href={`#${key}`}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-border bg-muted/60 px-3 py-1 text-xs font-medium transition-colors hover:bg-muted"
-                >
-                  <span className="font-mono text-primary/60">{i + 1}</span>
-                  {guide.title}
-                </a>
-              );
-            })}
+          <nav className="mt-7 flex flex-wrap gap-2" aria-label={copy.jump}>
+            {guides.map(({ key, content }, i) => (
+              <a
+                key={key}
+                href={`#${key}`}
+                className="inline-flex items-center gap-1.5 rounded-full border border-border bg-muted/60 px-3 py-1 text-xs font-medium transition-colors hover:bg-muted"
+              >
+                <span className="font-mono text-primary/60">{i + 1}</span>
+                {content.title}
+              </a>
+            ))}
           </nav>
         </div>
 
@@ -280,83 +398,57 @@ export default async function GuidesPage({ params }: Props) {
             className="object-cover"
           />
         </div>
-
       </header>
 
-      {/* ══════════════════════════════════════════
-          GUIDES
-      ══════════════════════════════════════════ */}
+      {/* Guides */}
       <div className="mt-14 space-y-10">
-        {GUIDES.map(({ key, icon: Icon }, index) => {
-          const guide = (t.raw as (k: string) => unknown)(
-            `items.${key}`,
-          ) as GuideContent;
+        {guides.map(({ key, icon: Icon, content: guide }, index) => (
+          <section
+            key={key}
+            id={key}
+            className="scroll-mt-24 overflow-hidden rounded-2xl border border-border bg-card shadow-sm"
+          >
+            <div className="h-1 w-full bg-primary/20" />
 
-          return (
-            <section
-              key={key}
-              id={key}
-              className="scroll-mt-24 overflow-hidden rounded-2xl border border-border bg-card shadow-sm"
-            >
-              {/* ── Coloured top bar ── */}
-              <div className="h-1 w-full bg-primary/20" />
+            <div className="p-7 sm:p-10">
+              <div className="flex items-start gap-4">
+                <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/20">
+                  <Icon className="size-5" aria-hidden="true" />
+                </span>
 
-              <div className="p-7 sm:p-10">
-
-                {/* Guide heading row */}
-                <div className="flex items-start gap-4">
-                  <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/20">
-                    <Icon className="size-5" aria-hidden="true" />
-                  </span>
-
-                  <div className="min-w-0">
-                    <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-                      {t('guideLabel', { number: index + 1 })}
-                    </p>
-                    <h2 className="mt-0.5 text-2xl font-semibold leading-snug sm:text-3xl">
-                      {guide.title}
-                    </h2>
-                  </div>
+                <div className="min-w-0">
+                  <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                    {t('guideLabel', { number: index + 1 })}
+                  </p>
+                  <h2 className="mt-0.5 text-2xl font-semibold leading-snug sm:text-3xl">{guide.title}</h2>
                 </div>
-
-                {/* Lead paragraph */}
-                <p className="mt-6 text-base leading-[1.8] text-muted-foreground">
-                  {guide.body}
-                </p>
-
-                {/* Three key points */}
-                <ul className="mt-6 grid gap-3 sm:grid-cols-3">
-                  {[guide.point1, guide.point2, guide.point3].map((pt, pi) => (
-                    <li
-                      key={pi}
-                      className="rounded-xl border border-border/70 bg-muted/50 px-4 py-3 text-sm leading-relaxed"
-                    >
-                      <span className="mb-1 block font-mono text-[10px] font-semibold uppercase tracking-widest text-primary/50">
-                        Point {pi + 1}
-                      </span>
-                      {pt}
-                    </li>
-                  ))}
-                </ul>
-
-                {/* Full expanded content */}
-                <GuideDetails page={guide.page} />
-
               </div>
-            </section>
-          );
-        })}
+
+              <p className="mt-6 text-base leading-[1.8] text-muted-foreground">{guide.body}</p>
+
+              <ul className="mt-6 grid gap-3 sm:grid-cols-3">
+                {[guide.point1, guide.point2, guide.point3].map((pt, pi) => (
+                  <li
+                    key={pi}
+                    className="rounded-xl border border-border/70 bg-muted/50 px-4 py-3 text-sm leading-relaxed"
+                  >
+                    <span className="mb-1 block text-xs font-semibold text-primary/70">
+                      {copy.keyPoint} {pi + 1}
+                    </span>
+                    {pt}
+                  </li>
+                ))}
+              </ul>
+
+              <GuideDetails guideKey={key} page={guide.page} lang={lang} />
+            </div>
+          </section>
+        ))}
       </div>
 
-      {/* ══════════════════════════════════════════
-          REVIEW NOTE
-      ══════════════════════════════════════════ */}
       {t.has('reviewNote') && (
-        <p className="mt-10 text-sm leading-relaxed text-muted-foreground">
-          {t('reviewNote')}
-        </p>
+        <p className="mt-10 text-sm leading-relaxed text-muted-foreground">{t('reviewNote')}</p>
       )}
-
     </article>
   );
 }
