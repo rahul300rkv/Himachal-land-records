@@ -14,7 +14,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return pageMetadata({ locale, path: '/converter', title: t('title'), description: t('intro') });
 }
 
-const FAQ_KEYS = ['districts', 'which', 'records', 'rounding', 'ownership', 'biswa', 'kanal', 'section118'] as const;
+const FAQ_KEYS = [
+  'districts', 'which', 'records', 'rounding',
+  'ownership', 'biswa', 'kanal', 'section118',
+] as const;
 
 export default async function ConverterPage({ params }: Props) {
   const { locale } = await params;
@@ -63,21 +66,38 @@ export default async function ConverterPage({ params }: Props) {
         <p className="mt-3 text-sm leading-relaxed opacity-90">{t('exampleBody')}</p>
       </section>
 
-      {/* Why units matter — context section */}
+      {/* Why units matter */}
       <section className="mt-10 border-t pt-8">
         <h2 className="text-2xl sm:text-3xl">{t('contextTitle')}</h2>
         <p className="mt-3 text-base leading-relaxed text-muted-foreground">{t('contextBody')}</p>
       </section>
 
-      {/* FAQ */}
+      {/* FAQ — collapsible */}
       <section className="mt-10 border-t pt-8" aria-labelledby="converter-faq">
         <h2 id="converter-faq" className="text-2xl sm:text-3xl">{t('faqTitle')}</h2>
-        <dl className="mt-6 space-y-0 divide-y divide-border rounded-xl border border-border">
+        <dl className="mt-5 space-y-2">
           {FAQ_KEYS.map((key) => (
-            <div key={key} className="p-5 sm:p-6">
-              <dt className="font-semibold leading-snug">{t(`faq.${key}.q`)}</dt>
-              <dd className="mt-2 text-sm leading-relaxed text-muted-foreground">{t(`faq.${key}.a`)}</dd>
-            </div>
+            <details key={key} className="group rounded-xl border border-border bg-card">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 font-medium">
+                <span>{t(`faq.${key}.q`)}</span>
+                <svg
+                  className="size-4 shrink-0 text-muted-foreground transition-transform group-open:rotate-180"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </summary>
+              <dd className="px-5 pb-5 text-sm leading-relaxed text-muted-foreground">
+                {t(`faq.${key}.a`)}
+              </dd>
+            </details>
           ))}
         </dl>
       </section>
