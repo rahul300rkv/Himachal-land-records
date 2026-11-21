@@ -7,7 +7,6 @@ import { JsonLd } from '@/components/seo/JsonLd';
 import { Link } from '@/i18n/navigation';
 import type { Locale } from '@/i18n/routing';
 import { pageMetadata } from '@/lib/seo';
-import { GUIDES as SITE_GUIDES, TOOLS } from '@/lib/site-tools';
 import { absoluteUrl } from '@/lib/utils';
 
 type Lang = 'en' | 'hi';
@@ -20,12 +19,12 @@ const GUIDES = [
 
 /** Where each guide hands the reader next (tool or related article). */
 const NEXT_STEP: Record<(typeof GUIDES)[number]['key'], { href: string; label: Record<Lang, string> }> = {
-  buyLand: { href: TOOLS.check.path, label: TOOLS.check.name },
+  buyLand: { href: '/check', label: { en: 'Nakal checker', hi: 'नकल जाँच' } },
   legalHeir: {
     href: '/blog/himachal-land-mutation-intkal-guide',
-    label: SITE_GUIDES['himachal-land-mutation-intkal-guide'],
+    label: { en: 'Land mutation (Intkal) guide', hi: 'भूमि इंतकाल (म्यूटेशन) मार्गदर्शिका' },
   },
-  forestLand: { href: TOOLS.map.path, label: TOOLS.map.name },
+  forestLand: { href: '/map', label: { en: 'Plot map lookup', hi: 'प्लॉट नक्शा खोज' } },
 };
 
 const COPY: Record<
