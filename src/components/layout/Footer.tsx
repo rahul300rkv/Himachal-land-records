@@ -1,4 +1,4 @@
-import { ExternalLink, Mail, TriangleAlert } from 'lucide-react';
+import { Mail, TriangleAlert } from 'lucide-react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
@@ -58,7 +58,7 @@ export function Footer() {
                   <a href={SITE.bloggerUrl} target="_blank" rel="noopener noreferrer" className={linkClass}>
                     <Image src="/images/blogger-logo.webp" alt="" width={16} height={16} className="mr-2 size-4 rounded-[3px]" />
                     Blogger
-                    <ExternalLink className="ml-1.5 size-3.5" aria-hidden="true" />
+                    
                   </a>
                 </li>
               )}
