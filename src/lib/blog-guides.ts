@@ -495,6 +495,220 @@ export const BLOG_GUIDES: BlogGuide[] = [
     ],
   },
 {
+    slug: 'land-demarcation-nishandehi-himachal-pradesh',
+    image: '/images/himachal-valley.jpg',
+    publishedAt: '2026-11-22T14:00:00+05:30',
+    readTime: { en: '9 minute guide', hi: '9 मिनट की मार्गदर्शिका' },
+    title: {
+      en: 'Land Demarcation (Nishandehi) in Himachal Pradesh 2026: How to Apply Online, Fees, Documents and Status',
+      hi: 'हिमाचल प्रदेश में भूमि निशानदेही 2026: ऑनलाइन आवेदन, शुल्क, दस्तावेज़ और स्थिति कैसे जाँचें',
+    },
+    summary: {
+      en: 'Who can apply for Nishandehi, the documents to prepare, how to submit the online MEGH-Demarcation request, what happens at the field visit, the fee position and how to track your application.',
+      hi: 'निशानदेही के लिए कौन आवेदन कर सकता है, कौन-से दस्तावेज़ तैयार रखें, ऑनलाइन मेघ-निशानदेही अनुरोध कैसे करें, मौके पर क्या होता है, शुल्क की स्थिति और आवेदन की ट्रैकिंग कैसे करें।',
+    },
+    intro: {
+      en: 'Are you unsure where your land ends and a neighbour’s begins? Are you buying a plot in Shimla, Solan, Kangra, Mandi or elsewhere in Himachal Pradesh and want the boundary measured officially? In these situations you may need land demarcation, commonly called Nishandehi. This guide explains who may apply, which records to prepare, how to submit an online request through the Revenue Department’s MEGH-Demarcation service, what happens during the field visit and how to follow up. The online application is a Government of Himachal Pradesh service on eHimbhoomi, not a HimLand Check service.',
+      hi: 'क्या आप निश्चित नहीं कि आपकी ज़मीन कहाँ खत्म होती है और पड़ोसी की कहाँ शुरू? क्या आप शिमला, सोलन, कांगड़ा, मंडी या हिमाचल के किसी और हिस्से में भूखंड खरीद रहे हैं और सीमा की आधिकारिक माप चाहते हैं? ऐसी स्थितियों में भूमि निशानदेही की ज़रूरत पड़ सकती है। यह मार्गदर्शिका बताती है कि आवेदन कौन कर सकता है, कौन-से अभिलेख तैयार रखें, राजस्व विभाग की मेघ-निशानदेही सेवा से ऑनलाइन अनुरोध कैसे करें, मौके पर क्या होता है और आगे कैसे पूछताछ करें। ऑनलाइन आवेदन हिमाचल प्रदेश सरकार की ई-हिमभूमि सेवा है, हिमलैंड चेक की नहीं।',
+    },
+    sections: [
+      {
+        title: { en: 'What is land demarcation or Nishandehi?', hi: 'भूमि निशानदेही क्या है?' },
+        body: {
+          en: 'Nishandehi is the formal process of locating and marking a parcel’s boundary on the ground by reference to recognised revenue maps and records. The competent revenue authority considers the measurements, field report and objections before issuing an order. It can help when land is jointly held, an old boundary mark has disappeared or neighbouring owners disagree about the boundary. For example, you may own a Khasra parcel shown in the Jamabandi while the fence on the ground does not match the revenue map. A private mobile map or satellite image can help you understand the approximate location, but it is not a substitute for official demarcation.',
+          hi: 'निशानदेही मान्यता प्राप्त राजस्व नक्शों और अभिलेखों के आधार पर भूखंड की सीमा को मौके पर खोजने और चिह्नित करने की औपचारिक प्रक्रिया है। सक्षम राजस्व अधिकारी माप, मौका रिपोर्ट और आपत्तियों पर विचार करके आदेश देता है। यह तब उपयोगी है जब भूमि संयुक्त हो, पुराना सीमा-चिह्न मिट गया हो या पड़ोसी मालिक सीमा पर असहमत हों। उदाहरण के लिए, जमाबंदी में आपका खसरा दर्ज है पर मौके की बाड़ राजस्व नक्शे से मेल नहीं खाती। निजी मोबाइल मैप या सैटेलाइट चित्र अनुमानित स्थान समझने में मदद करते हैं, पर आधिकारिक निशानदेही का विकल्प नहीं हैं।',
+        },
+      },
+      {
+        title: { en: 'Who can apply for Nishandehi?', hi: 'निशानदेही के लिए आवेदन कौन कर सकता है?' },
+        citation: {
+          en: 'Chapter 10, Himachal Pradesh Land Records Manual, as amended in the state’s published notification',
+          hi: 'हिमाचल प्रदेश भूमि अभिलेख नियमावली का अध्याय 10, राज्य की प्रकाशित अधिसूचना के अनुसार संशोधित',
+        },
+        body: {
+          en: 'The manual provides for an application by a co-sharer or a person with legally established title of ownership or possession. Applicants should identify the other co-sharers and relevant adjoining owners or occupants, as required for the proceedings. If you are only a prospective purchaser, ask the current landowner to arrange an appropriate demarcation, or take advice on your legal standing before applying yourself.',
+          hi: 'नियमावली के अनुसार आवेदन सह-हिस्सेदार या ऐसा व्यक्ति कर सकता है जिसका स्वामित्व या कब्जे का हक़ विधिवत स्थापित हो। कार्यवाही के लिए आवश्यक अन्य सह-हिस्सेदारों और संबंधित पड़ोसी मालिकों या कब्जाधारियों की पहचान करें। केवल संभावित खरीदार हों तो वर्तमान भू-स्वामी से उपयुक्त निशानदेही कराने को कहें, या स्वयं आवेदन से पहले अपनी कानूनी स्थिति पर सलाह लें।',
+        },
+      },
+      {
+        title: { en: 'Documents required for land demarcation', hi: 'निशानदेही के लिए आवश्यक दस्तावेज़' },
+        citation: {
+          en: 'Revenue Department MEGH-Demarcation checklist',
+          hi: 'राजस्व विभाग की मेघ-निशानदेही चेकलिस्ट',
+        },
+        body: {
+          en: 'Prepare the documents listed in the Revenue Department’s official checklist. The applicant’s contact details, identification and relevant title documents should also be at hand, because the office may ask for more depending on the case. Do not assume that an online entry replaces the documentary submission required by the published procedure.',
+          hi: 'राजस्व विभाग की आधिकारिक चेकलिस्ट में बताए दस्तावेज़ तैयार रखें। आवेदक का संपर्क विवरण, पहचान और संबंधित हक़ दस्तावेज़ भी साथ रखें, क्योंकि कार्यालय मामले के अनुसार और कागज़ माँग सकता है। यह न मानें कि ऑनलाइन प्रविष्टि प्रकाशित प्रक्रिया में माँगी गई दस्तावेज़ी प्रस्तुति का स्थान ले लेती है।',
+        },
+        list: {
+          en: [
+            'Latest Jamabandi (Record of Rights), to identify the holding, ownership and Khasra numbers.',
+            'Mutation sheet, where the Khasra number has been subdivided and the mutation is relevant to the application.',
+            'Current settlement map (Musavi) showing the land and adjoining Khasra numbers or subdivisions.',
+            'Prescribed process fee, as instructed by the concerned Tehsil or Sub-Tehsil.',
+          ],
+          hi: [
+            'नवीनतम जमाबंदी (अधिकार अभिलेख), ताकि होल्डिंग, स्वामित्व और खसरा नंबर पहचाने जा सकें।',
+            'इंतकाल शीट, जहाँ खसरा नंबर का उप-विभाजन हुआ हो और इंतकाल आवेदन से संबंधित हो।',
+            'वर्तमान बंदोबस्त नक्शा (मुसावी), जिसमें भूमि और आसपास के खसरा नंबर या उप-विभाजन दिखें।',
+            'निर्धारित प्रोसेस फीस, जैसा संबंधित तहसील या उप-तहसील निर्देश दे।',
+          ],
+        },
+      },
+      {
+        title: { en: 'How to apply for Nishandehi online', hi: 'निशानदेही के लिए ऑनलाइन आवेदन कैसे करें' },
+        body: {
+          en: 'Step 1: open the official eHimbhoomi online demarcation request page. If it is unavailable, start at the eHimbhoomi citizen services homepage and choose Demarcation. Step 2: enter the land details the portal asks for. The departmental circular explains that the module uses land details from the revenue database, so check the district, Tehsil or Sub-Tehsil, village and parcel identifiers against your current Jamabandi, because portal labels may change. Step 3: after submitting, save the acknowledgement number and any confirmation or printout. Step 4: the department’s published instructions require you to mention the acknowledgement number on the application and submit the prescribed annexures to the concerned Tehsil or Sub-Tehsil, so check whether a newer electronic submission arrangement applies to your case. Step 5: watch for scrutiny and the field date. If the application is in order it can be forwarded to the Field Kanungo, who fixes a demarcation date and updates the online system. If there are objections or deficiencies, the application may need clarification or may be rejected with reasons.',
+          hi: 'चरण 1: ई-हिमभूमि का आधिकारिक ऑनलाइन निशानदेही अनुरोध पृष्ठ खोलें। न खुले तो ई-हिमभूमि नागरिक सेवाएँ होमपेज से “Demarcation” चुनें। चरण 2: पोर्टल जो भूमि विवरण माँगे वह भरें। विभागीय परिपत्र के अनुसार मॉड्यूल राजस्व डेटाबेस के भूमि विवरण का उपयोग करता है, इसलिए जिला, तहसील/उप-तहसील, गाँव और भूखंड पहचान अपनी वर्तमान जमाबंदी से मिलाएँ; पोर्टल के लेबल बदल सकते हैं। चरण 3: जमा करने के बाद पावती संख्या और उपलब्ध पुष्टि या प्रिंटआउट सुरक्षित रखें। चरण 4: विभाग के प्रकाशित निर्देशों के अनुसार आवेदन पर पावती संख्या लिखें और निर्धारित संलग्नक संबंधित तहसील/उप-तहसील में जमा करें; पूछ लें कि आपके मामले में कोई नई इलेक्ट्रॉनिक प्रस्तुति व्यवस्था लागू है या नहीं। चरण 5: जाँच और मौका तिथि पर नज़र रखें। आवेदन सही हो तो वह फील्ड कानूनगो को भेजा जा सकता है, जो निशानदेही की तिथि तय करके ऑनलाइन प्रणाली अद्यतन करता है। आपत्ति या कमी होने पर स्पष्टीकरण माँगा जा सकता है या कारण सहित आवेदन अस्वीकार हो सकता है।',
+        },
+        link: {
+          href: 'https://ehimbhoomi.nic.in/Demarcation/frmOnlineDemReq.aspx',
+          label: { en: 'Open the official demarcation request page', hi: 'आधिकारिक निशानदेही अनुरोध पृष्ठ खोलें' },
+        },
+      },
+      {
+        title: { en: 'What happens during the field inspection?', hi: 'मौका निरीक्षण के दौरान क्या होता है?' },
+        body: {
+          en: 'On the scheduled date the authorised officer or Field Kanungo measures the land using the relevant revenue map and recognised reference points. The amended manual describes procedures involving fixed reference points, field measurements and, where suitable, electronic survey equipment. The field report should document the method and points used, parties present or absent, measurements and any objections. The Tehsildar, Naib Tehsildar or competent revenue officer then considers the report and passes the appropriate order.',
+          hi: 'निर्धारित तिथि पर अधिकृत अधिकारी या फील्ड कानूनगो संबंधित राजस्व नक्शे और मान्य संदर्भ बिंदुओं से माप करता है। संशोधित नियमावली में स्थिर संदर्भ बिंदुओं, मौका माप और उपयुक्त होने पर इलेक्ट्रॉनिक सर्वे उपकरणों की प्रक्रिया बताई गई है। मौका रिपोर्ट में प्रयुक्त विधि और बिंदु, उपस्थित या अनुपस्थित पक्ष, माप और आपत्तियाँ दर्ज होनी चाहिए। इसके बाद तहसीलदार, नायब तहसीलदार या सक्षम राजस्व अधिकारी रिपोर्ट पर विचार करके उचित आदेश देता है।',
+        },
+        list: {
+          en: [
+            'Keep the parcel and the access routes to it identifiable.',
+            'Make sure concerned co-sharers and adjoining parties receive the required notices through the official process.',
+            'Observe the measurement and raise any genuine objection through the appropriate record.',
+            'Do not treat an informal fence line or a private GPS pin as the final legal boundary.',
+          ],
+          hi: [
+            'भूखंड और उस तक पहुँच के रास्ते पहचाने जा सकें, यह सुनिश्चित करें।',
+            'संबंधित सह-हिस्सेदारों और पड़ोसी पक्षों को आधिकारिक प्रक्रिया से आवश्यक नोटिस मिलें, यह देखें।',
+            'माप के समय उपस्थित रहें और वास्तविक आपत्ति उचित अभिलेख में दर्ज कराएँ।',
+            'अनौपचारिक बाड़ या निजी जीपीएस पिन को अंतिम कानूनी सीमा न मानें।',
+          ],
+        },
+      },
+      {
+        title: { en: 'Nishandehi fees in Himachal Pradesh', hi: 'हिमाचल प्रदेश में निशानदेही शुल्क' },
+        body: {
+          en: 'The Revenue Department’s published MEGH procedure refers to a ₹6 court fee for a specified class of applications under a cited notification, and separately lists a process fee as prescribed under the rules. These are not necessarily the only charges payable in every situation.',
+          hi: 'राजस्व विभाग की प्रकाशित मेघ प्रक्रिया में एक उद्धृत अधिसूचना के अंतर्गत आवेदनों की निर्दिष्ट श्रेणी के लिए ₹6 कोर्ट फीस का उल्लेख है और अलग से नियमों के अनुसार निर्धारित प्रोसेस फीस बताई गई है। हर स्थिति में केवल यही शुल्क देय हों, यह ज़रूरी नहीं।',
+        },
+        note: {
+          en: 'Before paying, verify the current court fee, process fee and any case-specific requirements with your Tehsil or Sub-Tehsil or the live government portal. Do not rely on any blog, including this one, that presents ₹6 as a universal all-inclusive demarcation fee.',
+          hi: 'भुगतान से पहले वर्तमान कोर्ट फीस, प्रोसेस फीस और मामले की विशेष आवश्यकताएँ अपनी तहसील/उप-तहसील या सक्रिय सरकारी पोर्टल से पुष्ट करें। किसी भी ब्लॉग, इस सहित, पर भरोसा न करें जो ₹6 को निशानदेही का सार्वभौमिक और संपूर्ण शुल्क बताता हो।',
+        },
+      },
+      {
+        title: { en: 'How to check the application status', hi: 'आवेदन की स्थिति कैसे जाँचें' },
+        body: {
+          en: 'Use your acknowledgement number through the demarcation module, or ask the concerned Tehsil or Sub-Tehsil to check the record if online tracking is unavailable. Under the published workflow the record may move through submission, office scrutiny, referral to the Field Kanungo, date fixing, field report and final order. Save copies of the acknowledgement, submissions, notices and final order for your property file. If the application is delayed, contact the dealing revenue office with the acknowledgement number and application date.',
+          hi: 'पावती संख्या से निशानदेही मॉड्यूल में स्थिति देखें, या ऑनलाइन ट्रैकिंग उपलब्ध न हो तो संबंधित तहसील/उप-तहसील से रिकॉर्ड जँचवाएँ। प्रकाशित कार्यप्रवाह में रिकॉर्ड प्रस्तुति, कार्यालय जाँच, फील्ड कानूनगो को प्रेषण, तिथि निर्धारण, मौका रिपोर्ट और अंतिम आदेश के चरणों से गुज़र सकता है। पावती, जमा किए कागज़, नोटिस और अंतिम आदेश की प्रतियाँ अपनी संपत्ति फ़ाइल में रखें। देरी हो तो पावती संख्या और आवेदन तिथि के साथ संबंधित राजस्व कार्यालय से संपर्क करें।',
+        },
+      },
+      {
+        title: { en: 'How long does land demarcation take?', hi: 'निशानदेही में कितना समय लगता है?' },
+        body: {
+          en: 'Check time limits against the current rules that apply to your case. An older MEGH checklist quotes a three-month period for the Field Kanungo under the earlier Land Records Manual procedure, while more recent state reporting describes a two-month target for Nishandehi cases. Because published documents and reported service targets differ, ask the concerned revenue office which current deadline governs your application. Neither figure guarantees a completion date for an individual case.',
+          hi: 'समय-सीमा अपने मामले पर लागू वर्तमान नियमों से जाँचें। पुरानी मेघ चेकलिस्ट में पूर्व भूमि अभिलेख नियमावली प्रक्रिया के अंतर्गत फील्ड कानूनगो के लिए तीन माह बताए गए हैं, जबकि हाल की राज्य रिपोर्टिंग में निशानदेही मामलों के लिए दो माह का लक्ष्य बताया गया है। प्रकाशित दस्तावेज़ों और बताए गए सेवा लक्ष्यों में अंतर है, इसलिए संबंधित राजस्व कार्यालय से पूछें कि आपके आवेदन पर कौन-सी वर्तमान समय-सीमा लागू है। कोई भी आँकड़ा किसी व्यक्तिगत मामले की पूर्ति तिथि की गारंटी नहीं देता।',
+        },
+      },
+      {
+        title: { en: 'What if your neighbour disagrees?', hi: 'पड़ोसी असहमत हो तो क्या होगा?' },
+        body: {
+          en: 'Demarcation is a formal revenue proceeding, not simply a private measurement. The competent revenue officer may consider the objections of adjoining owners and co-sharers before accepting a report. If an objection is sustainable, the manual provides for re-demarcation and a reasoned decision. Where title, possession or wider legal rights are contested, a separate legal remedy may be necessary.',
+          hi: 'निशानदेही औपचारिक राजस्व कार्यवाही है, केवल निजी माप नहीं। सक्षम राजस्व अधिकारी रिपोर्ट स्वीकार करने से पहले पड़ोसी मालिकों और सह-हिस्सेदारों की आपत्तियों पर विचार कर सकता है। आपत्ति टिकने योग्य हो तो नियमावली में पुनः निशानदेही और तर्कसंगत निर्णय का प्रावधान है। जहाँ हक़, कब्जा या व्यापक कानूनी अधिकार विवादित हों, वहाँ अलग कानूनी उपचार आवश्यक हो सकता है।',
+        },
+      },
+      {
+        title: { en: 'Nishandehi vs Tatima vs BhuNaksha vs Jamabandi', hi: 'निशानदेही बनाम ततीमा बनाम भू-नक्शा बनाम जमाबंदी' },
+        body: {
+          en: 'These four terms are often mixed up. A digital map does not, by itself, settle a disputed physical boundary.',
+          hi: 'ये चारों शब्द अक्सर आपस में उलझ जाते हैं। डिजिटल नक्शा अपने-आप किसी विवादित भौतिक सीमा का समाधान नहीं करता।',
+        },
+        list: {
+          en: [
+            'Nishandehi: Official field demarcation of a land boundary | When the boundary on the ground is unclear or disputed | Revenue authorities (Field Kanungo, Tehsildar) | An order follows the field report',
+            'Tatima: A map extract or plan for a plot or subdivision | When you need the plot or subdivision plan | Revenue Department | A reference document, not a boundary order',
+            'BhuNaksha: A digital viewer of available cadastral parcel maps | For a quick look at a parcel and its neighbours | Government portal | A helpful reference only',
+            'Jamabandi: Revenue record of rights and land holding | To check ownership, shares and Khasra numbers | Revenue Department | A revenue record, not a boundary determination',
+          ],
+          hi: [
+            'निशानदेही: भूमि सीमा की आधिकारिक मौका माप | जब मौके की सीमा अस्पष्ट या विवादित हो | राजस्व अधिकारी (फील्ड कानूनगो, तहसीलदार) | मौका रिपोर्ट के बाद आदेश होता है',
+            'ततीमा: भूखंड या उप-विभाजन का नक्शा अंश या योजना | जब भूखंड या उप-विभाजन की योजना चाहिए | राजस्व विभाग | संदर्भ दस्तावेज़, सीमा आदेश नहीं',
+            'भू-नक्शा: उपलब्ध कैडस्ट्रल भूखंड नक्शों का डिजिटल दर्शक | भूखंड और पड़ोसियों की त्वरित झलक के लिए | सरकारी पोर्टल | केवल सहायक संदर्भ',
+            'जमाबंदी: अधिकार और भूमि होल्डिंग का राजस्व अभिलेख | स्वामित्व, हिस्से और खसरा नंबर जाँचने के लिए | राजस्व विभाग | राजस्व अभिलेख, सीमा निर्धारण नहीं',
+          ],
+        },
+        link: {
+          href: '/en/blog/tatima-plot-map-boundary-access-check',
+          label: { en: 'Read the Tatima, plot boundary and road access guide', hi: 'ततीमा, भूखंड सीमा और सड़क पहुँच मार्गदर्शिका पढ़ें' },
+        },
+      },
+      {
+        title: { en: 'Checklist before requesting a boundary survey', hi: 'सीमा माप का अनुरोध करने से पहले चेकलिस्ट' },
+        body: {
+          en: 'Run through these points before you apply.',
+          hi: 'आवेदन से पहले इन बिंदुओं को देख लें।',
+        },
+        list: {
+          en: [
+            'Match the Khasra number against the latest Jamabandi.',
+            'Obtain the relevant current Musavi or settlement map.',
+            'Check for subdivisions and obtain the applicable mutation sheet.',
+            'Identify co-sharers and adjacent landholders.',
+            'Keep the online acknowledgement number and the office receipt.',
+            'Confirm the field visit date and the prescribed fee.',
+            'Obtain the final report and order, and retain them safely.',
+          ],
+          hi: [
+            'खसरा नंबर को नवीनतम जमाबंदी से मिलाएँ।',
+            'संबंधित वर्तमान मुसावी या बंदोबस्त नक्शा प्राप्त करें।',
+            'उप-विभाजन की जाँच करें और लागू इंतकाल शीट लें।',
+            'सह-हिस्सेदारों और सटे भू-धारकों की पहचान करें।',
+            'ऑनलाइन पावती संख्या और कार्यालय की रसीद रखें।',
+            'मौका तिथि और निर्धारित शुल्क की पुष्टि करें।',
+            'अंतिम रिपोर्ट और आदेश प्राप्त करके सुरक्षित रखें।',
+          ],
+        },
+      },
+      {
+        title: { en: 'Frequently Asked Questions', hi: 'अक्सर पूछे जाने वाले प्रश्न' },
+        body: {
+          en: 'Short answers to common questions about Nishandehi.',
+          hi: 'निशानदेही से जुड़े आम प्रश्नों के संक्षिप्त उत्तर।',
+        },
+        list: {
+          en: [
+            'Can I apply for land demarcation online in Himachal Pradesh? Yes. The state publishes a MEGH-Demarcation request service on eHimbhoomi. The published process also calls for supporting documents to be submitted to the concerned Tehsil or Sub-Tehsil.',
+            'Do I need a Jamabandi for Nishandehi? Yes. The official checklist specifies a copy of the latest Jamabandi, along with other documents depending on the parcel.',
+            'Is a BhuNaksha screenshot enough to prove my boundary? No. Online map views are helpful references but do not replace a formal field demarcation and the competent revenue officer’s order.',
+            'Can joint land be demarcated? The published rules allow qualifying co-sharers to apply. Other co-sharers and neighbouring parties may need to be included in the proceedings.',
+            'Does demarcation decide who legally owns the land? Demarcation addresses the identification of boundaries. It should not be treated as a substitute for a complete title examination or as automatic resolution of every ownership dispute.',
+            'Where can I complain if my application is delayed? Start with the concerned Tehsil or Sub-Tehsil, quoting your acknowledgement number. Ask what stage the application has reached and which current statutory or service timeline applies.',
+          ],
+          hi: [
+            'क्या मैं हिमाचल प्रदेश में भूमि निशानदेही के लिए ऑनलाइन आवेदन कर सकता हूँ? हाँ। राज्य ई-हिमभूमि पर मेघ-निशानदेही अनुरोध सेवा प्रकाशित करता है। प्रकाशित प्रक्रिया में सहायक दस्तावेज़ संबंधित तहसील/उप-तहसील में जमा करने की भी अपेक्षा है।',
+            'क्या निशानदेही के लिए जमाबंदी चाहिए? हाँ। आधिकारिक चेकलिस्ट में नवीनतम जमाबंदी की प्रति और भूखंड के अनुसार अन्य दस्तावेज़ बताए गए हैं।',
+            'क्या भू-नक्शा का स्क्रीनशॉट मेरी सीमा सिद्ध करने के लिए काफ़ी है? नहीं। ऑनलाइन नक्शे उपयोगी संदर्भ हैं पर औपचारिक मौका निशानदेही और सक्षम राजस्व अधिकारी के आदेश का स्थान नहीं लेते।',
+            'क्या संयुक्त भूमि की निशानदेही हो सकती है? प्रकाशित नियम योग्य सह-हिस्सेदारों को आवेदन की अनुमति देते हैं। अन्य सह-हिस्सेदारों और पड़ोसी पक्षों को कार्यवाही में शामिल करना पड़ सकता है।',
+            'क्या निशानदेही तय करती है कि ज़मीन का कानूनी मालिक कौन है? निशानदेही सीमाओं की पहचान से संबंधित है। इसे पूर्ण हक़ जाँच का विकल्प या हर स्वामित्व विवाद का अपने-आप समाधान न मानें।',
+            'आवेदन में देरी हो तो शिकायत कहाँ करें? पावती संख्या बताकर संबंधित तहसील/उप-तहसील से शुरू करें। पूछें कि आवेदन किस चरण में है और कौन-सी वर्तमान वैधानिक या सेवा समय-सीमा लागू है।',
+          ],
+        },
+      },
+    ],
+    takeaway: {
+      en: 'Before building a fence, paying for a disputed plot or assuming a map screenshot settles a boundary, compare the latest Jamabandi and settlement map and consider formal Nishandehi where needed. The online service lets you start and track the process, but field verification and the revenue authority’s order are what count. For the map side, see our <a href="/en/blog/tatima-plot-map-boundary-access-check" class="takeaway-link">Tatima and plot boundary guide</a>.',
+      hi: 'बाड़ लगाने, विवादित भूखंड का भुगतान करने या नक्शे के स्क्रीनशॉट को सीमा का प्रमाण मानने से पहले नवीनतम जमाबंदी और बंदोबस्त नक्शा मिलाएँ और ज़रूरत हो तो औपचारिक निशानदेही पर विचार करें। ऑनलाइन सेवा प्रक्रिया शुरू करने और ट्रैक करने देती है, पर मौका सत्यापन और राजस्व अधिकारी का आदेश ही निर्णायक हैं। नक्शे के पक्ष के लिए हमारी <a href="/hi/blog/tatima-plot-map-boundary-access-check" class="takeaway-link">ततीमा और भूखंड सीमा मार्गदर्शिका</a> देखें।',
+    },
+    sources: [
+      { label: 'eHimbhoomi online demarcation request', url: 'https://ehimbhoomi.nic.in/Demarcation/frmOnlineDemReq.aspx' },
+      { label: 'District Una: Apply for demarcation of land', url: 'https://hpuna.nic.in/service/apply-for-demarcation-of-land/' },
+      { label: 'Revenue Department MEGH-Demarcation procedure and checklist (PDF)', url: 'https://emerginghimachal.hp.gov.in/themes/backend/uploads/notification/Notification/new/dem.pdf' },
+      
+    ],
+  },
+{
           slug: 'himachal-land-mutation-intkal-guide',
           image: '/images/himachal-concept-hero.webp',
           publishedAt: '2026-11-20T12:00:00+05:30',
