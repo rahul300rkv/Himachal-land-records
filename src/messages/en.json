@@ -1724,9 +1724,8 @@
         "b": "Ownership information",
         "c": "Mutation history",
         "d": "Points to verify before you buy",
-        "e": "Circle rate (placeholder for now)",
-        "f": "Unique report ID and generation date",
-        "g": "Full legal disclaimer"
+        "e": "Unique report ID and generation date",
+        "f": "Full legal disclaimer"
       },
       "howTitle": "How to get one",
       "steps": {

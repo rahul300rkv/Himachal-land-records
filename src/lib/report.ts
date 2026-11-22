@@ -1,4 +1,3 @@
-import type { CircleRate } from '@/lib/data/circle-rates';
 import type { LandRecord, Mutation } from '@/types/land-record';
 
 export type ReportLocale = 'en' | 'hi';
@@ -29,7 +28,6 @@ export type ReportSnapshot = {
   record: LandRecord;
   mutations: Mutation[];
   flags: ReportFlag[];
-  circleRate: CircleRate;
 };
 
 /** Human-friendly report number, e.g. HLC-2026-9F3A1C2B (derived from the UUID, so unique). */

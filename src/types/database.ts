@@ -46,7 +46,7 @@ export type ListingStatus =
 export type ReportType = 'pre_purchase' | 'ownership_history' | 'encumbrance' | 'mutation_summary';
 export type ReportStatus = 'pending' | 'processing' | 'completed' | 'failed';
 export type RiskLevel = 'low' | 'medium' | 'high' | 'unknown';
-export type PaymentStatus = 'unpaid' | 'paid' | 'refunded';
+export type PaymentStatus = 'unpaid' | 'paid' | 'refunded' | 'free';
 
 // ---------------------------------------------------------------------------
 // Row types (use `type`, not `interface`, so they satisfy supabase-js generics)

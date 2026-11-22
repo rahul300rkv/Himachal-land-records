@@ -3,7 +3,6 @@ import { createElement, type ReactElement } from 'react';
 import { z } from 'zod';
 import { ReportTemplate } from '@/components/reports/ReportTemplate';
 import { getCurrentUser } from '@/lib/auth';
-import { getCircleRate } from '@/lib/data/circle-rates';
 import { registerPdfFonts } from '@/lib/pdf-fonts';
 import { getRecordWithMutations } from '@/lib/record';
 import { computeFlags, displayReportId, type ReportLocale, type ReportSnapshot } from '@/lib/report';
@@ -96,12 +95,6 @@ export async function POST(request: Request) {
       record,
       mutations,
       flags: computeFlags(record, mutations, now),
-      circleRate: getCircleRate({
-        district: record.district,
-        tehsil: record.tehsil,
-        village: record.village,
-        landType: record.land_type,
-      }),
     };
 
     // Store the snapshot so the report can be downloaded again from the dashboard.
@@ -118,7 +111,7 @@ export async function POST(request: Request) {
         summary: `${snapshot.flags.length} point(s) to verify.`,
         findings: snapshot as unknown as Json,
         input_params: { locale },
-        payment_status: 'unpaid',
+        payment_status: 'free',
         created_at: snapshot.generatedAt,
         completed_at: snapshot.generatedAt,
       });
@@ -155,6 +148,7 @@ export async function GET(request: Request) {
       .select('findings')
       .eq('id', id)
       .eq('user_id', user.id)
+      .eq('status', 'completed')
       .maybeSingle();
     if (error) throw error;
 

@@ -2,6 +2,7 @@ import { CircleAlert, FileText, TestTube2 } from 'lucide-react';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { DisclaimerPanel } from '@/components/layout/DisclaimerPanel';
+import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
 import { StateMessage } from '@/components/layout/StateMessage';
 import { ReportsTable, type ReportListItem } from '@/components/reports/ReportsTable';
 import { Button } from '@/components/ui/button';
@@ -14,7 +15,7 @@ import { createClient } from '@/lib/supabase/server';
 
 type Props = { params: Promise<{ locale: string }> };
 
-const INCLUDES = ['a', 'b', 'c', 'd', 'e', 'f', 'g'] as const;
+const INCLUDES = ['a', 'b', 'c', 'd', 'e', 'f'] as const;
 const STEPS = ['search', 'open', 'generate'] as const;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -28,9 +29,10 @@ async function loadReports(userId: string): Promise<ReportListItem[] | null> {
     const supabase = await createClient();
     const { data, error } = await supabase
       .from('reports')
-      .select('id, title, created_at')
+      .select('id, title, summary, created_at')
       .eq('user_id', userId)
       .eq('report_type', 'pre_purchase')
+      .eq('status', 'completed')
       .order('created_at', { ascending: false })
       .limit(50);
     if (error) throw error;
@@ -51,6 +53,10 @@ export default async function ReportsPage({ params }: Props) {
 
   return (
     <div className="container py-10 sm:py-14">
+      <Breadcrumbs trail={[
+        { name: 'Home', href: '/' },
+        { name: 'Reports', href: '/reports' },
+      ]} className="mb-6" />
       <header className="max-w-3xl">
         <h1 className="text-3xl sm:text-4xl">{t('title')}</h1>
         <p className="mt-3 text-lg text-muted-foreground">{t('subtitle')}</p>

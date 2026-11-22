@@ -4,7 +4,7 @@ import { buttonVariants } from '@/components/ui/button';
 import { displayReportId } from '@/lib/report';
 import { cn } from '@/lib/utils';
 
-export type ReportListItem = { id: string; title: string; created_at: string };
+export type ReportListItem = { id: string; title: string; summary: string | null; created_at: string };
 
 /** A user's generated reports with a re-download link for each. Used on /reports and the dashboard. */
 export function ReportsTable({ reports }: { reports: ReportListItem[] }) {
@@ -30,6 +30,9 @@ export function ReportsTable({ reports }: { reports: ReportListItem[] }) {
                 <span aria-hidden="true"> · </span>
                 {date.format(new Date(report.created_at))}
               </p>
+              {report.summary && (
+                <p className="mt-1 text-sm text-muted-foreground">{report.summary}</p>
+              )}
             </div>
             <a
               href={`/api/report/generate?id=${report.id}&locale=${locale}`}
