@@ -9,6 +9,7 @@ import { HowItWorks } from '@/components/home/HowItWorks';
 import { WhatWeDo } from '@/components/home/WhatWeDo';
 import type { Locale } from '@/i18n/routing';
 import { pageMetadata } from '@/lib/seo';
+import { HomeExtraSections } from '@/components/home/ExtraSections';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -28,6 +29,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <WhatWeDo />
       <Features />
       <HowItWorks />
+<HomeExtraSections />   
       <DisclaimerSection />
       <CTA />
     </>
