@@ -124,7 +124,7 @@ export function LoginForm({ next }: { next: string }) {
         <div>
           <h2 className="text-xl">{t('code.title')}</h2>
           <p className="mt-1 text-muted-foreground">{t('code.sentTo', { destination })}</p>
-          {method === 'email' && <p className="mt-1 text-sm text-muted-foreground">{t('code.emailLink')}</p>}
+          {method === 'email' && <p className="mt-1 text-sm text-muted-foreground">{t('code.emailHint')}</p>}
         </div>
 
         <div>

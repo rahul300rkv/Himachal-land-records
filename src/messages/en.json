@@ -1853,7 +1853,7 @@
     "code": {
       "title": "Enter the code",
       "sentTo": "We sent a 6-digit code to {destination}.",
-      "emailLink": "You can also open the sign-in link in that email.",
+      "emailHint": "Can't see it? Check your spam or promotions folder.",
       "label": "6-digit code",
       "verify": "Verify and continue",
       "verifying": "Verifying…",
