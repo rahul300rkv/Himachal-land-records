@@ -709,6 +709,245 @@ export const BLOG_GUIDES: BlogGuide[] = [
     ],
   },
 {
+    slug: 'stamp-duty-registration-charges-himachal-pradesh-2026',
+    image: '/images/nakal-checker-sample.webp',
+    publishedAt: '2026-11-22T16:00:00+05:30',
+    readTime: { en: '10 minute guide', hi: '10 मिनट की मार्गदर्शिका' },
+    title: {
+      en: 'Stamp Duty and Registration Charges for Buying Land in Himachal Pradesh 2026: Rates, Examples and Calculator',
+      hi: 'हिमाचल प्रदेश में जमीन खरीदने पर स्टाम्प शुल्क और पंजीकरण खर्च 2026: दरें, उदाहरण और कैलकुलेटर',
+    },
+    summary: {
+      en: 'The 2026 stamp duty slabs for sale deeds, the one-year linked-deed rule, the 12% rate with Section 118 permission, family gifts and leases, with worked examples you can reproduce in our calculator.',
+      hi: 'बिक्री विलेख की 2026 स्टाम्प शुल्क दरें, एक वर्ष के जुड़े विलेखों का नियम, धारा 118 अनुमति पर 12% दर, पारिवारिक उपहार और पट्टे, साथ में हल किए उदाहरण जिन्हें आप हमारे कैलकुलेटर में दोहरा सकते हैं।',
+    },
+    intro: {
+      en: 'Stamp duty is usually the largest cost after the price of the land itself, and in Himachal Pradesh it changed in 2026. The Indian Stamp (Himachal Pradesh Second Amendment) Act, 2026 (Act No. 17 of 2026) substituted a new Schedule I-A. A legal-update report records that it was issued on 28 October 2026. This guide explains how the new schedule treats ordinary sale deeds, how linked deeds are added together, when the 12% rate applies, and how gifts and leases are charged. Every example uses the same rules as the HimLand Check stamp duty calculator, so you can reproduce the figures yourself. The calculator gives an estimate, not an official assessment, so confirm the final amount with your Sub-Registrar before paying.',
+      hi: 'जमीन की कीमत के बाद स्टाम्प शुल्क आमतौर पर सबसे बड़ा खर्च होता है, और हिमाचल प्रदेश में 2026 में इसमें बदलाव हुआ। भारतीय स्टाम्प (हिमाचल प्रदेश द्वितीय संशोधन) अधिनियम, 2026 (अधिनियम संख्या 17/2026) ने नई अनुसूची I-A लागू की। एक कानूनी अपडेट रिपोर्ट के अनुसार यह 28 अक्टूबर 2026 को जारी हुआ। यह मार्गदर्शिका बताती है कि नई अनुसूची साधारण बिक्री विलेख को कैसे देखती है, जुड़े विलेख कैसे जोड़े जाते हैं, 12% दर कब लगती है और उपहार तथा पट्टे पर शुल्क कैसे लगता है। हर उदाहरण हिमलैंड चेक स्टाम्प शुल्क कैलकुलेटर के उन्हीं नियमों पर है, इसलिए आप आँकड़े खुद दोहरा सकते हैं। कैलकुलेटर अनुमान देता है, आधिकारिक निर्धारण नहीं, इसलिए भुगतान से पहले अंतिम राशि उप-पंजीयक से पुष्ट करें।',
+    },
+    sections: [
+      {
+        title: { en: 'Stamp duty and registration fee are two different charges', hi: 'स्टाम्प शुल्क और पंजीकरण शुल्क दो अलग खर्च हैं' },
+        body: {
+          en: 'Stamp duty is the tax paid on the deed, calculated from the value and the deed type. The registration fee is a separate charge paid when the deed is registered with the Sub-Registrar. Many online pages mix the two or quote registration fee figures from older years. The calculator therefore asks you to type in the registration fee quoted by the Sub-Registrar and adds it to the duty, instead of guessing a number. Get that quote in writing or at the counter before you budget.',
+          hi: 'स्टाम्प शुल्क वह कर है जो विलेख पर मूल्य और विलेख के प्रकार के आधार पर लगता है। पंजीकरण शुल्क अलग है और विलेख उप-पंजीयक के यहाँ पंजीकृत कराते समय दिया जाता है। कई ऑनलाइन पन्ने दोनों को मिला देते हैं या पुराने वर्षों के पंजीकरण शुल्क बताते हैं। इसलिए कैलकुलेटर अंदाज़ा लगाने के बजाय आपसे उप-पंजीयक द्वारा बताया गया पंजीकरण शुल्क भरवाता है और उसे शुल्क में जोड़ देता है। बजट बनाने से पहले वह राशि पूछ लें।',
+        },
+      },
+      {
+        title: { en: 'Stamp duty rates on a sale deed in 2026', hi: '2026 में बिक्री विलेख पर स्टाम्प शुल्क दरें' },
+        citation: {
+          en: 'Indian Stamp (Himachal Pradesh Second Amendment) Act, 2026 (Act No. 17 of 2026), Schedule I-A',
+          hi: 'भारतीय स्टाम्प (हिमाचल प्रदेश द्वितीय संशोधन) अधिनियम, 2026 (अधिनियम संख्या 17/2026), अनुसूची I-A',
+        },
+        body: {
+          en: 'For an ordinary sale deed the rate depends on who is buying and on the value of the property. Once the value crosses the threshold, the higher rate applies to the whole value, not only to the amount above the threshold.',
+          hi: 'साधारण बिक्री विलेख पर दर इस पर निर्भर करती है कि खरीदार कौन है और संपत्ति का मूल्य कितना है। मूल्य सीमा पार करते ही ऊँची दर पूरे मूल्य पर लगती है, केवल सीमा से ऊपर की राशि पर नहीं।',
+        },
+        list: {
+          en: [
+            'Woman buyer: 4% where the value is up to ₹1 crore, and 8% above ₹1 crore.',
+            'Other buyers: 6% where the value is up to ₹40 lakh, and 8% above ₹40 lakh.',
+            'Linked deeds between the same parties within one year are added together before the threshold is tested (see the section on linked deeds).',
+            'A flat 12% applies where the State has granted permission under Section 118(2)(h) (see the section on Section 118).',
+          ],
+          hi: [
+            'महिला खरीदार: ₹1 करोड़ तक मूल्य पर 4% और ₹1 करोड़ से ऊपर 8%।',
+            'अन्य खरीदार: ₹40 लाख तक मूल्य पर 6% और ₹40 लाख से ऊपर 8%।',
+            'एक वर्ष के भीतर उन्हीं पक्षों के जुड़े विलेख सीमा जाँचने से पहले जोड़े जाते हैं (जुड़े विलेख वाला अनुभाग देखें)।',
+            'जहाँ राज्य ने धारा 118(2)(h) के तहत अनुमति दी हो वहाँ एकसमान 12% लगता है (धारा 118 वाला अनुभाग देखें)।',
+          ],
+        },
+        note: {
+          en: 'Early reporting on the Bill said the 4% women’s slab was raised from ₹80 lakh to ₹1 crore. If you are comparing with an older article, check that its slabs are not from before 2026.',
+          hi: 'विधेयक पर शुरुआती रिपोर्टों में कहा गया कि महिलाओं की 4% की सीमा ₹80 लाख से बढ़ाकर ₹1 करोड़ की गई। किसी पुराने लेख से तुलना कर रहे हों तो देखें कि उसकी सीमाएँ 2026 से पहले की तो नहीं।',
+        },
+      },
+      {
+        title: { en: 'Which value is used: market value or agreed price?', hi: 'कौन-सा मूल्य लगता है: बाज़ार मूल्य या तय कीमत?' },
+        body: {
+          en: 'On an ordinary sale the calculator applies the rate to the higher of the assessed market value and the agreed purchase price. Market value depends on the location, the land classification and the valuation that applies to the property, so it can be well above the price in your agreement. Enter the assessed value for the whole property. For a first look at official rates in your area, use the circle rate lookup, then confirm the final valuation with the Sub-Registrar.',
+          hi: 'साधारण बिक्री में कैलकुलेटर आँके गए बाज़ार मूल्य और तय खरीद कीमत में से जो अधिक हो उस पर दर लगाता है। बाज़ार मूल्य स्थान, भूमि वर्गीकरण और लागू मूल्यांकन पर निर्भर है, इसलिए वह आपके समझौते की कीमत से काफ़ी ऊपर हो सकता है। पूरी संपत्ति का आँका गया मूल्य भरें। अपने क्षेत्र की आधिकारिक दरें पहली बार देखने के लिए सर्कल रेट खोज का उपयोग करें, फिर अंतिम मूल्यांकन उप-पंजीयक से पुष्ट करें।',
+        },
+        link: {
+          href: '/en/circle-rate',
+          label: { en: 'Open the circle rate lookup', hi: 'सर्कल रेट खोज खोलें' },
+        },
+      },
+      {
+        title: { en: 'Worked examples you can reproduce in the calculator', hi: 'हल किए उदाहरण जो आप कैलकुलेटर में दोहरा सकते हैं' },
+        body: {
+          en: 'These examples assume the assessed market value is the higher figure and that no earlier deeds between the same parties fall within the last year. Stamp duty only, registration fee excluded.',
+          hi: 'इन उदाहरणों में माना गया है कि आँका गया बाज़ार मूल्य अधिक है और पिछले एक वर्ष में उन्हीं पक्षों के बीच कोई पूर्व विलेख नहीं है। केवल स्टाम्प शुल्क, पंजीकरण शुल्क अलग।',
+        },
+        list: {
+          en: [
+            'Woman buyer, ₹30 lakh: 4% gives ₹1,20,000.',
+            'Other buyer, ₹30 lakh: 6% gives ₹1,80,000.',
+            'Other buyer, exactly ₹40 lakh: 6% gives ₹2,40,000.',
+            'Other buyer, ₹41 lakh: 8% on the whole value gives ₹3,28,000. One extra lakh of value adds ₹88,000 of duty.',
+            'Other buyer, ₹50 lakh: 8% gives ₹4,00,000.',
+            'Woman buyer, exactly ₹1 crore: 4% gives ₹4,00,000.',
+            'Woman buyer, ₹1.2 crore: 8% gives ₹9,60,000.',
+            'Section 118 permission, ₹50 lakh: 12% gives ₹6,00,000.',
+          ],
+          hi: [
+            'महिला खरीदार, ₹30 लाख: 4% से ₹1,20,000।',
+            'अन्य खरीदार, ₹30 लाख: 6% से ₹1,80,000।',
+            'अन्य खरीदार, ठीक ₹40 लाख: 6% से ₹2,40,000।',
+            'अन्य खरीदार, ₹41 लाख: पूरे मूल्य पर 8% से ₹3,28,000। मूल्य में एक लाख अधिक होने पर शुल्क ₹88,000 बढ़ जाता है।',
+            'अन्य खरीदार, ₹50 लाख: 8% से ₹4,00,000।',
+            'महिला खरीदार, ठीक ₹1 करोड़: 4% से ₹4,00,000।',
+            'महिला खरीदार, ₹1.2 करोड़: 8% से ₹9,60,000।',
+            'धारा 118 अनुमति, ₹50 लाख: 12% से ₹6,00,000।',
+          ],
+        },
+        note: {
+          en: 'The jump at the threshold is why the assessed value matters so much. A small difference in valuation near ₹40 lakh or ₹1 crore can change the duty by lakhs of rupees, so confirm the valuation early.',
+          hi: 'सीमा पर यह उछाल ही कारण है कि आँका गया मूल्य इतना मायने रखता है। ₹40 लाख या ₹1 करोड़ के पास मूल्यांकन में थोड़ा अंतर भी शुल्क को लाखों रुपये से बदल सकता है, इसलिए मूल्यांकन जल्दी पुष्ट करें।',
+        },
+        link: {
+          href: '/en/stamp-duty-calculator',
+          label: { en: 'Try these in the stamp duty calculator', hi: 'ये उदाहरण स्टाम्प शुल्क कैलकुलेटर में आज़माएँ' },
+        },
+      },
+      {
+        title: { en: 'The one-year rule for linked deeds', hi: 'जुड़े विलेखों पर एक वर्ष का नियम' },
+        body: {
+          en: 'The new schedule was designed to stop a buyer splitting one purchase into several smaller deeds to stay under a threshold. Reports on the Bill say that deeds between the same buyer and seller within a one-year period are considered together if their combined value crosses the threshold, and duty is then worked out on the aggregated value. In the calculator, enter the value of earlier same-party deeds from the last year in the optional field, and it will flag that the higher rate applies. The calculator shows duty on the current deed only. The earlier deeds may also need to be repriced at 8%, and the Sub-Registrar calculates that adjustment.',
+          hi: 'नई अनुसूची इसलिए बनी कि कोई खरीदार एक खरीद को कई छोटे विलेखों में बाँटकर सीमा के नीचे न रह सके। विधेयक पर रिपोर्टें बताती हैं कि एक ही खरीदार और विक्रेता के बीच एक वर्ष के भीतर के विलेख, यदि उनका संयुक्त मूल्य सीमा पार करे, साथ गिने जाते हैं और शुल्क जोड़े गए मूल्य पर निकाला जाता है। कैलकुलेटर में पिछले वर्ष के उन्हीं पक्षों के पूर्व विलेखों का मूल्य वैकल्पिक खाने में भरें, वह बताएगा कि ऊँची दर लगेगी। कैलकुलेटर केवल वर्तमान विलेख पर शुल्क दिखाता है। पूर्व विलेखों को भी 8% पर पुनः आँकना पड़ सकता है और वह समायोजन उप-पंजीयक निकालता है।',
+        },
+      },
+      {
+        title: { en: 'The 12% rate with Section 118 permission', hi: 'धारा 118 अनुमति पर 12% दर' },
+        body: {
+          en: 'Where the State Government has granted permission under Section 118(2)(h) of the H.P. Tenancy and Land Reforms Act, 1972, a sale or lease is charged at 12%. The calculator applies this whichever gender the buyer is, and for fixed-term leases it still uses the lease duration in the formula. Tick the Section 118 option only if you actually hold the permission order. Permission itself is a separate legal step, covered in our Section 118 guide.',
+          hi: 'जहाँ राज्य सरकार ने हि.प्र. काश्तकारी एवं भूमि सुधार अधिनियम, 1972 की धारा 118(2)(h) के तहत अनुमति दी हो, वहाँ बिक्री या पट्टे पर 12% लगता है। कैलकुलेटर यह खरीदार के लिंग से स्वतंत्र लागू करता है, और निश्चित अवधि के पट्टे में सूत्र में पट्टे की अवधि ही प्रयोग करता है। धारा 118 का विकल्प तभी चुनें जब आपके पास अनुमति आदेश हो। अनुमति स्वयं एक अलग कानूनी चरण है, जो हमारी धारा 118 मार्गदर्शिका में समझाया गया है।',
+        },
+        link: {
+          href: '/en/blog/section-118-permission-himachal-land-buyers',
+          label: { en: 'Read the Section 118 guide', hi: 'धारा 118 मार्गदर्शिका पढ़ें' },
+        },
+      },
+      {
+        title: { en: 'Gifts between family members', hi: 'परिवार के सदस्यों के बीच उपहार' },
+        body: {
+          en: 'Qualifying gifts between spouses or between blood relatives with a common ancestor are charged at 0.1% of the market value, with a minimum of ₹5,000 and a maximum of ₹10,000. For example, a family gift of land worth ₹50 lakh would be 0.1% of the value, which is ₹5,000, so the minimum applies. Gifts that do not qualify as family gifts follow the standard thresholds above. After a gift deed is registered, the revenue record still has to be updated through mutation.',
+          hi: 'पति-पत्नी या साझा पूर्वज वाले रक्त-संबंधियों के बीच योग्य उपहार पर बाज़ार मूल्य का 0.1% शुल्क लगता है, न्यूनतम ₹5,000 और अधिकतम ₹10,000। उदाहरण के लिए, ₹50 लाख की भूमि के पारिवारिक उपहार में शुल्क ₹5,000 बनता है, इसलिए न्यूनतम सीमा लागू होती है। जो उपहार पारिवारिक उपहार की श्रेणी में नहीं आते उन पर ऊपर की सामान्य सीमाएँ लगती हैं। उपहार विलेख पंजीकृत होने के बाद भी राजस्व अभिलेख इंतकाल से अद्यतन कराना पड़ता है।',
+        },
+        link: {
+          href: '/en/blog/himachal-land-mutation-intkal-guide',
+          label: { en: 'Read the mutation (Intkal) guide', hi: 'इंतकाल मार्गदर्शिका पढ़ें' },
+        },
+      },
+      {
+        title: { en: 'Lease deeds', hi: 'पट्टा विलेख' },
+        body: {
+          en: 'For a fixed-term lease the calculator multiplies the market value by the applicable rate (8%, or 12% with Section 118 permission) and by the lease term in years divided by 100. For a perpetual or indefinite lease it uses the higher of the market value and the total amount payable, with no term factor. Article 35 exempts certain cultivation leases, so confirm that your lease qualifies before choosing that option.',
+          hi: 'निश्चित अवधि के पट्टे में कैलकुलेटर बाज़ार मूल्य को लागू दर (8%, या धारा 118 अनुमति पर 12%) से और पट्टे की वर्ष-अवधि को 100 से भाग देकर गुणा करता है। स्थायी या अनिश्चित पट्टे में वह बाज़ार मूल्य और कुल देय राशि में से अधिक को लेता है, अवधि-गुणक के बिना। अनुच्छेद 35 कुछ खेती के पट्टों को छूट देता है, इसलिए वह विकल्प चुनने से पहले जाँचें कि आपका पट्टा योग्य है।',
+        },
+      },
+      {
+        title: { en: 'How to estimate your costs step by step', hi: 'अपने खर्च का अनुमान चरण-दर-चरण कैसे लगाएँ' },
+        body: {
+          en: 'Work through these steps in the calculator and keep a note of each input.',
+          hi: 'कैलकुलेटर में ये चरण अपनाएँ और हर इनपुट का नोट रखें।',
+        },
+        list: {
+          en: [
+            'Choose the deed type: sale, gift or lease.',
+            'Enter the assessed market value for the whole property, and the agreed price if it is a sale.',
+            'Select the buyer category (woman or other), or the family gift or Section 118 option where it genuinely applies.',
+            'Add the value of any earlier deeds between the same parties in the last year.',
+            'Add the registration fee quoted by the Sub-Registrar to see the combined estimate.',
+            'Ask the Sub-Registrar to confirm the valuation, the registration fee and any local surcharge before you pay.',
+          ],
+          hi: [
+            'विलेख का प्रकार चुनें: बिक्री, उपहार या पट्टा।',
+            'पूरी संपत्ति का आँका गया बाज़ार मूल्य भरें, और बिक्री हो तो तय कीमत भी।',
+            'खरीदार श्रेणी (महिला या अन्य) चुनें, या जहाँ वास्तव में लागू हो वहाँ पारिवारिक उपहार या धारा 118 का विकल्प चुनें।',
+            'पिछले एक वर्ष में उन्हीं पक्षों के पूर्व विलेखों का मूल्य जोड़ें।',
+            'कुल अनुमान देखने के लिए उप-पंजीयक द्वारा बताया पंजीकरण शुल्क भरें।',
+            'भुगतान से पहले उप-पंजीयक से मूल्यांकन, पंजीकरण शुल्क और किसी स्थानीय अधिभार की पुष्टि कराएँ।',
+          ],
+        },
+      },
+      {
+        title: { en: 'After you pay: registration, then mutation', hi: 'भुगतान के बाद: पंजीकरण, फिर इंतकाल' },
+        body: {
+          en: 'Paying stamp duty and registering the deed does not update the revenue record. Mutation is a separate process, so check the Jamabandi afterwards to see that your name has been entered. Our guide on registry versus mutation explains the difference and what to do if the entry is pending.',
+          hi: 'स्टाम्प शुल्क देने और विलेख पंजीकृत कराने से राजस्व अभिलेख अपने-आप अद्यतन नहीं होता। इंतकाल अलग प्रक्रिया है, इसलिए बाद में जमाबंदी देखकर पुष्टि करें कि आपका नाम दर्ज हो गया है। रजिस्ट्री बनाम इंतकाल वाली हमारी मार्गदर्शिका अंतर और लंबित प्रविष्टि होने पर क्या करना है, यह समझाती है।',
+        },
+        link: {
+          href: '/en/blog/land-registry-vs-mutation-himachal-pradesh',
+          label: { en: 'Read the registry vs mutation guide', hi: 'रजिस्ट्री बनाम इंतकाल मार्गदर्शिका पढ़ें' },
+        },
+      },
+      {
+        title: { en: 'Common mistakes when budgeting stamp duty', hi: 'स्टाम्प शुल्क का बजट बनाते समय आम गलतियाँ' },
+        body: {
+          en: 'Most surprises at the Sub-Registrar’s office come from a few avoidable assumptions.',
+          hi: 'उप-पंजीयक कार्यालय में ज़्यादातर चौंकाने वाली बातें कुछ टाली जा सकने वाली धारणाओं से आती हैं।',
+        },
+        list: {
+          en: [
+            'Using the agreed price instead of the higher assessed market value.',
+            'Assuming the higher rate applies only to the amount above the threshold. It applies to the whole value.',
+            'Splitting one purchase into several deeds with the same seller within a year to stay under a threshold.',
+            'Quoting old articles with pre-2026 slabs, or old registration fee figures.',
+            'Forgetting that registration fee is separate from stamp duty.',
+            'Ignoring mutation after registration.',
+          ],
+          hi: [
+            'ऊँचे आँके गए बाज़ार मूल्य के बजाय तय कीमत का उपयोग करना।',
+            'यह मानना कि ऊँची दर केवल सीमा से ऊपर की राशि पर लगती है। वह पूरे मूल्य पर लगती है।',
+            'सीमा के नीचे रहने के लिए एक वर्ष में उसी विक्रेता के साथ एक खरीद को कई विलेखों में बाँटना।',
+            '2026 से पहले की सीमाओं या पुराने पंजीकरण शुल्क वाले पुराने लेखों का हवाला देना।',
+            'यह भूल जाना कि पंजीकरण शुल्क स्टाम्प शुल्क से अलग है।',
+            'पंजीकरण के बाद इंतकाल की अनदेखी।',
+          ],
+        },
+      },
+      {
+        title: { en: 'Frequently Asked Questions', hi: 'अक्सर पूछे जाने वाले प्रश्न' },
+        body: {
+          en: 'Short answers to common questions about stamp duty on land in Himachal Pradesh.',
+          hi: 'हिमाचल प्रदेश में जमीन पर स्टाम्प शुल्क से जुड़े आम प्रश्नों के संक्षिप्त उत्तर।',
+        },
+        list: {
+          en: [
+            'What is the stamp duty for women buying land in Himachal Pradesh? It is 4% where the value is up to ₹1 crore and 8% above ₹1 crore, under the 2026 schedule as applied in our calculator.',
+            'What is the stamp duty for other buyers? It is 6% up to ₹40 lakh and 8% above ₹40 lakh. Above the threshold the higher rate applies to the full value.',
+            'Is stamp duty charged on the sale price or the market value? On an ordinary sale the calculator uses the higher of the assessed market value and the agreed price.',
+            'Does buying with Section 118 permission cost more? Yes. Where the State has granted permission under Section 118(2)(h), a flat 12% applies to the sale or lease.',
+            'Can I split a purchase into two deeds to save duty? Reports on the 2026 rules say deeds between the same buyer and seller within one year are considered together, so splitting is unlikely to help.',
+            'How much is stamp duty on a family gift deed? Qualifying family gifts are charged at 0.1% of market value with a ₹5,000 minimum and a ₹10,000 maximum.',
+            'Is the registration fee included in the stamp duty? No. They are separate charges. Ask the Sub-Registrar for the registration fee and enter it in the calculator to see the combined estimate.',
+          ],
+          hi: [
+            'हिमाचल प्रदेश में जमीन खरीदने वाली महिलाओं के लिए स्टाम्प शुल्क कितना है? हमारे कैलकुलेटर में लागू 2026 अनुसूची के अनुसार ₹1 करोड़ तक मूल्य पर 4% और ₹1 करोड़ से ऊपर 8%।',
+            'अन्य खरीदारों के लिए स्टाम्प शुल्क कितना है? ₹40 लाख तक 6% और ₹40 लाख से ऊपर 8%। सीमा के ऊपर ऊँची दर पूरे मूल्य पर लगती है।',
+            'स्टाम्प शुल्क बिक्री कीमत पर लगता है या बाज़ार मूल्य पर? साधारण बिक्री में कैलकुलेटर आँके गए बाज़ार मूल्य और तय कीमत में से अधिक को लेता है।',
+            'क्या धारा 118 अनुमति से खरीदना महँगा पड़ता है? हाँ। जहाँ राज्य ने धारा 118(2)(h) के तहत अनुमति दी हो, बिक्री या पट्टे पर एकसमान 12% लगता है।',
+            'क्या शुल्क बचाने के लिए खरीद को दो विलेखों में बाँट सकता हूँ? 2026 नियमों पर रिपोर्टों के अनुसार एक वर्ष के भीतर एक ही खरीदार और विक्रेता के विलेख साथ गिने जाते हैं, इसलिए बाँटने से लाभ की संभावना कम है।',
+            'पारिवारिक उपहार विलेख पर स्टाम्प शुल्क कितना है? योग्य पारिवारिक उपहार पर बाज़ार मूल्य का 0.1% लगता है, न्यूनतम ₹5,000 और अधिकतम ₹10,000।',
+            'क्या पंजीकरण शुल्क स्टाम्प शुल्क में शामिल है? नहीं, दोनों अलग हैं। उप-पंजीयक से पंजीकरण शुल्क पूछें और कुल अनुमान देखने के लिए कैलकुलेटर में भरें।',
+          ],
+        },
+      },
+    ],
+    takeaway: {
+      en: 'The 2026 schedule makes the assessed value, the buyer category and the one-year linked-deed rule the three things that decide your stamp duty, and a small change near a threshold can move the bill by lakhs. Work out an estimate in the <a href="/en/stamp-duty-calculator" class="takeaway-link">stamp duty calculator</a>, confirm the valuation, registration fee and any surcharge with the Sub-Registrar, and then check that mutation follows registration.',
+      hi: '2026 की अनुसूची में आँका गया मूल्य, खरीदार श्रेणी और एक वर्ष का जुड़े विलेखों का नियम, ये तीन बातें आपका स्टाम्प शुल्क तय करती हैं, और सीमा के पास थोड़ा बदलाव भी बिल को लाखों रुपये से बदल सकता है। <a href="/hi/stamp-duty-calculator" class="takeaway-link">स्टाम्प शुल्क कैलकुलेटर</a> में अनुमान निकालें, मूल्यांकन, पंजीकरण शुल्क और किसी अधिभार की पुष्टि उप-पंजीयक से कराएँ, और फिर देखें कि पंजीकरण के बाद इंतकाल हुआ या नहीं।',
+    },
+    sources: [
+      { label: 'Himachal Pradesh e-Gazette: Act No. 17 of 2026, Schedule I-A', url: 'https://rajpatra.hp.gov.in/OPENFILE1.aspx?ID=52317+&etype=NSPECIAL' },
+      { label: 'TeamLease RegTech: Indian Stamp (Himachal Pradesh Second Amendment) Act, 2026', url: 'https://teamleaseregtech.com/updates/article/60937/indian-stamp-himachal-pradesh-second-amendment-act-2026/' },
+      { label: 'Outlook Money: Himachal Pradesh sets out new stamp duty structure', url: 'https://www.outlookmoney.com/news/himachal-pradesh-sets-out-new-stamp-duty-structure-for-property-deals' },
+      { label: 'The Tribune: Himachal Vidhan Sabha passes Bill on stamp duty', url: 'https://www.tribuneindia.com/news/himachal/himachal-vidhan-sabha-passes-bill-hiking-stamp-duty/' },
+      { label: 'Himachal Pradesh Revenue Department', url: 'https://himachal.nic.in/revenue' },
+    ],
+  },
+{
           slug: 'himachal-land-mutation-intkal-guide',
           image: '/images/himachal-concept-hero.webp',
           publishedAt: '2026-11-20T12:00:00+05:30',
