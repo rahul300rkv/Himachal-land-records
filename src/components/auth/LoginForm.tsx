@@ -16,7 +16,7 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const RESEND_SECONDS = 30;
 
 /**
- * Passwordless sign-in: a one-time code by SMS (mobile number) or email.
+ * Passwordless sign-in: a one-time code by SMS (mobile number), or a magic link by email.
  * The same flow signs in existing users and creates accounts for new ones.
  */
 export function LoginForm({ next }: { next: string }) {
@@ -25,7 +25,7 @@ export function LoginForm({ next }: { next: string }) {
   const router = useRouter();
 
   const [method, setMethod] = useState<Method>('phone');
-  const [step, setStep] = useState<'request' | 'code'>('request');
+  const [step, setStep] = useState<'request' | 'code' | 'link'>('request');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
@@ -64,7 +64,7 @@ export function LoginForm({ next }: { next: string }) {
               email: email.trim(),
               options: {
                 data,
-                // Used if the visitor clicks the link in the email instead of typing the code.
+                // Where the magic link in the email lands (see /api/auth/callback).
                 emailRedirectTo: `${window.location.origin}/api/auth/callback?next=${encodeURIComponent(next)}`,
               },
             });
@@ -75,7 +75,8 @@ export function LoginForm({ next }: { next: string }) {
       }
 
       setDestination(method === 'phone' ? formatIndianMobile(e164!) : email.trim());
-      setStep('code');
+      // Email sends a magic link (opened in the same browser); SMS sends a code to type here.
+      setStep(method === 'email' ? 'link' : 'code');
       setCode('');
       setCooldown(RESEND_SECONDS);
     } catch {
@@ -93,10 +94,11 @@ export function LoginForm({ next }: { next: string }) {
     setBusy(true);
     try {
       const supabase = createClient();
-      const { error: verifyError } =
-        method === 'phone'
-          ? await supabase.auth.verifyOtp({ phone: normalizeIndianMobile(phone)!, token: code, type: 'sms' })
-          : await supabase.auth.verifyOtp({ email: email.trim(), token: code, type: 'email' });
+      const { error: verifyError } = await supabase.auth.verifyOtp({
+        phone: normalizeIndianMobile(phone)!,
+        token: code,
+        type: 'sms',
+      });
 
       if (verifyError) {
         setError(rateLimited(verifyError) ? t('errors.rateLimited') : t('errors.verifyFailed'));
@@ -117,14 +119,49 @@ export function LoginForm({ next }: { next: string }) {
     </p>
   );
 
-  // ---- Step 2: enter the code ----
+  // ---- Step 2 (email): open the sign-in link that was emailed ----
+  if (step === 'link') {
+    return (
+      <div className="space-y-5" aria-live="polite">
+        <div>
+          <h2 className="text-xl">{t('link.title')}</h2>
+          <p className="mt-1 text-muted-foreground">{t('link.body', { destination })}</p>
+          <p className="mt-2 text-sm text-muted-foreground">{t('link.hint')}</p>
+        </div>
+
+        {errorBox}
+
+        <div className="flex flex-col gap-2 text-sm sm:flex-row sm:items-center sm:justify-between">
+          <button
+            type="button"
+            onClick={sendCode}
+            disabled={cooldown > 0 || busy}
+            className="text-left font-medium text-primary hover:underline disabled:cursor-not-allowed disabled:text-muted-foreground disabled:no-underline"
+          >
+            {cooldown > 0 ? t('link.resendIn', { seconds: cooldown }) : t('link.resend')}
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setStep('request');
+              setError(null);
+            }}
+            className="text-left text-muted-foreground hover:text-foreground hover:underline"
+          >
+            {t('code.change')}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // ---- Step 2 (phone): enter the code ----
   if (step === 'code') {
     return (
       <form onSubmit={verifyCode} noValidate className="space-y-5">
         <div>
           <h2 className="text-xl">{t('code.title')}</h2>
           <p className="mt-1 text-muted-foreground">{t('code.sentTo', { destination })}</p>
-          {method === 'email' && <p className="mt-1 text-sm text-muted-foreground">{t('code.emailHint')}</p>}
         </div>
 
         <div>
