@@ -330,6 +330,171 @@ export const BLOG_GUIDES: BlogGuide[] = [
     ],
   },
 {
+    slug: 'land-registry-vs-mutation-himachal-pradesh',
+    image: '/images/blog-land-research.webp',
+    publishedAt: '2026-11-22T12:00:00+05:30',
+    readTime: { en: '7 minute guide', hi: '7 मिनट की मार्गदर्शिका' },
+    title: {
+      en: 'Land Registry vs Mutation in Himachal Pradesh: Complete Guide for Property Buyers',
+      hi: 'हिमाचल प्रदेश में भूमि रजिस्ट्री बनाम इंतकाल: संपत्ति खरीदारों के लिए संपूर्ण मार्गदर्शिका',
+    },
+    summary: {
+      en: 'Registering a sale deed and getting a mutation (Intkal) are two different processes. Learn what each does, how to check your Jamabandi online and what to do if the mutation is pending.',
+      hi: 'बिक्री विलेख का पंजीकरण और इंतकाल दो अलग प्रक्रियाएँ हैं। जानें कि हर एक क्या करती है, जमाबंदी ऑनलाइन कैसे जाँचें और इंतकाल लंबित हो तो क्या करें।',
+    },
+    intro: {
+      en: 'Buying land in Himachal Pradesh is a major financial decision, whether the plot is residential land in Solan, agricultural land in Kangra or property near Shimla. Two terms confuse buyers more than any others: land registry (registration of the sale deed) and mutation (Intkal). Many people assume that once the deed is registered, their name automatically appears in the latest Jamabandi. It does not. Registration and mutation are separate processes handled by different offices, and both need to be checked. This guide explains how each works, why both matter and what a buyer should verify after the purchase.',
+      hi: 'हिमाचल प्रदेश में भूमि खरीदना बड़ा वित्तीय निर्णय है, चाहे वह सोलन में आवासीय भूखंड हो, कांगड़ा में कृषि भूमि हो या शिमला के पास संपत्ति। दो शब्द खरीदारों को सबसे ज़्यादा भ्रमित करते हैं: भूमि रजिस्ट्री (बिक्री विलेख का पंजीकरण) और इंतकाल। बहुत से लोग मान लेते हैं कि डीड रजिस्टर होते ही उनका नाम नवीनतम जमाबंदी में अपने-आप आ जाएगा। ऐसा नहीं होता। रजिस्ट्री और इंतकाल अलग-अलग कार्यालयों द्वारा की जाने वाली अलग प्रक्रियाएँ हैं और दोनों की जाँच ज़रूरी है। यह मार्गदर्शिका बताती है कि हर प्रक्रिया कैसे काम करती है, दोनों क्यों ज़रूरी हैं और खरीद के बाद क्या जाँचना चाहिए।',
+    },
+    sections: [
+      {
+        title: { en: 'What is land registry?', hi: 'भूमि रजिस्ट्री क्या है?' },
+        body: {
+          en: 'Land registry generally means the official registration of a property transfer document, such as a sale deed, with the competent Sub-Registrar. A registered deed records the names of the buyer and seller, the description and location of the property, the agreed consideration, the details of the land transferred and the date and registration particulars. A properly executed and registered sale deed is an important legal document supporting the transfer of property rights. Registration alone, however, does not settle every question about ownership, disputes or restrictions affecting the land.',
+          hi: 'भूमि रजिस्ट्री का सामान्य अर्थ है बिक्री विलेख जैसे हस्तांतरण दस्तावेज़ का सक्षम उप-पंजीयक के पास आधिकारिक पंजीकरण। पंजीकृत डीड में क्रेता और विक्रेता के नाम, संपत्ति का विवरण व स्थान, तय प्रतिफल, हस्तांतरित भूमि का ब्योरा तथा तिथि और पंजीकरण विवरण दर्ज होते हैं। विधिवत निष्पादित और पंजीकृत बिक्री विलेख संपत्ति अधिकारों के हस्तांतरण का महत्वपूर्ण कानूनी दस्तावेज़ है। फिर भी केवल पंजीकरण से स्वामित्व, विवाद या भूमि पर प्रतिबंधों से जुड़े सभी प्रश्न हल नहीं होते।',
+        },
+      },
+      {
+        title: { en: 'What is mutation (Intkal)?', hi: 'इंतकाल (म्यूटेशन) क्या है?' },
+        body: {
+          en: 'Mutation, commonly called Intkal, is the process of updating revenue records when land rights change. If an owner sells a plot, the mutation process records the change so that the new owner’s details can be reflected in the revenue records. It may be required after a sale or purchase, inheritance after an owner’s death, a gift or other qualifying transfer, or a court order affecting recorded rights.',
+          hi: 'इंतकाल भूमि अधिकार बदलने पर राजस्व अभिलेख अद्यतन करने की प्रक्रिया है। मालिक भूखंड बेचे तो इंतकाल उस परिवर्तन को दर्ज करता है ताकि नए मालिक का विवरण राजस्व अभिलेख में दिखे। यह बिक्री/खरीद, मालिक की मृत्यु पर विरासत, दान या अन्य योग्य हस्तांतरण, या दर्ज अधिकारों को प्रभावित करने वाले न्यायालय आदेश के बाद आवश्यक हो सकता है।',
+        },
+        note: {
+          en: 'Important: mutation is primarily a revenue-record process. A mutation entry by itself does not create or conclusively establish ownership title.',
+          hi: 'महत्वपूर्ण: इंतकाल मुख्यतः राजस्व अभिलेख की प्रक्रिया है। केवल इंतकाल प्रविष्टि से स्वामित्व हक़ न बनता है और न निर्णायक रूप से सिद्ध होता है।',
+        },
+        link: {
+          href: '/en/blog/himachal-land-mutation-intkal-guide',
+          label: { en: 'Read the complete Intkal guide', hi: 'पूरी इंतकाल मार्गदर्शिका पढ़ें' },
+        },
+      },
+      {
+        title: { en: 'Land registry vs mutation: key differences', hi: 'भूमि रजिस्ट्री बनाम इंतकाल: मुख्य अंतर' },
+        body: {
+          en: 'The two processes serve different purposes, and both should be checked when completing a land transaction.',
+          hi: 'दोनों प्रक्रियाओं के उद्देश्य अलग हैं और भूमि लेन-देन पूरा करते समय दोनों की जाँच होनी चाहिए।',
+        },
+        list: {
+          en: [
+            'Land registry: Registers a legal transfer document | Records the transaction and its parties | At the time of the transfer | Sub-Registrar | Does not by itself guarantee clear title',
+            'Mutation (Intkal): Updates revenue records | Reflects changes in recorded land rights | After the transfer or other change in rights | Revenue authorities (Patwari / Tehsil) | Does not independently confer title',
+          ],
+          hi: [
+            'भूमि रजिस्ट्री: हस्तांतरण का कानूनी दस्तावेज़ पंजीकृत करती है | लेन-देन और उसके पक्षकारों को दर्ज करती है | हस्तांतरण के समय | उप-पंजीयक | अपने-आप साफ़ हक़ की गारंटी नहीं देती',
+            'इंतकाल: राजस्व अभिलेख अद्यतन करता है | दर्ज भूमि अधिकारों में बदलाव दर्शाता है | हस्तांतरण या अधिकारों में बदलाव के बाद | राजस्व अधिकारी (पटवारी / तहसील) | स्वतंत्र रूप से हक़ प्रदान नहीं करता',
+          ],
+        },
+      },
+      {
+        title: { en: 'Why mutation matters after buying land', hi: 'जमीन खरीदने के बाद इंतकाल क्यों ज़रूरी है' },
+        body: {
+          en: 'Imagine registering a sale deed and, months later, finding the previous owner’s name still in the ownership column of the Jamabandi. This may mean the mutation has not been completed, incorporated or reflected in the record you are viewing. An outdated entry can cause practical difficulties with revenue offices, future buyers, banks and other institutions that rely on updated records. After any transaction, confirm that the mutation has been processed and reflected correctly.',
+          hi: 'कल्पना करें कि आपने बिक्री विलेख रजिस्टर कराया और महीनों बाद जमाबंदी के मालिक कॉलम में पिछले मालिक का नाम ही दिख रहा है। इसका अर्थ हो सकता है कि इंतकाल पूरा नहीं हुआ या आपके देखे अभिलेख में दर्ज नहीं हुआ। पुरानी प्रविष्टि से राजस्व कार्यालयों, भावी खरीदारों, बैंकों और अद्यतन अभिलेख माँगने वाली संस्थाओं के साथ व्यावहारिक कठिनाइयाँ आ सकती हैं। हर लेन-देन के बाद पुष्टि करें कि इंतकाल हो चुका है और सही दर्ज हुआ है।',
+        },
+      },
+      {
+        title: { en: 'How to check land records online in Himachal Pradesh', hi: 'हिमाचल प्रदेश में भूमि अभिलेख ऑनलाइन कैसे जाँचें' },
+        body: {
+          en: 'The Revenue Department provides online services for viewing land records. Open the HimBhoomi land records service, select the district, tehsil and revenue village as the portal requires, search with identifiers such as Khasra, Khata or Khatauni details, and review the Jamabandi. Compare the ownership names, land area, Khasra numbers and remarks with your property documents. For official or legal purposes, obtain the appropriate certified or digitally authenticated record rather than relying only on an online preview.',
+          hi: 'राजस्व विभाग भूमि अभिलेख देखने की ऑनलाइन सेवाएँ देता है। हिमभूमि भू-अभिलेख सेवा खोलें, पोर्टल के अनुसार जिला, तहसील और राजस्व गाँव चुनें, खसरा, खाता या खतौनी विवरण से खोजें और जमाबंदी देखें। मालिकों के नाम, क्षेत्रफल, खसरा नंबर और टिप्पणी को अपने दस्तावेज़ों से मिलाएँ। आधिकारिक या कानूनी प्रयोजन के लिए केवल ऑनलाइन प्रति पर निर्भर न रहकर उपयुक्त प्रमाणित या डिजिटल रूप से सत्यापित नकल लें।',
+        },
+        link: {
+          href: '/en/search',
+          label: { en: 'Search land records', hi: 'भूमि अभिलेख खोजें' },
+        },
+      },
+      {
+        title: { en: 'What to do if mutation is pending', hi: 'इंतकाल लंबित हो तो क्या करें' },
+        body: {
+          en: 'If you have bought land but the ownership details are not updated, work through these steps. The procedure can vary with the type of transaction and the circumstances of the property.',
+          hi: 'यदि आपने जमीन खरीदी है पर स्वामित्व विवरण अद्यतन नहीं हुआ, तो ये कदम उठाएँ। प्रक्रिया लेन-देन के प्रकार और संपत्ति की परिस्थितियों के अनुसार बदल सकती है।',
+        },
+        list: {
+          en: [
+            'Check the registration details and the mutation status.',
+            'Keep the registered sale deed and supporting documents ready.',
+            'Contact the concerned Patwari or Tehsil office to find out why the update is pending.',
+            'Ask whether additional documents, verification or proceedings are required.',
+            'Obtain the mutation order or the updated revenue record once the process is complete.',
+          ],
+          hi: [
+            'पंजीकरण विवरण और इंतकाल की स्थिति जाँचें।',
+            'पंजीकृत बिक्री विलेख और सहायक दस्तावेज़ तैयार रखें।',
+            'संबंधित पटवारी या तहसील कार्यालय से अद्यतन लंबित रहने का कारण पूछें।',
+            'पूछें कि अतिरिक्त दस्तावेज़, सत्यापन या कार्यवाही आवश्यक है या नहीं।',
+            'प्रक्रिया पूरी होने पर इंतकाल आदेश या अद्यतन राजस्व अभिलेख प्राप्त करें।',
+          ],
+        },
+      },
+      {
+        title: { en: 'Does mutation prove ownership?', hi: 'क्या इंतकाल स्वामित्व सिद्ध करता है?' },
+        body: {
+          en: 'Not by itself. A mutation entry is important evidence of how rights are recorded for revenue purposes, but it is not a substitute for valid title documents. A buyer should examine the sale deeds, ownership history, revenue records, restrictions, and any disputes or encumbrances. Where title is unclear, get professional legal verification before making payment.',
+          hi: 'अपने-आप में नहीं। इंतकाल प्रविष्टि राजस्व प्रयोजन से अधिकार दर्ज होने का महत्वपूर्ण साक्ष्य है, पर वैध हक़ दस्तावेज़ों का विकल्प नहीं। खरीदार को बिक्री विलेख, स्वामित्व इतिहास, राजस्व अभिलेख, प्रतिबंध तथा किसी विवाद या भार की जाँच करनी चाहिए। हक़ अस्पष्ट हो तो भुगतान से पहले पेशेवर कानूनी सत्यापन कराएँ।',
+        },
+      },
+      {
+        title: { en: 'Common mistakes property buyers should avoid', hi: 'संपत्ति खरीदारों की आम गलतियाँ' },
+        body: {
+          en: 'Most post-purchase problems come from a few repeated assumptions.',
+          hi: 'खरीद के बाद की ज़्यादातर समस्याएँ कुछ दोहराई जाने वाली धारणाओं से आती हैं।',
+        },
+        list: {
+          en: [
+            'Assuming registration means every record is updated. Always verify the mutation and later revenue entries.',
+            'Checking only the seller’s name. Confirm land identification, share, area and ownership history.',
+            'Ignoring joint ownership. A seller may own only a share of a larger holding, so verify exactly which rights are being transferred.',
+            'Overlooking purchase restrictions. Section 118 of the H.P. Tenancy and Land Reforms Act, 1972 may require permission, so confirm whether the transaction is legally permissible.',
+            'Paying before verifying. Avoid large payments based only on verbal assurances or unverified documents.',
+          ],
+          hi: [
+            'यह मान लेना कि रजिस्ट्री होते ही सब अभिलेख अद्यतन हो गए। इंतकाल और बाद की राजस्व प्रविष्टियाँ ज़रूर जाँचें।',
+            'केवल विक्रेता का नाम देखना। भूमि की पहचान, हिस्सा, क्षेत्रफल और स्वामित्व इतिहास की पुष्टि करें।',
+            'संयुक्त स्वामित्व की अनदेखी। विक्रेता बड़ी होल्डिंग के केवल एक हिस्से का मालिक हो सकता है, इसलिए ठीक-ठीक देखें कि कौन-से अधिकार हस्तांतरित हो रहे हैं।',
+            'खरीद प्रतिबंधों की अनदेखी। हि.प्र. काश्तकारी एवं भूमि सुधार अधिनियम, 1972 की धारा 118 में अनुमति आवश्यक हो सकती है, इसलिए लेन-देन की वैधता जाँचें।',
+            'जाँच से पहले भुगतान। केवल मौखिक आश्वासन या असत्यापित दस्तावेज़ों पर बड़ी रकम न दें।',
+          ],
+        },
+        link: {
+          href: '/en/blog/section-118-permission-himachal-land-buyers',
+          label: { en: 'Read the Section 118 guide', hi: 'धारा 118 मार्गदर्शिका पढ़ें' },
+        },
+      },
+      {
+        title: { en: 'Frequently Asked Questions', hi: 'अक्सर पूछे जाने वाले प्रश्न' },
+        body: {
+          en: 'Short answers to common questions about registration and mutation.',
+          hi: 'रजिस्ट्री और इंतकाल से जुड़े आम प्रश्नों के संक्षिप्त उत्तर।',
+        },
+        list: {
+          en: [
+            'Is mutation compulsory after land registration? Where a transaction changes rights recorded in revenue records, the corresponding mutation should be processed under applicable law and procedure. The precise requirements depend on the transaction.',
+            'Can land registration be completed without mutation? Registration of a qualifying document and mutation of the revenue record are distinct processes, so the revenue record may not reflect the transfer immediately.',
+            'Can I check Himachal Pradesh land records online? Yes. The Revenue Department provides online access to computerised land records for available areas.',
+            'Is Jamabandi the same as a sale deed? No. Jamabandi is a revenue record, whereas a sale deed is a document relating to the transfer of property rights.',
+            'Does mutation guarantee ownership? No. Mutation records changes for revenue purposes but does not independently create or conclusively establish legal title.',
+          ],
+          hi: [
+            'क्या रजिस्ट्री के बाद इंतकाल अनिवार्य है? जहाँ लेन-देन से राजस्व अभिलेख में दर्ज अधिकार बदलते हैं, वहाँ संबंधित इंतकाल लागू कानून और प्रक्रिया के अनुसार होना चाहिए। सटीक आवश्यकताएँ लेन-देन पर निर्भर हैं।',
+            'क्या इंतकाल के बिना भूमि रजिस्ट्री पूरी हो सकती है? योग्य दस्तावेज़ का पंजीकरण और राजस्व अभिलेख का इंतकाल अलग प्रक्रियाएँ हैं, इसलिए राजस्व अभिलेख में हस्तांतरण तुरंत न दिखे, ऐसा हो सकता है।',
+            'क्या मैं हिमाचल प्रदेश के भूमि अभिलेख ऑनलाइन देख सकता हूँ? हाँ। राजस्व विभाग उपलब्ध क्षेत्रों के कंप्यूटरीकृत भूमि अभिलेखों तक ऑनलाइन पहुँच देता है।',
+            'क्या जमाबंदी और बिक्री विलेख एक ही हैं? नहीं। जमाबंदी राजस्व अभिलेख है, जबकि बिक्री विलेख संपत्ति अधिकारों के हस्तांतरण का दस्तावेज़ है।',
+            'क्या इंतकाल स्वामित्व की गारंटी देता है? नहीं। इंतकाल राजस्व प्रयोजन से बदलाव दर्ज करता है, पर स्वतंत्र रूप से कानूनी हक़ न बनाता है और न निर्णायक रूप से सिद्ध करता है।',
+          ],
+        },
+      },
+    ],
+    takeaway: {
+      en: 'A registered sale deed and an updated revenue record serve different functions, so check both. Before completing any transaction, verify the seller’s rights, the land identification, applicable restrictions and the latest revenue records. For the revenue side, see our <a href="/en/blog/himachal-land-mutation-intkal-guide" class="takeaway-link">complete Intkal guide</a>.',
+      hi: 'पंजीकृत बिक्री विलेख और अद्यतन राजस्व अभिलेख के काम अलग हैं, इसलिए दोनों जाँचें। किसी भी लेन-देन से पहले विक्रेता के अधिकार, भूमि की पहचान, लागू प्रतिबंध और नवीनतम राजस्व अभिलेख की पुष्टि करें। राजस्व पक्ष के लिए हमारी <a href="/hi/blog/himachal-land-mutation-intkal-guide" class="takeaway-link">संपूर्ण इंतकाल मार्गदर्शिका</a> देखें।',
+    },
+    sources: [
+      { label: 'Himachal Pradesh Revenue Department', url: 'https://himachal.nic.in/revenue' },
+      { label: 'HimBhoomi public land records', url: 'https://himbhoomilmk.nic.in/viewlandrecords.aspx' },
+    ],
+  },
+{
           slug: 'himachal-land-mutation-intkal-guide',
           image: '/images/himachal-concept-hero.webp',
           publishedAt: '2026-11-20T12:00:00+05:30',
