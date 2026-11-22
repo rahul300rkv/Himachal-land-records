@@ -1853,7 +1853,7 @@
     "code": {
       "title": "Enter the code",
       "sentTo": "We sent a 6-digit code to {destination}.",
-      "emailHint": "Can't see it? Check your spam or promotions folder.",
+      "emailLink": "You can also open the sign-in link in that email.",
       "label": "6-digit code",
       "verify": "Verify and continue",
       "verifying": "Verifying…",
@@ -1867,7 +1867,7 @@
       "sendFailed": "We could not send the code. Check the details and try again.",
       "verifyFailed": "That code is not correct or has expired.",
       "rateLimited": "Too many attempts. Please wait a minute and try again.",
-      "link": "The sign-in link is invalid or has expired. Please request a new code."
+      "link": "The sign-in link is invalid or has expired. Enter your email address to request a new one."
     },
     "already": {
       "title": "You are already logged in",
@@ -1875,7 +1875,17 @@
       "button": "Go to dashboard"
     },
     "sending": "Sending…",
-    "why": "Log in to save searches, generate reports and list your land."
+    "why": "Log in to save searches, generate reports and list your land.",
+    "magic": {
+      "subtitle": "Enter your email address and we will send you a secure sign-in link. No password needed.",
+      "hint": "We will email you a link. Click it to sign in — no code to type.",
+      "send": "Send sign-in link",
+      "sending": "Sending link…",
+      "sentTitle": "Check your inbox",
+      "sentBody": "We sent a sign-in link to {email}. Click the link in that email to continue.",
+      "sentHint": "The link expires in 1 hour. Check your spam folder if you do not see it.",
+      "tryDifferent": "Use a different email address"
+    }
   },
   "Dashboard": {
     "title": "Your dashboard",

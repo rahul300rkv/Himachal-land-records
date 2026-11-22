@@ -1,84 +1,58 @@
 'use client';
 
-import { Loader2, Mail, Smartphone } from 'lucide-react';
-import { useLocale, useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
+import { Loader2, Mail, MailCheck } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Link, useRouter } from '@/i18n/navigation';
-import { formatIndianMobile, normalizeIndianMobile } from '@/lib/phone';
+import { Link } from '@/i18n/navigation';
 import { createClient } from '@/lib/supabase/client';
-import { cn } from '@/lib/utils';
 
-type Method = 'phone' | 'email';
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-const RESEND_SECONDS = 30;
 
 /**
- * Passwordless sign-in: a one-time code by SMS (mobile number), or a magic link by email.
- * The same flow signs in existing users and creates accounts for new ones.
+ * Magic-link sign-in: enter an email address, receive a link, click it.
+ * No OTP code entry. The link is handled by /api/auth/callback.
  */
 export function LoginForm({ next }: { next: string }) {
   const t = useTranslations('Auth');
-  const locale = useLocale();
-  const router = useRouter();
 
-  const [method, setMethod] = useState<Method>('phone');
-  const [step, setStep] = useState<'request' | 'code' | 'link'>('request');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
+  const [email, setEmail]     = useState('');
+  const [name, setName]       = useState('');
   const [consent, setConsent] = useState(false);
-  const [code, setCode] = useState('');
-  const [destination, setDestination] = useState('');
-  const [error, setError] = useState<string | null>(null);
-  const [busy, setBusy] = useState(false);
-  const [cooldown, setCooldown] = useState(0);
-
-  useEffect(() => {
-    if (cooldown <= 0) return;
-    const timer = setTimeout(() => setCooldown((s) => s - 1), 1000);
-    return () => clearTimeout(timer);
-  }, [cooldown]);
+  const [sent, setSent]       = useState(false);
+  const [error, setError]     = useState<string | null>(null);
+  const [busy, setBusy]       = useState(false);
 
   const rateLimited = (e: { status?: number; message?: string }) =>
     e.status === 429 || /rate limit|too many/i.test(e.message ?? '');
 
-  async function sendCode() {
+  async function handleSubmit(event: React.FormEvent) {
+    event.preventDefault();
     setError(null);
 
-    const e164 = method === 'phone' ? normalizeIndianMobile(phone) : null;
-    if (method === 'phone' && !e164) return setError(t('phone.invalid'));
-    if (method === 'email' && !EMAIL.test(email.trim())) return setError(t('email.invalid'));
+    if (!EMAIL.test(email.trim())) return setError(t('email.invalid'));
     if (!consent) return setError(t('consentRequired'));
 
     setBusy(true);
     try {
       const supabase = createClient();
-      const data = { locale, ...(name.trim() ? { full_name: name.trim() } : {}) };
-      const { error: sendError } =
-        method === 'phone'
-          ? await supabase.auth.signInWithOtp({ phone: e164!, options: { data } })
-          : await supabase.auth.signInWithOtp({
-              email: email.trim(),
-              options: {
-                data,
-                // Where the magic link in the email lands (see /api/auth/callback).
-                emailRedirectTo: `${window.location.origin}/api/auth/callback?next=${encodeURIComponent(next)}`,
-              },
-            });
+      const { error: sendError } = await supabase.auth.signInWithOtp({
+        email: email.trim(),
+        options: {
+          shouldCreateUser: true,
+          data: name.trim() ? { full_name: name.trim() } : undefined,
+          emailRedirectTo: `${window.location.origin}/api/auth/callback?next=${encodeURIComponent(next)}`,
+        },
+      });
 
       if (sendError) {
         setError(rateLimited(sendError) ? t('errors.rateLimited') : t('errors.sendFailed'));
         return;
       }
 
-      setDestination(method === 'phone' ? formatIndianMobile(e164!) : email.trim());
-      // Email sends a magic link (opened in the same browser); SMS sends a code to type here.
-      setStep(method === 'email' ? 'link' : 'code');
-      setCode('');
-      setCooldown(RESEND_SECONDS);
+      setSent(true);
     } catch {
       setError(t('errors.generic'));
     } finally {
@@ -86,202 +60,60 @@ export function LoginForm({ next }: { next: string }) {
     }
   }
 
-  async function verifyCode(event: React.FormEvent) {
-    event.preventDefault();
-    setError(null);
-    if (!/^\d{6}$/.test(code)) return setError(t('code.invalid'));
-
-    setBusy(true);
-    try {
-      const supabase = createClient();
-      const { error: verifyError } = await supabase.auth.verifyOtp({
-        phone: normalizeIndianMobile(phone)!,
-        token: code,
-        type: 'sms',
-      });
-
-      if (verifyError) {
-        setError(rateLimited(verifyError) ? t('errors.rateLimited') : t('errors.verifyFailed'));
-        return;
-      }
-      router.push(next);
-      router.refresh();
-    } catch {
-      setError(t('errors.generic'));
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  const errorBox = error && (
-    <p role="alert" className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2.5 text-sm text-destructive">
-      {error}
-    </p>
-  );
-
-  // ---- Step 2 (email): open the sign-in link that was emailed ----
-  if (step === 'link') {
+  // ── Sent state ──────────────────────────────────────────────────────────────
+  if (sent) {
     return (
-      <div className="space-y-5" aria-live="polite">
+      <div className="space-y-4 text-center">
+        <div className="mx-auto flex size-14 items-center justify-center rounded-full bg-primary/10 text-primary">
+          <MailCheck className="size-7" />
+        </div>
         <div>
-          <h2 className="text-xl">{t('link.title')}</h2>
-          <p className="mt-1 text-muted-foreground">{t('link.body', { destination })}</p>
-          <p className="mt-2 text-sm text-muted-foreground">{t('link.hint')}</p>
+          <h2 className="text-xl font-semibold">{t('magic.sentTitle')}</h2>
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+            {t('magic.sentBody', { email: email.trim() })}
+          </p>
         </div>
-
-        {errorBox}
-
-        <div className="flex flex-col gap-2 text-sm sm:flex-row sm:items-center sm:justify-between">
-          <button
-            type="button"
-            onClick={sendCode}
-            disabled={cooldown > 0 || busy}
-            className="text-left font-medium text-primary hover:underline disabled:cursor-not-allowed disabled:text-muted-foreground disabled:no-underline"
-          >
-            {cooldown > 0 ? t('link.resendIn', { seconds: cooldown }) : t('link.resend')}
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setStep('request');
-              setError(null);
-            }}
-            className="text-left text-muted-foreground hover:text-foreground hover:underline"
-          >
-            {t('code.change')}
-          </button>
-        </div>
+        <p className="text-xs text-muted-foreground">{t('magic.sentHint')}</p>
+        <button
+          type="button"
+          onClick={() => { setSent(false); setError(null); }}
+          className="text-sm font-medium text-primary hover:underline"
+        >
+          {t('magic.tryDifferent')}
+        </button>
       </div>
     );
   }
 
-  // ---- Step 2 (phone): enter the code ----
-  if (step === 'code') {
-    return (
-      <form onSubmit={verifyCode} noValidate className="space-y-5">
-        <div>
-          <h2 className="text-xl">{t('code.title')}</h2>
-          <p className="mt-1 text-muted-foreground">{t('code.sentTo', { destination })}</p>
-        </div>
-
-        <div>
-          <Label htmlFor="code">{t('code.label')}</Label>
-          <Input
-            id="code"
-            value={code}
-            onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-            inputMode="numeric"
-            autoComplete="one-time-code"
-            maxLength={6}
-            autoFocus
-            className="h-14 text-center text-2xl tracking-[0.5em] tabular-nums"
-            aria-invalid={Boolean(error)}
-          />
-        </div>
-
-        {errorBox}
-
-        <Button type="submit" size="lg" className="w-full" disabled={busy}>
-          {busy && <Loader2 className="animate-spin" />}
-          {busy ? t('code.verifying') : t('code.verify')}
-        </Button>
-
-        <div className="flex flex-col gap-2 text-sm sm:flex-row sm:items-center sm:justify-between">
-          <button
-            type="button"
-            onClick={sendCode}
-            disabled={cooldown > 0 || busy}
-            className="text-left font-medium text-primary hover:underline disabled:cursor-not-allowed disabled:text-muted-foreground disabled:no-underline"
-          >
-            {cooldown > 0 ? t('code.resendIn', { seconds: cooldown }) : t('code.resend')}
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setStep('request');
-              setError(null);
-            }}
-            className="text-left text-muted-foreground hover:text-foreground hover:underline"
-          >
-            {t('code.change')}
-          </button>
-        </div>
-      </form>
-    );
-  }
-
-  // ---- Step 1: phone or email ----
+  // ── Request form ────────────────────────────────────────────────────────────
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        void sendCode();
-      }}
-      noValidate
-      className="space-y-5"
-    >
-      <div role="tablist" aria-label={t('title')} className="grid grid-cols-2 rounded-lg border bg-secondary p-1">
-        {(['phone', 'email'] as const).map((value) => {
-          const Icon = value === 'phone' ? Smartphone : Mail;
-          const active = method === value;
-          return (
-            <button
-              key={value}
-              type="button"
-              role="tab"
-              aria-selected={active}
-              onClick={() => {
-                setMethod(value);
-                setError(null);
-              }}
-              className={cn(
-                'flex min-h-11 items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors',
-                active ? 'bg-background text-primary shadow-sm' : 'text-muted-foreground hover:text-foreground',
-              )}
-            >
-              <Icon className="size-4" aria-hidden="true" />
-              {t(`tabs.${value}`)}
-            </button>
-          );
-        })}
+    <form onSubmit={handleSubmit} noValidate className="space-y-5">
+
+      <div className="flex items-center gap-3 rounded-lg border border-border bg-muted/40 px-4 py-3 text-sm text-muted-foreground">
+        <Mail className="size-4 shrink-0 text-primary" aria-hidden="true" />
+        {t('magic.hint')}
       </div>
 
-      {method === 'phone' ? (
-        <div role="tabpanel">
-          <Label htmlFor="phone">{t('phone.label')}</Label>
-          <div className="flex gap-2">
-            <span className="flex h-11 items-center rounded-md border bg-secondary px-3 text-base font-medium">+91</span>
-            <Input
-              id="phone"
-              type="tel"
-              inputMode="tel"
-              autoComplete="tel-national"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              placeholder={t('phone.placeholder')}
-              maxLength={16}
-            />
-          </div>
-        </div>
-      ) : (
-        <div role="tabpanel">
-          <Label htmlFor="email">{t('email.label')}</Label>
-          <Input
-            id="email"
-            type="email"
-            inputMode="email"
-            autoComplete="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder={t('email.placeholder')}
-            maxLength={254}
-          />
-        </div>
-      )}
+      <div className="space-y-1.5">
+        <Label htmlFor="email">{t('email.label')}</Label>
+        <Input
+          id="email"
+          type="email"
+          inputMode="email"
+          autoComplete="email"
+          autoFocus
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder={t('email.placeholder')}
+          maxLength={254}
+          aria-invalid={Boolean(error)}
+        />
+      </div>
 
-      <div>
+      <div className="space-y-1.5">
         <Label htmlFor="name">
-          {t('name.label')} <span className="font-normal text-muted-foreground">({t('name.hint')})</span>
+          {t('name.label')}{' '}
+          <span className="font-normal text-muted-foreground">({t('name.hint')})</span>
         </Label>
         <Input
           id="name"
@@ -316,11 +148,15 @@ export function LoginForm({ next }: { next: string }) {
         </span>
       </label>
 
-      {errorBox}
+      {error && (
+        <p role="alert" className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2.5 text-sm text-destructive">
+          {error}
+        </p>
+      )}
 
       <Button type="submit" size="lg" className="w-full" disabled={busy}>
-        {busy && <Loader2 className="animate-spin" />}
-        {busy ? t('sending') : t(`${method}.send`)}
+        {busy && <Loader2 className="animate-spin" aria-hidden="true" />}
+        {busy ? t('magic.sending') : t('magic.send')}
       </Button>
     </form>
   );

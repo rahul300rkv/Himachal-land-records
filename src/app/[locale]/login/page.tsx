@@ -1,4 +1,4 @@
-import { DatabaseZap, LogIn } from 'lucide-react';
+import { MailCheck, DatabaseZap, LogIn } from 'lucide-react';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { LoginForm } from '@/components/auth/LoginForm';
@@ -48,7 +48,7 @@ export default async function LoginPage({ params, searchParams }: Props) {
         ) : (
           <div className="rounded-xl border bg-card p-6 shadow-sm sm:p-8">
             <h1 className="text-2xl sm:text-3xl">{t('title')}</h1>
-            <p className="mb-6 mt-2 text-muted-foreground">{t('subtitle')}</p>
+            <p className="mb-6 mt-2 text-muted-foreground">{t('magic.subtitle')}</p>
             {linkError && (
               <p role="alert" className="mb-5 rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2.5 text-sm text-destructive">
                 {t('errors.link')}
