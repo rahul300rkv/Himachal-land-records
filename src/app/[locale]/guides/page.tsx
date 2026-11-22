@@ -19,7 +19,7 @@ const GUIDES = [
 
 /** Where each guide hands the reader next (tool or related article). */
 const NEXT_STEP: Record<(typeof GUIDES)[number]['key'], { href: string; label: Record<Lang, string> }> = {
-  buyLand: { href: '/check', label: { en: 'Nakal checker', hi: 'नकल जाँच' } },
+  buyLand: { href: '/check', label: { en: 'Jamabandi checker', hi: 'जमाबंदी जाँच' } },
   legalHeir: {
     href: '/blog/himachal-land-mutation-intkal-guide',
     label: { en: 'Land mutation (Intkal) guide', hi: 'भूमि इंतकाल (म्यूटेशन) मार्गदर्शिका' },
