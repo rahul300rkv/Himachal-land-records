@@ -33,3 +33,13 @@ export function estimateStampDuty(input: {
   const rate = linked || value > threshold ? 8 : woman ? 4 : 6;
   return { value, rate, duty: roundDuty(value * rate / 100), linked };
 }
+
+/** Registration fee as a percentage of the property value used for stamp duty. */
+export const REGISTRATION_FEE_RATE = 2;
+/** Optional upper limit in rupees. Leave null for no cap. */
+export const REGISTRATION_FEE_CAP: number | null = null;
+
+export function estimateRegistrationFee(value: number) {
+  const fee = Math.round((value * REGISTRATION_FEE_RATE) / 100);
+  return REGISTRATION_FEE_CAP === null ? fee : Math.min(fee, REGISTRATION_FEE_CAP);
+}
