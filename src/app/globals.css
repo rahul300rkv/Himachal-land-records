@@ -56,10 +56,18 @@
     @apply border-border;
   }
 
+  /* Remove 300ms tap delay on mobile for all interactive elements */
+  a, button, [role="button"], input, label, select, textarea, summary {
+    touch-action: manipulation;
+  }
+
   html {
     scroll-behavior: smooth;
     /* Keeps in-page anchors (e.g. #legal-disclaimer) clear of the sticky header */
     scroll-padding-top: 5rem;
+    /* Prevent iOS from inflating font sizes in landscape */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -192,7 +200,7 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    font-size: 0.8rem;
+    font-size: 0.875rem;
     font-weight: 600;
     letter-spacing: 0.16em;
     text-transform: uppercase;

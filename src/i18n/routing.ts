@@ -4,7 +4,7 @@ export const routing = defineRouting({
   locales: ['en', 'hi'],
   // Used when the visitor's browser language is neither English nor Hindi.
   // Most visitors are expected to be Hindi readers; change to 'en' if you prefer.
-  defaultLocale: 'hi',
+  defaultLocale: 'en',
   // Always show the locale in the URL (/hi/..., /en/...) so pages are shareable and indexable.
   localePrefix: 'always',
 });

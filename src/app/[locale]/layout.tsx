@@ -10,6 +10,7 @@ import { Header } from '@/components/layout/Header';
 import { routing, type Locale } from '@/i18n/routing';
 import { SITE } from '@/lib/site';
 import { absoluteUrl } from '@/lib/utils';
+import { AuthSessionHandler } from '@/components/auth/AuthSessionHandler';
 import '../globals.css';
 
 // Hind: one family that covers both Latin and Devanagari for body/UI text.
@@ -73,7 +74,12 @@ export function generateStaticParams() {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#ffffff',
+  minimumScale: 1,
+  viewportFit: 'cover',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)',  color: '#2a102d' },
+  ],
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -134,7 +140,6 @@ export default async function LocaleLayout({ children, params }: Props) {
       name: SITE.name,
       url: absoluteUrl('/'),
       logo: absoluteUrl('/icon.svg'),
-      ...(SITE.bloggerUrl ? { sameAs: [SITE.bloggerUrl] } : {}),
       description: metadata('description'),
       areaServed: { '@type': 'AdministrativeArea', name: 'Himachal Pradesh, India' },
       contactPoint: { '@type': 'ContactPoint', email: SITE.contactEmail, contactType: 'customer support', availableLanguage: ['English', 'Hindi'] },
@@ -160,6 +165,7 @@ export default async function LocaleLayout({ children, params }: Props) {
       <head><JsonLd data={structuredData} /></head>
       <body className="flex min-h-screen flex-col font-sans antialiased">
         <NextIntlClientProvider locale={locale} messages={messages}>
+          <AuthSessionHandler />
           <a
             href="#main"
             className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
