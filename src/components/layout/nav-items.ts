@@ -1,6 +1,6 @@
 /** Primary navigation. Labels live in messages under `Navigation.<key>`. */
 export const NAV_ITEMS = [
-  { href: '/circle-rate', key: 'circleRates' },
+  { href: '/search', key: 'search' },
   { href: '/check', key: 'nakalChecker' },
   { href: '/map', key: 'map' },
   { href: '/tools', key: 'tools' },
