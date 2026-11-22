@@ -34,12 +34,18 @@ export function estimateStampDuty(input: {
   return { value, rate, duty: roundDuty(value * rate / 100), linked };
 }
 
-/** Registration fee as a percentage of the property value used for stamp duty. */
+/**
+ * Registration fee for the deed types this calculator covers.
+ * Sale (conveyance) and gift deeds: 2% of the higher of market value and
+ * consideration, minimum Rs 100, rounded to the nearest Rs 10.
+ * Miscellaneous documents (partition, release, settlement, exchange, transfer of
+ * lease, mortgage without possession and similar) carry a separate 0.05% fee and
+ * are not covered here. A fresh lease deed has no rate in the departmental
+ * letter, so it returns null and the Sub-Registrar's quote must be entered.
+ */
 export const REGISTRATION_FEE_RATE = 2;
-/** Optional upper limit in rupees. Leave null for no cap. */
-export const REGISTRATION_FEE_CAP: number | null = null;
 
-export function estimateRegistrationFee(value: number) {
-  const fee = Math.round((value * REGISTRATION_FEE_RATE) / 100);
-  return REGISTRATION_FEE_CAP === null ? fee : Math.min(fee, REGISTRATION_FEE_CAP);
+export function estimateRegistrationFee(deed: Deed, value: number): number | null {
+  if (deed === 'lease') return null;
+  return Math.max(100, Math.round((value * REGISTRATION_FEE_RATE) / 100 / 10) * 10);
 }

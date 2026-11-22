@@ -568,7 +568,7 @@
                 "resFemale": "Resident female buyer: about 4% up to a value threshold, and higher above it.",
                 "resJoint": "Resident joint buyers (male and female): about 5%.",
                 "nonRes": "Non-resident buyer: a flat 12%, regardless of gender. A second home or a temporary stay in the state does not make you a resident.",
-                "reg": "Registration fee: about 2% of the value, subject to a cap of ₹25,000.",
+                "reg": "Registration fee: 2% of the market value or the price, whichever is higher, with a minimum of ₹100 and rounded to the nearest ₹10, for a sale or gift deed.",
                 "estamp": "Payment: e-stamping is mandatory, and physical stamp paper has been discontinued since April 2024."
               },
               "note": "Duty is charged on the higher of the circle rate or the agreement value. On a ₹1 crore property, 12% is ₹12 lakh against ₹6 lakh at 6%, so your resident status can change the budget by lakhs."

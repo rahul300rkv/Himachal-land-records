@@ -766,8 +766,8 @@ export const BLOG_GUIDES: BlogGuide[] = [
       {
         title: { en: 'Stamp duty and registration fee are two different charges', hi: 'स्टाम्प शुल्क और पंजीकरण शुल्क दो अलग खर्च हैं' },
         body: {
-          en: 'Stamp duty is the tax paid on the deed, calculated from the value and the deed type. The registration fee is a separate charge paid when the deed is registered with the Sub-Registrar, and the calculator estimates it at 2% of the property value used for stamp duty. Many online pages mix the two charges together. If the Sub-Registrar quotes a different registration fee for your deed, type it into the calculator to replace the estimate, and confirm the final figure at the counter before you budget.',
-          hi: 'स्टाम्प शुल्क वह कर है जो विलेख पर मूल्य और विलेख के प्रकार के आधार पर लगता है। पंजीकरण शुल्क अलग है और विलेख उप-पंजीयक के यहाँ पंजीकृत कराते समय दिया जाता है; कैलकुलेटर इसका अनुमान स्टाम्प शुल्क के लिए प्रयुक्त संपत्ति मूल्य के 2% पर लगाता है। कई ऑनलाइन पन्ने दोनों शुल्कों को मिला देते हैं। उप-पंजीयक आपके विलेख के लिए अलग पंजीकरण शुल्क बताएं तो उसे कैलकुलेटर में दर्ज करके अनुमान बदल लें, और बजट बनाने से पहले अंतिम राशि काउंटर पर पुष्ट करें।',
+          en: 'Stamp duty is the tax paid on the deed, calculated from the value and the deed type. The registration fee is a separate charge paid when the deed is registered with the Sub-Registrar. For a sale (conveyance) deed or a gift deed it is 2% of the market value or the consideration, whichever is higher, with a minimum of ₹100 and the fee rounded to the nearest ₹10. Miscellaneous documents such as partition, release, settlement and exchange deeds, mortgages without possession and transfer of lease carry a lower fee of 0.05%. Many online pages mix the two charges together or quote older figures, including a cap that does not appear in the departmental letter. The calculator estimates the registration fee for sale and gift deeds. If the Sub-Registrar quotes a different amount, type it in to replace the estimate, and confirm the final figure at the counter before you budget.',
+          hi: 'स्टाम्प शुल्क वह कर है जो विलेख पर मूल्य और विलेख के प्रकार के आधार पर लगता है। पंजीकरण शुल्क अलग है और विलेख उप-पंजीयक के यहाँ पंजीकृत कराते समय दिया जाता है। बिक्री (हस्तांतरण) या उपहार विलेख पर यह बाज़ार मूल्य या प्रतिफल में से अधिक का 2% है, न्यूनतम ₹100 और शुल्क निकटतम ₹10 तक पूर्णांकित। बँटवारा, त्याग-पत्र, समझौता और विनिमय विलेख, कब्जे के बिना बंधक तथा पट्टे के अंतरण जैसे विविध दस्तावेज़ों पर कम शुल्क 0.05% है। कई ऑनलाइन पन्ने दोनों शुल्कों को मिला देते हैं या पुराने आँकड़े बताते हैं, जिनमें ऐसी अधिकतम सीमा भी है जो विभागीय पत्र में नहीं दिखती। कैलकुलेटर बिक्री और उपहार विलेख पर पंजीकरण शुल्क का अनुमान लगाता है। उप-पंजीयक अलग राशि बताएं तो उसे दर्ज करके अनुमान बदल लें, और बजट बनाने से पहले अंतिम राशि काउंटर पर पुष्ट करें।',
         },
       },
       {
@@ -868,8 +868,8 @@ export const BLOG_GUIDES: BlogGuide[] = [
       {
         title: { en: 'Gifts between family members', hi: 'परिवार के सदस्यों के बीच उपहार' },
         body: {
-          en: 'Qualifying gifts between spouses or between blood relatives with a common ancestor are charged at 0.1% of the market value, with a minimum of ₹5,000 and a maximum of ₹10,000. For example, a family gift of land worth ₹50 lakh would be 0.1% of the value, which is ₹5,000, so the minimum applies. Gifts that do not qualify as family gifts follow the standard thresholds above. After a gift deed is registered, the revenue record still has to be updated through mutation.',
-          hi: 'पति-पत्नी या साझा पूर्वज वाले रक्त-संबंधियों के बीच योग्य उपहार पर बाज़ार मूल्य का 0.1% शुल्क लगता है, न्यूनतम ₹5,000 और अधिकतम ₹10,000। उदाहरण के लिए, ₹50 लाख की भूमि के पारिवारिक उपहार में शुल्क ₹5,000 बनता है, इसलिए न्यूनतम सीमा लागू होती है। जो उपहार पारिवारिक उपहार की श्रेणी में नहीं आते उन पर ऊपर की सामान्य सीमाएँ लगती हैं। उपहार विलेख पंजीकृत होने के बाद भी राजस्व अभिलेख इंतकाल से अद्यतन कराना पड़ता है।',
+          en: 'Qualifying gifts between spouses or between blood relatives with a common ancestor are charged at 0.1% of the market value, with a minimum of ₹5,000 and a maximum of ₹10,000. For example, a family gift of land worth ₹50 lakh would be 0.1% of the value, which is ₹5,000, so the minimum applies. Gifts that do not qualify as family gifts follow the standard thresholds above. After a gift deed is registered, the revenue record still has to be updated through mutation. The registration fee on a gift deed is 2% of the market value, with a minimum of ₹100.',
+          hi: 'पति-पत्नी या साझा पूर्वज वाले रक्त-संबंधियों के बीच योग्य उपहार पर बाज़ार मूल्य का 0.1% शुल्क लगता है, न्यूनतम ₹5,000 और अधिकतम ₹10,000। उदाहरण के लिए, ₹50 लाख की भूमि के पारिवारिक उपहार में शुल्क ₹5,000 बनता है, इसलिए न्यूनतम सीमा लागू होती है। जो उपहार पारिवारिक उपहार की श्रेणी में नहीं आते उन पर ऊपर की सामान्य सीमाएँ लगती हैं। उपहार विलेख पंजीकृत होने के बाद भी राजस्व अभिलेख इंतकाल से अद्यतन कराना पड़ता है। उपहार विलेख पर पंजीकरण शुल्क बाज़ार मूल्य का 2% है, न्यूनतम ₹100।',
         },
         link: {
           href: '/en/blog/himachal-land-mutation-intkal-guide',
@@ -879,8 +879,8 @@ export const BLOG_GUIDES: BlogGuide[] = [
       {
         title: { en: 'Lease deeds', hi: 'पट्टा विलेख' },
         body: {
-          en: 'For a fixed-term lease the calculator multiplies the market value by the applicable rate (8%, or 12% with Section 118 permission) and by the lease term in years divided by 100. For a perpetual or indefinite lease it uses the higher of the market value and the total amount payable, with no term factor. Article 35 exempts certain cultivation leases, so confirm that your lease qualifies before choosing that option.',
-          hi: 'निश्चित अवधि के पट्टे में कैलकुलेटर बाज़ार मूल्य को लागू दर (8%, या धारा 118 अनुमति पर 12%) से और पट्टे की वर्ष-अवधि को 100 से भाग देकर गुणा करता है। स्थायी या अनिश्चित पट्टे में वह बाज़ार मूल्य और कुल देय राशि में से अधिक को लेता है, अवधि-गुणक के बिना। अनुच्छेद 35 कुछ खेती के पट्टों को छूट देता है, इसलिए वह विकल्प चुनने से पहले जाँचें कि आपका पट्टा योग्य है।',
+          en: 'For a fixed-term lease the calculator multiplies the market value by the applicable rate (8%, or 12% with Section 118 permission) and by the lease term in years divided by 100. For a perpetual or indefinite lease it uses the higher of the market value and the total amount payable, with no term factor. Article 35 exempts certain cultivation leases, so confirm that your lease qualifies before choosing that option. The calculator does not estimate the registration fee for a lease deed, so ask the Sub-Registrar for it.',
+          hi: 'निश्चित अवधि के पट्टे में कैलकुलेटर बाज़ार मूल्य को लागू दर (8%, या धारा 118 अनुमति पर 12%) से और पट्टे की वर्ष-अवधि को 100 से भाग देकर गुणा करता है। स्थायी या अनिश्चित पट्टे में वह बाज़ार मूल्य और कुल देय राशि में से अधिक को लेता है, अवधि-गुणक के बिना। अनुच्छेद 35 कुछ खेती के पट्टों को छूट देता है, इसलिए वह विकल्प चुनने से पहले जाँचें कि आपका पट्टा योग्य है। कैलकुलेटर पट्टा विलेख का पंजीकरण शुल्क नहीं निकालता, इसलिए वह उप-पंजीयक से पूछें।',
         },
       },
       {
@@ -895,7 +895,7 @@ export const BLOG_GUIDES: BlogGuide[] = [
             'Enter the assessed market value for the whole property, and the agreed price if it is a sale.',
             'Select the buyer category (woman or other), or the family gift or Section 118 option where it genuinely applies.',
             'Add the value of any earlier deeds between the same parties in the last year.',
-            'Check the registration fee, estimated at 2% of the value, and replace it if the Sub-Registrar quotes a different amount.',
+            'Check the registration fee (2% of the higher value for a sale or gift, minimum ₹100) and replace it if the Sub-Registrar quotes a different amount.',
             'Ask the Sub-Registrar to confirm the valuation, the registration fee and any local surcharge before you pay.',
           ],
           hi: [
@@ -903,7 +903,7 @@ export const BLOG_GUIDES: BlogGuide[] = [
             'पूरी संपत्ति का आँका गया बाज़ार मूल्य भरें, और बिक्री हो तो तय कीमत भी।',
             'खरीदार श्रेणी (महिला या अन्य) चुनें, या जहाँ वास्तव में लागू हो वहाँ पारिवारिक उपहार या धारा 118 का विकल्प चुनें।',
             'पिछले एक वर्ष में उन्हीं पक्षों के पूर्व विलेखों का मूल्य जोड़ें।',
-            'मूल्य के 2% पर अनुमानित पंजीकरण शुल्क देखें, और उप-पंजीयक अलग राशि बताएं तो उसे बदल दें।',
+            'पंजीकरण शुल्क देखें (बिक्री या उपहार में अधिक मूल्य का 2%, न्यूनतम ₹100) और उप-पंजीयक अलग राशि बताएं तो उसे बदल दें।',
             'भुगतान से पहले उप-पंजीयक से मूल्यांकन, पंजीकरण शुल्क और किसी स्थानीय अधिभार की पुष्टि कराएँ।',
           ],
         },
@@ -958,7 +958,7 @@ export const BLOG_GUIDES: BlogGuide[] = [
             'Does buying with Section 118 permission cost more? Yes. Where the State has granted permission under Section 118(2)(h), a flat 12% applies to the sale or lease.',
             'Can I split a purchase into two deeds to save duty? Reports on the 2026 rules say deeds between the same buyer and seller within one year are considered together, so splitting is unlikely to help.',
             'How much is stamp duty on a family gift deed? Qualifying family gifts are charged at 0.1% of market value with a ₹5,000 minimum and a ₹10,000 maximum.',
-            'How much is the registration fee? The calculator estimates it at 2% of the property value, and it is separate from stamp duty. If the Sub-Registrar quotes a different amount, enter it to replace the estimate.',
+            'How much is the registration fee? For a sale or gift deed it is 2% of the higher of market value and consideration, with a minimum of ₹100, rounded to the nearest ₹10. Partition, release, settlement and exchange deeds, mortgages without possession and transfer of lease are charged 0.05%. It is separate from stamp duty.',
           ],
           hi: [
             'हिमाचल प्रदेश में जमीन खरीदने वाली महिलाओं के लिए स्टाम्प शुल्क कितना है? हमारे कैलकुलेटर में लागू 2026 अनुसूची के अनुसार ₹1 करोड़ तक मूल्य पर 4% और ₹1 करोड़ से ऊपर 8%।',
@@ -967,7 +967,7 @@ export const BLOG_GUIDES: BlogGuide[] = [
             'क्या धारा 118 अनुमति से खरीदना महँगा पड़ता है? हाँ। जहाँ राज्य ने धारा 118(2)(h) के तहत अनुमति दी हो, बिक्री या पट्टे पर एकसमान 12% लगता है।',
             'क्या शुल्क बचाने के लिए खरीद को दो विलेखों में बाँट सकता हूँ? 2026 नियमों पर रिपोर्टों के अनुसार एक वर्ष के भीतर एक ही खरीदार और विक्रेता के विलेख साथ गिने जाते हैं, इसलिए बाँटने से लाभ की संभावना कम है।',
             'पारिवारिक उपहार विलेख पर स्टाम्प शुल्क कितना है? योग्य पारिवारिक उपहार पर बाज़ार मूल्य का 0.1% लगता है, न्यूनतम ₹5,000 और अधिकतम ₹10,000।',
-            'पंजीकरण शुल्क कितना है? कैलकुलेटर इसका अनुमान संपत्ति मूल्य के 2% पर लगाता है, और यह स्टाम्प शुल्क से अलग है। उप-पंजीयक अलग राशि बताएं तो उसे दर्ज करके अनुमान बदल लें।',
+            'पंजीकरण शुल्क कितना है? बिक्री या उपहार विलेख पर यह बाज़ार मूल्य और प्रतिफल में से अधिक का 2% है, न्यूनतम ₹100, निकटतम ₹10 तक पूर्णांकित। बँटवारा, त्याग-पत्र, समझौता और विनिमय विलेख, कब्जे के बिना बंधक तथा पट्टे के अंतरण पर 0.05% लगता है। यह स्टाम्प शुल्क से अलग है।',
           ],
         },
       },

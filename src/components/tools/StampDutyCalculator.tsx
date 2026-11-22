@@ -28,7 +28,7 @@ export function StampDutyCalculator({ copy, locale }: { copy: StampDutyCopy; loc
     leaseYears: Number(years), indefinite, earlierValue: standardTransfer ? Number(earlierValue) : 0,
   }) : null;
   const duty = deed === 'lease' && exemptLease ? 0 : estimate?.duty;
-  const registration = estimate ? (fee === '' ? estimateRegistrationFee(estimate.value) : Number(fee)) : 0;
+  const registration = estimate ? (fee === '' ? estimateRegistrationFee(deed, estimate.value) : Number(fee)) : null;
   const money = new Intl.NumberFormat(locale === 'hi' ? 'hi-IN' : 'en-IN', { style: 'currency', currency: 'INR' });
 
   return (
@@ -105,8 +105,9 @@ export function StampDutyCalculator({ copy, locale }: { copy: StampDutyCopy; loc
             <dt>{copy.base}</dt><dd>{money.format(estimate.value)}</dd>
             <dt>{copy.rate}</dt><dd>{duty === 0 ? 0 : estimate.rate}%</dd>
             <dt>{copy.duty}</dt><dd className="font-semibold">{money.format(duty)}</dd>
-            <dt>{fee === '' ? copy.registration : copy.registrationQuoted}</dt><dd>{money.format(registration)}</dd>
-            <dt className="font-semibold">{copy.total}</dt><dd className="font-semibold">{money.format(duty + registration)}</dd>
+            <dt>{fee !== '' ? copy.registrationQuoted : deed === 'lease' ? copy.registrationLease : copy.registration}</dt>
+            <dd>{registration === null ? copy.pending : money.format(registration)}</dd>
+            {registration !== null && <><dt className="font-semibold">{copy.total}</dt><dd className="font-semibold">{money.format(duty + registration)}</dd></>}
           </dl>
           {estimate.linked && <p className="mt-4 text-sm">{copy.linked}</p>}
         </> : <p className="mt-4 text-sm">{copy.empty}</p>}
