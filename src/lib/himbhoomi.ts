@@ -48,6 +48,16 @@ function decodeEntities(value: string) {
     .replace(/&#x([\da-f]+);/gi, (_, code: string) => String.fromCodePoint(Number.parseInt(code, 16)));
 }
 
+/**
+ * Removes characters that no font can draw (private-use code points, lone
+ * surrogates, the replacement character and stray control codes). The official
+ * pages sometimes include them, and the PDF shows each one as an empty box.
+ * Zero-width joiners are kept because Devanagari conjuncts need them.
+ */
+export function cleanDisplayText(value: string) {
+  return value.replace(/[\p{Co}\p{Cs}\uFFFD\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F-\u009F\u00AD]/gu, '');
+}
+
 function attributes(tag: string) {
   return Object.fromEntries(
     [...tag.matchAll(/([:\w$-]+)\s*=\s*(?:"([^"]*)"|'([^']*)')/g)].map((match) => [
@@ -372,9 +382,9 @@ function nakalParcelTable(html: string) {
   if (start < 0 || end < 0) return undefined;
   const rows = [...html.slice(start, end).matchAll(/([\s\S]*?)<\/tr>/gi)]
     .map((row) => [...row[1].matchAll(/<t[dh]\b[^>]*>([\s\S]*?)<\/t[dh]>/gi)]
-      .map((cell) => decodeEntities(cell[1]
+      .map((cell) => cleanDisplayText(decodeEntities(cell[1]
         .replace(/<br\s*\/?>/gi, '\n')
-        .replace(/<[^>]*>/g, ''))
+        .replace(/<[^>]*>/g, '')))
         .split('\n').map((line) => line.replace(/[ \t\r]+/g, ' ').trim()).join('\n').trim()))
     .filter((cells) => cells.length === 7);
   if (!rows.length) return undefined;
@@ -385,7 +395,7 @@ function nakalLabels(html: string) {
   const labels: { id: string; value: string }[] = [];
   for (const span of html.matchAll(/<span\b(?=[^>]*\sid\s*=\s*["'](?:ctl00_)?(?:ContentPlaceHolder1_)?(?:lbl|Label)[^"']*["'])[^>]*>([\s\S]*?)<\/span>/gi)) {
     const id = attributes(span[0].slice(0, span[0].indexOf('>') + 1)).id;
-    labels.push({ id, value: plainText(span[1]) });
+    labels.push({ id, value: cleanDisplayText(plainText(span[1])) });
   }
   return labels;
 }

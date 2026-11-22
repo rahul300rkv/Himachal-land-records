@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { JamabandiCopy } from '@/components/reports/JamabandiCopy';
+import { cleanDisplayText } from '@/lib/himbhoomi';
 import { registerPdfFonts } from '@/lib/pdf-fonts';
 
 export const runtime = 'nodejs';
@@ -27,7 +28,15 @@ export async function POST(request: Request) {
   if (!parsed.success) return Response.json({ error: 'invalid_request' }, { status: 400 });
   try {
     registerPdfFonts();
-    const document = createElement(JamabandiCopy, { data: parsed.data }) as unknown as ReactElement<DocumentProps>;
+    const data = {
+      ...parsed.data,
+      labels: parsed.data.labels.map((label) => ({ ...label, value: cleanDisplayText(label.value) })),
+      parcelTable: {
+        headers: parsed.data.parcelTable.headers.map(cleanDisplayText),
+        rows: parsed.data.parcelTable.rows.map((row) => row.map(cleanDisplayText)),
+      },
+    };
+    const document = createElement(JamabandiCopy, { data }) as unknown as ReactElement<DocumentProps>;
     const pdf = await renderToBuffer(document);
     return new Response(new Uint8Array(pdf), { headers: {
       'Content-Type': 'application/pdf',
