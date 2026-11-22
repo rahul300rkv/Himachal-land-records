@@ -49,7 +49,18 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
   const [downloadError, setDownloadError] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
+  const [stage, setStage] = useState<'districts' | 'tehsils' | 'villages' | 'years' | 'records' | 'next' | 'captcha' | 'search'>('districts');
   const operationInFlight = useRef(false);
+  const loadingMessage = {
+    districts: t('loadingDistricts'),
+    tehsils: t('loadingTehsils'),
+    villages: t('loadingVillages'),
+    years: t('loadingYears'),
+    records: t('loadingRecords'),
+    next: t('loadingNext'),
+    captcha: t('loadingCaptcha'),
+    search: t('loadingSearch'),
+  }[stage];
 
   useEffect(() => {
     let active = true;
@@ -80,7 +91,7 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
   }, [initialLocation, t]);
 
   async function load(action: 'tehsils' | 'villages' | 'years', payload: Record<string, string>) {
-    setBusy(true); setError('');
+    setStage(action); setBusy(true); setError('');
     try {
       const options = (await callHimBhoomi({ action, ...payload })).options ?? [];
       if (action === 'tehsils') setTehsils(options);
@@ -100,7 +111,7 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
   async function requestCaptcha() {
     if (!token || operationInFlight.current) return;
     operationInFlight.current = true;
-    setBusy(true); setError(''); setCaptcha(''); setCaptchaImage('');
+    setStage('captcha'); setBusy(true); setError(''); setCaptcha(''); setCaptchaImage('');
     try {
       const data = await callHimBhoomi({ action: 'captcha', token });
       setCaptchaImage(data.image ?? ''); setToken(data.token ?? '');
@@ -112,7 +123,7 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
     event.preventDefault();
     if (!token || !captcha.trim() || operationInFlight.current) return;
     operationInFlight.current = true;
-    setBusy(true); setError('');
+    setStage('search'); setBusy(true); setError('');
     try {
       const data = await callHimBhoomi({ action: 'search', token, captcha });
       if (data.captchaFailed) {
@@ -145,7 +156,7 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
     operationInFlight.current = true;
     setYear(nextYear); resetAfterLocation();
     if (!nextYear) { operationInFlight.current = false; return; }
-    setBusy(true); setError('');
+    setStage('records'); setBusy(true); setError('');
     try {
       const data = await callHimBhoomi({ action: 'recordOptions', district, tehsil, village, year: nextYear });
       const nextControls = data.controls ?? [];
@@ -160,9 +171,13 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
     setOfficialFields(nextFields); setCaptchaImage(''); setCaptcha('');
     if (control.kind === 'text' || !value || !token) return;
     operationInFlight.current = true;
-    setBusy(true); setError('');
+    setStage('next'); setBusy(true); setError('');
     try {
-      const data = await callHimBhoomi({ action: 'continue', token, fields: nextFields, eventTarget: control.name });
+      // Send only the controls up to the one that changed. Choices that come after
+      // it depend on it, so a stale Khasra from the previous Khewat must not be posted back.
+      const keep = new Set(controls.slice(0, controls.findIndex((item) => item.name === control.name) + 1).map((item) => item.name));
+      const sentFields = Object.fromEntries(Object.entries(nextFields).filter(([name]) => keep.has(name)));
+      const data = await callHimBhoomi({ action: 'continue', token, fields: sentFields, eventTarget: control.name });
       const nextControls = data.controls ?? [];
       setOfficialFields(selectedFields(nextControls));
       setToken(data.token ?? token); setControls(nextControls); setRecordReady(Boolean(data.recordReady));
@@ -204,14 +219,15 @@ export function SearchForm({ initialLocation }: SearchFormProps) {
   }
 
   return <div className="space-y-6">
-    {busy && <p role="status" className="text-sm text-muted-foreground">{t('loadingOfficial')}</p>}
+    <div role="status" aria-live="polite" className="min-h-10">{busy && <p className="flex items-center gap-2 rounded-md border border-primary/20 bg-primary-soft px-3 py-2 text-sm text-primary"><LoaderCircle className="size-4 shrink-0 animate-spin" aria-hidden="true" /><span>{loadingMessage}</span></p>}</div>
     <div className="flex items-start gap-3 rounded-lg border border-primary/20 bg-primary-soft p-4 text-sm"><ShieldCheck className="mt-0.5 size-5 shrink-0 text-primary" aria-hidden="true" /><p>{t('privacy')}</p></div>
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <div><Label htmlFor="official-district">{t('district')}</Label><Select id="official-district" value={district} disabled={busy || districts.length === 0} onChange={(event) => { const value = event.target.value; setDistrict(value); setTehsil(''); setVillage(''); setYear(''); setTehsils([]); setVillages([]); setYears([]); resetAfterLocation(); if (value) void load('tehsils', { district: value }); }}><option value="">{t('districtPlaceholder')}</option>{districts.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</Select></div>
-      <div><Label htmlFor="official-tehsil">{t('tehsil')}</Label><Select id="official-tehsil" value={tehsil} disabled={busy || !district} onChange={(event) => { const value = event.target.value; setTehsil(value); setVillage(''); setYear(''); setVillages([]); setYears([]); resetAfterLocation(); if (value) void load('villages', { district, tehsil: value }); }}><option value="">{t('tehsilPlaceholder')}</option>{tehsils.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</Select></div>
-      <div><Label htmlFor="official-village">{t('village')}</Label><Select id="official-village" value={village} disabled={busy || !tehsil} onChange={(event) => { const value = event.target.value; setVillage(value); setYear(''); setYears([]); resetAfterLocation(); if (value) void load('years', { district, tehsil, village: value }); }}><option value="">{t('villagePlaceholder')}</option>{villages.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</Select></div>
-      <div><Label htmlFor="official-year">{t('year')}</Label><Select id="official-year" value={year} disabled={busy || !village} onChange={(event) => void prepareRecordOptions(event.target.value)}><option value="">{t('yearPlaceholder')}</option>{years.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</Select></div>
+      <div><Label htmlFor="official-tehsil">{t('tehsil')}</Label><Select id="official-tehsil" value={tehsil} disabled={busy || !district} onChange={(event) => { const value = event.target.value; setTehsil(value); setVillage(''); setYear(''); setVillages([]); setYears([]); resetAfterLocation(); if (value) void load('villages', { district, tehsil: value }); }}><option value="">{busy && stage === 'tehsils' ? t('loadingShort') : t('tehsilPlaceholder')}</option>{tehsils.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</Select></div>
+      <div><Label htmlFor="official-village">{t('village')}</Label><Select id="official-village" value={village} disabled={busy || !tehsil} onChange={(event) => { const value = event.target.value; setVillage(value); setYear(''); setYears([]); resetAfterLocation(); if (value) void load('years', { district, tehsil, village: value }); }}><option value="">{busy && stage === 'villages' ? t('loadingShort') : t('villagePlaceholder')}</option>{villages.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</Select></div>
+      <div><Label htmlFor="official-year">{t('year')}</Label><Select id="official-year" value={year} disabled={busy || !village} onChange={(event) => void prepareRecordOptions(event.target.value)}><option value="">{busy && stage === 'years' ? t('loadingShort') : t('yearPlaceholder')}</option>{years.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</Select></div>
     </div>
+    {busy && stage === 'records' && controls.length === 0 && <div aria-hidden="true" className="h-40 animate-pulse rounded-xl border bg-muted/40" />}
     {controls.length > 0 && !captchaImage && <section className="rounded-xl border bg-background p-5"><h2 className="font-sans text-lg font-semibold tracking-normal">{t('recordChooser')}</h2><p className="mt-1 text-sm text-muted-foreground">{t('recordChooserBody')}</p><div className="mt-4 grid gap-4 sm:grid-cols-2">{controls.map((control) => <div key={control.name}><Label htmlFor={`official-${control.name}`}>{control.label}</Label>{control.kind === 'text' ? <Input id={`official-${control.name}`} value={officialFields[control.name] ?? ''} disabled={busy} autoComplete="off" onChange={(event) => void changeOfficialControl(control, event.target.value)} /> : <Select id={`official-${control.name}`} value={officialFields[control.name] ?? ''} disabled={busy} onChange={(event) => void changeOfficialControl(control, event.target.value)}><option value="">{t('choose')}</option>{control.options.map((option) => <option key={`${control.name}-${option.value}`} value={option.value}>{option.label}</option>)}</Select>}</div>)}</div><div className="mt-4 flex flex-col gap-3 sm:flex-row"><Button type="button" disabled={busy || !canRequestCaptcha} onClick={() => void requestCaptcha()}>{busy ? <LoaderCircle className="animate-spin" /> : <Search />}{t('continue')}</Button><Button type="button" variant="ghost" disabled={busy} onClick={clearAll}><X />{t('reset')}</Button></div></section>}
     {!captchaImage && !recordReady && controls.length === 0 && <div className="flex flex-col gap-3 sm:flex-row"><Button type="button" size="lg" variant="ghost" disabled={busy} onClick={clearAll}><X />{t('reset')}</Button></div>}
     {captchaImage && !recordReady && <form className="rounded-xl border bg-background p-5" onSubmit={submitCaptcha}><h2 className="font-sans text-lg font-semibold tracking-normal">{t('captchaTitle')}</h2><p className="mt-1 text-sm text-muted-foreground">{t('captchaBody')}</p><div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-end"><div><span className="text-sm font-medium">{t('captcha')}</span><div className="mt-1 flex min-h-12 items-center rounded-md border bg-white px-3"><img src={captchaImage} alt={t('captchaAlt')} className="max-h-10 max-w-[190px]" /></div></div><div className="min-w-48 flex-1"><Label htmlFor="official-captcha">{t('captchaEntry')}</Label><Input id="official-captcha" value={captcha} maxLength={12} autoComplete="off" onChange={(event) => setCaptcha(event.target.value.toUpperCase())} /></div><Button type="submit" size="lg" disabled={busy || !captcha.trim()}>{busy ? <LoaderCircle className="animate-spin" /> : <Search />}{t('fetch')}</Button><Button type="button" variant="ghost" size="lg" disabled={busy} onClick={() => void requestCaptcha()}><RefreshCw />{t('newCaptcha')}</Button></div></form>}

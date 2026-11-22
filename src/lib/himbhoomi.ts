@@ -130,22 +130,37 @@ function mergeCookie(current: string, response: Response) {
   return [...cookies].map(([name, value]) => `${name}=${value}`).join('; ');
 }
 
-async function request(url: string, init: RequestInit, cookie = ''): Promise<UpstreamState> {
-  const response = await fetch(url, {
-    ...init,
-    cache: 'no-store',
-    redirect: 'follow',
-    headers: {
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-      Accept: 'text/html,application/xhtml+xml',
-      'Accept-Language': 'hi-IN,hi;q=0.9,en-IN;q=0.8,en;q=0.7',
-      ...(cookie ? { Cookie: cookie } : {}),
-      ...init.headers,
-    },
-    signal: AbortSignal.timeout(30_000),
-  });
-  if (!response.ok) throw new Error(`HimBhoomi returned ${response.status}`);
-  return { cookie: mergeCookie(cookie, response), html: await response.text(), url: response.url, redirected: response.redirected };
+async function request(url: string, init: RequestInit, cookie = '', retries = 1): Promise<UpstreamState> {
+  for (let attempt = 0; ; attempt += 1) {
+    try {
+      const response = await fetch(url, {
+        ...init,
+        cache: 'no-store',
+        redirect: 'follow',
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+          Accept: 'text/html,application/xhtml+xml',
+          'Accept-Language': 'hi-IN,hi;q=0.9,en-IN;q=0.8,en;q=0.7',
+          ...(cookie ? { Cookie: cookie } : {}),
+          ...init.headers,
+        },
+        signal: AbortSignal.timeout(30_000),
+      });
+      // The official server is intermittently overloaded. Retry a 5xx once
+      // before giving up, instead of passing a broken page on to the form.
+      if (response.status >= 500 && attempt < retries) {
+        await delay(800);
+        continue;
+      }
+      if (!response.ok) throw new Error(`HimBhoomi returned ${response.status}`);
+      return { cookie: mergeCookie(cookie, response), html: await response.text(), url: response.url, redirected: response.redirected };
+    } catch (error) {
+      const name = error instanceof Error ? error.name : '';
+      const upstreamStatus = error instanceof Error && error.message.startsWith('HimBhoomi returned');
+      if (attempt >= retries || upstreamStatus || name === 'TimeoutError') throw error;
+      await delay(800);
+    }
+  }
 }
 
 async function start() {
@@ -414,7 +429,7 @@ export async function submitOfficialSearch(token: string, captcha: string) {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded', Referer: RECORDS_URL },
     body,
-  }, session.cookie);
+  }, session.cookie, 0);
   const popup = isNakalPage(formResponse.url) ? null : nakalPopupUrl(formResponse.html, formResponse.url);
   const state = popup
     ? await request(popup, { method: 'GET', headers: { Referer: formResponse.url } }, formResponse.cookie)
@@ -460,6 +475,9 @@ export async function submitOfficialSearch(token: string, captcha: string) {
   };
 }
 
+// Controls that belong to the record chooser (not the location dropdowns).
+const RECORD_CONTROL = /\$(?:DDL(?:Khewat|Khatauni|Khasra)|RBLKKK|.*JamShj|txtFullName)$/i;
+
 export async function continueOfficialSearch(token: string, fields: Record<string, string>, eventTarget = '') {
   const session = decodeSession(token);
   const safeFields = Object.fromEntries(
@@ -467,35 +485,60 @@ export async function continueOfficialSearch(token: string, fields: Record<strin
       name.startsWith('ctl00$ContentPlaceHolder1$') && name.length <= 150 && value.length <= 500,
     ),
   );
-  const allFields = { ...(session.fields ?? {}), ...safeFields };
+  // The client only sends the controls up to the one that just changed. Any
+  // record control it left out is a dependent choice (for example a Khasra
+  // picked for the previous Khewat), so drop the value stored in the session
+  // instead of posting a stale selection back to the official form.
+  const retainedFields = Object.fromEntries(
+    Object.entries(session.fields ?? {}).filter(([name]) => !RECORD_CONTROL.test(name) || name in safeFields),
+  );
+  const allFields = { ...retainedFields, ...safeFields };
   const requestedTarget = eventTarget.startsWith('ctl00$ContentPlaceHolder1$') ? eventTarget : '';
   const selectedValue = safeFields[requestedTarget] ?? '';
   const resolvedTarget = session.postbacks?.[requestedTarget]?.[selectedValue]
     ?? session.postbacks?.[requestedTarget]?.['*']
     ?? requestedTarget;
-  const body = new URLSearchParams({
-    ...session.hidden,
-    [FIELD.district]: session.district,
-    [FIELD.tehsil]: session.tehsil!,
-    [FIELD.village]: session.village!,
-    [FIELD.year]: session.year,
-    ...allFields,
-    __EVENTTARGET: resolvedTarget,
-    __EVENTARGUMENT: '',
-  });
-  const state = await request(RECORDS_URL, {
+  const submit = () => request(RECORDS_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded', Referer: RECORDS_URL },
-    body,
+    body: new URLSearchParams({
+      ...session.hidden,
+      [FIELD.district]: session.district,
+      [FIELD.tehsil]: session.tehsil!,
+      [FIELD.village]: session.village!,
+      [FIELD.year]: session.year,
+      ...allFields,
+      __EVENTTARGET: resolvedTarget,
+      __EVENTARGUMENT: '',
+    }),
   }, session.cookie);
-  const recordReady = isNakalPage(state.url);
+
+  let state = await submit();
+  let recordReady = isNakalPage(state.url);
+  let controls = recordReady ? [] : officialControls(state.html);
+  // A valid reply always carries the form state and at least one record
+  // control. If either is missing the official server answered with a partial
+  // page, so repeat the same postback once before showing anything.
+  if (!recordReady && (!hiddenFields(state.html).__VIEWSTATE || controls.length === 0)) {
+    console.warn('HimBhoomi continue returned an incomplete form, retrying once', {
+      hasViewState: Boolean(hiddenFields(state.html).__VIEWSTATE),
+      controls: controls.length,
+    });
+    await delay(POSTBACK_SETTLE_MS * 2);
+    state = await submit();
+    recordReady = isNakalPage(state.url);
+    controls = recordReady ? [] : officialControls(state.html);
+  }
+  if (!recordReady && !hiddenFields(state.html).__VIEWSTATE) {
+    throw new Error('HimBhoomi returned an incomplete page');
+  }
   const nextFields = browserFormFields(state.html);
   return {
     receiptNumber: recordReady ? nakalReceiptNumber(state.html) : undefined,
     labels: recordReady ? nakalLabels(state.html) : [],
     parcelTable: recordReady ? nakalParcelTable(state.html) : undefined,
     recordReady,
-    controls: recordReady ? [] : officialControls(state.html),
+    controls,
     token: encodeSession({
       ...session,
       cookie: state.cookie,
@@ -505,4 +548,3 @@ export async function continueOfficialSearch(token: string, fields: Record<strin
     }),
   };
 }
-

@@ -88,15 +88,15 @@
         "title": "How to verify a record",
         "steps": {
           "a": "Note the district, tehsil, village and the khasra, khewat and khatauni numbers from our result.",
-          "b": "Visit the Patwari or Tehsil office, or use the official government land-records portal and ask for a certified copy (nakal) of the current entry.",
+          "b": "Visit the Patwari or Tehsil office, or use the official government land-records portal, and ask for a certified copy (nakal) of the current entry.",
           "c": "Compare the certified copy with what you saw here: owner names, shares, area and land type.",
-          "d": "Check for mutations, mortgages and court orders and ask a qualified advocate to review the documents before you pay any money."
+          "d": "Check for mutations, mortgages and court orders, and ask a qualified advocate to review the documents before you pay any money."
         }
       },
-      "grievance": "For questions, correction requests or personal-data concerns, write to us at the address on the contact page. We will acknowledge within three working days and reply within a reasonable time. If a record shown on the platform contains data about you that you believe is incorrect, state the khasra number, district, tehsil and village and describe the error. We will review and respond. Requests are handled in English and Hindi.",
+      "grievance": "For questions, correction requests or personal-data concerns, write to us at the address on the contact page. We will acknowledge within three working days and reply within a reasonable time. If a record shown on the platform contains data about you that you believe is incorrect, state the khasra number, district, tehsil and village, and describe the error. We will review and respond. Requests are handled in English and Hindi.",
       "sectionNote": "This disclaimer is part of a set of documents that govern your use of HimLand Check. Please also read the Terms of Use and the Privacy Policy. If there is any conflict between this disclaimer and those documents, the more specific document applies. If you are unsure whether this disclaimer applies to a specific use, treat it as applying. The purpose of the platform is to help you ask better questions before a transaction — not to remove the need for professional legal advice or certified official documents.",
       "permissionsTitle": "Land-use and permission requirements",
-      "permissionsBody": "In addition to Section 118, land in Himachal Pradesh may be subject to forest regulations, eco-sensitive zone notifications, municipal building by-laws, agricultural land-use restrictions and other central or state rules that limit what a buyer can do with the land after purchase. HimLand Check does not check compliance with any of these rules. Before completing a purchase, ask a qualified advocate and the relevant department — Revenue, Forest, Town and Country Planning or Municipal — whether any restriction, permission requirement or pending proceeding affects the plot. HimLand Check does not carry out any check under the Forest (Conservation) Act, the Environment Protection Act, the Himachal Pradesh Town and Country Planning Act or under any municipal scheme. Those checks require specialist knowledge and official records that are not publicly available online. Before purchasing any land, ask the Revenue Department whether the plot is subject to a land ceiling notification and ask the Forest Department whether any part of the plot falls within a reserved or protected forest boundary. These checks are outside what HimLand Check can provide."
+      "permissionsBody": "In addition to Section 118, land in Himachal Pradesh may be subject to forest regulations, eco-sensitive zone notifications, municipal building by-laws, agricultural land-use restrictions and other central or state rules that limit what a buyer can do with the land after purchase. HimLand Check does not check compliance with any of these rules. Before completing a purchase, ask a qualified advocate and the relevant department — Revenue, Forest, Town and Country Planning or Municipal — whether any restriction, permission requirement or pending proceeding affects the plot. HimLand Check does not carry out any check under the Forest (Conservation) Act, the Environment Protection Act, the Himachal Pradesh Town and Country Planning Act or under any municipal scheme. Those checks require specialist knowledge and official records that are not publicly available online. Before purchasing any land, ask the Revenue Department whether the plot is subject to a land ceiling notification, and ask the Forest Department whether any part of the plot falls within a reserved or protected forest boundary. These checks are outside what HimLand Check can provide."
     },
     "title": "Important legal disclaimer"
   },
@@ -289,14 +289,14 @@
     },
     "limits": {
       "title": "Why these checks require a person",
-      "body": "HimBhoomi and eCourts use CAPTCHAs to prevent automated access. HimLand Check does not bypass those controls or impersonate a user at any official source. The verification workspace standardises the information you carry into each portal, keeps your plot brief consistent and structures your evidence trail — but every step that touches an official portal requires you to open it, complete any CAPTCHA and retrieve the document yourself. That is by design: the official record you retrieve is the evidence; a screenshot of a third-party summary is not."
+      "body": "HimBhoomi and eCourts use CAPTCHAs to prevent automated access. HimLand Check does not bypass those controls or impersonate a user at any official source. The verification workspace standardises the information you carry into each portal, keeps your plot brief consistent, and structures your evidence trail — but every step that touches an official portal requires you to open it, complete any CAPTCHA, and retrieve the document yourself. That is by design: the official record you retrieve is the evidence; a screenshot of a third-party summary is not."
     },
     "whyTitle": "Why each check matters",
-    "whyOwnership": "The jamabandi records who holds the land and in what share, but ownership can be more complicated than a single entry. Where multiple khewats exist, or where a mutation has been recorded but not yet attested, the picture in the current nakal may not match what the seller claims. Always read every khasra entry for the plot, trace the mutation chain and confirm that the seller's name appears as the recorded owner in the most recent attested entry.",
+    "whyOwnership": "The jamabandi records who holds the land and in what share, but ownership can be more complicated than a single entry. Where multiple khewats exist, or where a mutation has been recorded but not yet attested, the picture in the current nakal may not match what the seller claims. Always read every khasra entry for the plot, trace the mutation chain, and confirm that the seller's name appears as the recorded owner in the most recent attested entry.",
     "whyMutation": "A mutation (intkal) is the revenue entry made when ownership or occupancy changes — through sale, inheritance, gift, court order or partition. A mutation that is pending or rejected does not establish title. If the jamabandi shows a pending mutation, do not proceed until you have confirmed its current status at the Tehsil office and obtained an attested copy of the entry.",
     "whyCourt": "An adverse court order — a stay, an injunction or a decree — may not appear in the jamabandi at all. Revenue records and civil court records are maintained separately. Searching the eCourts portal for every person named in the jamabandi as an owner or prior owner is the only way to identify litigation that has not yet been reflected in the revenue entry.",
     "evidenceTitle": "Preserving evidence",
-    "evidenceBody": "Save a copy of everything you retrieve: the jamabandi nakal with its receipt number, the HimBhoomi or BhuNaksha screenshots and any court-portal search results. Keep the date and time of each search. If a dispute arises later, a dated record of what the official portals showed at the time of your enquiry demonstrates the due diligence you carried out. If you use the verification workspace, the brief it generates records the plot identifiers, owner names and search terms in a consistent form. Use the same brief for every portal you search. Consistency in spelling and in the khasra number format matters: HimBhoomi, HimRIS and the eCourts portal each have different search interfaces and a name entered differently in each portal may return different results. The workspace helps you carry the same information through every check without variation.",
+    "evidenceBody": "Save a copy of everything you retrieve: the jamabandi nakal with its receipt number, the HimBhoomi or BhuNaksha screenshots, and any court-portal search results. Keep the date and time of each search. If a dispute arises later, a dated record of what the official portals showed at the time of your enquiry demonstrates the due diligence you carried out. If you use the verification workspace, the brief it generates records the plot identifiers, owner names and search terms in a consistent form. Use the same brief for every portal you search. Consistency in spelling and in the khasra number format matters: HimBhoomi, HimRIS and the eCourts portal each have different search interfaces, and a name entered differently in each portal may return different results. The workspace helps you carry the same information through every check without variation.",
     "summaryTitle": "Summary checklist",
     "summaryBody": "Before completing a purchase: retrieve the current attested jamabandi nakal from HimBhoomi and confirm the recorded owner, khasra number and area; check that all mutations in the chain are attested and that none are pending; search the eCourts portal for every person named in the ownership column; check the BhuNaksha map and confirm the boundary and area match the nakal; look up the applicable circle rate and confirm that the agreed price meets the minimum; obtain certified copies of every document the seller provides; and confirm with an advocate that no Section 118 or other restriction applies to your transaction. Keep all retrieved documents and screenshots in a single folder with the retrieval date in the file name. A dated evidence record is your best protection if a dispute arises after the sale is complete."
   },
@@ -330,7 +330,7 @@
     "howTitle": "How the tools fit together",
     "howBody": "Most land checks in Himachal Pradesh require more than one document. Start with the jamabandi search to retrieve the current record of rights for the village and khasra. Upload the nakal to the checker to scan for mutation entries, court-case remarks and mortgage notes that need follow-up. Open the plot map to confirm the parcel boundary matches the khasra number and the area stated in the record. Look up the circle rate for the district and Sub-Registrar office to understand the government valuation benchmark, then use the stamp duty calculator to estimate registration costs. Run the full verification checklist last, using the brief the workspace generates, before you open the official portals to confirm each item. Each tool is independent — use them in any order that suits your review.",
     "recordsTitle": "Records the tools cover",
-    "recordsBody": "The search and nakal checker work with jamabandi records from HimBhoomi. A jamabandi is Himachal Pradesh's principal record of rights: it records each khewat (estate), the khasra plots within it, the recorded owners and their shares, the land area and use and the mutation history up to the last settlement. The map tool covers parcels indexed in BhuNaksha for the districts where parcel data is published. Circle-rate schedules are the PDFs published by the Registration and Stamps Department through the MEGH portal.",
+    "recordsBody": "The search and nakal checker work with jamabandi records from HimBhoomi. A jamabandi is Himachal Pradesh's principal record of rights: it records each khewat (estate), the khasra plots within it, the recorded owners and their shares, the land area and use, and the mutation history up to the last settlement. The map tool covers parcels indexed in BhuNaksha for the districts where parcel data is published. Circle-rate schedules are the PDFs published by the Registration and Stamps Department through the MEGH portal.",
     "disclaimerNote": "All tools are for reference only. They are not a substitute for a certified nakal, a registered deed or professional legal advice. Confirm every detail with the Patwari, Tehsil office or Sub-Registrar before any transaction.",
     "whoBenefits": {
       "title": "Who benefits from these tools",
@@ -451,7 +451,7 @@
     "openOfficial": "Open map report",
     "officialEyebrow": "Himachal Pradesh BhuNaksha",
     "officialTitle": "How to open your plot map",
-    "step1": "Select the district, tehsil or sub-tehsil and village.",
+    "step1": "Select the district, tehsil or sub-tehsil, and village.",
     "step2": "Enter the Plot / Khasra No. from your land record.",
     "step3": "Click Open Map to view the official BhuNaksha plot report in a new tab.",
     "reference": "Your plot reference",
@@ -475,7 +475,7 @@
       },
       "openReport": {
         "question": "How do I view or save the plot report?",
-        "answer": "Choose the district, tehsil or sub-tehsil and village. Enter the Khasra number and click Open Map. The official report opens in a new tab. If the report loads, use your browser’s Print option to save a PDF."
+        "answer": "Choose the district, tehsil or sub-tehsil, and village. Enter the Khasra number and click Open Map. The official report opens in a new tab. If the report loads, use your browser’s Print option to save a PDF."
       },
       "missingReport": {
         "question": "What if the map does not open?",
@@ -500,7 +500,7 @@
     },
     "notice": "Always compare the online outline with the official shajra, field book and demarcation on the ground.",
     "contextTitle": "What BhuNaksha shows and what it does not",
-    "contextBody": "BhuNaksha is Himachal Pradesh's online parcel mapping system. It publishes the cadastral boundaries — the mapped outlines — of khasra plots as they were drawn at the last revenue settlement. The map shows each parcel's shape, its khasra number and its relationship to neighbouring plots and to the revenue village boundary. It does not show current ownership, pending mutations, encumbrances or court orders; those are recorded in the jamabandi and are available through HimBhoomi. BhuNaksha coverage is not uniform across the state — some tehsils have fully digitised parcel maps while others have partial or no published data. If the map does not load for a plot, the parcel may not yet be in the digital BhuNaksha layer for that village. Where parcel data is not yet published for a tehsil, the BhuNaksha viewer will return an empty result or show no parcel for the entered khasra number. In that case, ask the Patwari for a manual tatima sketch and use it alongside the revenue record to understand the plot's boundaries.",
+    "contextBody": "BhuNaksha is Himachal Pradesh's online parcel mapping system. It publishes the cadastral boundaries — the mapped outlines — of khasra plots as they were drawn at the last revenue settlement. The map shows each parcel's shape, its khasra number, and its relationship to neighbouring plots and to the revenue village boundary. It does not show current ownership, pending mutations, encumbrances or court orders; those are recorded in the jamabandi and are available through HimBhoomi. BhuNaksha coverage is not uniform across the state — some tehsils have fully digitised parcel maps while others have partial or no published data. If the map does not load for a plot, the parcel may not yet be in the digital BhuNaksha layer for that village. Where parcel data is not yet published for a tehsil, the BhuNaksha viewer will return an empty result or show no parcel for the entered khasra number. In that case, ask the Patwari for a manual tatima sketch and use it alongside the revenue record to understand the plot's boundaries.",
     "tatima": {
       "title": "BhuNaksha and the Tatima",
       "body": "A tatima is the official field sketch prepared by the Patwari for a specific khasra or sub-division. It shows the plot's boundaries in relation to neighbouring parcels, roads, water channels and landmarks. A tatima is different from BhuNaksha: BhuNaksha is the digital cadastral map for the whole revenue village, while a tatima is a Patwari-certified sketch for a specific plot. If a seller provides a tatima, compare it against the BhuNaksha outline for the same khasra number. Discrepancies in shape, area or boundary points should be verified with the Patwari before you proceed."
@@ -530,7 +530,7 @@
               "title": "Why Himachal is different",
               "body": [
                 "Section 118 of the Himachal Pradesh Tenancy and Land Reforms Act, 1972 restricts the transfer of land to people who are not agriculturists in the state. It is not only an outsider rule: a Himachali who does not hold agricultural land can also need permission.",
-                "On top of that, a very large part of the state is recorded forest, many areas sit inside eco-sensitive or heritage zones and stamp duty differs between residents and non-residents. A plot that looks cheap and clear can still be impossible to register or build on."
+                "On top of that, a very large part of the state is recorded forest, many areas sit inside eco-sensitive or heritage zones, and stamp duty differs between residents and non-residents. A plot that looks cheap and clear can still be impossible to register or build on."
               ]
             },
             "whoNeeds": {
@@ -544,10 +544,10 @@
                 "needNonAgri": "Permission needed: a Himachali who is not an agriculturist and wants to buy land.",
                 "needOutsider": "Permission needed: a non-Himachali Indian citizen buying land, including plain plots outside municipal limits."
               },
-              "note": "If permission is required and not obtained, the sale deed cannot be registered and a transaction built to get around the rule is at serious risk of being treated as void."
+              "note": "If permission is required and not obtained, the sale deed cannot be registered, and a transaction built to get around the rule is at serious risk of being treated as void."
             },
             "permission": {
-              "title": "What the permission covers and the clock that starts running",
+              "title": "What the permission covers, and the clock that starts running",
               "body": [
                 "Permission is granted for a stated purpose and a limited area. Figures commonly quoted are up to 500 square metres for a residential house and up to 300 square metres for a shop or office, with larger limits for horticulture or other approved purposes. Treat these as a starting point and read the actual order.",
                 "Once permission is granted, the land has to be put to the stated use within the time given in the order, commonly two years with a possible extension. Land left unused beyond that can vest in the State. If you are buying a plot that already carries a permission, check the date and confirm the deadline has not passed."
@@ -565,11 +565,11 @@
               "intro": "Commonly reported rates are listed below. Slabs and concessions change, so confirm the current figures with the Sub-Registrar or the registration portal before you fix your budget.",
               "items": {
                 "resMale": "Resident male buyer: stamp duty of about 6% for higher-value property, with lower slabs for smaller ones.",
-                "resFemale": "Resident female buyer: about 4% up to a value threshold and higher above it.",
+                "resFemale": "Resident female buyer: about 4% up to a value threshold, and higher above it.",
                 "resJoint": "Resident joint buyers (male and female): about 5%.",
                 "nonRes": "Non-resident buyer: a flat 12%, regardless of gender. A second home or a temporary stay in the state does not make you a resident.",
-                "reg": "Registration fee: about 2% of the value, subject to a cap of ₹25,000.",
-                "estamp": "Payment: e-stamping is mandatory and physical stamp paper has been discontinued since April 2024."
+                "reg": "Registration fee: 2% of the market value or the price, whichever is higher, with a minimum of ₹100 and rounded to the nearest ₹10, for a sale or gift deed.",
+                "estamp": "Payment: e-stamping is mandatory, and physical stamp paper has been discontinued since April 2024."
               },
               "note": "Duty is charged on the higher of the circle rate or the agreement value. On a ₹1 crore property, 12% is ₹12 lakh against ₹6 lakh at 6%, so your resident status can change the budget by lakhs."
             },
@@ -584,7 +584,7 @@
                 "circle": "Circle rate: find the road-proximity category for the khasra, because it sets the value on which duty is charged.",
                 "encumbrance": "Encumbrance: look for any mortgage, charge or earlier unresolved sale against the property.",
                 "residency": "Your status: confirm whether you will be treated as a resident or a non-resident for stamp duty.",
-                "s118": "Section 118: confirm which category you fall in and whether permission is needed, already held or exempt."
+                "s118": "Section 118: confirm which category you fall in, and whether permission is needed, already held or exempt."
               }
             },
             "process": {
@@ -615,7 +615,7 @@
             "nri": {
               "title": "If you are an NRI or OCI",
               "body": [
-                "For NRIs, the practical route is usually built-up property in a municipal area or a HIMUDA allotment, both of which avoid the Section 118 permission process. Payments should come through NRE or NRO accounts and a power of attorney signed abroad has to be notarised or attested as required and then registered here.",
+                "For NRIs, the practical route is usually built-up property in a municipal area or a HIMUDA allotment, both of which avoid the Section 118 permission process. Payments should come through NRE or NRO accounts, and a power of attorney signed abroad has to be notarised or attested as required and then registered here.",
                 "Agricultural land and undeveloped plots are far harder: you need Section 118 permission and must also satisfy FEMA rules, which restrict NRIs from buying agricultural land. Non-resident stamp duty applies even to built-up property. Get advice before you commit."
               ]
             },
@@ -642,7 +642,7 @@
               },
               "unpermitted": {
                 "q": "What happens if I buy without the required permission?",
-                "a": "The sale deed cannot normally be registered and a transaction structured to avoid the rule can be challenged and treated as void. Do not pay large sums before the permission position is clear."
+                "a": "The sale deed cannot normally be registered, and a transaction structured to avoid the rule can be challenged and treated as void. Do not pay large sums before the permission position is clear."
               },
               "himuda": {
                 "q": "Why is HIMUDA often the simplest option?",
@@ -660,7 +660,7 @@
           },
           "cta": {
             "title": "Before you pay a token amount",
-            "body": "Pull a fresh nakal, locate the khasra on the village map and ask a Himachal property lawyer to review the permission position and the chain of title."
+            "body": "Pull a fresh nakal, locate the khasra on the village map, and ask a Himachal property lawyer to review the permission position and the chain of title."
           }
         }
       },
@@ -679,7 +679,7 @@
               "title": "What the certificate is",
               "body": [
                 "It is issued by the Tehsildar or Naib Tehsildar of the Revenue Department after the Patwari checks the family details on the ground. It lists each heir with their relationship to the deceased, their age and their marital status.",
-                "It is used to update the jamabandi, to transfer inherited property and to claim pensions, provident fund, bank balances and insurance. Where there is a valid will, the will governs and the certificate is for cases without one."
+                "It is used to update the jamabandi, to transfer inherited property, and to claim pensions, provident fund, bank balances and insurance. Where there is a valid will, the will governs, and the certificate is for cases without one."
               ]
             },
             "quick": {
@@ -706,7 +706,7 @@
               "title": "How to apply offline",
               "items": {
                 "a": "Collect and fill in the application form at the Tehsildar’s office or a Sugam Centre, listing all surviving family members.",
-                "b": "Attach the death certificate, the applicant’s identity proof such as Aadhaar or voter ID and any other document the office asks for.",
+                "b": "Attach the death certificate, the applicant’s identity proof such as Aadhaar or voter ID, and any other document the office asks for.",
                 "c": "Submit the form at the counter and keep the reference number.",
                 "d": "Once the Patwari reports and the Tehsildar approves, collect the certificate. If it is lost, ask the nearest Lok Mitra Kendra for a duplicate, carrying the death certificate and your ID."
               }
@@ -724,19 +724,19 @@
             "issues": {
               "title": "Common problems",
               "items": {
-                "a": "A married daughter is left out. Courts in Himachal have treated this as a defect and an omitted daughter can challenge the sale.",
+                "a": "A married daughter is left out. Courts in Himachal have treated this as a defect, and an omitted daughter can challenge the sale.",
                 "b": "A minor heir has no guardian. A minor cannot consent, so the sale needs a court-appointed guardian and, where the law requires it, court permission.",
                 "c": "Only some heirs sign. A complete certificate does not help if the sale is signed by part of the family: the others keep their share and can seek partition.",
-                "d": "A thin family inquiry. Heirs who live away or abroad can be missed and a later claimant can contest the certificate.",
+                "d": "A thin family inquiry. Heirs who live away or abroad can be missed, and a later claimant can contest the certificate.",
                 "e": "The certificate is used where a court order is needed. It is a revenue document, not a court order. Lenders, high-value transfers and disputed estates may require a succession certificate from a civil court.",
-                "f": "An out-of-date certificate. If a listed heir has since died, that heir’s own heirs now have a share and the old certificate no longer shows the full picture."
+                "f": "An out-of-date certificate. If a listed heir has since died, that heir’s own heirs now have a share, and the old certificate no longer shows the full picture."
               }
             },
             "buyers": {
               "title": "Why it matters when you buy",
               "body": [
-                "For inherited land, no single heir can sell the whole plot alone. The certificate shows who the owners are and every one of them has to agree before the sale is safe. A buyer who registers a deed signed by fewer than all heirs risks a partition or cancellation suit, sometimes years later.",
-                "Banks look for the same three things: the certificate, consent from every heir and proof that no minor is involved without a guardian. A file missing any of them usually stalls at the lender’s legal check."
+                "For inherited land, no single heir can sell the whole plot alone. The certificate shows who the owners are, and every one of them has to agree before the sale is safe. A buyer who registers a deed signed by fewer than all heirs risks a partition or cancellation suit, sometimes years later.",
+                "Banks look for the same three things: the certificate, consent from every heir, and proof that no minor is involved without a guardian. A file missing any of them usually stalls at the lender’s legal check."
               ],
               "note": "Red flag: a certificate that lists only sons, a seller who cannot produce written consent from the listed heirs, or one who discourages you from speaking to the rest of the family."
             }
@@ -746,7 +746,7 @@
             "items": {
               "when": {
                 "q": "When is a legal heir certificate needed?",
-                "a": "When land or other assets pass from a person who died without a registered will: for mutation, for selling inherited land and for pension, bank and insurance claims."
+                "a": "When land or other assets pass from a person who died without a registered will: for mutation, for selling inherited land, and for pension, bank and insurance claims."
               },
               "docs": {
                 "q": "What documents are needed to apply?",
@@ -754,7 +754,7 @@
               },
               "daughter": {
                 "q": "Can a married daughter be left out?",
-                "a": "She should not be. Daughters are generally entitled heirs and Himachal courts have treated their omission as a defect. A certificate that leaves out a living daughter is open to challenge."
+                "a": "She should not be. Daughters are generally entitled heirs, and Himachal courts have treated their omission as a defect. A certificate that leaves out a living daughter is open to challenge."
               },
               "succession": {
                 "q": "Legal heir certificate or succession certificate?",
@@ -762,7 +762,7 @@
               },
               "mandatory": {
                 "q": "Do I need one to sell inherited land?",
-                "a": "In practice, yes. A Sub-Registrar will usually ask for proof of who the heirs are and all of them must consent. Without these, the deed may be refused or later challenged."
+                "a": "In practice, yes. A Sub-Registrar will usually ask for proof of who the heirs are, and all of them must consent. Without these, the deed may be refused or later challenged."
               },
               "validity": {
                 "q": "Does it expire?",
@@ -791,7 +791,7 @@
               "title": "What the check covers",
               "body": [
                 "Forest status is decided under the Indian Forest Act, 1927, the Forest (Conservation) Act, 1980 and the Wildlife (Protection) Act, 1972. The Revenue Department’s jamabandi shows the land type, while the Forest Department holds the forest and protected-area records.",
-                "Recorded forest is a legal classification. A plot can be recorded forest even if it has no dense tree cover and it is the legal record that counts, not how the land looks."
+                "Recorded forest is a legal classification. A plot can be recorded forest even if it has no dense tree cover, and it is the legal record that counts, not how the land looks."
               ],
               "note": "A khasra recorded as Van or any forest type in the current jamabandi cannot be privately bought or built on."
             },
@@ -809,7 +809,7 @@
               "title": "How to check at the forest office",
               "items": {
                 "a": "Find the Range Forest Officer for the tehsil. The department has offices across all districts.",
-                "b": "Submit the khasra number, village, tehsil and a copy of the jamabandi and ask in writing whether the plot is recorded forest, protected forest or inside an eco-sensitive zone.",
+                "b": "Submit the khasra number, village, tehsil and a copy of the jamabandi, and ask in writing whether the plot is recorded forest, protected forest or inside an eco-sensitive zone.",
                 "c": "Allow the Divisional or Range Forest Officer to check the forest maps and notified boundaries.",
                 "d": "Collect the confirmation in writing on official letterhead. A verbal assurance has no legal value."
               },
@@ -833,15 +833,15 @@
                 "b": "The plot partly overlaps forest. On steep terrain one khasra can straddle private and forest land. Ask the Range Forest Officer for a boundary overlay before agreeing on area or price.",
                 "c": "The eco-sensitive zone is not mentioned. Plots near national parks and sanctuaries can need wildlife board clearance before construction. Check the coordinates against the notified boundaries.",
                 "d": "Forest land is sold as agricultural. Revenue and forest records sometimes disagree, especially in older villages. Run both checks together.",
-                "e": "A clearance is described as in process. A pending diversion application is not an approval and building before clearance can be an offence. Ask for the application number and track it on the PARIVESH portal.",
+                "e": "A clearance is described as in process. A pending diversion application is not an approval, and building before clearance can be an offence. Ask for the application number and track it on the PARIVESH portal.",
                 "f": "Forest rights claims. Unresolved claims under the Forest Rights Act, 2006 can block development even after purchase. Ask the Divisional Forest Officer whether any are pending on the parcel."
               }
             },
             "why": {
               "title": "Why this check matters",
               "body": [
-                "Land recorded as forest cannot be the subject of a valid private sale. A deed registered on it is void and any non-forest use or construction needs central clearance.",
-                "Even private land near a protected area can face permanent limits on construction. Banks also check forest classification and eco-sensitive proximity and a plot with any forest class will fail technical sanction."
+                "Land recorded as forest cannot be the subject of a valid private sale. A deed registered on it is void, and any non-forest use or construction needs central clearance.",
+                "Even private land near a protected area can face permanent limits on construction. Banks also check forest classification and eco-sensitive proximity, and a plot with any forest class will fail technical sanction."
               ],
               "note": "Red flag: a seller who discourages you from visiting the forest office, says the jamabandi will be corrected after registration, or offers hillside land near forest at a price far below market."
             }
@@ -859,11 +859,11 @@
               },
               "buy": {
                 "q": "Can I buy forest land?",
-                "a": "No. Recorded, protected or reserved forest cannot be validly sold privately and a deed on such land is void. Non-forest use also needs central clearance."
+                "a": "No. Recorded, protected or reserved forest cannot be validly sold privately, and a deed on such land is void. Non-forest use also needs central clearance."
               },
               "mistake": {
                 "q": "What if I buy forest land by mistake?",
-                "a": "The sale is void under forest law, the authorities can take back the land and structures on it can face demolition. Recourse is very limited once the deed is registered, so check first."
+                "a": "The sale is void under forest law, the authorities can take back the land, and structures on it can face demolition. Recourse is very limited once the deed is registered, so check first."
               },
               "near": {
                 "q": "Does living near a national park affect me?",
@@ -881,7 +881,7 @@
           },
           "cta": {
             "title": "Before you commit",
-            "body": "Pull the latest jamabandi yourself, get written confirmation from the forest office and keep both on file for your lawyer’s review."
+            "body": "Pull the latest jamabandi yourself, get written confirmation from the forest office, and keep both on file for your lawyer’s review."
           }
         }
       }
@@ -989,6 +989,15 @@
       "submissionInvalid": "HimBhoomi didn’t return a record. Check your selections and enter a new CAPTCHA code.",
       "recordChooser": "Choose the official record",
       "loadingOfficial": "Waiting for HimBhoomi to refresh…",
+      "loadingDistricts": "Loading districts…",
+      "loadingTehsils": "Loading tehsils from HimBhoomi…",
+      "loadingVillages": "Loading villages…",
+      "loadingYears": "Loading available years…",
+      "loadingRecords": "Loading Khewat, Khatauni and Khasra options. This can take a few seconds…",
+      "loadingNext": "Updating the record options…",
+      "loadingCaptcha": "Loading a new CAPTCHA…",
+      "loadingSearch": "Fetching the record from HimBhoomi…",
+      "loadingShort": "Loading…",
       "openOfficial": "Open official HimBhoomi",
       "recordChooserBody": "Choose Jamabandi or Shajra Nasab. For Jamabandi, choose Khewat, Khatauni or Khasra and then its HimBhoomi-populated number. For Shajra Nasab, enter the name.",
       "choose": "Select an option",
@@ -1147,7 +1156,7 @@
     "intro": "HimLand Check is a simpler way to read, understand and check government land records — for villages in Himachal Pradesh. We bring together the records held by HimBhoomi, BhuNaksha and the official Sub-Registrar notices and present them in a form that is easier to navigate before a property transaction.",
     "whatWeDo": {
       "title": "What we do",
-      "body": "We make public revenue records — jamabandi, khasra, khatauni, khewat, mutations — searchable in one place, show them on maps and shajra drawings and produce pre-purchase check reports. The search covers every district, tehsil and revenue village served by the HimBhoomi portal. The map tool links each khasra number to the corresponding parcel on the BhuNaksha viewer. The nakal checker reads an uploaded jamabandi PDF and flags items — pending mutations, case references, mortgage remarks — that you would otherwise have to find by reading the document line by line. There is also a marketplace where people list land themselves; those listings are separate from the revenue data."
+      "body": "We make public revenue records — jamabandi, khasra, khatauni, khewat, mutations — searchable in one place, show them on maps and shajra drawings, and produce pre-purchase check reports. The search covers every district, tehsil and revenue village served by the HimBhoomi portal. The map tool links each khasra number to the corresponding parcel on the BhuNaksha viewer. The nakal checker reads an uploaded jamabandi PDF and flags items — pending mutations, case references, mortgage remarks — that you would otherwise have to find by reading the document line by line. There is also a marketplace where people list land themselves; those listings are separate from the revenue data."
     },
     "whatWeAreNot": {
       "title": "What we are not",
@@ -1172,7 +1181,7 @@
     },
     "recordTypes": {
       "title": "Records the platform covers",
-      "body": "The search and nakal checker work with jamabandi records from HimBhoomi. The jamabandi is Himachal Pradesh's principal record of rights: it records each khewat, the khasra plots within it, the recorded owners and their shares, the land area and use, the soil type and the mutation history to the last settlement. A khewat number identifies the estate; a khatauni number identifies the occupancy record; a khasra number identifies the individual plot. The shajra-nasab is the genealogical pedigree associated with an ownership entry. The map tool covers parcels indexed in BhuNaksha. Circle-rate and stamp-duty tools use schedules from the Registration and Stamps Department published through MEGH."
+      "body": "The search and nakal checker work with jamabandi records from HimBhoomi. The jamabandi is Himachal Pradesh's principal record of rights: it records each khewat, the khasra plots within it, the recorded owners and their shares, the land area and use, the soil type, and the mutation history to the last settlement. A khewat number identifies the estate; a khatauni number identifies the occupancy record; a khasra number identifies the individual plot. The shajra-nasab is the genealogical pedigree associated with an ownership entry. The map tool covers parcels indexed in BhuNaksha. Circle-rate and stamp-duty tools use schedules from the Registration and Stamps Department published through MEGH."
     },
     "limitations": {
       "title": "Known limitations",
@@ -1199,7 +1208,7 @@
         "body": [
           "We collect only what we need to run the service:",
           "- Account details: name, email address, phone number and preferred language when you sign up.",
-          "- Search activity: the district, tehsil, village, khasra or owner-name searches you run and the records or reports you open.",
+          "- Search activity: the district, tehsil, village, khasra or owner-name searches you run, and the records or reports you open.",
           "- Listings and uploads: the details, contact information and photographs you add when you post land on the marketplace.",
           "- Report requests and payment status for reports you order. When paid reports are offered, card and bank details are handled by the payment provider and are not stored by us.",
           "- Technical data: IP address, browser and device type, pages visited and error logs, used for security and to keep the service running."
@@ -1208,7 +1217,7 @@
       "publicRecords": {
         "title": "Land records and personal data",
         "body": [
-          "Land records contain the names of owners and related persons. We compile this information from public revenue records and from information supplied by users and we show it for reference only.",
+          "Land records contain the names of owners and related persons. We compile this information from public revenue records and from information supplied by users, and we show it for reference only.",
           "If you believe an entry about you is wrong, or you want it reviewed, write to {email} with the details of the record. We will look into it and reply within a reasonable time."
         ]
       },
@@ -1226,7 +1235,7 @@
       "consent": {
         "title": "Consent and lawful use",
         "body": [
-          "We process your personal data with your consent, or for other uses the law allows, such as complying with a legal obligation. You can withdraw consent at any time. This does not affect processing done before you withdrew it and some features may stop working."
+          "We process your personal data with your consent, or for other uses the law allows, such as complying with a legal obligation. You can withdraw consent at any time. This does not affect processing done before you withdrew it, and some features may stop working."
         ]
       },
       "sharing": {
@@ -1270,7 +1279,7 @@
       "rights": {
         "title": "Your rights",
         "body": [
-          "Under the Digital Personal Data Protection Act, 2023, you have the right to know what personal data we hold about you, to have inaccurate data corrected, to have your data erased where the law permits and to withdraw consent at any time.",
+          "Under the Digital Personal Data Protection Act, 2023, you have the right to know what personal data we hold about you, to have inaccurate data corrected, to have your data erased where the law permits, and to withdraw consent at any time.",
           "To exercise any of these rights, write to us at the address on the contact page. We will respond within a reasonable time. If you withdraw consent for processing that is necessary to run a feature, that feature will stop working for your account.",
           "You also have the right to file a complaint with the Data Protection Board of India if you believe your rights under the Act have not been respected. We encourage you to contact us first so we can try to resolve the matter directly."
         ]
@@ -1341,20 +1350,20 @@
       "marketplace": {
         "title": "Marketplace",
         "body": [
-          "Listings are posted by users, not by us. We do not own, inspect or verify listed land and we are not a party to any sale, lease or other transaction between users.",
+          "Listings are posted by users, not by us. We do not own, inspect or verify listed land, and we are not a party to any sale, lease or other transaction between users.",
           "If you post a listing, you confirm that:",
           "- you own the land or are legally authorised to offer it;",
           "- the details, price and photographs are accurate and not misleading;",
           "- the sale or transfer is permitted under applicable law, including any restriction or permission requirement under the H.P. Tenancy and Land Reforms Act, 1972;",
           "- you have the right to share any contact details you publish.",
-          "We may review, refuse, edit, suspend or remove any listing and close accounts that break these terms. A “verified” label only means that basic checks were done. It is not a guarantee of title.",
+          "We may review, refuse, edit, suspend or remove any listing, and close accounts that break these terms. A “verified” label only means that basic checks were done. It is not a guarantee of title.",
           "If you are a buyer, do your own due diligence and take legal advice before you pay any money."
         ]
       },
       "ip": {
         "title": "Intellectual property",
         "body": [
-          "The website, its design, software and original content belong to us or our licensors. The underlying public records belong to the relevant authorities. We give you a limited, personal, non-transferable licence to use the service for lawful purposes. You keep ownership of content you upload and you give us a licence to host, display and use it to run the service."
+          "The website, its design, software and original content belong to us or our licensors. The underlying public records belong to the relevant authorities. We give you a limited, personal, non-transferable licence to use the service for lawful purposes. You keep ownership of content you upload, and you give us a licence to host, display and use it to run the service."
         ]
       },
       "availability": {
@@ -1366,7 +1375,7 @@
       "thirdParty": {
         "title": "Third-party services and links",
         "body": [
-          "The service links to official government portals — HimBhoomi, BhuNaksha, eCourts, MEGH — and to other external sites. We do not control those sites, cannot guarantee their availability and are not responsible for their content or practices.",
+          "The service links to official government portals — HimBhoomi, BhuNaksha, eCourts, MEGH — and to other external sites. We do not control those sites, cannot guarantee their availability, and are not responsible for their content or practices.",
           "When you follow a link to an external site, you leave HimLand Check. Any data you submit at an external site, including CAPTCHAs and search inputs at HimBhoomi, is subject to that site's own terms and privacy policy.",
           "AI processing for the nakal checker uses Google Gemini as the primary model. Where the NVIDIA fallback is enabled and needed, page images from the uploaded PDF are sent to NVIDIA's inference API. By using the checker you consent to this processing."
         ]
@@ -1393,7 +1402,7 @@
       "termination": {
         "title": "Suspension and termination",
         "body": [
-          "We may suspend or end your access at any time if you break these terms or the law. You may stop using the service and ask us to close your account, at any time."
+          "We may suspend or end your access at any time if you break these terms or the law. You may stop using the service, and ask us to close your account, at any time."
         ]
       },
       "law": {
@@ -1671,7 +1680,7 @@
         "contactName": "Your name",
         "contactPhone": "Mobile number",
         "contactHint": "Only logged-in visitors can see your contact details.",
-        "consent": "I confirm that I own this land or am legally authorised to offer it, that the details are accurate and that I agree to the Terms of use.",
+        "consent": "I confirm that I own this land or am legally authorised to offer it, that the details are accurate, and that I agree to the Terms of use.",
         "termsLink": "Terms of use"
       },
       "errors": {
