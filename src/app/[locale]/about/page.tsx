@@ -16,7 +16,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function AboutPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale as Locale);
-
   const t = await getTranslations('About');
   const nav = await getTranslations('Navigation');
 
@@ -36,8 +35,28 @@ export default async function AboutPage({ params }: Props) {
       </section>
 
       <section className="mt-10 border-t pt-8">
+        <h2 className="text-2xl">{t('howItWorks.title')}</h2>
+        <p className="mt-3 text-lg leading-relaxed">{t('howItWorks.body')}</p>
+      </section>
+
+      <section className="mt-10 border-t pt-8">
+        <h2 className="text-2xl">{t('recordTypes.title')}</h2>
+        <p className="mt-3 text-lg leading-relaxed">{t('recordTypes.body')}</p>
+      </section>
+
+      <section className="mt-10 border-t pt-8">
+        <h2 className="text-2xl">{t('whenToUse.title')}</h2>
+        <p className="mt-3 text-lg leading-relaxed">{t('whenToUse.body')}</p>
+      </section>
+
+      <section className="mt-10 border-t pt-8">
         <h2 className="text-2xl">{t('whatWeAreNot.title')}</h2>
         <p className="mt-3 text-lg leading-relaxed">{t('whatWeAreNot.body')}</p>
+      </section>
+
+      <section className="mt-10 border-t pt-8">
+        <h2 className="text-2xl">{t('limitations.title')}</h2>
+        <p className="mt-3 text-lg leading-relaxed">{t('limitations.body')}</p>
       </section>
 
       <section className="mt-10 border-t pt-8">
@@ -45,17 +64,16 @@ export default async function AboutPage({ params }: Props) {
         <p className="mt-3 text-lg leading-relaxed">{t('whoRuns.body', { company: SITE.companyName })}</p>
       </section>
 
+      <section className="mt-10 border-t pt-8">
+        <h2 className="text-2xl">{t('contact.title')}</h2>
+        <p className="mt-3 text-lg leading-relaxed">{t('contact.body')}</p>
+      </section>
+
       <nav aria-label={t('related')} className="mt-12 flex flex-wrap gap-x-6 gap-y-2 border-t pt-6 text-sm">
         <span className="font-semibold">{t('related')}:</span>
-        <Link href="/disclaimer" className="text-primary hover:underline">
-          {nav('disclaimer')}
-        </Link>
-        <Link href="/privacy" className="text-primary hover:underline">
-          {nav('privacy')}
-        </Link>
-        <Link href="/terms" className="text-primary hover:underline">
-          {nav('terms')}
-        </Link>
+        <Link href="/disclaimer" className="text-primary hover:underline">{nav('disclaimer')}</Link>
+        <Link href="/privacy" className="text-primary hover:underline">{nav('privacy')}</Link>
+        <Link href="/terms" className="text-primary hover:underline">{nav('terms')}</Link>
       </nav>
     </article>
   );
