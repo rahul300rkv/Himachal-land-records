@@ -1,5 +1,5 @@
 // =============================================================================
-// Database tests: applies both migrations to an in-memory Postgres (PGlite) and checks that
+// Database tests: applies all migrations to an in-memory Postgres (PGlite) and checks that
 // the security rules hold: RLS, role protection, listing moderation, hidden seller contact
 // columns, report/saved-search limits and storage policies.
 //
@@ -40,7 +40,7 @@ const as = async (role, uid) => {
   if (role !== 'postgres') await db.exec(`set role ${role}`);
 };
 
-for (const f of ['001_initial_schema.sql', '002_marketplace_dashboard.sql']) {
+for (const f of ['001_initial_schema.sql', '002_marketplace_dashboard.sql', '003_listing_location.sql']) {
   const err = await fails(fs.readFileSync(new URL(`../migrations/${f}`, import.meta.url), 'utf8'));
   ok(`migration ${f} applies`, err === null, err ?? '');
   if (err) process.exit(1);
@@ -102,6 +102,39 @@ ok('anon "select *" is refused (app always lists columns)', (await fails(`select
 await as('authenticated', U2);
 r = await db.query(`select contact_name, contact_phone from public.listings`);
 ok('logged-in user CAN read seller contact', r.rows.length === 1 && r.rows[0].contact_phone === '+919876543210');
+
+// --- listing location: exact pin for logged-in users, an offset pin for everyone else ---
+await as('authenticated', U1);
+ok('seller can save a village code, pin and plot numbers (edit flow)', (await fails(`update public.listings set gis_code = '0213000001', khasra = '123/4', khewat = '56', khatauni = '7', latitude = 31.1, longitude = 77.17, location_source = 'pin', status = 'pending_review' where seller_id = '${U1}'`)) === null);
+ok('seller cannot save a malformed village code', !!(await fails(`update public.listings set gis_code = '12ab', status = 'pending_review' where seller_id = '${U1}'`)));
+ok('seller cannot save an unknown pin source', !!(await fails(`update public.listings set location_source = 'gps', status = 'pending_review' where seller_id = '${U1}'`)));
+await as('authenticated', ADMIN);
+await db.exec(`update public.listings set status = 'active'`);
+const METRES = `6371000*2*asin(sqrt(power(sin(radians(public_latitude-latitude)/2),2)+cos(radians(latitude))*cos(radians(public_latitude))*power(sin(radians(public_longitude-longitude)/2),2)))`;
+await as('authenticated', U2);
+r = await db.query(`select latitude, khasra, khewat, khatauni, public_latitude, public_longitude, ${METRES} as metres from public.listings`);
+const exact = r.rows[0], offsetPin = `${exact.public_latitude},${exact.public_longitude}`;
+ok('logged-in user CAN read the exact pin and plot numbers', Number(exact.latitude) === 31.1 && exact.khasra === '123/4' && exact.khewat === '56' && exact.khatauni === '7');
+ok('public pin is 70 to 100 metres from the exact pin', exact.metres >= 69 && exact.metres <= 101, `${Number(exact.metres).toFixed(1)} m`);
+await as('anon');
+r = await db.query(`select gis_code, location_source, public_latitude, public_longitude from public.listings`);
+ok('anon CAN read the village code and the offset pin', r.rows.length === 1 && r.rows[0].gis_code === '0213000001' && `${r.rows[0].public_latitude},${r.rows[0].public_longitude}` === offsetPin);
+for (const col of ['latitude', 'longitude', 'khasra', 'khewat', 'khatauni']) {
+  ok(`anon CANNOT select ${col}`, (await fails(`select ${col} from public.listings`))?.includes('permission denied') === true);
+}
+await as('authenticated', U1);
+await db.exec(`update public.listings set title = 'Apple orchard near Theog (edited)', status = 'pending_review' where seller_id = '${U1}'`);
+r = await db.query(`select public_latitude, public_longitude from public.listings`);
+ok('offset pin stays fixed when other fields are edited', `${r.rows[0].public_latitude},${r.rows[0].public_longitude}` === offsetPin);
+await db.exec(`update public.listings set public_latitude = 0, public_longitude = 0, status = 'pending_review' where seller_id = '${U1}'`);
+r = await db.query(`select public_latitude, public_longitude from public.listings`);
+ok('seller cannot choose the public pin directly', `${r.rows[0].public_latitude},${r.rows[0].public_longitude}` === offsetPin);
+await db.exec(`update public.listings set latitude = 31.25, longitude = 77.4, status = 'pending_review' where seller_id = '${U1}'`);
+r = await db.query(`select ${METRES} as metres, public_latitude, public_longitude from public.listings`);
+ok('moving the pin picks a new offset 70 to 100 metres away', r.rows[0].metres >= 69 && r.rows[0].metres <= 101 && `${r.rows[0].public_latitude},${r.rows[0].public_longitude}` !== offsetPin, `${Number(r.rows[0].metres).toFixed(1)} m`);
+await db.exec(`update public.listings set latitude = null, longitude = null, status = 'pending_review' where seller_id = '${U1}'`);
+r = await db.query(`select public_latitude from public.listings`);
+ok('removing the pin also clears the public pin', r.rows[0].public_latitude === null);
 
 await as('authenticated', ADMIN);
 await db.exec(`update public.listings set status = 'withdrawn'`);

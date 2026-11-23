@@ -1645,6 +1645,18 @@
           "b": "Get a certified copy (nakal) from the Tehsil / Patwari office and ask an advocate to review the documents.",
           "c": "Check that you are eligible to buy: transfers of land in Himachal Pradesh can be restricted under Section 118 of the H.P. Tenancy and Land Reforms Act, 1972."
         }
+      },
+      "map": {
+        "title": "Location on the map",
+        "exactNote": "Exact location of the land.",
+        "approxNote": "Approximate area, within about 100 metres. Log in to see the exact point and the plot numbers.",
+        "loginPrompt": "Exact location and plot numbers are shown to logged-in visitors.",
+        "login": "Log in to see the exact location",
+        "exactTitle": "Exact location of the land",
+        "exactLabel": "Map showing the exact location of the land",
+        "approxLabel": "Map showing the approximate area of the land",
+        "loading": "Loading map…",
+        "officialPlot": "Open this plot on the official BhuNaksha map"
       }
     },
     "form": {
@@ -1657,9 +1669,10 @@
         "location": "Where is the land?",
         "land": "The land",
         "price": "Price",
-        "record": "Link to a land record",
+        "record": "Plot details (optional)",
         "photos": "Photos",
-        "contact": "Your contact details"
+        "contact": "Your contact details",
+        "map": "Pin the location"
       },
       "fields": {
         "title": "Listing title",
@@ -1673,7 +1686,7 @@
         "price": "Asking price (₹)",
         "negotiable": "Price is negotiable",
         "khasra": "Khasra number",
-        "khasraHint": "Optional but recommended. If we hold this khasra for the village you chose, your listing is linked to its record and shows a link badge.",
+        "khasraHint": "All three are optional. A khasra number lets us find your plot on the map and, if we hold the record, link your listing to it. Only logged-in visitors can see these numbers.",
         "photos": "Add photos",
         "photosHint": "Up to {max} photos. JPG, PNG or WebP, up to 5 MB each.",
         "removePhoto": "Remove {name}",
@@ -1681,13 +1694,21 @@
         "contactPhone": "Mobile number",
         "contactHint": "Only logged-in visitors can see your contact details.",
         "consent": "I confirm that I own this land or am legally authorised to offer it, that the details are accurate, and that I agree to the Terms of use.",
-        "termsLink": "Terms of use"
+        "termsLink": "Terms of use",
+        "district": "District",
+        "tehsil": "Tehsil / sub-tehsil",
+        "village": "Village",
+        "districtPlaceholder": "Select district",
+        "tehsilPlaceholder": "Select tehsil",
+        "villagePlaceholder": "Select village",
+        "khewat": "Khewat number",
+        "khatauni": "Khatauni number"
       },
       "errors": {
         "title": "Enter a title of at least 5 characters",
         "district": "Select a district",
         "tehsil": "Select a tehsil",
-        "village": "Enter the village",
+        "village": "Select the village",
         "landType": "Select a land type",
         "area": "Enter an area greater than zero",
         "price": "Enter a price greater than zero",
@@ -1699,7 +1720,8 @@
         "photosSize": "Each photo must be 5 MB or smaller",
         "upload": "A photo could not be uploaded. Please try again.",
         "save": "We could not save your listing. Please try again.",
-        "auth": "Please log in again to continue."
+        "auth": "Please log in again to continue.",
+        "pin": "We could not place your land on the map. Click the map to drop a pin, then submit again."
       },
       "submit": "Submit for review",
       "submitting": "Submitting…",
@@ -1709,7 +1731,48 @@
         "linked": "Linked to a land record we hold.",
         "notLinked": "Not linked to a land record. You can mention the khasra number in the description.",
         "view": "View your listing",
-        "dashboard": "Go to dashboard"
+        "dashboard": "Go to dashboard",
+        "editedTitle": "Changes saved",
+        "editedBody": "Your listing is back in review. We will publish it again once it passes basic checks. You can follow its status on your dashboard."
+      },
+      "loadingShort": "Loading…",
+      "locationFailed": "The list of districts and villages could not be loaded. Please refresh the page and try again.",
+      "save": "Save changes",
+      "edit": {
+        "title": "Edit your listing",
+        "subtitle": "Update the details, the location or the photos.",
+        "notice": "After you save, the listing goes back for review and is hidden from buyers until it is approved again."
+      },
+      "map": {
+        "intro": "Search for a place or zoom in, then click the map to drop a pin on your land. You can drag the pin to adjust it. If you skip this, we use the centre of the village.",
+        "searchLabel": "Search for a place on the map",
+        "searchPlaceholder": "Search a town, road or landmark",
+        "searchButton": "Search",
+        "noResults": "No places found. Try a nearby town or landmark.",
+        "searchFailed": "Place search is not available right now. You can still zoom in and click the map.",
+        "locatePlot": "Find this plot on the map",
+        "useMyLocation": "Use my location",
+        "removePin": "Remove pin",
+        "mapLabel": "Map for choosing the location of the land",
+        "pinTitle": "Your land. Drag to move.",
+        "loadingMap": "Loading map…",
+        "selectVillageFirst": "Select the district, tehsil and village above and the map will move there.",
+        "loadingVillage": "Finding the village on the map…",
+        "villageFailed": "We could not load the village outline. You can still search and click the map to place the pin.",
+        "plotFound": "Plot {plot} found. The pin is at the centre of the plot; drag it if it is slightly off.",
+        "plotNotFound": "Plot {plot} was not found in the official map for this village. Place the pin by hand.",
+        "plotFailed": "The official map did not respond. Try again, or place the pin by hand.",
+        "locationDenied": "We could not get your location. Allow location access in your browser, or click the map instead.",
+        "locationOutside": "Your location is outside Himachal Pradesh, so we did not use it.",
+        "outside": "The pin looks to be outside the village you selected. Check the village, or move the pin.",
+        "noPin": "No pin yet. If you do not place one, the centre of the village is used.",
+        "source": {
+          "pin": "Pin placed by you.",
+          "plot": "Pin set at the centre of plot {plot} on the official map.",
+          "village": "Using the centre of the village."
+        },
+        "privacy": "Logged-in visitors see this exact point. Everyone else sees a spot about 100 metres away.",
+        "nearPlace": "Near {place}"
       }
     }
   },
@@ -1935,7 +1998,9 @@
       "withdraw": "Withdraw",
       "delete": "Delete",
       "confirmDelete": "Delete this listing permanently?",
-      "actionFailed": "Could not update the listing. Please try again."
+      "actionFailed": "Could not update the listing. Please try again.",
+      "edit": "Edit",
+      "relist": "Edit and relist"
     },
     "error": {
       "title": "Dashboard unavailable",

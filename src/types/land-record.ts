@@ -114,7 +114,16 @@ export type ShajraNode = {
   children?: ShajraNode[];
 };
 
-/** A listing as visible to logged-out visitors (no seller contact details). */
-export type ListingPublic = Omit<ListingRow, 'contact_name' | 'contact_phone'>;
+/**
+ * A listing as visible to logged-out visitors: no seller contact details, no exact pin and
+ * no plot numbers (those would reveal the exact plot). Logged-in users get them separately.
+ */
+export type ListingPublic = Omit<
+  ListingRow,
+  'contact_name' | 'contact_phone' | 'latitude' | 'longitude' | 'khasra' | 'khewat' | 'khatauni'
+>;
+
+/** Details only logged-in users may read. */
+export type ListingPrivate = Pick<ListingRow, 'latitude' | 'longitude' | 'khasra' | 'khewat' | 'khatauni'>;
 
 export type SellerContact = { name: string | null; phone: string | null };

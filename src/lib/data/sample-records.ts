@@ -247,8 +247,10 @@ export const SAMPLE_MUTATIONS: Mutation[] = [
 
 const listingBase = {
   seller_id: 'demo-seller',
-  latitude: null,
-  longitude: null,
+  gis_code: null,
+  location_source: null,
+  public_latitude: null,
+  public_longitude: null,
   images: [] as string[],
   is_featured: false,
   expires_at: null,

@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { DisclaimerPanel } from '@/components/layout/DisclaimerPanel';
+import { ListingMap } from '@/components/map/ListingMap';
 import { ContactSeller } from '@/components/marketplace/ContactSeller';
 import { VerificationBadge } from '@/components/marketplace/VerificationBadge';
 import { ReportButton } from '@/components/record/ReportButton';
@@ -14,7 +15,7 @@ import type { Locale } from '@/i18n/routing';
 import { getCurrentUser } from '@/lib/auth';
 import { districtLabel, tehsilLabel } from '@/lib/data/districts';
 import { listingImageUrl, verificationStatus } from '@/lib/listing-utils';
-import { getListing, getSellerContact } from '@/lib/marketplace';
+import { getListing, getListingPrivate, getSellerContact } from '@/lib/marketplace';
 import { getLandRecord } from '@/lib/record';
 import { pageMetadata } from '@/lib/seo';
 import { cn, formatPrice } from '@/lib/utils';
@@ -63,6 +64,15 @@ export default async function ListingPage({ params }: Props) {
 
   const user = await getCurrentUser();
   const contact = user ? await getSellerContact(id) : null;
+  // Exact pin and plot numbers are for logged-in visitors only. Everyone else gets the
+  // offset position stored by the database.
+  const priv = user ? await getListingPrivate(id) : null;
+  const exactPin = priv?.latitude != null && priv?.longitude != null ? { lat: priv.latitude, lng: priv.longitude } : null;
+  const approxPin =
+    listing.public_latitude != null && listing.public_longitude != null
+      ? { lat: listing.public_latitude, lng: listing.public_longitude }
+      : null;
+  const mapPin = exactPin ?? approxPin;
   const linked = listing.land_record_id ? await getLandRecord(listing.land_record_id) : null;
 
   const intl = locale === 'hi' ? 'hi-IN' : 'en-IN';
@@ -170,10 +180,45 @@ export default async function ListingPage({ params }: Props) {
               </Row>
               <Row label={t('landType')}>{land(listing.land_type)}</Row>
               <Row label={t('location')}>{place}</Row>
+              {priv?.khasra && <Row label={t('record.khasra')}>{priv.khasra}</Row>}
+              {priv?.khewat && <Row label={t('record.khewat')}>{priv.khewat}</Row>}
+              {priv?.khatauni && <Row label={t('record.khatauni')}>{priv.khatauni}</Row>}
               <Row label={t('posted')}>{date.format(new Date(listing.created_at))}</Row>
               {listing.status !== 'active' && <Row label={t('status')}>{statuses(listing.status)}</Row>}
             </dl>
           </section>
+
+          {mapPin && (
+            <section aria-labelledby="map-title">
+              <h2 id="map-title" className="text-2xl">
+                {t('map.title')}
+              </h2>
+              <div className="mt-3 space-y-3">
+                <ListingMap lat={mapPin.lat} lng={mapPin.lng} exact={Boolean(exactPin)} />
+                <p className="text-sm text-muted-foreground">{exactPin ? t('map.exactNote') : t('map.approxNote')}</p>
+                {!user && (
+                  <p>
+                    <Link
+                      href={{ pathname: '/login', query: { next: `/marketplace/${listing.id}` } }}
+                      className="font-medium text-primary underline underline-offset-2"
+                    >
+                      {t('map.login')}
+                    </Link>
+                  </p>
+                )}
+                {listing.gis_code && priv?.khasra && (
+                  <a
+                    href={`https://bhunakshahp.nic.in/plotreport/${listing.gis_code}/${encodeURIComponent(priv.khasra)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={cn(buttonVariants({ variant: 'outline' }))}
+                  >
+                    {t('map.officialPlot')}
+                  </a>
+                )}
+              </div>
+            </section>
+          )}
 
           {/* Verification and the land record behind the listing */}
           <section aria-labelledby="record-title">
