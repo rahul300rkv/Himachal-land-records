@@ -6,12 +6,21 @@ import { useTranslations } from 'next-intl';
 import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { LocationFields, type Location } from '@/components/search/LocationFields';
+import {
+  BhunakshaLocationFields,
+  EMPTY_LOCATION,
+  gisCodeOf,
+  type BhunakshaLocation,
+} from '@/components/map/BhunakshaLocationFields';
+import { LocationPicker } from '@/components/map/LocationPicker';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select } from '@/components/ui/select';
 import { Link } from '@/i18n/navigation';
+import type { LatLng, MapPoint } from '@/lib/geo';
+import { listingImageUrl } from '@/lib/listing-utils';
+import type { EditableListing } from '@/lib/marketplace';
 import { normalizeIndianMobile } from '@/lib/phone';
 import { createClient } from '@/lib/supabase/client';
 import { cn } from '@/lib/utils';
@@ -29,31 +38,48 @@ const schema = z.object({
   district: z.string().min(1, 'district'),
   tehsil: z.string().min(1, 'tehsil'),
   village: z.string().trim().min(1, 'village').max(100, 'village'),
+  gisCode: z.string().regex(/^\d{10}$/, 'village'),
   landType: z.string().min(1, 'landType'),
   area: z.string().refine((v) => Number(v) > 0 && Number(v) < 1e9, 'area'),
   areaUnit: z.string().min(1),
   price: z.string().refine((v) => Number(v) > 0 && Number(v) < 1e11, 'price'),
   negotiable: z.boolean(),
   khasra: z.string().trim().max(100),
+  khewat: z.string().trim().max(100),
+  khatauni: z.string().trim().max(100),
   contactName: z.string().trim().min(2, 'name').max(100, 'name'),
   contactPhone: z.string().refine((v) => normalizeIndianMobile(v) !== null, 'phone'),
   consent: z.boolean().refine((v) => v, 'consent'),
 });
 
 type FormValues = z.infer<typeof schema>;
-type ErrorKey = 'title' | 'district' | 'tehsil' | 'village' | 'landType' | 'area' | 'price' | 'phone' | 'name' | 'consent';
+type ErrorKey = 'title' | 'district' | 'tehsil' | 'village' | 'landType' | 'area' | 'price' | 'phone' | 'name' | 'consent' | 'pin';
 
 /** Escape LIKE wildcards so the village match is a plain, case-insensitive comparison. */
 const escapeLike = (value: string) => value.replace(/[\\%_]/g, (c) => `\\${c}`);
 
-type Outcome = { id: string; linked: boolean } | null;
+type Outcome = { id: string; linked: boolean; edited: boolean } | null;
 
-export function ListingForm({ defaultName }: { defaultName?: string }) {
+export function ListingForm({ defaultName, listing }: { defaultName?: string; listing?: EditableListing }) {
   const t = useTranslations('Marketplace.form');
   const land = useTranslations('LandTypes');
   const units = useTranslations('Units');
   const fileInput = useRef<HTMLInputElement>(null);
 
+  const editing = Boolean(listing);
+  const gis = listing?.gis_code ?? '';
+  const [loc, setLoc] = useState<BhunakshaLocation>(
+    gis.length === 10
+      ? { ...EMPTY_LOCATION, districtId: gis.slice(0, 2), tehsilId: gis.slice(2, 4), villageId: gis.slice(4, 10) }
+      : EMPTY_LOCATION,
+  );
+  const [pin, setPin] = useState<MapPoint | null>(
+    listing?.latitude != null && listing?.longitude != null
+      ? { lat: listing.latitude, lng: listing.longitude, source: listing.location_source ?? 'pin' }
+      : null,
+  );
+  const [villageCenter, setVillageCenter] = useState<LatLng | null>(null);
+  const [keptImages, setKeptImages] = useState<string[]>(listing?.images ?? []);
   const [photos, setPhotos] = useState<File[]>([]);
   const [photoError, setPhotoError] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -69,19 +95,39 @@ export function ListingForm({ defaultName }: { defaultName?: string }) {
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      title: '', description: '', district: '', tehsil: '', village: '', landType: '', area: '',
-      areaUnit: 'bigha', price: '', negotiable: true, khasra: '', contactName: defaultName ?? '',
-      contactPhone: '', consent: false,
+      title: listing?.title ?? '',
+      description: listing?.description ?? '',
+      district: listing?.district ?? '',
+      tehsil: listing?.tehsil ?? '',
+      village: listing?.village ?? '',
+      gisCode: gis,
+      landType: listing?.land_type ?? '',
+      area: listing ? String(listing.area) : '',
+      areaUnit: listing?.area_unit ?? 'bigha',
+      price: listing ? String(listing.price) : '',
+      negotiable: listing?.price_negotiable ?? true,
+      khasra: listing?.khasra ?? '',
+      khewat: listing?.khewat ?? '',
+      khatauni: listing?.khatauni ?? '',
+      contactName: listing?.contact_name ?? defaultName ?? '',
+      contactPhone: listing?.contact_phone ?? '',
+      consent: false,
     },
   });
-  const { district, tehsil, village } = watch();
+  const gisCode = watch('gisCode');
+  const khasra = watch('khasra');
 
   const err = (key?: string) => (key ? t(`errors.${key as ErrorKey}`) : undefined);
 
-  function onLocationChange(patch: Partial<Location>) {
-    (Object.entries(patch) as [keyof Location, string][]).forEach(([key, value]) =>
-      setValue(key, value, { shouldValidate: Boolean(errors[key]) }),
-    );
+  function onLocationChange(next: BhunakshaLocation) {
+    const code = gisCodeOf(next);
+    // A pin belongs to one village: moving to another village clears it.
+    if (code !== gisCodeOf(loc)) setPin(null);
+    setLoc(next);
+    setValue('district', next.district, { shouldValidate: Boolean(errors.district) });
+    setValue('tehsil', next.tehsil, { shouldValidate: Boolean(errors.tehsil) });
+    setValue('village', next.village, { shouldValidate: Boolean(errors.village) });
+    setValue('gisCode', code, { shouldValidate: Boolean(errors.village || errors.gisCode) });
   }
 
   function addPhotos(files: FileList | null) {
@@ -91,7 +137,7 @@ export function ListingForm({ defaultName }: { defaultName?: string }) {
     for (const file of Array.from(files)) {
       if (!(file.type in PHOTO_TYPES)) return setPhotoError(t('errors.photosType'));
       if (file.size > MAX_PHOTO_BYTES) return setPhotoError(t('errors.photosSize'));
-      if (next.length >= MAX_PHOTOS) return setPhotoError(t('errors.photosCount', { max: MAX_PHOTOS }));
+      if (next.length + keptImages.length >= MAX_PHOTOS) return setPhotoError(t('errors.photosCount', { max: MAX_PHOTOS }));
       next.push(file);
     }
     setPhotos(next);
@@ -99,8 +145,15 @@ export function ListingForm({ defaultName }: { defaultName?: string }) {
   }
 
   async function onSubmit(values: FormValues) {
-    setSubmitting(true);
     setSubmitError(null);
+
+    // Use the seller's pin, or fall back to the centre of the village.
+    const point: MapPoint | null = pin ?? (villageCenter ? { ...villageCenter, source: 'village' } : null);
+    if (!point) {
+      setSubmitError(t('errors.pin'));
+      return;
+    }
+    setSubmitting(true);
 
     const supabase = createClient();
     const uploaded: string[] = [];
@@ -142,29 +195,35 @@ export function ListingForm({ defaultName }: { defaultName?: string }) {
         landRecordId = data?.[0]?.id ?? null;
       }
 
-      // 3. Create the listing. It starts as "pending_review": only an admin can publish it.
-      const { data, error } = await supabase
-        .from('listings')
-        .insert({
-          seller_id: user.id,
-          land_record_id: landRecordId,
-          title: values.title,
-          description: values.description || null,
-          district: values.district,
-          tehsil: values.tehsil,
-          village: values.village,
-          price: Number(values.price),
-          price_negotiable: values.negotiable,
-          area: Number(values.area),
-          area_unit: values.areaUnit as AreaUnit,
-          land_type: values.landType as LandType,
-          contact_name: values.contactName,
-          contact_phone: normalizeIndianMobile(values.contactPhone),
-          images: uploaded,
-          status: 'pending_review',
-        })
-        .select('id')
-        .single();
+      // 3. Save the listing. Every save puts it back to "pending_review": only an admin can
+      //    publish it, and sellers are not allowed to keep a listing live while editing it.
+      const fields = {
+        land_record_id: landRecordId,
+        title: values.title,
+        description: values.description || null,
+        district: values.district,
+        tehsil: values.tehsil,
+        village: values.village,
+        gis_code: values.gisCode,
+        khasra: values.khasra || null,
+        khewat: values.khewat || null,
+        khatauni: values.khatauni || null,
+        latitude: point.lat,
+        longitude: point.lng,
+        location_source: point.source,
+        price: Number(values.price),
+        price_negotiable: values.negotiable,
+        area: Number(values.area),
+        area_unit: values.areaUnit as AreaUnit,
+        land_type: values.landType as LandType,
+        contact_name: values.contactName,
+        contact_phone: normalizeIndianMobile(values.contactPhone),
+        images: [...keptImages, ...uploaded],
+        status: 'pending_review' as const,
+      };
+      const { data, error } = listing
+        ? await supabase.from('listings').update(fields).eq('id', listing.id).eq('seller_id', user.id).select('id').single()
+        : await supabase.from('listings').insert({ seller_id: user.id, ...fields }).select('id').single();
 
       if (error || !data) {
         // Do not leave orphaned photos behind.
@@ -173,7 +232,11 @@ export function ListingForm({ defaultName }: { defaultName?: string }) {
         return;
       }
 
-      setOutcome({ id: data.id, linked: Boolean(landRecordId) });
+      // Photos the seller removed while editing (best effort; the listing is already saved).
+      const removed = (listing?.images ?? []).filter((path) => !keptImages.includes(path));
+      if (removed.length) await supabase.storage.from('listing-images').remove(removed).catch(() => undefined);
+
+      setOutcome({ id: data.id, linked: Boolean(landRecordId), edited: editing });
     } catch {
       if (uploaded.length) await supabase.storage.from('listing-images').remove(uploaded).catch(() => undefined);
       setSubmitError(t('errors.save'));
@@ -186,8 +249,8 @@ export function ListingForm({ defaultName }: { defaultName?: string }) {
     return (
       <div role="status" className="rounded-xl border border-leaf/30 bg-leaf-soft p-6 sm:p-8">
         <CheckCircle2 className="size-8 text-leaf" aria-hidden="true" />
-        <h2 className="mt-3 text-2xl">{t('success.title')}</h2>
-        <p className="mt-2 max-w-2xl">{t('success.body')}</p>
+        <h2 className="mt-3 text-2xl">{outcome.edited ? t('success.editedTitle') : t('success.title')}</h2>
+        <p className="mt-2 max-w-2xl">{outcome.edited ? t('success.editedBody') : t('success.body')}</p>
         <p className="mt-2 text-muted-foreground">{outcome.linked ? t('success.linked') : t('success.notLinked')}</p>
         <div className="mt-6 flex flex-col gap-3 sm:flex-row">
           <Button asChild>
@@ -213,6 +276,9 @@ export function ListingForm({ defaultName }: { defaultName?: string }) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-6">
+      {editing && (
+        <p className="rounded-md border border-primary/20 bg-primary-soft px-4 py-3 text-sm text-primary">{t('edit.notice')}</p>
+      )}
       <fieldset className={sectionClass}>
         <legend className={legendClass}>{t('sections.basics')}</legend>
         <div className="space-y-4">
@@ -238,14 +304,49 @@ export function ListingForm({ defaultName }: { defaultName?: string }) {
       <fieldset className={sectionClass}>
         <legend className={legendClass}>{t('sections.location')}</legend>
         <div className="grid gap-4 sm:grid-cols-3">
-          <LocationFields
-            district={district}
-            tehsil={tehsil}
-            village={village}
+          <BhunakshaLocationFields
+            value={loc}
             onChange={onLocationChange}
-            errors={{ district: err(errors.district?.message), tehsil: err(errors.tehsil?.message), village: err(errors.village?.message) }}
+            errors={{
+              district: errors.district?.message,
+              tehsil: errors.tehsil?.message,
+              village: errors.village?.message ?? errors.gisCode?.message,
+            }}
           />
         </div>
+      </fieldset>
+
+      <fieldset className={sectionClass}>
+        <legend className={legendClass}>{t('sections.record')}</legend>
+        <div className="grid gap-4 sm:grid-cols-3">
+          <div>
+            <Label htmlFor="khasra">{t('fields.khasra')}</Label>
+            <Input id="khasra" autoComplete="off" maxLength={100} aria-describedby="khasra-hint" {...register('khasra')} />
+          </div>
+          <div>
+            <Label htmlFor="khewat">{t('fields.khewat')}</Label>
+            <Input id="khewat" autoComplete="off" maxLength={100} {...register('khewat')} />
+          </div>
+          <div>
+            <Label htmlFor="khatauni">{t('fields.khatauni')}</Label>
+            <Input id="khatauni" autoComplete="off" maxLength={100} {...register('khatauni')} />
+          </div>
+        </div>
+        <p id="khasra-hint" className="mt-3 max-w-2xl text-sm text-muted-foreground">
+          {t('fields.khasraHint')}
+        </p>
+      </fieldset>
+
+      <fieldset className={sectionClass}>
+        <legend className={legendClass}>{t('sections.map')}</legend>
+        <p className="mb-4 max-w-2xl text-sm text-muted-foreground">{t('map.intro')}</p>
+        <LocationPicker
+          gisCode={gisCode}
+          khasra={khasra}
+          value={pin}
+          onChange={setPin}
+          onVillageCenter={setVillageCenter}
+        />
       </fieldset>
 
       <fieldset className={sectionClass}>
@@ -297,17 +398,6 @@ export function ListingForm({ defaultName }: { defaultName?: string }) {
       </fieldset>
 
       <fieldset className={sectionClass}>
-        <legend className={legendClass}>{t('sections.record')}</legend>
-        <div className="max-w-sm">
-          <Label htmlFor="khasra">{t('fields.khasra')}</Label>
-          <Input id="khasra" autoComplete="off" maxLength={100} aria-describedby="khasra-hint" {...register('khasra')} />
-        </div>
-        <p id="khasra-hint" className="mt-2 max-w-2xl text-sm text-muted-foreground">
-          {t('fields.khasraHint')}
-        </p>
-      </fieldset>
-
-      <fieldset className={sectionClass}>
         <legend className={legendClass}>{t('sections.photos')}</legend>
         <input
           ref={fileInput}
@@ -318,7 +408,7 @@ export function ListingForm({ defaultName }: { defaultName?: string }) {
           className="sr-only"
           onChange={(e) => addPhotos(e.target.files)}
         />
-        <Button type="button" variant="outline" onClick={() => fileInput.current?.click()} disabled={photos.length >= MAX_PHOTOS}>
+        <Button type="button" variant="outline" onClick={() => fileInput.current?.click()} disabled={photos.length + keptImages.length >= MAX_PHOTOS}>
           <ImagePlus />
           {t('fields.photos')}
         </Button>
@@ -327,6 +417,24 @@ export function ListingForm({ defaultName }: { defaultName?: string }) {
           <p role="alert" className="mt-2 text-sm text-destructive">
             {photoError}
           </p>
+        )}
+        {keptImages.length > 0 && (
+          <ul className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {keptImages.map((path, index) => (
+              <li key={path} className="relative aspect-[4/3] overflow-hidden rounded-md border bg-secondary">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={listingImageUrl(path)} alt="" className="size-full object-cover" />
+                <button
+                  type="button"
+                  aria-label={t('fields.removePhoto', { name: String(index + 1) })}
+                  onClick={() => setKeptImages((list) => list.filter((item) => item !== path))}
+                  className="absolute right-1 top-1 rounded-full bg-background/90 p-1 shadow hover:bg-background"
+                >
+                  <X className="size-4" />
+                </button>
+              </li>
+            ))}
+          </ul>
         )}
         {photos.length > 0 && (
           <ul className="mt-4 space-y-2">
@@ -389,7 +497,7 @@ export function ListingForm({ defaultName }: { defaultName?: string }) {
 
       <Button type="submit" size="lg" disabled={submitting} className={cn('w-full sm:w-auto sm:min-w-56')}>
         {submitting && <Loader2 className="animate-spin" />}
-        {submitting ? t('submitting') : t('submit')}
+        {submitting ? t('submitting') : editing ? t('save') : t('submit')}
       </Button>
     </form>
   );

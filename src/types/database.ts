@@ -121,6 +121,13 @@ export type ListingRow = {
   images: string[];
   latitude: number | null;
   longitude: number | null;
+  gis_code: string | null;
+  khasra: string | null;
+  khewat: string | null;
+  khatauni: string | null;
+  location_source: 'pin' | 'plot' | 'village' | null;
+  public_latitude: number | null;
+  public_longitude: number | null;
   status: ListingStatus;
   is_verified: boolean;
   is_featured: boolean;
@@ -220,6 +227,13 @@ export type ListingInsert = WithOptional<
   | 'images'
   | 'latitude'
   | 'longitude'
+  | 'gis_code'
+  | 'khasra'
+  | 'khewat'
+  | 'khatauni'
+  | 'location_source'
+  | 'public_latitude'
+  | 'public_longitude'
   | 'status'
   | 'is_verified'
   | 'is_featured'

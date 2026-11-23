@@ -77,6 +77,9 @@ export function MyListings({ items }: { items: MyListingItem[] }) {
                 <Link href={`/marketplace/${item.id}`} className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}>
                   {t('view')}
                 </Link>
+                <Link href={`/marketplace/${item.id}/edit`} className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}>
+                  {editable ? t('edit') : t('relist')}
+                </Link>
                 {open && (
                   <Button size="sm" variant="outline" disabled={isPending} onClick={() => setStatus(item.id, 'sold')}>
                     {t('markSold')}

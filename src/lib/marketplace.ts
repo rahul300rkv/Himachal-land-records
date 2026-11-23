@@ -4,7 +4,7 @@ import { SAMPLE_CONTACT, SAMPLE_LISTINGS } from '@/lib/data/sample-records';
 import { verificationStatus } from '@/lib/listing-utils';
 import { isSupabaseConfigured } from '@/lib/supabase/config';
 import { createClient } from '@/lib/supabase/server';
-import { AREA_UNITS, LAND_TYPES, type ListingPublic, type SellerContact } from '@/types/land-record';
+import { AREA_UNITS, LAND_TYPES, type ListingPrivate, type ListingPublic, type SellerContact } from '@/types/land-record';
 import type { AreaUnit, LandType } from '@/types/database';
 
 export const LISTINGS_PAGE_SIZE = 12;
@@ -14,7 +14,7 @@ export const LISTINGS_PAGE_SIZE = 12;
  * visitors are not allowed to read them (see migration 002). Never use `select('*')`.
  */
 export const LISTING_PUBLIC_COLUMNS =
-  'id, seller_id, land_record_id, title, description, district, tehsil, village, price, price_negotiable, area, area_unit, land_type, images, latitude, longitude, status, is_verified, is_featured, expires_at, created_at, updated_at';
+  'id, seller_id, land_record_id, title, description, district, tehsil, village, gis_code, price, price_negotiable, area, area_unit, land_type, images, location_source, public_latitude, public_longitude, status, is_verified, is_featured, expires_at, created_at, updated_at';
 
 export { listingImageUrl, verificationStatus, type VerificationStatus } from '@/lib/listing-utils';
 
@@ -193,4 +193,65 @@ export async function getSellerContact(id: string): Promise<SellerContact | null
   } catch {
     return null;
   }
+}
+
+/**
+ * Exact pin and plot numbers. Logged-in users only: the database refuses these columns to
+ * anonymous requests. Call it only when the visitor is logged in.
+ */
+export async function getListingPrivate(id: string): Promise<ListingPrivate | null> {
+  if (!isSupabaseConfigured || !UUID.test(id)) return null;
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from('listings')
+      .select('latitude, longitude, khasra, khewat, khatauni')
+      .eq('id', id)
+      .maybeSingle();
+    if (error || !data) return null;
+    return data as ListingPrivate;
+  } catch {
+    return null;
+  }
+}
+
+export type EditableListing = {
+  id: string;
+  status: string;
+  title: string;
+  description: string | null;
+  district: string;
+  tehsil: string;
+  village: string;
+  gis_code: string | null;
+  land_type: string;
+  area: number;
+  area_unit: string;
+  price: number;
+  price_negotiable: boolean;
+  khasra: string | null;
+  khewat: string | null;
+  khatauni: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  location_source: 'pin' | 'plot' | 'village' | null;
+  contact_name: string | null;
+  contact_phone: string | null;
+  images: string[];
+};
+
+/** One of the seller's own listings, with every editable field. Null if it is not theirs. */
+export async function getListingForEdit(id: string, userId: string): Promise<EditableListing | null> {
+  if (!isSupabaseConfigured || !UUID.test(id)) return null;
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from('listings')
+    .select(
+      'id, status, title, description, district, tehsil, village, gis_code, land_type, area, area_unit, price, price_negotiable, khasra, khewat, khatauni, latitude, longitude, location_source, contact_name, contact_phone, images',
+    )
+    .eq('id', id)
+    .eq('seller_id', userId)
+    .maybeSingle();
+  if (error || !data) return null;
+  return data as unknown as EditableListing;
 }
