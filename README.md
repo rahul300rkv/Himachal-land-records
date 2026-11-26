@@ -36,7 +36,7 @@ A private, independent platform to **search, read and check land records in Hima
 | **Marketplace**: browse + filter (district, price, area, land type, verified), listing page with linked record and verification badge, contact seller, create a listing with photos | `/marketplace`, `/marketplace/[id]`, `/marketplace/list` |
 | **Pre-purchase reports**: PDF generated with `@react-pdf/renderer` (Hindi + English), unique report ID, mutation history, circle-rate placeholder, disclaimer | `/reports`, `POST/GET /api/report/generate` |
 | **Source verification workspace**: one plot brief with official HimBhoomi, HP High Court and district eCourts handoffs | `/verify`, `/api/integrations/capabilities` |
-| **Tools, map and guides**: internal toolkit, fictional map demonstration and practical bilingual explainers | `/tools`, `/map`, `/guides` |
+| **Tools, maps and guides**: land converter, stamp-duty calculator, official MEGH circle-rate lookup, official BhuNaksha plot viewer and practical bilingual explainers | `/tools`, `/map`, `/guides`, `/circle-rate`, `/stamp-duty-calculator`, `/converter` |
 | **Blog**: bilingual due-diligence articles, including the seven-document pre-purchase checklist with official online-check links | `/blog`, `/blog/7-documents-before-buying-land` |
 | **Auth**: passwordless sign-in by **mobile OTP or email** (Supabase Auth) | `/login`, `/api/auth/callback` |
 | **Dashboard**: saved searches, generated reports, my land listings | `/dashboard` |
@@ -48,10 +48,10 @@ All routes live under `/hi/...` and `/en/...`.
 ## Tech stack
 
 - **Next.js 15** (App Router, React 19) + **TypeScript** (strict)
-- **Tailwind CSS 3** + shadcn/ui conventions, `lucide-react`, `framer-motion`
+- **Tailwind CSS 3** + shadcn/ui conventions and `lucide-react`
 - **next-intl 4**: Hindi + English
 - **Supabase**: Auth, Postgres with Row Level Security, Storage (`@supabase/ssr`)
-- `zod` + `react-hook-form`, `date-fns`, `leaflet` (maps), `@react-pdf/renderer` (PDF reports)
+- `zod` + `react-hook-form`, `date-fns`, `leaflet` (maps), `@react-pdf/renderer` (PDF reports), `pdfjs-dist` and `@napi-rs/canvas` (Nakal PDF rendering)
 
 ## Quick start (demo mode)
 
@@ -87,10 +87,14 @@ cp .env.local.example .env.local
 | `SUPABASE_SERVICE_ROLE_KEY` | Project Settings -> API | **Server only.** Bypasses RLS. Used to save generated reports. Never prefix with `NEXT_PUBLIC_` |
 | `NEXT_PUBLIC_SITE_URL` | your domain | `http://localhost:3000` locally |
 | `GOOGLE_SITE_VERIFICATION` | Search Console -> URL-prefix property -> HTML tag | Paste only the verification token; optional locally |
+| `GEMINI_API_KEY` | Google AI Studio | Primary Nakal PDF extraction provider; server-only |
+| `GEMINI_MODELS` | Your Google AI Studio model list | Optional comma-separated fallback order |
+| `NVIDIA_API_KEY` | NVIDIA NIM | Optional fallback when Gemini is unavailable; server-only |
+| `NVIDIA_MODEL` | NVIDIA NIM model ID | Optional; defaults to `microsoft/phi-4-multimodal-instruct` |
 
 ### 3. Create the database
 
-Run **both** migrations, in order. Either paste each file into **SQL Editor -> New query**, or use the CLI:
+Run **all three** migrations, in order. Either paste each file into **SQL Editor -> New query**, or use the CLI:
 
 ```bash
 supabase login
@@ -102,6 +106,7 @@ supabase db push
 | --- | --- |
 | `supabase/migrations/001_initial_schema.sql` | enums, `profiles`, `land_records`, `mutations`, `listings`, `reports`, indexes, triggers, RLS policies, the `search_land_records` function, storage buckets `listing-images` (public) and `report-files` (private) |
 | `supabase/migrations/002_marketplace_dashboard.sql` | `saved_searches` (max 25 per user), hides seller contact columns from logged-out visitors, marketplace indexes |
+| `supabase/migrations/003_listing_location.sql` | BhuNaksha village codes, Khasra/Khewat/Khatauni fields, exact logged-in coordinates, public offset coordinates and location-source protections |
 
 ### 4. Configure sign-in (Authentication)
 
@@ -147,7 +152,7 @@ npm run dev
 
 1. Push the project to GitHub, GitLab or Bitbucket.
 2. In Vercel: **Add New -> Project**, import the repository. The framework is detected as Next.js; keep the defaults.
-3. Under **Environment Variables** add all four variables from the table above (set `NEXT_PUBLIC_SITE_URL` to your production URL). Add them for *Production* and, if you use previews, *Preview* too.
+3. Under **Environment Variables** add the variables from the table above (set `NEXT_PUBLIC_SITE_URL` to your production URL). Add them for *Production* and, if you use previews, *Preview* too.
 4. **Deploy.**
 5. Project Settings -> **Functions** -> choose a region near your users and your Supabase project (for India: Mumbai `bom1`).
 6. Add your custom domain (Settings -> Domains), then update **Site URL** and **Redirect URLs** in Supabase (step 4 above) to that domain.
@@ -166,7 +171,7 @@ Notes:
 
 - PDF reports run in a Node.js serverless function. The Hind font files in `src/assets/fonts/` are shipped with it automatically (`outputFileTracingIncludes` in `next.config.ts`).
 - The build needs internet access to Google Fonts (`next/font/google`).
-- OpenStreetMap's public tile server (used by the map) is for light use. For real traffic switch the tile URL in `src/components/record/MapViewer.tsx` to a commercial provider (MapTiler, Mapbox, Stadia).
+- The official BhuNaksha viewer uses Himachal government map services. The record and marketplace Leaflet maps use OpenStreetMap tiles, which are suitable only for light use; switch those tile URLs to a commercial provider for real traffic.
 
 ## Running the business
 
@@ -222,7 +227,7 @@ Sellers can never set `active`, `is_verified` or `is_featured` themselves (enfor
 
 ### Circle rates
 
-Reports show a "to be added" placeholder. When you have a data source, implement `getCircleRate()` in `src/lib/data/circle-rates.ts`; the PDF already renders its result.
+The `/circle-rate` page fetches official district- and Sub-Registrar-specific schedules from the MEGH document portal through `/api/circle-rate`. The pre-purchase PDF still shows a clearly labelled placeholder rather than silently inventing a rate; connect a verified rate to the report only after defining the matching land category and office.
 
 ## Project structure
 
@@ -269,38 +274,38 @@ src/
 ├── assets/fonts/      Hind (SIL OFL) for PDFs
 └── middleware.ts      locale detection + Supabase session refresh
 supabase/
-├── migrations/        001_initial_schema.sql, 002_marketplace_dashboard.sql
+├── migrations/        001_initial_schema.sql, 002_marketplace_dashboard.sql, 003_listing_location.sql
 └── tests/rls.test.mjs database tests (npm run test:db)
 ```
 
 ## How the main features work
 
-- **External verification**: `/verify` creates a consistent plot brief and opens each official source in a separate tab. Search values stay in the browser and are not sent by HimLand Check. HimBhoomi and eCourts require the user to complete their CAPTCHAs. The application does not proxy protected requests or store third-party credentials. `/api/integrations/capabilities` exposes the current source modes and constraints for clients.
+- **External verification**: `/verify` creates a consistent plot brief and opens each official source in a separate tab. Search values stay in the browser and are not sent by HimLand Check. HimBhoomi and eCourts require the user to complete their CAPTCHAs. The app does not store third-party credentials. The separate `/api/himbhoomi` flow handles the official public HimBhoomi form session, CAPTCHA image and result/PDF handoff; it does not bypass CAPTCHA. `/api/integrations/capabilities` exposes source modes and constraints.
 
 - **Search**: `/search?district=&tehsil=&village=&khasra=&owner=` (+ `khewat`, `khatauni`, `type`, `year`, `page`). Everything is in the URL, so searches can be shared and saved. Khasra/khewat/khatauni match exactly; owner and village match partially. 20 results per page.
 - **Village suggestions** come from the villages already stored for the chosen tehsil (`/api/villages`). No village names are hard-coded.
 - **Record page** reads one `land_records` row plus its `mutations`. It is `noindex` because it contains owners' personal data.
 - **Reports**: `POST /api/report/generate {recordId, locale}` verifies the user, builds a snapshot (record, mutations, rule-based "points to verify", circle-rate placeholder), stores it in `reports.findings` (needs `SUPABASE_SERVICE_ROLE_KEY`) and streams the PDF. `GET /api/report/generate?id=<uuid>&locale=` re-renders an earlier report from its snapshot, in either language. Limit: 10 reports per user per hour. The "points to verify" are a checklist, deliberately **not a risk score**.
-- **Marketplace contact privacy**: logged-out visitors cannot read `contact_name` / `contact_phone`. This is enforced in the database with column privileges (migration 002), so it cannot be bypassed through the API. The app therefore always selects explicit columns for listings. If you add a public column to `listings`, also run `grant select (new_column) on public.listings to anon;`.
+- **Marketplace privacy**: logged-out visitors cannot read `contact_name` / `contact_phone`, exact coordinates, `khasra`, `khewat` or `khatauni`. These restrictions are enforced with database column privileges and RLS, not only UI hiding. Public map pins are generated 70–100 metres away from the exact seller pin by a database trigger. The app always selects explicit listing columns. If you add a public column to `listings`, also update the grants in migrations 002 and 003.
 - **Demo mode** (no Supabase variables): sample data from `src/lib/data/sample-records.ts`. It switches to the database automatically once the variables are set.
 
 ## Nakal checker (upload a nakal PDF -> risk score)
 
 `/hi/check` and `/en/check`: upload a jamabandi nakal PDF, get a 0-100 score with the reasons.
 
-Pipeline: `src/lib/nakal/extract.ts` (Gemini reads the PDF and returns JSON) -> `src/lib/nakal/assess.ts` (deterministic rules; the AI never sets the score) -> `NakalChecker.tsx` shows flags in Hindi/English (`NakalCheck` messages).
+Pipeline: `src/lib/nakal/extract.ts` sends the PDF to Gemini first and can fall back to `src/lib/nakal/nvidia.ts`, which renders pages locally with `pdfjs-dist` and `@napi-rs/canvas` before sending images to NVIDIA NIM. The returned JSON is validated by Zod, then `src/lib/nakal/assess.ts` applies deterministic rules; the AI never sets the score. `NakalChecker.tsx` shows the score, flags and extracted summary in Hindi/English (`NakalCheck` messages).
 
-Setup (free): create a key at <https://aistudio.google.com/app/api-keys>, then set `GEMINI_API_KEY` (and optionally `GEMINI_MODELS`) in `.env.local` and in Vercel -> Settings -> Environment Variables.
+Setup: create a Gemini key at <https://aistudio.google.com/app/api-keys> and set `GEMINI_API_KEY` (optionally `GEMINI_MODELS`). To enable the fallback, also set `NVIDIA_API_KEY` and optionally `NVIDIA_MODEL`. All provider keys are server-only environment variables and must never use the `NEXT_PUBLIC_` prefix.
 
 Notes:
-- The free tier has small daily quotas and Google may use free-tier inputs to improve its models. Land records name real people: move to a paid/Vertex key before real users, or add your own consent text.
-- Uploads are limited to 4 MB (Vercel's request body limit) and are not stored.
+- Gemini has quota and model-availability limits. Google may use free-tier inputs to improve its models; NVIDIA processing sends rendered page images to NVIDIA. Land records name real people: use an appropriate paid/provider agreement before real users and keep the consent notice current.
+- Uploads are limited to 4 MB and are not persisted as files. A successful result may remain in a best-effort in-memory server cache for up to six hours, keyed by a SHA-256 digest, so repeat analysis can avoid another provider request.
 - Rule penalties in `assess.ts` are starting values: calibrate them with a local lawyer or patwari.
 - Area units reuse the marla = 19.2 sq m / kanal = 384 sq m rates from the converter (`src/lib/nakal/units.ts`).
 
 ## Internationalisation
 
-- Locales: `hi` (default) and `en`, set in `src/i18n/routing.ts` (change `defaultLocale` for English).
+- Locales: `en` (default) and `hi`, set in `src/i18n/routing.ts`. Locale-prefixed URLs are always used (`/en/...` and `/hi/...`); the root path redirects according to the locale cookie/browser language.
 - On first visit `/` redirects by the browser's language; the choice is remembered in the `NEXT_LOCALE` cookie.
 - All text lives in `src/messages/en.json` and `hi.json`. **Keep both files in the same shape.** `global.d.ts` types the keys from `en.json`, so a missing English key fails type-checking; a key missing from `hi.json` is not caught, so check parity when adding text.
 - Only the namespaces listed in `CLIENT_NAMESPACES` (`src/app/[locale]/layout.tsx`) are sent to the browser. If a new Client Component uses a new namespace, add it there.
@@ -310,7 +315,7 @@ Notes:
 
 ## Security and privacy notes
 
-- **RLS is enabled on every table.** Land records and mutations are public to read, admin-only to write. Listings: anyone reads active ones; sellers manage their own; only admins publish, verify or feature. Reports and saved searches are private to their owner. Roles cannot be self-escalated.
+- **RLS is enabled on every table.** Migration 003 must be applied after migrations 001 and 002 before marketplace location fields are used. Land records and mutations are public to read, admin-only to write. Listings: anyone reads active ones; sellers manage their own; only admins publish, verify or feature. Reports and saved searches are private to their owner. Roles cannot be self-escalated.
 - Seller contact details are hidden from logged-out visitors (see above) and revealed in the UI only on click.
 - `SUPABASE_SERVICE_ROLE_KEY` is used only in `src/lib/supabase/admin.ts`, which imports `server-only`, so the build fails if a Client Component ever imports it.
 - Open redirects are blocked: `?next=` is accepted only for same-site paths.
@@ -326,7 +331,7 @@ Notes:
 | `npm run build` / `npm start` | Production build and server |
 | `npm run lint` | ESLint |
 | `npm run typecheck` | `tsc --noEmit` |
-| `npm run test:db` | Applies both migrations to an in-memory Postgres (PGlite) and checks 41 security rules: RLS, role protection, listing moderation, hidden contact columns, limits, storage policies |
+| `npm run test:db` | Applies all three migrations to an in-memory Postgres (PGlite) and checks security rules: RLS, role protection, listing moderation, hidden contact columns, limits, storage policies |
 | `npm run db:types` | Regenerates `src/types/database.ts` from your local Supabase DB (overwrites the hand-written file) |
 
 `test:db` stubs Supabase's `auth` and `storage` schemas, so it needs no running Supabase. It does not replace testing against your real project.
@@ -342,7 +347,7 @@ Notes:
 - [ ] Set `GOOGLE_SITE_VERIFICATION`, verify the production property, and submit `/sitemap.xml` in Search Console.
 - [ ] Load real land records, with the right to publish them.
 - [ ] Switch the map tiles to a commercial provider if you expect traffic.
-- [ ] Implement circle rates (or keep the clearly labelled placeholder).
+- [ ] Confirm the official MEGH circle-rate lookup works for the target districts and offices; keep the report placeholder clearly labelled until report integration is verified.
 - [ ] Decide on a fee / refund policy if reports become paid (the `reports` table already has payment columns).
 - [ ] Consider rate limiting (for example Vercel Firewall) for `/api/*` and a monitoring tool for errors.
 
@@ -352,6 +357,7 @@ Notes:
 - **No OTP arrives**: check the SMS provider credentials, the DLT template (India) and Supabase's Auth logs. For email, check SMTP settings and that the template contains `{{ .Token }}`.
 - **`permission denied for table listings`**: something selected `*` (or a contact column) while logged out. Select explicit columns, as `src/lib/marketplace.ts` does.
 - **Generated reports do not appear on the dashboard**: `SUPABASE_SERVICE_ROLE_KEY` is not set on the server. The PDF still downloads (the response header `X-Report-Persisted` is `false`).
+- **Nakal analysis fails**: check `GEMINI_API_KEY`; if using the fallback, check `NVIDIA_API_KEY`, `NVIDIA_MODEL`, provider quotas and the Vercel 60-second function limit.
 - **Hindi text in a fallback font / build fails on fonts**: Google Fonts could not be downloaded (offline or blocked network).
 - **Odd production errors after running `next dev`**: `next dev` and `next build` share the `.next` folder. Delete it (`rm -rf .next`) before building.
 - **Locale not switching**: clear the `NEXT_LOCALE` cookie.
