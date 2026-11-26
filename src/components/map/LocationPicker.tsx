@@ -1,21 +1,23 @@
 'use client';
 
-import type { DivIcon, LatLngBounds, Map as LeafletMap, Marker, Rectangle } from 'leaflet';
+import type { DivIcon, GridLayer, LatLngBounds, Map as LeafletMap, Marker, Rectangle } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Crosshair, Loader2, MapPin, Search, Trash2 } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
+import { MapChromeButtons, useMapChrome } from '@/components/map/MapChrome';
+import { plotHighlight, villageLines, type Leaflet } from '@/components/map/map-layers';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { GIS_CODE, inHimachal, round6, utm43ToLatLng, type LatLng, type MapPoint } from '@/lib/geo';
+import { GIS_CODE, inHimachal, plotCenterLatLng, round6, utm43ToLatLng, type LatLng, type MapPoint } from '@/lib/geo';
+import { cn } from '@/lib/utils';
 
-type Leaflet = typeof import('leaflet');
 type Place = { id: number; label: string; lat: number; lng: number };
 
 type Props = {
   /** 10-digit BhuNaksha code of the chosen village ('' until one is chosen). */
   gisCode: string;
-  /** Khasra number, used by "Find this plot on the map". Optional. */
+  /** Khasra number. When it is given, the pin goes to the centre of that plot's shape. Optional. */
   khasra: string;
   value: MapPoint | null;
   onChange: (point: MapPoint | null) => void;
@@ -36,24 +38,35 @@ function pinIcon(L: Leaflet): DivIcon {
 }
 
 /**
- * Map where the seller drops a pin. Centres on the chosen village, offers place search
- * (OpenStreetMap), "my location" and, when a khasra is given, a jump to that plot.
+ * Map where the seller drops a pin. It centres on the chosen village and outlines the village's
+ * plots. Typing a khasra number loads that plot's shape from the official BhuNaksha map and puts
+ * the pin at its centre; the pin can still be dragged. Place search is OpenStreetMap.
  */
 export function LocationPicker({ gisCode, khasra, value, onChange, onVillageCenter }: Props) {
   const t = useTranslations('Marketplace.form.map');
   const locale = useLocale();
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<LeafletMap | null>(null);
   const LRef = useRef<Leaflet | null>(null);
   const markerRef = useRef<Marker | null>(null);
   const areaRef = useRef<Rectangle | null>(null);
+  const villageLayerRef = useRef<GridLayer | null>(null);
+  const plotLayerRef = useRef<GridLayer | null>(null);
   const centeredOnValue = useRef(false);
+  // "village:khasra" the pin was last placed for. Editing a listing starts as already handled,
+  // so opening the form never moves a saved pin.
+  const locatedKey = useRef(value && khasra.trim() ? `${gisCode}:${khasra.trim()}` : '');
   const onChangeRef = useRef(onChange);
   const onCenterRef = useRef(onVillageCenter);
   const valueRef = useRef(value);
+  const gisRef = useRef(gisCode);
+  const khasraRef = useRef(khasra);
   onChangeRef.current = onChange;
   onCenterRef.current = onVillageCenter;
   valueRef.current = value;
+  gisRef.current = gisCode;
+  khasraRef.current = khasra;
 
   const [ready, setReady] = useState(false);
   const [bounds, setBounds] = useState<LatLngBounds | null>(null);
@@ -65,8 +78,15 @@ export function LocationPicker({ gisCode, khasra, value, onChange, onVillageCent
   const [geoState, setGeoState] = useState<'idle' | 'loading' | 'denied' | 'outside'>('idle');
   const [nearPlace, setNearPlace] = useState('');
 
+  const chrome = useMapChrome({ wrapperRef, mapRef, LRef, ready });
+
   function place(point: LatLng, source: MapPoint['source']) {
     onChangeRef.current({ lat: round6(point.lat), lng: round6(point.lng), source });
+  }
+
+  function clearPlotShape() {
+    plotLayerRef.current?.remove();
+    plotLayerRef.current = null;
   }
 
   // Create the map once.
@@ -78,7 +98,8 @@ export function LocationPicker({ gisCode, khasra, value, onChange, onVillageCent
       if (cancelled || !containerRef.current || mapRef.current) return;
       const map = L.map(containerRef.current, { center: [31.9, 77.2], zoom: 7, scrollWheelZoom: true });
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
+        maxZoom: 21,
+        maxNativeZoom: 19,
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors',
       }).addTo(map);
       map.on('click', (event) => place(event.latlng, 'pin'));
@@ -93,6 +114,8 @@ export function LocationPicker({ gisCode, khasra, value, onChange, onVillageCent
       mapRef.current = null;
       markerRef.current = null;
       areaRef.current = null;
+      villageLayerRef.current = null;
+      plotLayerRef.current = null;
       setReady(false);
     };
   }, []);
@@ -109,7 +132,7 @@ export function LocationPicker({ gisCode, khasra, value, onChange, onVillageCent
     }
     const position: [number, number] = [value.lat, value.lng];
     if (!markerRef.current) {
-      const marker = L.marker(position, { draggable: true, icon: pinIcon(L), title: t('pinTitle') }).addTo(map);
+      const marker = L.marker(position, { draggable: true, icon: pinIcon(L), title: t('pinTitle'), zIndexOffset: 1000 }).addTo(map);
       marker.on('dragend', () => place(marker.getLatLng(), 'pin'));
       markerRef.current = marker;
     } else {
@@ -122,13 +145,18 @@ export function LocationPicker({ gisCode, khasra, value, onChange, onVillageCent
     }
   }, [value, ready, t]);
 
-  // Centre on the chosen village and outline its area.
+  // Centre on the chosen village, outline it and draw its plot boundaries.
   useEffect(() => {
     const L = LRef.current;
     const map = mapRef.current;
     if (!ready || !L || !map) return;
     areaRef.current?.remove();
     areaRef.current = null;
+    villageLayerRef.current?.remove();
+    villageLayerRef.current = null;
+    clearPlotShape();
+    locatedKey.current = '';
+    setPlotState('idle');
     setBounds(null);
     onCenterRef.current?.(null);
     if (!GIS_CODE.test(gisCode)) {
@@ -145,6 +173,7 @@ export function LocationPicker({ gisCode, khasra, value, onChange, onVillageCent
         const box = L.latLngBounds(sw, ne);
         if (!box.isValid() || !inHimachal({ lat: box.getCenter().lat, lng: box.getCenter().lng })) throw new Error('extent');
         areaRef.current = L.rectangle(box, { color: '#2563eb', weight: 2, dashArray: '6 6', fill: false, interactive: false }).addTo(map);
+        villageLayerRef.current = villageLines(L, map, gisCode).addTo(map);
         if (!valueRef.current) map.fitBounds(box, { padding: [24, 24] });
         const center = box.getCenter();
         onCenterRef.current?.({ lat: round6(center.lat), lng: round6(center.lng) });
@@ -157,6 +186,61 @@ export function LocationPicker({ gisCode, khasra, value, onChange, onVillageCent
       });
     return () => controller.abort();
   }, [gisCode, ready]);
+
+  async function locatePlot() {
+    const L = LRef.current;
+    const map = mapRef.current;
+    const plot = khasraRef.current.trim();
+    const code = gisRef.current;
+    if (!L || !map || !plot || !GIS_CODE.test(code)) return;
+    const key = `${code}:${plot}`;
+    locatedKey.current = key; // handled, so the automatic lookup does not repeat it
+    setPlotState('loading');
+    try {
+      const response = await fetch(`/api/bhunaksha/viewer?gisCode=${code}&plot=${encodeURIComponent(plot)}`);
+      if (!response.ok) throw new Error('viewer');
+      const data = (await response.json()) as {
+        selectedPlot?: { minx: number; miny: number; maxx: number; maxy: number; id: string } | null;
+      };
+      if (`${gisRef.current}:${khasraRef.current.trim()}` !== key) return; // changed while loading
+      const p = data.selectedPlot;
+      if (!p || ![p.minx, p.miny, p.maxx, p.maxy].every(Number.isFinite)) {
+        clearPlotShape();
+        setPlotState('notFound');
+        return;
+      }
+      const center = plotCenterLatLng(p);
+      if (!inHimachal(center)) {
+        clearPlotShape();
+        setPlotState('notFound');
+        return;
+      }
+      clearPlotShape();
+      if (p.id) plotLayerRef.current = plotHighlight(L, map, code, p.id).addTo(map);
+      place(center, 'plot');
+      map.setView([center.lat, center.lng], 18);
+      setPlotState('found');
+    } catch {
+      if (`${gisRef.current}:${khasraRef.current.trim()}` === key) setPlotState('error');
+    }
+  }
+
+  // When a khasra number is typed, find the plot by itself once the seller stops typing.
+  useEffect(() => {
+    if (!ready) return;
+    const plot = khasra.trim();
+    if (!plot || !GIS_CODE.test(gisCode)) {
+      clearPlotShape();
+      locatedKey.current = '';
+      setPlotState('idle');
+      return;
+    }
+    if (locatedKey.current === `${gisCode}:${plot}`) return;
+    const timer = setTimeout(() => void locatePlot(), 900);
+    return () => clearTimeout(timer);
+    // locatePlot only reads refs and state setters, so it does not need to be a dependency.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [khasra, gisCode, ready]);
 
   // Name the area around the pin ("Theog, Shimla"). It is only a hint, so failures are ignored.
   // The wait after each move keeps lookups well inside OpenStreetMap's usage policy.
@@ -199,34 +283,6 @@ export function LocationPicker({ gisCode, khasra, value, onChange, onVillageCent
     setResults([]);
   }
 
-  async function locatePlot() {
-    const plot = khasra.trim();
-    if (!plot || !GIS_CODE.test(gisCode)) return;
-    setPlotState('loading');
-    try {
-      const response = await fetch(`/api/bhunaksha/viewer?gisCode=${gisCode}&plot=${encodeURIComponent(plot)}`);
-      if (!response.ok) throw new Error('viewer');
-      const data = (await response.json()) as {
-        selectedPlot?: { minx: number; miny: number; maxx: number; maxy: number } | null;
-      };
-      const p = data.selectedPlot;
-      if (!p || ![p.minx, p.miny, p.maxx, p.maxy].every(Number.isFinite)) {
-        setPlotState('notFound');
-        return;
-      }
-      const [lat, lng] = utm43ToLatLng((p.minx + p.maxx) / 2, (p.miny + p.maxy) / 2);
-      if (!inHimachal({ lat, lng })) {
-        setPlotState('notFound');
-        return;
-      }
-      place({ lat, lng }, 'plot');
-      mapRef.current?.setView([lat, lng], 18);
-      setPlotState('found');
-    } catch {
-      setPlotState('error');
-    }
-  }
-
   function useMyLocation() {
     if (!navigator.geolocation) {
       setGeoState('denied');
@@ -262,83 +318,94 @@ export function LocationPicker({ gisCode, khasra, value, onChange, onVillageCent
   );
 
   return (
-    <div className="space-y-3">
-      <form
-        className="flex gap-2"
-        onSubmit={(event) => {
-          event.preventDefault();
-          void search();
-        }}
-      >
-        <Input
-          aria-label={t('searchLabel')}
-          placeholder={t('searchPlaceholder')}
-          value={query}
-          maxLength={120}
-          onChange={(event) => setQuery(event.target.value)}
-        />
-        <Button type="submit" variant="outline" disabled={searchState === 'loading' || query.trim().length < 3}>
-          {searchState === 'loading' ? <Loader2 className="animate-spin" /> : <Search />}
-          {t('searchButton')}
-        </Button>
-      </form>
+    <div>
+      <div ref={wrapperRef} className={cn('space-y-3', chrome.wrapperClass)}>
+        <form
+          className="flex gap-2"
+          onSubmit={(event) => {
+            event.preventDefault();
+            void search();
+          }}
+        >
+          <Input
+            aria-label={t('searchLabel')}
+            placeholder={t('searchPlaceholder')}
+            value={query}
+            maxLength={120}
+            onChange={(event) => setQuery(event.target.value)}
+          />
+          <Button type="submit" variant="outline" disabled={searchState === 'loading' || query.trim().length < 3}>
+            {searchState === 'loading' ? <Loader2 className="animate-spin" /> : <Search />}
+            {t('searchButton')}
+          </Button>
+        </form>
 
-      <div aria-live="polite" className="min-h-5">
-        {searchState === 'empty' && message(t('noResults'))}
-        {searchState === 'error' && message(t('searchFailed'), 'error')}
-      </div>
-      {results.length > 0 && (
-        <ul className="max-h-48 divide-y overflow-auto rounded-md border bg-background text-sm">
-          {results.map((item) => (
-            <li key={item.id}>
-              <button type="button" onClick={() => goTo(item)} className="flex w-full items-start gap-2 px-3 py-2 text-left hover:bg-accent">
-                <MapPin className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
-                <span>{item.label}</span>
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-
-      <div className="flex flex-wrap gap-2">
-        <Button type="button" variant="outline" size="sm" onClick={locatePlot} disabled={!khasra.trim() || !GIS_CODE.test(gisCode) || plotState === 'loading'}>
-          {plotState === 'loading' ? <Loader2 className="animate-spin" /> : <MapPin />}
-          {t('locatePlot')}
-        </Button>
-        <Button type="button" variant="outline" size="sm" onClick={useMyLocation} disabled={geoState === 'loading'}>
-          {geoState === 'loading' ? <Loader2 className="animate-spin" /> : <Crosshair />}
-          {t('useMyLocation')}
-        </Button>
-        <Button type="button" variant="ghost" size="sm" onClick={() => onChange(null)} disabled={!value}>
-          <Trash2 />
-          {t('removePin')}
-        </Button>
-      </div>
-
-      <div className="relative z-0 isolate">
-        <div ref={containerRef} className="h-80 w-full overflow-hidden rounded-lg border bg-secondary sm:h-96" role="application" aria-label={t('mapLabel')} />
-        {!ready && (
-          <p className="absolute inset-0 flex items-center justify-center gap-2 text-sm text-muted-foreground">
-            <Loader2 className="size-4 animate-spin" aria-hidden="true" />
-            {t('loadingMap')}
-          </p>
+        <div aria-live="polite" className="min-h-5">
+          {searchState === 'empty' && message(t('noResults'))}
+          {searchState === 'error' && message(t('searchFailed'), 'error')}
+        </div>
+        {results.length > 0 && (
+          <ul className="max-h-48 divide-y overflow-auto rounded-md border bg-background text-sm">
+            {results.map((item) => (
+              <li key={item.id}>
+                <button type="button" onClick={() => goTo(item)} className="flex w-full items-start gap-2 px-3 py-2 text-left hover:bg-accent">
+                  <MapPin className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
+                  <span>{item.label}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
         )}
-      </div>
 
-      <div aria-live="polite" className="min-h-5 space-y-1">
-        {!GIS_CODE.test(gisCode) && message(t('selectVillageFirst'))}
-        {villageState === 'loading' && message(t('loadingVillage'))}
-        {villageState === 'error' && message(t('villageFailed'), 'warn')}
-        {plotState === 'found' && message(t('plotFound', { plot: khasra.trim() }))}
-        {plotState === 'notFound' && message(t('plotNotFound', { plot: khasra.trim() }), 'warn')}
-        {plotState === 'error' && message(t('plotFailed'), 'warn')}
-        {geoState === 'denied' && message(t('locationDenied'), 'warn')}
-        {geoState === 'outside' && message(t('locationOutside'), 'warn')}
-        {outside && message(t('outside'), 'warn')}
-        {value ? message(t(`source.${value.source}`, { plot: khasra.trim() })) : GIS_CODE.test(gisCode) && message(t('noPin'))}
-        {value && nearPlace && message(t('nearPlace', { place: nearPlace }))}
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="flex flex-wrap gap-2">
+            <Button type="button" variant="outline" size="sm" onClick={() => void locatePlot()} disabled={!khasra.trim() || !GIS_CODE.test(gisCode) || plotState === 'loading'}>
+              {plotState === 'loading' ? <Loader2 className="animate-spin" /> : <MapPin />}
+              {t('locatePlot')}
+            </Button>
+            <Button type="button" variant="outline" size="sm" onClick={useMyLocation} disabled={geoState === 'loading'}>
+              {geoState === 'loading' ? <Loader2 className="animate-spin" /> : <Crosshair />}
+              {t('useMyLocation')}
+            </Button>
+            <Button type="button" variant="ghost" size="sm" onClick={() => onChange(null)} disabled={!value}>
+              <Trash2 />
+              {t('removePin')}
+            </Button>
+          </div>
+          <MapChromeButtons
+            satellite={chrome.satellite}
+            onSatellite={() => chrome.setSatellite((on) => !on)}
+            fullscreen={chrome.isFullscreen}
+            onFullscreen={chrome.toggleFullscreen}
+          />
+        </div>
+
+        <div className={cn('relative z-0 isolate', chrome.mapBoxClass)}>
+          <div ref={containerRef} className={cn('w-full overflow-hidden rounded-lg border bg-secondary', chrome.mapClass)} role="application" aria-label={t('mapLabel')} />
+          {!ready && (
+            <p className="absolute inset-0 flex items-center justify-center gap-2 text-sm text-muted-foreground">
+              <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+              {t('loadingMap')}
+            </p>
+          )}
+        </div>
+
+        <div aria-live="polite" className="min-h-5 space-y-1">
+          {!GIS_CODE.test(gisCode) && message(t('selectVillageFirst'))}
+          {villageState === 'loading' && message(t('loadingVillage'))}
+          {villageState === 'error' && message(t('villageFailed'), 'warn')}
+          {plotState === 'loading' && message(t('plotLoading', { plot: khasra.trim() }))}
+          {plotState === 'found' && message(t('plotFound', { plot: khasra.trim() }))}
+          {plotState === 'notFound' && message(t('plotNotFound', { plot: khasra.trim() }), 'warn')}
+          {plotState === 'error' && message(t('plotFailed'), 'warn')}
+          {geoState === 'denied' && message(t('locationDenied'), 'warn')}
+          {geoState === 'outside' && message(t('locationOutside'), 'warn')}
+          {outside && message(t('outside'), 'warn')}
+          {value ? message(t(`source.${value.source}`, { plot: khasra.trim() })) : GIS_CODE.test(gisCode) && message(t('noPin'))}
+          {value && nearPlace && message(t('nearPlace', { place: nearPlace }))}
+        </div>
       </div>
-      <p className="text-sm text-muted-foreground">{t('privacy')}</p>
+      <p className="mt-3 text-sm text-muted-foreground">{t('privacy')}</p>
     </div>
   );
 }

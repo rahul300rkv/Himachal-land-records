@@ -1,39 +1,53 @@
 'use client';
 
-import type { Map as LeafletMap } from 'leaflet';
+import type { GridLayer, Map as LeafletMap } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Loader2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
+import { MapChromeButtons, useMapChrome } from '@/components/map/MapChrome';
+import { villageLines, type Leaflet } from '@/components/map/map-layers';
+import { GIS_CODE } from '@/lib/geo';
+import { cn } from '@/lib/utils';
 
 type Props = {
   lat: number;
   lng: number;
   /** true: the exact pin (logged-in visitors). false: a circle around the approximate spot. */
   exact: boolean;
+  /** Village code. With an exact pin it enables the "Plot lines" switch. */
+  gisCode?: string | null;
 };
 
-/** Read-only map for a listing page. */
-export function ListingMap({ lat, lng, exact }: Props) {
+/** Read-only map for a listing page, with satellite, full screen and (for the exact pin) plot lines. */
+export function ListingMap({ lat, lng, exact, gisCode }: Props) {
   const t = useTranslations('Marketplace.detail.map');
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<LeafletMap | null>(null);
+  const LRef = useRef<Leaflet | null>(null);
+  const linesRef = useRef<GridLayer | null>(null);
   const [ready, setReady] = useState(false);
+  const [plotLines, setPlotLines] = useState(false);
+  const chrome = useMapChrome({ wrapperRef, mapRef, LRef, ready });
+  const canShowLines = exact && Boolean(gisCode && GIS_CODE.test(gisCode));
 
   useEffect(() => {
-    let map: LeafletMap | null = null;
     let cancelled = false;
     (async () => {
       const mod = await import('leaflet');
-      const L = ('default' in mod ? mod.default : mod) as typeof import('leaflet');
+      const L = ('default' in mod ? mod.default : mod) as Leaflet;
       if (cancelled || !containerRef.current) return;
-      map = L.map(containerRef.current, { center: [lat, lng], zoom: exact ? 17 : 15, scrollWheelZoom: false });
+      const map = L.map(containerRef.current, { center: [lat, lng], zoom: exact ? 17 : 15, scrollWheelZoom: false });
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
+        maxZoom: 21,
+        maxNativeZoom: 19,
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors',
       }).addTo(map);
       if (exact) {
         L.marker([lat, lng], {
           title: t('exactTitle'),
+          zIndexOffset: 1000,
           icon: L.divIcon({
             className: '',
             iconSize: [28, 36],
@@ -48,24 +62,59 @@ export function ListingMap({ lat, lng, exact }: Props) {
         // The real spot is up to about 100 m from the centre, so 160 m always covers it.
         L.circle([lat, lng], { radius: 160, color: '#b91c1c', weight: 2, fillColor: '#b91c1c', fillOpacity: 0.15 }).addTo(map);
       }
+      mapRef.current = map;
+      LRef.current = L;
       setReady(true);
-      setTimeout(() => map?.invalidateSize(), 0);
+      setTimeout(() => map.invalidateSize(), 0);
     })();
     return () => {
       cancelled = true;
-      map?.remove();
+      mapRef.current?.remove();
+      mapRef.current = null;
+      linesRef.current = null;
+      setReady(false);
     };
   }, [lat, lng, exact, t]);
 
+  // Plot boundaries of the village, from the official map.
+  useEffect(() => {
+    const L = LRef.current;
+    const map = mapRef.current;
+    if (!ready || !L || !map || !plotLines || !canShowLines || !gisCode) return;
+    const layer = villageLines(L, map, gisCode).addTo(map);
+    linesRef.current = layer;
+    return () => {
+      layer.remove();
+      linesRef.current = null;
+    };
+  }, [ready, plotLines, canShowLines, gisCode]);
+
   return (
-    <div className="relative z-0 isolate">
-      <div ref={containerRef} className="h-72 w-full overflow-hidden rounded-lg border bg-secondary sm:h-80" role="application" aria-label={exact ? t('exactLabel') : t('approxLabel')} />
-      {!ready && (
-        <p className="absolute inset-0 flex items-center justify-center gap-2 text-sm text-muted-foreground">
-          <Loader2 className="size-4 animate-spin" aria-hidden="true" />
-          {t('loading')}
-        </p>
-      )}
+    <div ref={wrapperRef} className={cn('space-y-2', chrome.wrapperClass)}>
+      <div className="flex justify-end">
+        <MapChromeButtons
+          satellite={chrome.satellite}
+          onSatellite={() => chrome.setSatellite((on) => !on)}
+          fullscreen={chrome.isFullscreen}
+          onFullscreen={chrome.toggleFullscreen}
+          plotLines={canShowLines ? plotLines : undefined}
+          onPlotLines={canShowLines ? () => setPlotLines((on) => !on) : undefined}
+        />
+      </div>
+      <div className={cn('relative z-0 isolate', chrome.mapBoxClass)}>
+        <div
+          ref={containerRef}
+          className={cn('w-full overflow-hidden rounded-lg border bg-secondary', chrome.isFullscreen ? 'h-full' : 'h-72 sm:h-80')}
+          role="application"
+          aria-label={exact ? t('exactLabel') : t('approxLabel')}
+        />
+        {!ready && (
+          <p className="absolute inset-0 flex items-center justify-center gap-2 text-sm text-muted-foreground">
+            <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+            {t('loading')}
+          </p>
+        )}
+      </div>
     </div>
   );
 }

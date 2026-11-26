@@ -1,4 +1,4 @@
-import { ImageOff, MapPin } from 'lucide-react';
+import { ImageOff, MapPin, MapPinned } from 'lucide-react';
 import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
 import { Badge } from '@/components/ui/badge';
@@ -50,7 +50,15 @@ export function ListingCard({ listing }: { listing: ListingPublic }) {
       </div>
 
       <div className="flex flex-1 flex-col p-4">
-        <VerificationBadge status={verificationStatus(listing)} />
+        <div className="flex flex-wrap items-center gap-2">
+          <VerificationBadge status={verificationStatus(listing)} />
+          {listing.location_source === 'plot' && (
+            <Badge tone="success">
+              <MapPinned className="size-3.5" aria-hidden="true" />
+              {t('plotLocated')}
+            </Badge>
+          )}
+        </div>
 
         <h3 className="mt-3 font-sans text-lg font-semibold leading-snug tracking-normal">
           <Link

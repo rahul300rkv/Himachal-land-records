@@ -1,4 +1,4 @@
-import { CircleAlert, Plus, SearchX, TestTube2 } from 'lucide-react';
+import { Calculator, CircleAlert, FileSearch, MapPinned, Plus, SearchX, TestTube2, type LucideIcon } from 'lucide-react';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { DisclaimerPanel } from '@/components/layout/DisclaimerPanel';
@@ -9,6 +9,7 @@ import { Pagination } from '@/components/search/Pagination';
 import { Button } from '@/components/ui/button';
 import { Link } from '@/i18n/navigation';
 import type { Locale } from '@/i18n/routing';
+import { districtLabel, tehsilLabel } from '@/lib/data/districts';
 import { parseListingParams, searchListings } from '@/lib/marketplace';
 import { pageMetadata } from '@/lib/seo';
 
@@ -29,7 +30,19 @@ export default async function MarketplacePage({ params, searchParams }: Props) {
 
   const t = await getTranslations('Marketplace');
   const raw = await searchParams;
-  const result = await searchListings(parseListingParams(raw));
+  const query = parseListingParams(raw);
+  const result = await searchListings(query);
+
+  // Name of the area when the page is opened from a map tool link (?gis=...). It comes from the
+  // first listing found; the code on its own says nothing a visitor can read.
+  const sample = result.listings[0];
+  const areaName = !query.gis || !sample
+    ? ''
+    : [
+        query.gis.length === 10 ? sample.village : '',
+        query.gis.length >= 4 ? tehsilLabel(sample.district, sample.tehsil, locale) : '',
+        districtLabel(sample.district, locale),
+      ].filter(Boolean).join(', ');
 
   // Query string kept by the pagination links (the page number is added there).
   const currentQuery = Object.fromEntries(
@@ -37,6 +50,13 @@ export default async function MarketplacePage({ params, searchParams }: Props) {
       .map(([key, value]) => [key, Array.isArray(value) ? value[0] : value] as const)
       .filter(([key, value]) => key !== 'page' && value),
   ) as Record<string, string>;
+  const withoutArea = Object.fromEntries(Object.entries(currentQuery).filter(([key]) => key !== 'gis'));
+
+  const tools: { key: 'plot' | 'record' | 'cost'; href: string; icon: LucideIcon }[] = [
+    { key: 'plot', href: '/map', icon: MapPinned },
+    { key: 'record', href: '/search', icon: FileSearch },
+    { key: 'cost', href: '/stamp-duty-calculator', icon: Calculator },
+  ];
 
   return (
     <div className="container py-10 sm:py-14">
@@ -52,6 +72,39 @@ export default async function MarketplacePage({ params, searchParams }: Props) {
           </Link>
         </Button>
       </header>
+
+      <section aria-labelledby="trust-title" className="mt-8 rounded-2xl border border-primary/15 bg-primary-soft/50 p-5 sm:p-6">
+        <h2 id="trust-title" className="text-xl">{t('trust.title')}</h2>
+        <p className="mt-1 max-w-3xl text-sm text-muted-foreground">{t('trust.body')}</p>
+        <ul className="mt-4 grid gap-3 sm:grid-cols-3">
+          {tools.map(({ key, href, icon: Icon }) => (
+            <li key={key}>
+              <Link href={href} className="flex h-full flex-col gap-1 rounded-xl border bg-background p-4 transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                <span className="flex items-center gap-2 font-semibold">
+                  <Icon className="size-4 text-primary" aria-hidden="true" />
+                  {t(`trust.${key}.title`)}
+                </span>
+                <span className="text-sm text-muted-foreground">{t(`trust.${key}.body`)}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-4">
+          <Link href={{ pathname: '/marketplace', query: { plot: '1' } }} className="text-sm font-semibold text-primary underline-offset-2 hover:underline">
+            {t('trust.showPlotLocated')}
+          </Link>
+        </p>
+      </section>
+
+      {query.gis && (
+        <p className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 rounded-md border bg-card px-4 py-3 text-sm">
+          <MapPinned className="size-4 shrink-0 text-primary" aria-hidden="true" />
+          <span>{areaName ? t('area.showing', { place: areaName }) : t('area.showingGeneric')}</span>
+          <Link href={{ pathname: '/marketplace', query: withoutArea }} className="font-semibold text-primary underline-offset-2 hover:underline">
+            {t('area.clear')}
+          </Link>
+        </p>
+      )}
 
       {result.mode === 'demo' && (
         <p className="mt-6 flex items-start gap-2 rounded-md border border-notice-border bg-notice px-4 py-3 text-sm text-notice-foreground">

@@ -39,6 +39,10 @@ export type ListingQuery = {
   areaUnit?: AreaUnit;
   landType?: LandType;
   verifiedOnly: boolean;
+  /** Only listings whose plot was found on the official BhuNaksha map. */
+  plotOnly: boolean;
+  /** BhuNaksha code prefix: district (2), tehsil (4) or village (10 digits). */
+  gis?: string;
   sort: ListingSort;
   page: number;
 };
@@ -61,6 +65,8 @@ export function parseListingParams(raw: RawParams): ListingQuery {
     areaUnit: hasArea ? (AREA_UNITS.find((u) => u === unit) ?? 'bigha') : undefined,
     landType: LAND_TYPES.find((t) => t === type),
     verifiedOnly: first(raw.verified) === '1',
+    plotOnly: first(raw.plot) === '1',
+    gis: /^\d{2}(\d{2}(\d{6})?)?$/.test(first(raw.gis) ?? '') ? first(raw.gis) : undefined,
     sort: sort === 'price_asc' || sort === 'price_desc' ? sort : 'new',
     page: Number.isFinite(page) && page >= 1 && page <= 1000 ? page : 1,
   };
@@ -100,6 +106,8 @@ export async function searchListings(q: ListingQuery): Promise<ListingsResult> {
     }
     if (q.landType) query = query.eq('land_type', q.landType);
     if (q.verifiedOnly) query = query.eq('is_verified', true).not('land_record_id', 'is', null);
+    if (q.plotOnly) query = query.eq('location_source', 'plot');
+    if (q.gis) query = query.like('gis_code', `${q.gis}%`);
 
     if (q.sort === 'price_asc') query = query.order('price', { ascending: true });
     else if (q.sort === 'price_desc') query = query.order('price', { ascending: false });
@@ -134,7 +142,9 @@ function demoSearch(q: ListingQuery): ListingsResult {
           (q.areaMin === undefined || l.area >= q.areaMin) &&
           (q.areaMax === undefined || l.area <= q.areaMax))) &&
       (!q.landType || l.land_type === q.landType) &&
-      (!q.verifiedOnly || verificationStatus(l) === 'verified'),
+      (!q.verifiedOnly || verificationStatus(l) === 'verified') &&
+      (!q.plotOnly || l.location_source === 'plot') &&
+      (!q.gis || Boolean(l.gis_code?.startsWith(q.gis))),
   ).sort((a, b) =>
     q.sort === 'price_asc'
       ? a.price - b.price

@@ -1,4 +1,4 @@
-import { ArrowLeft, EyeOff, ImageOff, TestTube2 } from 'lucide-react';
+import { ArrowLeft, BadgeCheck, Calculator, EyeOff, FileSearch, ImageOff, Landmark, MapPinned, TestTube2, type LucideIcon } from 'lucide-react';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -73,6 +73,26 @@ export default async function ListingPage({ params }: Props) {
       ? { lat: listing.public_latitude, lng: listing.public_longitude }
       : null;
   const mapPin = exactPin ?? approxPin;
+  const plotLocated = listing.location_source === 'plot';
+  const hasPlot = Boolean(listing.gis_code && priv?.khasra);
+  const linkClass =
+    'flex h-full flex-col gap-1 rounded-xl border bg-background p-4 transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring';
+  // Tools that let a buyer check the land themselves. Logged-out visitors get the tools without
+  // the plot number, which stays private.
+  const officialLinks: { key: 'plotMap' | 'plotMapGeneric' | 'record' | 'cost' | 'circle' | 'sameVillage' | 'bhunaksha'; href: string | { pathname: string; query: Record<string, string> }; icon: LucideIcon; external?: boolean }[] = [
+    {
+      key: hasPlot ? 'plotMap' : 'plotMapGeneric',
+      href: hasPlot ? { pathname: '/map', query: { gis: listing.gis_code as string, plot: priv?.khasra as string } } : '/map',
+      icon: MapPinned,
+    },
+    { key: 'record', href: '/search', icon: FileSearch },
+    { key: 'cost', href: '/stamp-duty-calculator', icon: Calculator },
+    { key: 'circle', href: '/circle-rate', icon: Landmark },
+    ...(listing.gis_code ? [{ key: 'sameVillage' as const, href: { pathname: '/marketplace', query: { gis: listing.gis_code } }, icon: MapPinned }] : []),
+    ...(hasPlot
+      ? [{ key: 'bhunaksha' as const, href: `https://bhunakshahp.nic.in/plotreport/${listing.gis_code}/${encodeURIComponent(priv?.khasra as string)}`, icon: BadgeCheck, external: true }]
+      : []),
+  ];
   const linked = listing.land_record_id ? await getLandRecord(listing.land_record_id) : null;
 
   const intl = locale === 'hi' ? 'hi-IN' : 'en-IN';
@@ -110,7 +130,15 @@ export default async function ListingPage({ params }: Props) {
       )}
 
       <header className="mt-5 max-w-3xl">
-        <VerificationBadge status={status} />
+        <div className="flex flex-wrap items-center gap-2">
+          <VerificationBadge status={status} />
+          {plotLocated && (
+            <Badge tone="success">
+              <MapPinned className="size-3.5" aria-hidden="true" />
+              {card('plotLocated')}
+            </Badge>
+          )}
+        </div>
         <h1 className="mt-3 text-3xl sm:text-4xl">{listing.title}</h1>
         <p className="mt-2 text-lg text-muted-foreground">{place}</p>
       </header>
@@ -194,7 +222,7 @@ export default async function ListingPage({ params }: Props) {
                 {t('map.title')}
               </h2>
               <div className="mt-3 space-y-3">
-                <ListingMap lat={mapPin.lat} lng={mapPin.lng} exact={Boolean(exactPin)} />
+                <ListingMap lat={mapPin.lat} lng={mapPin.lng} exact={Boolean(exactPin)} gisCode={listing.gis_code} />
                 <p className="text-sm text-muted-foreground">{exactPin ? t('map.exactNote') : t('map.approxNote')}</p>
                 {!user && (
                   <p>
@@ -206,19 +234,52 @@ export default async function ListingPage({ params }: Props) {
                     </Link>
                   </p>
                 )}
-                {listing.gis_code && priv?.khasra && (
-                  <a
-                    href={`https://bhunakshahp.nic.in/plotreport/${listing.gis_code}/${encodeURIComponent(priv.khasra)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={cn(buttonVariants({ variant: 'outline' }))}
-                  >
-                    {t('map.officialPlot')}
-                  </a>
-                )}
               </div>
             </section>
           )}
+
+          <section aria-labelledby="official-title" className="rounded-2xl border border-leaf/25 bg-leaf-soft/40 p-5 sm:p-6">
+            <h2 id="official-title" className="flex items-center gap-2 text-2xl">
+              <BadgeCheck className="size-6 shrink-0 text-leaf" aria-hidden="true" />
+              {t('official.title')}
+            </h2>
+            <p className="mt-2 text-muted-foreground">{plotLocated ? t('official.located') : t('official.notLocated')}</p>
+            <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+              {officialLinks.map(({ key, href, icon: Icon, external }) => (
+                <li key={key}>
+                  {external ? (
+                    <a href={href as string} target="_blank" rel="noopener noreferrer" className={linkClass}>
+                      <span className="flex items-center gap-2 font-semibold">
+                        <Icon className="size-4 text-primary" aria-hidden="true" />
+                        {t(`official.${key}.title`)}
+                      </span>
+                      <span className="text-sm text-muted-foreground">{t(`official.${key}.body`)}</span>
+                    </a>
+                  ) : (
+                    <Link href={href as '/map'} className={linkClass}>
+                      <span className="flex items-center gap-2 font-semibold">
+                        <Icon className="size-4 text-primary" aria-hidden="true" />
+                        {t(`official.${key}.title`)}
+                      </span>
+                      <span className="text-sm text-muted-foreground">{t(`official.${key}.body`)}</span>
+                    </Link>
+                  )}
+                </li>
+              ))}
+            </ul>
+            {priv?.khasra && (
+              <p className="mt-4 text-sm text-muted-foreground">{t('official.recordHint', { place, khasra: priv.khasra })}</p>
+            )}
+            {!user && (
+              <p className="mt-4 text-sm text-muted-foreground">
+                {t('official.loginPrompt')}{' '}
+                <Link href={{ pathname: '/login', query: { next: `/marketplace/${listing.id}` } }} className="font-medium text-primary underline underline-offset-2">
+                  {t('map.login')}
+                </Link>
+              </p>
+            )}
+            <p className="mt-4 text-xs text-muted-foreground">{t('official.note')}</p>
+          </section>
 
           {/* Verification and the land record behind the listing */}
           <section aria-labelledby="record-title">

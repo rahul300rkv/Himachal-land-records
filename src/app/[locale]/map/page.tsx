@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { PlotMapLookup } from '@/components/map/PlotMapLookup';
 import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
@@ -28,7 +29,10 @@ export default async function MapPage({ params }: Props) {
         <h1 className="mt-3 text-4xl sm:text-5xl">{t('title')}</h1>
         <p className="mt-4 text-lg text-muted-foreground">{t('intro')}</p>
       </header>
-      <PlotMapLookup />
+      {/* The lookup reads ?gis=&plot= from the address, which needs a Suspense boundary. */}
+      <Suspense fallback={null}>
+        <PlotMapLookup />
+      </Suspense>
       <figure className="mt-8 overflow-hidden rounded-2xl border bg-card">
         <figcaption className="border-b px-5 py-4 sm:px-7">
           <h2 className="text-2xl">{t('sample.title')}</h2>
