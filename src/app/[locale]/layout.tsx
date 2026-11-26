@@ -7,6 +7,7 @@ import { JsonLd } from '@/components/seo/JsonLd';
 import { DisclaimerBanner } from '@/components/layout/DisclaimerBanner';
 import { Footer } from '@/components/layout/Footer';
 import { DesktopMagnificationDock } from '@/components/layout/DesktopMagnificationDock';
+import { MobileQuickDock } from '@/components/layout/MobileQuickDock';
 import { Header } from '@/components/layout/Header';
 import { routing, type Locale } from '@/i18n/routing';
 import { SITE } from '@/lib/site';
@@ -177,10 +178,11 @@ export default async function LocaleLayout({ children, params }: Props) {
           {/* Legal notice stays visible on every page */}
           <DisclaimerBanner />
           <Header />
-          <main id="main" className="flex-1 lg:pb-24">
+          <main id="main" className="flex-1 pb-20 lg:pb-24">
             {children}
           </main>
           <DesktopMagnificationDock />
+          <MobileQuickDock />
           <Footer />
         </NextIntlClientProvider>
       </body>
