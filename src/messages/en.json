@@ -1,8 +1,8 @@
 {
   "Metadata": {
     "siteName": "HimLand Check",
-    "title": "Himachal Jamabandi Map & Land Records Search | HimLand Check",
-    "description": "Search Himachal jamabandi and Land records. Check plot map and circle rates before you buy. Independent site, not a government portal."
+    "title": "Himachal Land Records, Jamabandi & BhuNaksha | HimLand Check",
+    "description": "Search Himachal Bhulekh and Jamabandi records through eHimBhoomi. Check BhuNaksha plot maps and circle rates before you buy. Independent site, not a government portal."
   },
   "Navigation": {
     "circleRates": "Circle rates",
@@ -112,8 +112,8 @@
   },
   "Home": {
     "hero": {
-      "title": "Search Himachal jamabandi and land records before you buy",
-      "subtitle": "Find Jamabandi, Khasra, Khatauni, Khewat and mutation entries by district, tehsil and village, then verify the official record before any land transaction.",
+      "title": "Search Himachal Jamabandi & Land Records Before You Buy",
+      "subtitle": "Search Bhulekh and Jamabandi records by district, tehsil and village through eHimBhoomi, then check the BhuNaksha plot map before any land transaction.",
       "searchTitle": "Search official land revenue records",
       "searchHint": "",
       "submit": "Continue to search",
@@ -302,8 +302,8 @@
   },
   "Tools": {
     "eyebrow": "Himachal land toolkit",
-    "title": "Useful tools, in one place",
-    "intro": "Search, read, map and cross-check a plot without jumping between different government portals. Every tool here works with the official records held by HimBhoomi, BhuNaksha and the MEGH document store.",
+    "title": "Himachal Land Record Tools",
+    "intro": "Search Bhulekh records through eHimBhoomi, check Jamabandi nakal, open BhuNaksha plot maps, compare circle rates and calculate land costs in one place.",
     "open": "Open tool",
     "items": {
       "verify": {
@@ -358,7 +358,7 @@
   },
   "CircleRateTool": {
     "title": "Himachal Pradesh Circle Rates",
-    "intro": "Find and download official government circle-rates in Himachal Pradesh.",
+    "intro": "Find and download official district-wise circle rates for land in Himachal Pradesh.",
     "lookup": "Find the published rate",
     "lookupHelp": "Select a district and SRO to see available notices. Open the PDF and check its effective period, land category and unit.",
     "form": {
@@ -430,8 +430,8 @@
   },
   "MapExplorer": {
     "eyebrow": "Map tool",
-    "title": "Search Plot by Khasra Number on Himachal BhuNaksha Map",
-    "intro": "Prepare the exact district, tehsil, village and Khasra number, then continue to the Himachal Pradesh government map viewer.",
+    "title": "Himachal BhuNaksha Map | Search Plot by Khasra",
+    "intro": "Prepare the exact district, tehsil, village and Khasra number, then open the Himachal Pradesh BhuNaksha plot map.",
     "formTitle": "Locate your plot",
     "formIntro": "Choose the official BhuNaksha location in order. The report opens directly for the selected plot.",
     "districtLabel": "District",
@@ -510,8 +510,8 @@
   },
   "Guides": {
     "eyebrow": "Practical guides",
-    "title": "Understand the record before you rely on it",
-    "intro": "Short, plain-language explainers for common Himachal land-record questions.",
+    "title": "Himachal Jamabandi & Land Record Guides",
+    "intro": "Short, plain-language explainers for Jamabandi, Bhulekh, Khasra, mutations and other Himachal land-record questions.",
     "reviewNote": "General information only. Not legal advice. Laws and procedures change, so confirm with the Patwari, the Tehsil office or a Himachal property lawyer.",
     "relatedTitle": "Keep reading",
     "tryTool": "Try the tool",
@@ -891,8 +891,8 @@
   },
   "Blog": {
     "eyebrow": "Land due-diligence library",
-    "title": "Himachal land guides",
-    "intro": "Practical, source-aware articles to help you ask better questions before a property transaction.",
+    "title": "Himachal Land Record Guides",
+    "intro": "Practical, source-aware guides to Jamabandi, Bhulekh, BhuNaksha, mutations and land checks before a property transaction.",
     "read": "Read the guide",
     "article": {
       "readTime": "10 minute guide",
@@ -966,8 +966,8 @@
     }
   },
   "Search": {
-    "title": "Search Himachal land records",
-    "subtitle": "Choose the district, tehsil, village and Jamabandi year used by HimBhoomi.",
+    "title": "Himachal Bhulekh & Jamabandi Search",
+    "subtitle": "Choose the district, tehsil, village and Jamabandi year used by HimBhoomi (eHimBhoomi).",
     "official": {
       "privacy": "The selectors and record choices below are loaded from HimBhoomi through HimLand Check. You remain on this website throughout the search.",
       "district": "District",
@@ -1547,9 +1547,9 @@
     }
   },
   "Marketplace": {
-    "title": "Land marketplace",
+    "title": "Land for Sale in Himachal Pradesh",
     "subtitle": "Himachal Pradesh land for sale, where listings can be checked against the official records. Give a khasra number and your plot is placed on the official BhuNaksha map.",
-    "metaDescription": "Browse land for sale in Himachal Pradesh. Every listing shows whether it is linked to a land record. Independent platform, not a government website.",
+    "metaDescription": "Browse land for sale in Himachal Pradesh and use Jamabandi, Bhulekh and BhuNaksha tools to decide what needs verification. Independent platform, not a government website.",
     "listLand": "List your land",
     "demoNotice": "Demo mode: showing fictional sample listings.",
     "notice": "Listings are posted by third parties. We do not own or inspect the land. Verify the land record and the seller yourself before you pay any money.",
@@ -1852,9 +1852,9 @@
   },
   "Report": {
     "page": {
-      "title": "Pre-purchase check reports",
+      "title": "Himachal Land Pre-Purchase Check Reports",
       "subtitle": "A clear PDF that summarises a land record, its mutation history and the points to verify before you pay.",
-      "metaDescription": "Generate a pre-purchase check report for a Himachal Pradesh land record: land details, ownership, mutation history and points to verify. Not a title opinion.",
+      "metaDescription": "Generate a pre-purchase check report for a Himachal Pradesh land record, including ownership, mutation history and points to verify. Not a title opinion.",
       "includesTitle": "What is in a report",
       "includes": {
         "a": "Land details summary",
@@ -2111,8 +2111,8 @@
     "search": "Search land records"
   },
   "Converter": {
-    "title": "Land unit converter",
-    "intro": "Convert Himachal land measurements without assuming one district-wide standard.",
+    "title": "Himachal Land Unit Converter",
+    "intro": "Convert Himachal land measurements between kanal, marla, bigha, biswa, square metres and square feet.",
     "value": "Area",
     "from": "From",
     "to": "To",
@@ -2243,8 +2243,8 @@
       "contextTitle": "What the checker reads and what it cannot",
       "contextBody": "The checker extracts text from the uploaded PDF and applies a fixed set of rules: it looks for owner entries and shares, mutation status codes, case-reference patterns and remarks that match known mortgage or charge formats. It does not search external databases — it reads only what is in the document you uploaded. If the PDF was scanned at low resolution, or if the Patwari's handwriting in the remarks column was not captured clearly, the extraction may miss entries that are present on the paper copy. Always compare the checker's output with the original PDF before drawing any conclusions."
     },
-    "title": "Check a land record (jamabandi)",
-    "intro": "Upload a Jamabandi nakal PDF. We read it, run rule-based checks and show a score with the reasons. An AI model does the reading, so always compare the result with the original record.",
+    "title": "Himachal Jamabandi Checker",
+    "intro": "Upload a Bhulekh or HimBhoomi Jamabandi nakal PDF. We read it, run rule-based checks and show a score with the reasons. Always compare the result with the original record.",
     "choose": "Choose a PDF (up to 4 MB)",
     "analyze": "Check this record",
     "analyzing": "Reading the record… this can take up to a minute.",
