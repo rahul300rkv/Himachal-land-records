@@ -1,5 +1,6 @@
 'use client';
 
+import { Languages } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useTransition } from 'react';
 import { usePathname, useRouter } from '@/i18n/navigation';
@@ -12,7 +13,7 @@ const LABELS: Record<Locale, { visible: string; name: 'english' | 'hindi' }> = {
 };
 
 /**
- * Two-option language switch. Keeps the visitor on the same page and swaps the locale.
+ * Compact two-option language switch. Keeps the visitor on the same page and swaps the locale.
  * next-intl also remembers the choice in the NEXT_LOCALE cookie.
  */
 export function LanguageToggle({ className }: { className?: string }) {
@@ -34,8 +35,15 @@ export function LanguageToggle({ className }: { className?: string }) {
       role="group"
       aria-label={t('language')}
       aria-busy={isPending}
-      className={cn('inline-flex items-center rounded-full border bg-secondary p-0.5 text-sm', className)}
+      className={cn(
+        'inline-flex h-10 items-center gap-1 rounded-xl border border-black/10 bg-white/75 px-1 shadow-sm ring-1 ring-black/[0.03] backdrop-blur-sm',
+        className,
+      )}
     >
+      <span className="flex size-8 items-center justify-center text-[#69566b]" aria-hidden="true">
+        <Languages className="size-4" strokeWidth={1.8} />
+      </span>
+
       {routing.locales.map((code) => {
         const active = code === locale;
         const { visible, name } = LABELS[code];
@@ -49,10 +57,12 @@ export function LanguageToggle({ className }: { className?: string }) {
             disabled={isPending}
             onClick={() => switchTo(code)}
             className={cn(
-              'min-h-12 rounded-full px-2.5 font-medium transition-colors sm:px-3',
+              'h-8 rounded-lg px-2 text-xs font-semibold tracking-[0.02em] transition-[background-color,color,box-shadow] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+              code === 'hi' && 'min-w-12',
+              code === 'en' && 'min-w-9',
               active
-                ? 'bg-primary text-primary-foreground shadow-sm'
-                : 'text-muted-foreground hover:text-foreground',
+                ? 'bg-[#2a102d] text-white shadow-sm'
+                : 'text-[#69566b] hover:bg-[#2a102d]/[0.06] hover:text-[#2a102d]',
             )}
           >
             {visible}
