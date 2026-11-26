@@ -1,12 +1,14 @@
 'use client';
 
 import { ArrowUpRight, Copy, MapPinned } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select } from '@/components/ui/select';
+import { Link } from '@/i18n/navigation';
 import { BhunakshaViewer } from './BhunakshaViewer';
 
 type Option = { id: string; name: string; hi?: string };
@@ -25,6 +27,24 @@ export function PlotMapLookup() {
   const [copied, setCopied] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [viewerOpen, setViewerOpen] = useState(false);
+
+  // Opened from a marketplace listing: /map?gis=<10-digit village code>&plot=<khasra>.
+  // Fill in the village and plot and show the map straight away.
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    const gis = searchParams.get('gis') ?? '';
+    if (!/^\d{10}$/.test(gis)) return;
+    setDistrictId(gis.slice(0, 2));
+    setTehsilId(gis.slice(2, 4));
+    setVillageId(gis.slice(4, 10));
+    const plotParam = (searchParams.get('plot') ?? '').trim().slice(0, 50);
+    if (plotParam) setPlot(plotParam);
+    setViewerOpen(true);
+    const timer = window.setTimeout(() => document.getElementById('plot-map-viewer')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 400);
+    return () => window.clearTimeout(timer);
+    // Only the address the page was opened with matters, not later changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     fetch('/api/bhunaksha/locations')
@@ -180,9 +200,20 @@ export function PlotMapLookup() {
             </button>
           </div>
         )}
+        {districtId && (
+          <Link
+            href={{ pathname: '/marketplace', query: { gis: `${districtId}${tehsilId}${tehsilId && villageId ? villageId : ''}` } }}
+            className="mt-6 block rounded-xl border bg-background/80 p-4 transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <span className="flex items-center gap-2 text-sm font-semibold text-primary">
+              {t('forSale')} <ArrowUpRight className="size-4" aria-hidden="true" />
+            </span>
+            <span className="mt-1 block text-sm text-muted-foreground">{t('forSaleBody')}</span>
+          </Link>
+        )}
       </aside>
       {viewerOpen && districtId && tehsilId && villageId && (
-        <div className="lg:col-span-2"><BhunakshaViewer gisCode={`${districtId}${tehsilId}${villageId}`} plot={plot.trim()} attribution={reference} /></div>
+        <div id="plot-map-viewer" className="scroll-mt-20 lg:col-span-2"><BhunakshaViewer gisCode={`${districtId}${tehsilId}${villageId}`} plot={plot.trim()} attribution={reference} /></div>
       )}
     </div>
   );

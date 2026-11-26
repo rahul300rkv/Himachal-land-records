@@ -504,7 +504,9 @@
     "tatima": {
       "title": "BhuNaksha and the Tatima",
       "body": "A tatima is the official field sketch prepared by the Patwari for a specific khasra or sub-division. It shows the plot's boundaries in relation to neighbouring parcels, roads, water channels and landmarks. A tatima is different from BhuNaksha: BhuNaksha is the digital cadastral map for the whole revenue village, while a tatima is a Patwari-certified sketch for a specific plot. If a seller provides a tatima, compare it against the BhuNaksha outline for the same khasra number. Discrepancies in shape, area or boundary points should be verified with the Patwari before you proceed."
-    }
+    },
+    "forSale": "Land for sale in this area",
+    "forSaleBody": "See marketplace listings in the area you selected."
   },
   "Guides": {
     "eyebrow": "Practical guides",
@@ -1546,7 +1548,7 @@
   },
   "Marketplace": {
     "title": "Land marketplace",
-    "subtitle": "Browse land listed for sale by owners and agents. Check the record behind every listing before you decide.",
+    "subtitle": "Himachal Pradesh land for sale, where listings can be checked against the official records. Give a khasra number and your plot is placed on the official BhuNaksha map.",
     "metaDescription": "Browse land for sale in Himachal Pradesh. Every listing shows whether it is linked to a land record. Independent platform, not a government website.",
     "listLand": "List your land",
     "demoNotice": "Demo mode: showing fictional sample listings.",
@@ -1569,7 +1571,8 @@
       "sortPriceDesc": "Price: high to low",
       "apply": "Apply filters",
       "clear": "Clear filters",
-      "active": "{count} active"
+      "active": "{count} active",
+      "plotOnly": "Only plots located on the official map"
     },
     "results": {
       "summary": "{count, plural, one {# listing} other {# listings}} on page {page}",
@@ -1589,7 +1592,8 @@
       "featured": "Featured",
       "view": "View listing",
       "viewFor": "View listing: {title}",
-      "posted": "Posted {date}"
+      "posted": "Posted {date}",
+      "plotLocated": "Plot on official map"
     },
     "verification": {
       "verified": "Verified",
@@ -1644,7 +1648,9 @@
           "a": "Never pay an advance before you have verified the land record and visited the plot.",
           "b": "Get a certified copy (nakal) from the Tehsil / Patwari office and ask an advocate to review the documents.",
           "c": "Check that you are eligible to buy: transfers of land in Himachal Pradesh can be restricted under Section 118 of the H.P. Tenancy and Land Reforms Act, 1972."
-        }
+        },
+        "lockedLogin": "Log in to see name, phone and WhatsApp",
+        "lockedReveal": "Tap below to show name, phone and WhatsApp"
       },
       "map": {
         "title": "Location on the map",
@@ -1657,6 +1663,42 @@
         "approxLabel": "Map showing the approximate area of the land",
         "loading": "Loading map…",
         "officialPlot": "Open this plot on the official BhuNaksha map"
+      },
+      "official": {
+        "title": "Check this land yourself",
+        "located": "The seller gave a khasra number and the plot was found on the official BhuNaksha map for this village. That shows the plot exists where the pin is. It does not prove who owns it, so check the land record before paying.",
+        "notLocated": "This listing has not been matched to a plot on the official map. Ask the seller for the khasra number, then use these tools to check the land before paying.",
+        "plotMap": {
+          "title": "Open this plot on the plot map",
+          "body": "Opens the village map with this plot selected."
+        },
+        "plotMapGeneric": {
+          "title": "Open the plot map",
+          "body": "See the plots of the village on the official map."
+        },
+        "record": {
+          "title": "Check the land record",
+          "body": "Look up the Jamabandi and Nakal from HimBhoomi."
+        },
+        "cost": {
+          "title": "Estimate stamp duty",
+          "body": "Stamp duty and registration charges for a sale deed."
+        },
+        "circle": {
+          "title": "Check the circle rate",
+          "body": "Compare the price with the official land rate."
+        },
+        "sameVillage": {
+          "title": "More land in this village",
+          "body": "Other listings in the same village."
+        },
+        "bhunaksha": {
+          "title": "Open the official plot report",
+          "body": "BhuNaksha plot report on the Himachal government site."
+        },
+        "recordHint": "To check the record, choose {place} and khasra {khasra} in the land search.",
+        "loginPrompt": "Log in to see the khasra number and open this exact plot.",
+        "note": "These tools use the government's own data. HimLand Check is independent and does not guarantee it. Always confirm ownership, mutation and permissions before you pay."
       }
     },
     "form": {
@@ -1744,13 +1786,13 @@
         "notice": "After you save, the listing goes back for review and is hidden from buyers until it is approved again."
       },
       "map": {
-        "intro": "Search for a place or zoom in, then click the map to drop a pin on your land. You can drag the pin to adjust it. If you skip this, we use the centre of the village.",
+        "intro": "Search for a place or zoom in, then click the map to drop a pin on your land. If you enter a khasra number, we load that plot from the official map and put the pin at the centre of its shape. You can drag the pin to adjust it. If you skip this, we use the centre of the village.",
         "searchLabel": "Search for a place on the map",
         "searchPlaceholder": "Search a town, road or landmark",
         "searchButton": "Search",
         "noResults": "No places found. Try a nearby town or landmark.",
         "searchFailed": "Place search is not available right now. You can still zoom in and click the map.",
-        "locatePlot": "Find this plot on the map",
+        "locatePlot": "Move pin to the centre of the plot",
         "useMyLocation": "Use my location",
         "removePin": "Remove pin",
         "mapLabel": "Map for choosing the location of the land",
@@ -1759,7 +1801,7 @@
         "selectVillageFirst": "Select the district, tehsil and village above and the map will move there.",
         "loadingVillage": "Finding the village on the map…",
         "villageFailed": "We could not load the village outline. You can still search and click the map to place the pin.",
-        "plotFound": "Plot {plot} found. The pin is at the centre of the plot; drag it if it is slightly off.",
+        "plotFound": "Plot {plot} found on the official map. The pin is at the centre of the plot shape; drag it if it is slightly off.",
         "plotNotFound": "Plot {plot} was not found in the official map for this village. Place the pin by hand.",
         "plotFailed": "The official map did not respond. Try again, or place the pin by hand.",
         "locationDenied": "We could not get your location. Allow location access in your browser, or click the map instead.",
@@ -1768,12 +1810,44 @@
         "noPin": "No pin yet. If you do not place one, the centre of the village is used.",
         "source": {
           "pin": "Pin placed by you.",
-          "plot": "Pin set at the centre of plot {plot} on the official map.",
+          "plot": "Pin at the centre of plot {plot} from the official map.",
           "village": "Using the centre of the village."
         },
         "privacy": "Logged-in visitors see this exact point. Everyone else sees a spot about 100 metres away.",
-        "nearPlace": "Near {place}"
+        "nearPlace": "Near {place}",
+        "plotLoading": "Looking up plot {plot} on the official map…"
       }
+    },
+    "trust": {
+      "title": "Built only for Himachal land",
+      "body": "Most property sites have no idea what a khasra or a Jamabandi is. Here, a seller who gives the khasra number gets the plot found on the official map, and every buyer has the official tools one tap away.",
+      "plot": {
+        "title": "See the plot on the official map",
+        "body": "Open the plot map for the village and the khasra number."
+      },
+      "record": {
+        "title": "Check the land record",
+        "body": "Look up the Jamabandi and Nakal for the khasra from HimBhoomi."
+      },
+      "cost": {
+        "title": "Work out the cost",
+        "body": "Estimate stamp duty and registration charges before you decide."
+      },
+      "showPlotLocated": "Show only plots located on the official map"
+    },
+    "area": {
+      "showing": "Showing land in {place}.",
+      "showingGeneric": "Showing land in the area you chose on the map tool.",
+      "clear": "Show all of Himachal"
+    },
+    "mapControls": {
+      "satellite": "Satellite",
+      "mapOnly": "Map only",
+      "plotLines": "Plot lines",
+      "fullscreen": "View full screen",
+      "exitFullscreen": "Exit full screen",
+      "fullscreenHint": "Full screen (F)",
+      "exitFullscreenHint": "Exit full screen (F)"
     }
   },
   "Report": {

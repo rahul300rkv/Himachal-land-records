@@ -22,10 +22,13 @@ type Values = {
   unit: string;
   type: string;
   verified: boolean;
+  plot: boolean;
+  /** Area chosen from a map tool link (a BhuNaksha code prefix). It is kept while other filters change. */
+  gis: string;
   sort: string;
 };
 
-const KEYS = ['district', 'pmin', 'pmax', 'amin', 'amax', 'unit', 'type', 'verified', 'sort'] as const;
+const KEYS = ['district', 'pmin', 'pmax', 'amin', 'amax', 'unit', 'type', 'verified', 'plot', 'gis', 'sort'] as const;
 
 /** Filter listings by district, price range, area, land type and verification. State lives in the URL. */
 export function MarketplaceFilters() {
@@ -47,6 +50,8 @@ export function MarketplaceFilters() {
     unit: get('unit') || 'bigha',
     type: get('type'),
     verified: get('verified') === '1',
+    plot: get('plot') === '1',
+    gis: get('gis'),
     sort: get('sort') || 'new',
   });
 
@@ -58,6 +63,8 @@ export function MarketplaceFilters() {
     get('amin') || get('amax'),
     get('type'),
     get('verified'),
+    get('plot'),
+    get('gis'),
   ].filter(Boolean).length;
 
   function push(next: Values) {
@@ -68,6 +75,8 @@ export function MarketplaceFilters() {
         if (next.amin.trim() || next.amax.trim()) query.unit = next.unit;
       } else if (key === 'verified') {
         if (next.verified) query.verified = '1';
+      } else if (key === 'plot') {
+        if (next.plot) query.plot = '1';
       } else if (key === 'sort') {
         if (next.sort !== 'new') query.sort = next.sort;
       } else if (typeof value === 'string' && value.trim()) {
@@ -79,7 +88,7 @@ export function MarketplaceFilters() {
 
   function clear() {
     const empty: Values = {
-      district: '', pmin: '', pmax: '', amin: '', amax: '', unit: 'bigha', type: '', verified: false, sort: 'new',
+      district: '', pmin: '', pmax: '', amin: '', amax: '', unit: 'bigha', type: '', verified: false, plot: false, gis: '', sort: 'new',
     };
     setValues(empty);
     push(empty);
@@ -165,15 +174,26 @@ export function MarketplaceFilters() {
             </Select>
           </div>
 
-          <label className="flex min-h-11 items-center gap-2.5 text-sm font-medium sm:col-span-1 lg:col-span-2">
-            <input
-              type="checkbox"
-              checked={values.verified}
-              onChange={(e) => set('verified', e.target.checked)}
-              className="size-5 rounded border-input accent-[hsl(var(--primary))]"
-            />
-            {t('verifiedOnly')}
-          </label>
+          <div className="sm:col-span-1 lg:col-span-2">
+            <label className="flex min-h-11 items-center gap-2.5 text-sm font-medium">
+              <input
+                type="checkbox"
+                checked={values.verified}
+                onChange={(e) => set('verified', e.target.checked)}
+                className="size-5 rounded border-input accent-[hsl(var(--primary))]"
+              />
+              {t('verifiedOnly')}
+            </label>
+            <label className="flex min-h-11 items-center gap-2.5 text-sm font-medium">
+              <input
+                type="checkbox"
+                checked={values.plot}
+                onChange={(e) => set('plot', e.target.checked)}
+                className="size-5 rounded border-input accent-[hsl(var(--primary))]"
+              />
+              {t('plotOnly')}
+            </label>
+          </div>
         </div>
 
         <div className="flex flex-col gap-3 sm:flex-row">
