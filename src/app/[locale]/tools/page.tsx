@@ -58,11 +58,11 @@ export default async function ToolsPage({ params }: Props) {
       <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {TOOLS.map(({ key, href, icon: Icon }) => (
           <li key={key}>
-            <Link href={href} className="group flex h-full flex-col rounded-xl border bg-card p-6 shadow-sm transition hover:-translate-y-1 hover:border-primary/40">
+            <Link href={href} className="group flex h-full flex-col rounded-lg border bg-card p-6 transition-colors hover:border-primary/50">
               <span className="flex size-11 items-center justify-center rounded-lg bg-primary-soft text-primary"><Icon className="size-5" aria-hidden="true" /></span>
               <h2 className="mt-5 text-xl">{toolTitle(key)}</h2>
               <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{toolBody(key)}</p>
-              <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-primary">{t('open')} <ArrowRight className="size-4 transition group-hover:translate-x-1" aria-hidden="true" /></span>
+              <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-primary">{t('open')} <ArrowRight className="size-4" aria-hidden="true" /></span>
             </Link>
           </li>
         ))}
