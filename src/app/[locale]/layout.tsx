@@ -4,7 +4,6 @@ import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { JsonLd } from '@/components/seo/JsonLd';
-import { DisclaimerBanner } from '@/components/layout/DisclaimerBanner';
 import { Footer } from '@/components/layout/Footer';
 import { DesktopMagnificationDock } from '@/components/layout/DesktopMagnificationDock';
 import { MobileQuickDock } from '@/components/layout/MobileQuickDock';
@@ -175,8 +174,6 @@ export default async function LocaleLayout({ children, params }: Props) {
             {t('skipToContent')}
           </a>
 
-          {/* Legal notice stays visible on every page */}
-          <DisclaimerBanner />
           <Header />
           <main id="main" className="flex-1 pb-20 lg:pb-24">
             {children}
