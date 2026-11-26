@@ -26,7 +26,7 @@ export function ListingCard({ listing }: { listing: ListingPublic }) {
   const photo = listing.images[0];
 
   return (
-    <article className="group relative flex h-full flex-col overflow-hidden rounded-xl border bg-card shadow-sm transition-shadow focus-within:ring-2 focus-within:ring-ring hover:shadow-md">
+    <article className="group relative flex h-full flex-col overflow-hidden rounded-lg border bg-card transition-colors focus-within:ring-2 focus-within:ring-ring hover:border-primary/50">
       <div className="relative aspect-[16/10] bg-secondary">
         {photo ? (
           <Image
@@ -43,7 +43,7 @@ export function ListingCard({ listing }: { listing: ListingPublic }) {
           </div>
         )}
         {listing.is_featured && (
-          <Badge tone="warning" className="absolute left-3 top-3 shadow-sm">
+          <Badge tone="warning" className="absolute left-3 top-3">
             {t('featured')}
           </Badge>
         )}
