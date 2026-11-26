@@ -12,7 +12,7 @@ export async function RelatedTools({ current }: { current: ToolKey }) {
       <ul className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {RELATED_TOOLS[current].map((key) => (
           <li key={key}>
-            <Link href={TOOL_HREFS[key]} className="flex h-full min-h-12 flex-col rounded-xl border border-border bg-card p-5 hover:border-primary/40">
+            <Link href={TOOL_HREFS[key]} className="flex h-full min-h-12 flex-col rounded-lg border border-border bg-card p-5 transition-colors hover:border-primary/50">
               <span className="font-semibold text-primary">{t(`tools.${key}.name`)}</span>
               <span className="mt-2 text-sm leading-relaxed text-muted-foreground">{t(`tools.${key}.hint`)}</span>
             </Link>
