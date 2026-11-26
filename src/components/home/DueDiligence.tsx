@@ -16,7 +16,7 @@ export function DueDiligence() {
     <section className="due-diligence" aria-labelledby="due-diligence-title">
       <div className="container py-20 sm:py-28">
         <Reveal className="max-w-4xl">
-          <p className="font-signature text-3xl text-leaf sm:text-4xl">{t('eyebrow')}</p>
+          <p className="field-note text-leaf">{t('eyebrow')}</p>
           <h2 id="due-diligence-title" className="mt-4 text-3xl leading-tight sm:text-4xl lg:text-6xl">
             {t('title')}
           </h2>
@@ -26,12 +26,11 @@ export function DueDiligence() {
         <ol className="mt-14 grid gap-5 lg:grid-cols-3">
           {CHECKS.map(({ key, icon: Icon }, index) => (
             <li key={key} className={index === 1 ? 'lg:translate-y-5' : ''}>
-              <Reveal delay={index * 0.08} className="due-diligence__card concept-card">
+              <Reveal delay={index * 0.08} className="due-diligence__card">
                 <div className="flex items-center justify-between">
                   <span className="flex size-12 items-center justify-center rounded-full bg-primary-soft text-primary">
                     <Icon className="size-6" aria-hidden="true" />
                   </span>
-                  <span className="font-serif text-4xl text-primary/15" aria-hidden="true">0{index + 1}</span>
                 </div>
                 <h3 className="mt-6 text-2xl">{t(`checks.${key}.title`)}</h3>
                 <p className="mt-3 leading-relaxed text-muted-foreground">{t(`checks.${key}.description`)}</p>
