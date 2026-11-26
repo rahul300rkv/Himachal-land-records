@@ -20,7 +20,7 @@ export async function Hero() {
           <circle cx="1110" cy="205" r="7" fill="none" stroke="currentColor" />
         </svg>
 
-        <div className="container relative z-10 flex min-h-[calc(100svh-4rem)] flex-col items-start justify-center px-4 pb-24 pt-16 text-left sm:min-h-[calc(100svh-4.5rem)] sm:px-6 sm:pb-28 sm:pt-20 lg:min-h-[calc(100vh-5rem)] lg:pb-32 lg:pt-24">
+        <div className="container relative z-10 flex min-h-[calc(100svh-4rem)] flex-col items-start justify-start px-4 pb-24 pt-20 text-left sm:min-h-[calc(100svh-4.5rem)] sm:px-6 sm:pb-28 sm:pt-24 lg:min-h-[calc(100vh-5rem)] lg:pb-32 lg:pt-28">
           <p className="field-note animate-fade-rise text-[#69566b]">
             <ShieldCheck className="size-4" aria-hidden="true" /> {t('trustNote')}
           </p>
