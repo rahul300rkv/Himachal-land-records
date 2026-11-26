@@ -102,7 +102,7 @@ export function NakalChecker() {
 
       {result && s && (
         <div className="space-y-6" aria-live="polite">
-          <div className={`rounded-2xl border p-5 sm:p-7 ${BAND_STYLE[result.band].ring}`}>
+          <div className={`rounded-xl border p-5 sm:p-7 ${BAND_STYLE[result.band].ring}`}>
             <div className="flex flex-wrap items-center gap-5">
               <div className="relative grid size-28 shrink-0 place-items-center rounded-full border-[10px] border-current/20" style={{ color: result.band === 'low' ? '#10b981' : result.band === 'moderate' ? '#f59e0b' : '#ef4444' }}>
                 <div className="text-center"><p className="text-4xl font-semibold leading-none tabular-nums">{result.score}</p><span className="text-xs text-muted-foreground">/100</span></div>
