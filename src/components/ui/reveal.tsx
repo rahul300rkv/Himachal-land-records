@@ -18,19 +18,60 @@ type RevealProps = {
 };
 
 /**
- * Gentle fade-and-rise entrance. Renders plain markup when the visitor has asked their
- * system to reduce motion.
+ * Gentle fade-and-rise entrance. Content always fails open if motion is reduced,
+ * IntersectionObserver is unavailable, or an observer callback is delayed.
  */
 export function Reveal({ children, className, delay = 0, y = 14, trigger = 'inView' }: RevealProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(trigger === 'mount');
+  const [reducedMotion, setReducedMotion] = useState(false);
+
   useEffect(() => {
-    if (trigger === 'mount' || !ref.current) return;
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const shouldReduceMotion = media.matches;
+    setReducedMotion(shouldReduceMotion);
+
+    if (shouldReduceMotion || trigger === 'mount' || !ref.current) {
+      setVisible(true);
+      return;
+    }
+
+    if (typeof IntersectionObserver === 'undefined') {
+      setVisible(true);
+      return;
+    }
+
     const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) { setVisible(true); observer.disconnect(); }
+      if (entry.isIntersecting) {
+        setVisible(true);
+        observer.disconnect();
+      }
     }, { rootMargin: '0px 0px -60px 0px' });
+
     observer.observe(ref.current);
-    return () => observer.disconnect();
+
+    // Never leave content hidden if the browser delays or suppresses the callback.
+    const fallback = window.setTimeout(() => setVisible(true), 1500);
+
+    return () => {
+      observer.disconnect();
+      window.clearTimeout(fallback);
+    };
   }, [trigger]);
-  return <div ref={ref} className={className} style={{ opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : `translateY(${y}px)`, transition: `opacity .5s ease-out ${delay}s, transform .5s cubic-bezier(.22,1,.36,1) ${delay}s` }}>{children}</div>;
+
+  return (
+    <div
+      ref={ref}
+      className={className}
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? 'translateY(0)' : `translateY(${y}px)`,
+        transition: reducedMotion
+          ? 'none'
+          : `opacity .5s ease-out ${delay}s, transform .5s cubic-bezier(.22,1,.36,1) ${delay}s`,
+      }}
+    >
+      {children}
+    </div>
+  );
 }
