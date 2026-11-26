@@ -20,13 +20,13 @@ export async function Hero() {
           <circle cx="1110" cy="205" r="7" fill="none" stroke="currentColor" />
         </svg>
 
-        <div className="container relative z-10 flex min-h-[calc(100svh-4rem)] flex-col items-center justify-center px-4 pb-24 pt-16 text-center sm:min-h-[calc(100svh-4.5rem)] sm:px-6 sm:pb-28 sm:pt-20 lg:min-h-[calc(100vh-5rem)] lg:pb-32 lg:pt-24">
+        <div className="container relative z-10 flex min-h-[calc(100svh-4rem)] flex-col items-start justify-center px-4 pb-24 pt-16 text-left sm:min-h-[calc(100svh-4.5rem)] sm:px-6 sm:pb-28 sm:pt-20 lg:min-h-[calc(100vh-5rem)] lg:pb-32 lg:pt-24">
           <p className="field-note animate-fade-rise text-[#69566b]">
             <ShieldCheck className="size-4" aria-hidden="true" /> {t('trustNote')}
           </p>
           <h1 className="font-display animate-fade-rise sketch-underline mt-6 max-w-5xl text-4xl font-normal leading-[1.02] tracking-[-1.5px] text-[#2a102d] sm:text-5xl md:text-6xl lg:text-7xl">{t('title')}</h1>
-          <p className="animate-fade-rise-delay mt-6 max-w-2xl text-base leading-relaxed text-[#69566b] sm:text-lg">{t('subtitle')}</p>
-          <a href="#land-search" className="animate-fade-rise-delay-2 mt-8 inline-flex min-h-12 items-center gap-3 rounded-full bg-[#2a102d] px-8 py-3 text-base font-medium text-white shadow-lg transition-transform duration-300 hover:scale-[1.03] focus-visible:ring-[#f2b134] sm:mt-10 sm:px-10">
+          <p className="animate-fade-rise-delay mt-6 max-w-xl text-base leading-relaxed text-[#69566b] sm:text-lg">{t('subtitle')}</p>
+          <a href="#land-search" className="animate-fade-rise-delay-2 mt-8 inline-flex min-h-12 items-center gap-3 rounded-md bg-[#2a102d] px-7 py-3 text-base font-medium text-white shadow-sm transition-colors hover:bg-[#3a2140] focus-visible:ring-[#f2b134] sm:mt-10">
             {t('chooseLocation')} <ArrowDown className="size-4" aria-hidden="true" />
           </a>
         </div>
