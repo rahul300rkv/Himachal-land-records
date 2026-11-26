@@ -3,7 +3,6 @@ import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { Logo } from './Logo';
-import { NAV_ITEMS } from './nav-items';
 import { SITE } from '@/lib/site';
 
 const LEGAL_LINKS = [
@@ -19,29 +18,14 @@ export function Footer() {
   const nav = useTranslations('Navigation');
   const year = new Date().getFullYear();
 
-  const exploreLinks = NAV_ITEMS;
-
   return (
-    <footer className="mt-16 border-t bg-muted/50">
+    <footer className="mt-16 border-t bg-muted/50 lg:pb-24">
       <div className="container py-12">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr]">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr]">
           <div className="max-w-sm space-y-4 sm:col-span-2 lg:col-span-1">
             <Logo />
             <p className="text-sm text-muted-foreground">{t('tagline')}</p>
           </div>
-
-          <nav aria-label={t('explore')}>
-            <h2 className="font-sans text-sm font-semibold tracking-normal">{t('explore')}</h2>
-            <ul className="mt-3 text-base">
-              {exploreLinks.map((item) => (
-                <li key={item.href}>
-                  <Link href={item.href} className={linkClass}>
-                    {nav(item.key)}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
 
           <nav aria-label={t('company')}>
             <h2 className="font-sans text-sm font-semibold tracking-normal">{t('company')}</h2>
@@ -51,14 +35,22 @@ export function Footer() {
                   {nav('about')}
                 </Link>
               </li>
-              <li><Link href="/contact" className={linkClass}>{nav('contact')}</Link></li>
-              <li><a href={`mailto:${SITE.contactEmail}`} className={linkClass}><Mail className="mr-2 size-4" aria-hidden="true" />{SITE.contactEmail}</a></li>
+              <li>
+                <Link href="/contact" className={linkClass}>
+                  {nav('contact')}
+                </Link>
+              </li>
+              <li>
+                <a href={`mailto:${SITE.contactEmail}`} className={linkClass}>
+                  <Mail className="mr-2 size-4" aria-hidden="true" />
+                  {SITE.contactEmail}
+                </a>
+              </li>
               {SITE.bloggerUrl && (
                 <li>
                   <a href={SITE.bloggerUrl} target="_blank" rel="noopener noreferrer" className={linkClass}>
                     <Image src="/images/blogger-logo.webp" alt="" width={16} height={16} className="mr-2 size-4 rounded-[3px]" />
                     Blogger
-                    
                   </a>
                 </li>
               )}
@@ -86,7 +78,7 @@ export function Footer() {
         >
           <TriangleAlert className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
           <span>
-            {t('disclaimerShort')}{' '}
+            {t('disclaimerShort)}{' '}
             <Link href="/disclaimer" className="whitespace-nowrap font-semibold underline underline-offset-2">
               {t('readDisclaimer')}
             </Link>
