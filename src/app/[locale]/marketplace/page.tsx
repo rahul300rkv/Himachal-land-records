@@ -73,13 +73,13 @@ export default async function MarketplacePage({ params, searchParams }: Props) {
         </Button>
       </header>
 
-      <section aria-labelledby="trust-title" className="mt-8 rounded-2xl border border-primary/15 bg-primary-soft/50 p-5 sm:p-6">
+      <section aria-labelledby="trust-title" className="mt-8 rounded-xl border border-border bg-card p-5 sm:p-6">
         <h2 id="trust-title" className="text-xl">{t('trust.title')}</h2>
         <p className="mt-1 max-w-3xl text-sm text-muted-foreground">{t('trust.body')}</p>
         <ul className="mt-4 grid gap-3 sm:grid-cols-3">
           {tools.map(({ key, href, icon: Icon }) => (
             <li key={key}>
-              <Link href={href} className="flex h-full flex-col gap-1 rounded-xl border bg-background p-4 transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+              <Link href={href} className="flex h-full flex-col gap-1 rounded-lg border bg-background p-4 transition-colors hover:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                 <span className="flex items-center gap-2 font-semibold">
                   <Icon className="size-4 text-primary" aria-hidden="true" />
                   {t(`trust.${key}.title`)}
