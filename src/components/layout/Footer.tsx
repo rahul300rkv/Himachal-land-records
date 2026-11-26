@@ -78,7 +78,7 @@ export function Footer() {
         >
           <TriangleAlert className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
           <span>
-            {t('disclaimerShort)}{' '}
+            {t('disclaimerShort')}{' '}
             <Link href="/disclaimer" className="whitespace-nowrap font-semibold underline underline-offset-2">
               {t('readDisclaimer')}
             </Link>
