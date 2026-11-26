@@ -47,7 +47,7 @@ export function DueDiligence() {
             <h3 className="text-2xl text-primary-foreground">{t('ctaTitle')}</h3>
             <p className="mt-2 max-w-2xl text-primary-foreground/80">{t('ctaBody')}</p>
           </div>
-          <Link href="/check" className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-white px-7 py-3.5 font-semibold text-primary transition hover:scale-[1.03]">
+          <Link href="/check" className="inline-flex shrink-0 items-center justify-center gap-2 rounded-md bg-white px-7 py-3.5 font-semibold text-primary transition-colors hover:bg-white/90">
             {t('cta')} <ArrowRight className="size-4" aria-hidden="true" />
           </Link>
         </Reveal>
