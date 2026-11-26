@@ -80,10 +80,7 @@
     @apply bg-background text-foreground;
     font-family: var(--font-body-editorial);
     font-feature-settings: 'kern' 1, 'liga' 1;
-    background-image:
-      linear-gradient(hsl(296 48% 12% / 0.035) 1px, transparent 1px),
-      linear-gradient(90deg, hsl(296 48% 12% / 0.035) 1px, transparent 1px);
-    background-size: 32px 32px;
+    background-image: none;
   }
 
   /* Devanagari needs more vertical room than Latin */
@@ -137,41 +134,35 @@
     color: hsl(var(--foreground));
     background: hsl(var(--card));
     border: 1px solid hsl(var(--border));
-    border-radius: 1.5rem;
-    box-shadow: 10px 12px 0 hsl(var(--foreground) / 0.09), 0 30px 90px hsl(var(--shadow-color) / 0.08);
+    border-radius: 1rem;
+    box-shadow: 0 12px 32px hsl(var(--shadow-color) / 0.08);
   }
   .land-feature {
     height: 100%;
     border: 1px solid hsl(var(--border));
-    border-radius: 1.5rem;
-    padding: 1.75rem;
+    border-radius: 1rem;
+    padding: 1.5rem;
     background: hsl(var(--card));
-    box-shadow: 6px 7px 0 hsl(var(--foreground) / 0.07);
-    transition: border-color 220ms ease, transform 220ms ease, box-shadow 220ms ease;
+    box-shadow: 0 8px 24px hsl(var(--shadow-color) / 0.06);
+    transition: border-color 180ms ease, box-shadow 180ms ease;
   }
   .land-feature:hover {
     border-color: hsl(var(--primary) / 0.55);
-    box-shadow: 0 24px 70px hsl(var(--shadow-color) / 0.1);
-    transform: translateY(-6px);
+    box-shadow: 0 14px 32px hsl(var(--shadow-color) / 0.1);
   }
   .due-diligence {
-    background:
-      radial-gradient(circle at 90% 10%, hsl(var(--leaf) / 0.09), transparent 32rem),
-      linear-gradient(180deg, hsl(var(--background)), hsl(var(--primary-soft) / 0.55));
+    background: hsl(var(--background));
   }
   .due-diligence__card {
     height: 100%;
     border: 1px solid hsl(var(--border));
-    border-radius: 1.5rem;
-    padding: 2rem;
-    background: hsl(var(--card) / 0.92);
-    box-shadow: 7px 8px 0 hsl(var(--foreground) / 0.07);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    background: hsl(var(--card));
+    box-shadow: 0 8px 24px hsl(var(--shadow-color) / 0.06);
   }
   .concept-grid {
-    background-image:
-      linear-gradient(hsl(296 48% 12% / 0.07) 1px, transparent 1px),
-      linear-gradient(90deg, hsl(296 48% 12% / 0.07) 1px, transparent 1px);
-    background-size: 24px 24px;
+    background-image: none;
   }
   .concept-card {
     position: relative;
@@ -202,8 +193,7 @@
     gap: 0.5rem;
     font-size: 0.875rem;
     font-weight: 600;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
+    letter-spacing: 0.03em;
   }
   .field-note::before {
     content: '';
@@ -217,11 +207,8 @@
     text-decoration-color: hsl(var(--primary) / 0.55);
   }
   .blueprint-grid {
-    background-color: #2a102d;
-    background-image:
-      linear-gradient(rgb(255 255 255 / 0.055) 1px, transparent 1px),
-      linear-gradient(90deg, rgb(255 255 255 / 0.055) 1px, transparent 1px);
-    background-size: 28px 28px;
+    background-color: #253231;
+    background-image: none;
   }
   .land-nav-active {
     color: hsl(var(--primary));
