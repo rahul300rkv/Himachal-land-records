@@ -9,6 +9,9 @@ import { Link, usePathname } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
 import { NAV_ITEMS } from './nav-items';
 
+// Primary tasks live in the fixed mobile dock; the menu keeps secondary destinations.
+const MOBILE_MENU_ITEMS = NAV_ITEMS.filter((item) => item.href === '/guides' || item.href === '/marketplace');
+
 /**
  * Hamburger menu for screens below `lg`.
  * The panel is absolutely positioned under the (sticky) header rather than using a
@@ -54,7 +57,7 @@ export function MobileNav({ className }: { className?: string }) {
             className="animate-menu-in absolute inset-x-0 top-full border-b bg-background shadow-lg"
           >
             <nav aria-label={t('mainNavigation')} className="container flex flex-col py-3">
-              {NAV_ITEMS.map((item) => {
+              {MOBILE_MENU_ITEMS.map((item) => {
                 const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
                 return (
                   <Link
