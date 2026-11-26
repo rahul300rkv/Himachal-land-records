@@ -1,6 +1,6 @@
 const en = {
-  title: 'Himachal Pradesh Stamp Duty Calculator',
-  intro: 'Estimate stamp duty and the registration fee for a sale, gift or lease. For sale and gift deeds the registration fee is calculated at 2% of the property value.',
+  title: 'Himachal Pradesh Stamp Duty & Registration Charges Calculator',
+  intro: 'Calculate Himachal Pradesh stamp duty and registration charges for a sale, gift or lease. For sale and gift deeds, the registration fee is estimated at 2% of the property value.',
   deed: 'Deed type', sale: 'Sale deed', gift: 'Gift deed', lease: 'Lease deed',
   term: 'Lease term', fixed: 'Fixed term', indefinite: 'Perpetual or indefinite',
   market: 'Assessed market value (₹)', consideration: 'Agreed purchase price (₹)',
@@ -32,8 +32,8 @@ const en = {
 export type StampDutyCopy = typeof en;
 
 const hi: StampDutyCopy = {
-  title: 'हिमाचल प्रदेश स्टाम्प शुल्क कैलकुलेटर',
-  intro: 'बिक्री, उपहार या पट्टे का स्टाम्प शुल्क और पंजीकरण शुल्क जानें। बिक्री और उपहार विलेख पर पंजीकरण शुल्क संपत्ति मूल्य के 2% पर निकाला जाता है।',
+  title: 'हिमाचल प्रदेश स्टाम्प शुल्क और पंजीकरण शुल्क कैलकुलेटर',
+  intro: 'बिक्री, उपहार या पट्टे के लिए हिमाचल प्रदेश का स्टाम्प शुल्क और पंजीकरण शुल्क निकालें। बिक्री और उपहार विलेख पर पंजीकरण शुल्क संपत्ति मूल्य के 2% पर अनुमानित है।',
   deed: 'दस्तावेज़ का प्रकार', sale: 'बिक्री विलेख', gift: 'उपहार विलेख', lease: 'पट्टा विलेख',
   term: 'पट्टे की अवधि', fixed: 'निश्चित अवधि', indefinite: 'स्थायी या अनिश्चित अवधि',
   market: 'आकलित बाजार मूल्य (₹)', consideration: 'तय बिक्री मूल्य (₹)',
