@@ -133,18 +133,6 @@ export default async function SearchPage({ params, searchParams }: Props) {
         <SearchForm key={JSON.stringify(initialLocation)} initialLocation={initialLocation} />
       </section>
 
-      
-      <section className="mt-4 grid gap-3 sm:grid-cols-3" aria-labelledby="search-trust-title">
-        <h2 id="search-trust-title" className="sr-only">{t('trust.title')}</h2>
-        <div className="rounded-lg border border-primary/15 bg-primary-soft p-4">
-          <p className="text-sm font-semibold text-primary">{t('trust.sourceTitle')}</p>
-          <p className="mt-1 text-sm text-muted-foreground">{t('trust.sourceBody')}</p>
-        </div>
-        <div className="rounded-lg border border-notice-border bg-notice p-4">
-          <p className="text-sm font-semibold text-notice-foreground">{t('trust.referenceTitle')}</p>
-          <p className="mt-1 text-sm text-notice-foreground/80">{t('trust.referenceBody')}</p>
-        </div>
-      </section>
 
       <section className="mt-10" aria-live="polite">
         {parsed.status === 'idle' && (
