@@ -30,7 +30,7 @@ const CONTENT_UPDATED = new Date('2026-11-27T00:00:00+05:30');
 
 function lastModified(path: string) {
   const guide = BLOG_GUIDES.find(({ slug }) => path === `/blog/${slug}`);
-  if (guide) return new Date(guide.publishedAt);
+  if (guide) return new Date(guide.updatedAt ?? guide.publishedAt);
   if (path === '/blog/7-documents-before-buying-land') return new Date('2026-11-15T09:00:00+05:30');
   return CONTENT_UPDATED;
 }
