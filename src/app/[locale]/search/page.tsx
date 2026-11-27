@@ -13,7 +13,6 @@ import { getCurrentUser } from '@/lib/auth';
 import { parseSearchParams, searchLandRecords } from '@/lib/search';
 import { pageMetadata } from '@/lib/seo';
 import { isSupabaseConfigured } from '@/lib/supabase/config';
-import { Link } from '@/i18n/navigation';
 import type { Locale } from '@/i18n/routing';
 
 type Props = {
@@ -109,10 +108,6 @@ export default async function SearchPage({ params, searchParams }: Props) {
         <div className="rounded-lg border border-primary/15 bg-primary-soft p-4">
           <p className="text-sm font-semibold text-primary">{t('trust.sourceTitle')}</p>
           <p className="mt-1 text-sm text-muted-foreground">{t('trust.sourceBody')}</p>
-        </div>
-        <div className="rounded-lg border border-border bg-card p-4">
-          <p className="text-sm font-semibold text-primary">{t('trust.mapTitle')}</p>
-          <p className="mt-1 text-sm text-muted-foreground">{t('trust.mapBody')}</p>
         </div>
         <div className="rounded-lg border border-notice-border bg-notice p-4">
           <p className="text-sm font-semibold text-notice-foreground">{t('trust.referenceTitle')}</p>
@@ -239,12 +234,6 @@ export default async function SearchPage({ params, searchParams }: Props) {
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t(`steps.${key}.body`)}</p>
             </article>
           ))}
-        </div>
-        <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold">
-          <Link href="/map" className="text-primary underline underline-offset-4">{t('links.map')}</Link>
-          <Link href="/check" className="text-primary underline underline-offset-4">{t('links.checker')}</Link>
-          <Link href="/verify" className="text-primary underline underline-offset-4">{t('links.verify')}</Link>
-          <Link href="/blog" className="text-primary underline underline-offset-4">{t('links.blog')}</Link>
         </div>
       </section>
 
