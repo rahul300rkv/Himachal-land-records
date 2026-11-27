@@ -2,7 +2,6 @@
 
 import 'leaflet/dist/leaflet.css';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import { maplibreGL } from '@maplibre/maplibre-gl-leaflet';
 import { Layers, LoaderCircle, Maximize2, Minimize2, MapPinned, Share2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
@@ -219,6 +218,9 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onShare, onStateCh
 
         const mod = await import('leaflet');
         const L = ('default' in mod ? mod.default : mod) as typeof import('leaflet');
+        // MapLibre must stay browser-only: importing it at module scope makes
+        // Next.js evaluate window during server prerendering.
+        const { maplibreGL } = await import('@maplibre/maplibre-gl-leaflet');
         if (cancelled || !containerRef.current) return;
 
         // tear down any previous instance
