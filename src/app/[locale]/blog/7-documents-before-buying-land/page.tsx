@@ -135,6 +135,20 @@ export default async function SevenDocumentsPage({ params }: Props) {
         url: `${articleUrl}#${key}`,
       })),
     },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      '@id': `${articleUrl}#how-to`,
+      name: t('title'),
+      description: t('intro'),
+      step: DOCUMENTS.map(({ key }, index) => ({
+        '@type': 'HowToStep',
+        position: index + 1,
+        name: t(`items.${key}.title`),
+        text: `${t(`items.${key}.shows`)} ${t(`items.${key}.flags`)}`,
+        url: `${articleUrl}#${key}`,
+      })),
+    },
   ];
 
   return (
