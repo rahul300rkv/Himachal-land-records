@@ -1166,8 +1166,6 @@
       "title": "Why use this search",
       "sourceTitle": "HimBhoomi-linked search",
       "sourceBody": "Location and record options come from the Himachal land-records workflow.",
-      "mapTitle": "Add the plot map",
-      "mapBody": "Match the Jamabandi Khasra number with the BhuNaksha parcel view.",
       "referenceTitle": "Reference first",
       "referenceBody": "This is an independent lookup. Confirm important details with a certified nakal."
     },
@@ -1187,12 +1185,6 @@
         "title": "Cross-check the plot",
         "body": "Read the record, compare its Khasra number with the BhuNaksha map, and follow up with the Tehsil or Patwari office before a transaction."
       }
-    },
-    "links": {
-      "map": "View the BhuNaksha plot map",
-      "checker": "Check a Jamabandi PDF",
-      "verify": "Open the verification checklist",
-      "blog": "Read the Himachal land guides"
     }
   },
   "LandTypes": {
