@@ -228,8 +228,6 @@ export default async function GuidePage({ params }: Props) {
   const faqSection = guide.sections.find(isFaqSection);
   const faqItems = faqSection ? parseFaq(faqSection.list?.[language] ?? []) : [];
   const modifiedAt = guide.updatedAt ?? guide.publishedAt;
-  const hasUpdate = Boolean(guide.updatedAt);
-
   const relatedGuides = BLOG_GUIDES.filter((g) => g.slug !== guide.slug).slice(0, 3);
 
   const jsonLd: Record<string, unknown>[] = [
@@ -303,11 +301,9 @@ export default async function GuidePage({ params }: Props) {
             <CalendarDays className="size-4" aria-hidden="true" />
             {labels.published}: <time dateTime={guide.publishedAt}>{formatDate(guide.publishedAt, language)}</time>
           </span>
-          {hasUpdate && (
-            <span>
-              {labels.updated}: <time dateTime={modifiedAt}>{formatDate(modifiedAt, language)}</time>
-            </span>
-          )}
+          <span>
+            {labels.updated}: <time dateTime={modifiedAt}>{formatDate(modifiedAt, language)}</time>
+          </span>
         </p>
 
         <p className="mt-5 text-lg leading-relaxed text-muted-foreground">{guide.intro[language]}</p>
