@@ -545,6 +545,7 @@
       "villageMap": "गाँव का नक्शा",
       "satellite": "सैटेलाइट",
       "mapOnly": "केवल नक्शा",
+      "opacity": "सीमा की पारदर्शिता",
       "fullscreen": "पूर्ण स्क्रीन में देखें",
       "exitFullscreen": "पूर्ण स्क्रीन से बाहर निकलें",
       "fullscreenHint": "पूर्ण स्क्रीन (F)",

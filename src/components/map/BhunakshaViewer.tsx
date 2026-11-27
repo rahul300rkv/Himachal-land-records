@@ -52,11 +52,14 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
   // keep live Leaflet objects in refs — never in state
   const mapRef        = useRef<import('leaflet').Map | null>(null);
   const satLayerRef   = useRef<import('leaflet').Layer | null>(null);
+  const villageLayerRef = useRef<import('leaflet').Layer | null>(null);
+  const selectedLayerRef = useRef<import('leaflet').Layer | null>(null);
   const viewRef       = useRef<{ center: [number, number]; zoom: number } | null>(null);
   const LRef          = useRef<typeof import('leaflet') | null>(null);
 
   const [state,        setState]        = useState<'loading' | 'ready' | 'error'>('loading');
   const [satellite,    setSatellite]    = useState(false);
+  const [cadastralOpacity, setCadastralOpacity] = useState(80);
   const [coordinates,  setCoordinates]  = useState('');
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -178,6 +181,13 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
       }
     }
   }, [satellite]);
+
+  /* ─── cadastral opacity: keep official parcel layers adjustable ──── */
+  useEffect(() => {
+    const opacity = cadastralOpacity / 100;
+    villageLayerRef.current?.setOpacity(opacity * 0.85);
+    selectedLayerRef.current?.setOpacity(opacity);
+  }, [cadastralOpacity]);
 
   /* ─── map init: runs once per gisCode+plot change ───────────────── */
   useEffect(() => {
@@ -322,25 +332,28 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
           attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         }).addTo(map);
 
-        const wmsLayers = [
-          createWmsGrid(
-            'VILLAGE_MAP',
-            'VILLAGE_MAP',
-            { transparent: 'true', state: '', gis_code: gisCode, overlay_codes: '' },
-            0.72,
-            'villageParcelPane',
-          ),
-          ...(data.selectedPlot ? [
-            createWmsGrid(
+        const villageLayer = createWmsGrid(
+          'VILLAGE_MAP',
+          'VILLAGE_MAP',
+          { transparent: 'true', state: '', gis_code: gisCode, overlay_codes: '' },
+          cadastralOpacity / 100 * 0.85,
+          'villageParcelPane',
+        );
+        const selectedLayer = data.selectedPlot
+          ? createWmsGrid(
               'PLOT_SELECTION',
               'PLOT_LIST',
               { transparent: 'true', state: '', gis_code: gisCode, overlay_codes: '', plot_id: data.selectedPlot.id },
-              1,
+              cadastralOpacity / 100,
               'selectedKhasraPane',
-            ),
-          ] : []),
-        ];
-        wmsLayers.forEach((l) => l.addTo(map));
+            )
+          : null;
+
+        villageLayerRef.current = villageLayer;
+        selectedLayerRef.current = selectedLayer;
+        villageLayer.addTo(map);
+        selectedLayer?.addTo(map);
+
 
         // Initial view
         if (savedView) {
@@ -391,6 +404,8 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
         mapRef.current = null;
       }
       satLayerRef.current = null;
+      villageLayerRef.current = null;
+      selectedLayerRef.current = null;
       viewRef.current = null;
       LRef.current = null;
     };
@@ -425,6 +440,21 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
             <Layers className="size-4" aria-hidden="true" />
             {satellite ? t('viewer.mapOnly') : t('viewer.satellite')}
           </button>
+
+          <label className="inline-flex min-h-9 items-center gap-2 rounded-full border bg-background px-3 text-xs font-semibold">
+            <span>{t('viewer.opacity')}</span>
+            <input
+              type="range"
+              min="20"
+              max="100"
+              step="5"
+              value={cadastralOpacity}
+              onChange={(event) => setCadastralOpacity(Number(event.target.value))}
+              aria-label={t('viewer.opacity')}
+              className="h-1.5 w-20 accent-primary"
+            />
+            <output>{cadastralOpacity}%</output>
+          </label>
 
           <button
             type="button"

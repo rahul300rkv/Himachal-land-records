@@ -545,6 +545,7 @@
       "villageMap": "Village map",
       "satellite": "Satellite",
       "mapOnly": "Map only",
+      "opacity": "Boundary opacity",
       "fullscreen": "View full screen",
       "exitFullscreen": "Exit full screen",
       "fullscreenHint": "Full screen (F)",
