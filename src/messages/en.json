@@ -506,7 +506,35 @@
       "body": "A tatima is the official field sketch prepared by the Patwari for a specific khasra or sub-division. It shows the plot's boundaries in relation to neighbouring parcels, roads, water channels and landmarks. A tatima is different from BhuNaksha: BhuNaksha is the digital cadastral map for the whole revenue village, while a tatima is a Patwari-certified sketch for a specific plot. If a seller provides a tatima, compare it against the BhuNaksha outline for the same khasra number. Discrepancies in shape, area or boundary points should be verified with the Patwari before you proceed."
     },
     "forSale": "Land for sale in this area",
-    "forSaleBody": "See marketplace listings in the area you selected."
+    "forSaleBody": "See marketplace listings in the area you selected.",
+    "plotSuggestions": "{count} plot numbers are available from BhuNaksha.",
+    "plotNotListed": "This Khasra was not returned for the selected village. Check the full number and map availability.",
+    "copyLink": "Copy link",
+    "linkCopied": "Link copied",
+    "shareLink": "Share link",
+    "shareTitle": "Himachal BhuNaksha Khasra view",
+    "shareBody": "Preliminary BhuNaksha view for this Khasra.",
+    "status": {
+      "loadingVillage": "Checking map availability for this village…",
+      "villageReady": "Village map is available. {count, plural, one {1 Khasra} other {# Khasra numbers}} returned by BhuNaksha.",
+      "villageError": "Village map availability could not be checked. You can still try the official report.",
+      "plotFound": "Khasra found in the BhuNaksha response.",
+      "plotUnavailable": "Village map loaded, but this Khasra was not returned by BhuNaksha.",
+      "viewerError": "The BhuNaksha viewer could not load. Check the location and try again."
+    },
+    "viewer": {
+      "khasra": "Khasra",
+      "villageMap": "Village map",
+      "satellite": "Satellite",
+      "mapOnly": "Map only",
+      "fullscreen": "View full screen",
+      "exitFullscreen": "Exit full screen",
+      "fullscreenHint": "Full screen (F)",
+      "exitFullscreenHint": "Exit full screen (F)",
+      "mapLabel": "BhuNaksha village map",
+      "loading": "Loading official BhuNaksha map…",
+      "error": "The official map could not be loaded. Check the location and Khasra number, or use the official map report."
+    }
   },
   "Guides": {
     "eyebrow": "Practical guides",

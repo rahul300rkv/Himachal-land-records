@@ -3,8 +3,15 @@
 import 'leaflet/dist/leaflet.css';
 import { Layers, LoaderCircle, Maximize2, Minimize2, MapPinned } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
-type Props = { gisCode: string; plot: string; attribution?: string };
+export type ViewerState = 'loading' | 'ready' | 'error' | 'plot-found' | 'plot-unavailable';
+type Props = {
+  gisCode: string;
+  plot: string;
+  attribution?: string;
+  onStateChange?: (state: ViewerState) => void;
+};
 type Extent = { xmin: number; ymin: number; xmax: number; ymax: number };
 type SelectedPlot = { minx: number; miny: number; maxx: number; maxy: number; id: string; kide: string };
 type WebkitEl  = HTMLElement & { webkitRequestFullscreen?: () => Promise<void> | void };
@@ -35,7 +42,8 @@ function latLngToUtm43(lat: number, lon: number): [number, number] {
   return [easting, northing];
 }
 
-export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
+export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: Props) {
+  const t = useTranslations('MapExplorer');
   const containerRef = useRef<HTMLDivElement>(null);
   const wrapperRef   = useRef<HTMLDivElement>(null);
   const toolbarRef   = useRef<HTMLDivElement>(null);
@@ -67,7 +75,9 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
       const statusH  = status?.offsetHeight  ?? 0;
       height = window.innerHeight - toolbarH - statusH;
     } else {
-      height = window.innerWidth >= 640 ? 480 : 420;
+      height = window.innerWidth >= 640
+        ? 480
+        : Math.min(560, Math.max(360, Math.round(window.innerHeight * 0.55)));
     }
     container.style.height = `${height}px`;
 
@@ -174,6 +184,7 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
     let cancelled = false;
 
     (async () => {
+      onStateChange?.('loading');
       try {
         const response = await fetch(
           `/api/bhunaksha/viewer?gisCode=${encodeURIComponent(gisCode)}&plot=${encodeURIComponent(plot)}`,
@@ -337,8 +348,12 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
         }
 
         setState('ready');
+        onStateChange?.(plot ? (data.selectedPlot ? 'plot-found' : 'plot-unavailable') : 'ready');
       } catch {
-        if (!cancelled) setState('error');
+        if (!cancelled) {
+          setState('error');
+          onStateChange?.('error');
+        }
       }
     })();
 
@@ -366,7 +381,7 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
       <div ref={toolbarRef} className="flex flex-wrap items-center justify-between gap-3 border-b bg-white px-4 py-3 text-sm">
         <span className="flex items-center gap-2 font-semibold">
           <MapPinned className="size-4 text-primary" />
-          {plot ? `Khasra ${plot}` : 'Village map'}
+          {plot ? `${t('viewer.khasra')} ${plot}` : t('viewer.villageMap')}
         </span>
 
         <div className="flex items-center gap-2">
@@ -381,14 +396,14 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
             className="inline-flex min-h-9 items-center gap-1.5 rounded-full border bg-white px-3 text-sm font-semibold hover:bg-muted transition-colors"
           >
             <Layers className="size-4" aria-hidden="true" />
-            {satellite ? 'Map only' : 'Satellite'}
+            {satellite ? t('viewer.mapOnly') : t('viewer.satellite')}
           </button>
 
           <button
             type="button"
             onClick={toggleFullscreen}
-            aria-label={isFullscreen ? 'Exit full screen' : 'View full screen'}
-            title={isFullscreen ? 'Exit full screen (F)' : 'Full screen (F)'}
+            aria-label={isFullscreen ? t('viewer.exitFullscreen') : t('viewer.fullscreen')}
+            title={isFullscreen ? t('viewer.exitFullscreenHint') : t('viewer.fullscreenHint')}
             className="inline-flex min-h-9 w-9 items-center justify-center rounded-full border bg-white hover:bg-muted transition-colors"
           >
             {isFullscreen
@@ -403,7 +418,7 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
       <div
         ref={containerRef}
         role="region"
-        aria-label="BhuNaksha village map"
+        aria-label={t('viewer.mapLabel')}
         className="w-full bg-white"
         style={{ height: '420px' }}
       />
@@ -412,8 +427,8 @@ export function BhunakshaViewer({ gisCode, plot, attribution }: Props) {
       {state !== 'ready' && (
         <div ref={statusRef} className="flex items-center justify-center gap-2 border-t bg-card px-4 py-3 text-sm text-muted-foreground">
           {state === 'loading'
-            ? <><LoaderCircle className="size-4 animate-spin" /> Loading official map…</>
-            : 'The official map could not be loaded. Use Open map report to continue.'
+            ? <><LoaderCircle className="size-4 animate-spin" /> {t('viewer.loading')}</>
+            : t('viewer.error')
           }
         </div>
       )}

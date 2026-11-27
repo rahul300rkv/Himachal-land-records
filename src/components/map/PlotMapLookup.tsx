@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowUpRight, Copy, MapPinned } from 'lucide-react';
+import { ArrowUpRight, Copy, MapPinned, Share2 } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
@@ -12,6 +12,22 @@ import { Link } from '@/i18n/navigation';
 import { BhunakshaViewer } from './BhunakshaViewer';
 
 type Option = { id: string; name: string; hi?: string };
+type ViewerStatus = 'idle' | 'loading' | 'village-ready' | 'plot-found' | 'plot-unavailable' | 'error';
+type PlotApiValue = string | Record<string, unknown>;
+
+function normalizePlotNumbers(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  const numbers = value.flatMap((item: PlotApiValue) => {
+    if (typeof item === 'string' || typeof item === 'number') return [String(item).trim()];
+    if (!item || typeof item !== 'object') return [];
+    for (const key of ['plotno', 'plotNo', 'plot', 'khasra', 'khasraNo', 'name', 'value']) {
+      const candidate = item[key];
+      if (typeof candidate === 'string' || typeof candidate === 'number') return [String(candidate).trim()];
+    }
+    return [];
+  });
+  return [...new Set(numbers)].filter(Boolean).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+}
 
 export function PlotMapLookup() {
   const t = useTranslations('MapExplorer');
@@ -27,6 +43,11 @@ export function PlotMapLookup() {
   const [copied, setCopied] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [viewerOpen, setViewerOpen] = useState(false);
+  const [viewerStatus, setViewerStatus] = useState<ViewerStatus>('idle');
+  const [locationStatus, setLocationStatus] = useState<'idle' | 'loading' | 'ready' | 'error'>('idle');
+  const [availablePlots, setAvailablePlots] = useState<string[]>([]);
+  const [shareLink, setShareLink] = useState('');
+  const [linkCopied, setLinkCopied] = useState(false);
 
   // Opened from a marketplace listing: /map?gis=<10-digit village code>&plot=<khasra>.
   // Fill in the village and plot and show the map straight away.
@@ -39,6 +60,7 @@ export function PlotMapLookup() {
     setVillageId(gis.slice(4, 10));
     const plotParam = (searchParams.get('plot') ?? '').trim().slice(0, 50);
     if (plotParam) setPlot(plotParam);
+    setShareLink(window.location.href);
     setViewerOpen(true);
     const timer = window.setTimeout(() => document.getElementById('plot-map-viewer')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 400);
     return () => window.clearTimeout(timer);
@@ -77,6 +99,25 @@ export function PlotMapLookup() {
       .finally(() => setLoading(''));
   }, [districtId, tehsilId]);
 
+  useEffect(() => {
+    setAvailablePlots([]);
+    setLocationStatus('idle');
+    setViewerStatus('idle');
+    if (!districtId || !tehsilId || !villageId) return;
+    let cancelled = false;
+    setLocationStatus('loading');
+    fetch('/api/bhunaksha/viewer?gisCode=' + districtId + tehsilId + villageId)
+      .then(async (response) => {
+        const data = await response.json() as { extent?: unknown; plots?: unknown };
+        if (!response.ok || !data.extent) throw new Error('location');
+        if (cancelled) return;
+        setAvailablePlots(normalizePlotNumbers(data.plots));
+        setLocationStatus('ready');
+      })
+      .catch(() => { if (!cancelled) setLocationStatus('error'); });
+    return () => { cancelled = true; };
+  }, [districtId, tehsilId, villageId]);
+
   const district = districts.find((item) => item.id === districtId);
   const tehsil = tehsils.find((item) => item.id === tehsilId);
   const village = villages.find((item) => item.id === villageId);
@@ -86,21 +127,49 @@ export function PlotMapLookup() {
   );
 
   function validate() {
+    const normalizedPlot = plot.trim();
+    const plotNotListed = locationStatus === 'ready' && availablePlots.length > 0 && !availablePlots.includes(normalizedPlot);
     const next = {
       district: districtId ? '' : t('requiredDistrict'),
       tehsil: tehsilId ? '' : t('requiredTehsil'),
       village: villageId ? '' : t('requiredVillage'),
-      plot: plot.trim() ? '' : t('requiredPlot'),
+      plot: normalizedPlot ? (plotNotListed ? t('plotNotListed') : '') : t('requiredPlot'),
     };
     setErrors(next);
     return !Object.values(next).some(Boolean);
   }
 
+  function updateShareableUrl() {
+    const url = new URL(window.location.href);
+    url.searchParams.set('gis', districtId + tehsilId + villageId);
+    url.searchParams.set('plot', plot.trim());
+    window.history.replaceState(null, '', url);
+    setShareLink(url.toString());
+    return url.toString();
+  }
+
+  async function copyShareLink() {
+    const link = shareLink || updateShareableUrl();
+    await navigator.clipboard.writeText(link);
+    setLinkCopied(true);
+    window.setTimeout(() => setLinkCopied(false), 1800);
+  }
+
+  async function shareCurrentView() {
+    const link = shareLink || updateShareableUrl();
+    if (navigator.share) {
+      await navigator.share({ title: t('shareTitle'), text: t('shareBody'), url: link });
+    } else {
+      await copyShareLink();
+    }
+  }
+
   function openOfficialMap() {
     if (!validate()) return;
+    updateShareableUrl();
     setViewerOpen(true);
-    const locationCode = `${districtId}${tehsilId}${villageId}`;
-    window.open(`https://bhunakshahp.nic.in/plotreport/${locationCode}/${encodeURIComponent(plot.trim())}`, '_blank', 'noopener,noreferrer');
+    const locationCode = districtId + tehsilId + villageId;
+    window.open('https://bhunakshahp.nic.in/plotreport/' + locationCode + '/' + encodeURIComponent(plot.trim()), '_blank', 'noopener,noreferrer');
   }
 
   async function copyReference() {
@@ -162,21 +231,35 @@ export function PlotMapLookup() {
               inputMode="text"
               placeholder={t('plotPlaceholder')}
               aria-invalid={Boolean(errors.plot)}
+              list="bhunaksha-plot-options"
               aria-describedby={errors.plot ? 'plot-number-error' : 'plot-number-hint'}
               onChange={(event) => {
                 setPlot(event.target.value);
                 setErrors((current) => ({ ...current, plot: '' }));
               }}
             />
+            <datalist id="bhunaksha-plot-options">
+              {availablePlots.map((plotNumber) => <option key={plotNumber} value={plotNumber} />)}
+            </datalist>
             {errors.plot ? (
               <p id="plot-number-error" role="alert" className="mt-1.5 text-sm text-destructive">{errors.plot}</p>
             ) : (
-              <p id="plot-number-hint" className="mt-1.5 text-sm text-muted-foreground">{t('plotHint')}</p>
+              <p id="plot-number-hint" className="mt-1.5 text-sm text-muted-foreground">
+                {availablePlots.length > 0 ? t('plotSuggestions', { count: availablePlots.length }) : t('plotHint')}
+              </p>
             )}
           </div>
         </div>
 
-        <div className="mt-7 flex flex-col sm:flex-row">
+        <div className="mt-5 min-h-6" aria-live="polite">
+          {locationStatus === 'loading' && <p className="text-sm text-muted-foreground">{t('status.loadingVillage')}</p>}
+          {locationStatus === 'ready' && <p className="text-sm text-muted-foreground">{t('status.villageReady', { count: availablePlots.length })}</p>}
+          {locationStatus === 'error' && <p className="text-sm text-destructive">{t('status.villageError')}</p>}
+          {viewerStatus === 'plot-found' && <p className="text-sm font-medium text-leaf">{t('status.plotFound')}</p>}
+          {viewerStatus === 'plot-unavailable' && <p className="text-sm text-destructive">{t('status.plotUnavailable')}</p>}
+          {viewerStatus === 'error' && <p className="text-sm text-destructive">{t('status.viewerError')}</p>}
+        </div>
+        <div className="mt-3 flex flex-col gap-3 sm:flex-row">
           <Button type="button" size="lg" onClick={openOfficialMap}>
             {t('openOfficial')} <ArrowUpRight aria-hidden="true" />
           </Button>
@@ -195,9 +278,21 @@ export function PlotMapLookup() {
           <div className="mt-6 rounded-lg border bg-background p-4">
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">{t('reference')}</p>
             <p className="mt-2 break-words text-sm font-medium">{reference}</p>
-            <button type="button" onClick={copyReference} className="mt-3 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-primary hover:underline">
-              <Copy className="size-4" aria-hidden="true" /> {copied ? t('copied') : t('copy')}
-            </button>
+            <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2">
+              <button type="button" onClick={copyReference} className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-primary hover:underline">
+                <Copy className="size-4" aria-hidden="true" /> {copied ? t('copied') : t('copy')}
+              </button>
+              {shareLink && (
+                <>
+                  <button type="button" onClick={copyShareLink} className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-primary hover:underline">
+                    <Copy className="size-4" aria-hidden="true" /> {linkCopied ? t('linkCopied') : t('copyLink')}
+                  </button>
+                  <button type="button" onClick={shareCurrentView} className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-primary hover:underline">
+                    <Share2 className="size-4" aria-hidden="true" /> {t('shareLink')}
+                  </button>
+                </>
+              )}
+            </div>
           </div>
         )}
         {districtId && (
@@ -213,7 +308,15 @@ export function PlotMapLookup() {
         )}
       </aside>
       {viewerOpen && districtId && tehsilId && villageId && (
-        <div id="plot-map-viewer" className="scroll-mt-20 lg:col-span-2"><BhunakshaViewer gisCode={`${districtId}${tehsilId}${villageId}`} plot={plot.trim()} attribution={reference} /></div>
+        <div id="plot-map-viewer" className="scroll-mt-20 lg:col-span-2">
+          <BhunakshaViewer
+            key={shareLink || (districtId + tehsilId + villageId + '-' + plot.trim())}
+            gisCode={districtId + tehsilId + villageId}
+            plot={plot.trim()}
+            attribution={reference}
+            onStateChange={setViewerStatus}
+          />
+        </div>
       )}
     </div>
   );
