@@ -241,12 +241,13 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
           return pane;
         };
 
-        // Village parcels: neutral, low-contrast background context.
+        // Other village parcels: light sky-blue boundaries with no grey wash.
+        // The official raster remains transparent outside its boundary pixels.
         createDisplayPane(
           'villageParcelPane',
           430,
-          0.64,
-          'grayscale(0.72) saturate(0.48) brightness(1.14) contrast(1.28)',
+          0.68,
+          'brightness(0) saturate(100%) invert(79%) sepia(19%) saturate(1020%) hue-rotate(164deg) brightness(96%) contrast(88%)',
         );
         // Selected Khasra: recolour the official raster pixels toward plum
         // and keep the layer above both OSM and satellite imagery.
