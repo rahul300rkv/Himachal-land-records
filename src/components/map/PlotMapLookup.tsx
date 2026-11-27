@@ -344,6 +344,64 @@ export function PlotMapLookup() {
           />
         </div>
       )}
+
+      {viewerOpen && districtId && tehsilId && villageId && (
+        <section
+          className="relative z-10 mx-3 -mt-8 rounded-2xl border border-border bg-card p-5 shadow-xl sm:p-6 lg:col-span-2"
+          aria-labelledby="plot-summary-title"
+        >
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">{t('plotCard.eyebrow')}</p>
+              <h2 id="plot-summary-title" className="mt-1 text-2xl font-semibold">{t('plotCard.title')} {plot.trim()}</h2>
+              <p className="mt-1 text-sm text-muted-foreground">{reference}</p>
+            </div>
+            <span className="inline-flex w-fit items-center rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary">
+              {viewerStatus === 'plot-found'
+                ? t('plotCard.found')
+                : viewerStatus === 'plot-unavailable'
+                  ? t('plotCard.unavailable')
+                  : t('plotCard.pending')}
+            </span>
+          </div>
+
+          <div className="mt-5 grid gap-3 sm:grid-cols-3">
+            <div className="rounded-xl bg-muted/50 p-4">
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t('plotCard.source')}</p>
+              <p className="mt-1 font-semibold">{t('plotCard.sourceValue')}</p>
+            </div>
+            <div className="rounded-xl bg-muted/50 p-4">
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t('plotCard.record')}</p>
+              <p className="mt-1 font-semibold">{t('plotCard.notChecked')}</p>
+            </div>
+            <div className="rounded-xl bg-muted/50 p-4">
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t('plotCard.area')}</p>
+              <p className="mt-1 font-semibold">{t('plotCard.notAvailable')}</p>
+            </div>
+          </div>
+
+          <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+            {t('plotCard.preliminary')}
+          </p>
+
+          <div className="mt-5 flex flex-wrap gap-2">
+            <Link href="/search" className="inline-flex min-h-11 items-center rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
+              {t('plotCard.jamabandi')}
+            </Link>
+            <button type="button" onClick={openOfficialMap} className="inline-flex min-h-11 items-center rounded-full border px-4 py-2 text-sm font-semibold hover:bg-muted">
+              {t('plotCard.official')}
+            </button>
+            <Link href="/verify" className="inline-flex min-h-11 items-center rounded-full border px-4 py-2 text-sm font-semibold hover:bg-muted">
+              {t('plotCard.verification')}
+            </Link>
+            {canShare && (
+              <button type="button" onClick={shareCurrentView} className="inline-flex min-h-11 items-center rounded-full border px-4 py-2 text-sm font-semibold hover:bg-muted">
+                {linkCopied ? t('linkCopied') : t('plotCard.share')}
+              </button>
+            )}
+          </div>
+        </section>
+      )}
     </div>
   );
 }

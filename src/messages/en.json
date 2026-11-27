@@ -429,7 +429,27 @@
     "categoryBody": "Most circle-rate schedules in Himachal Pradesh separate land into categories — agricultural, orchard, residential, commercial — and may further subdivide by distance from a metalled road or by the revenue village or locality. A plot described as agricultural in the jamabandi may attract a different rate than the same plot after a land-use change has been approved. Read the category row that matches the current land-use entry in the official record, not what the seller describes it as. If the schedule lists a road-distance criterion, check the measurement against the actual access route."
   },
   "MapExplorer": {
-    "eyebrow": "Map tool",
+  {
+    "plotCard": {
+      "eyebrow": "Plot identity",
+      "title": "Selected Khasra",
+      "source": "Map source",
+      "sourceValue": "Himachal BhuNaksha",
+      "record": "Jamabandi",
+      "notChecked": "Not checked yet",
+      "area": "Area",
+      "notAvailable": "Not supplied by BhuNaksha",
+      "found": "Plot found in official map",
+      "unavailable": "Plot not found in official map",
+      "pending": "Checking official map",
+      "preliminary": "Preliminary map reference. Verify ownership, area, boundary and access through certified revenue records.",
+      "jamabandi": "Check Jamabandi",
+      "official": "Open official map",
+      "verification": "Verification checklist",
+      "share": "Share plot"
+    }
+  },
+  "eyebrow": "Map tool",
     "title": "Himachal BhuNaksha Map | Search Khasra Plot",
     "intro": "Prepare the exact district, tehsil, village and Khasra number, then open the Himachal Pradesh BhuNaksha plot map. A map helps with location and neighbours; it does not by itself prove title or access.",
     "formTitle": "Locate your plot",
