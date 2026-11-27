@@ -175,7 +175,7 @@ export default async function LocaleLayout({ children, params }: Props) {
           </a>
 
           <Header />
-          <main id="main" className="flex-1 pb-20 lg:pb-24">
+          <main id="main" className="flex-1 pb-6 lg:pb-8">
             {children}
           </main>
           <DesktopMagnificationDock />
