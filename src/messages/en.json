@@ -481,9 +481,9 @@
     },
     "overview": {
       "title": "Himachal Pradesh BhuNaksha overview",
-      "body": "Himachal Pradesh BhuNaksha is the state’s online Khasra and plot map. Select a district, tehsil and revenue village to locate a digitised parcel and view its outline beside neighbouring plots. The map is a location aid, not proof of ownership or legal access.",
-      "identify": "Check the plot number and shape against the village map or Tatima you were given.",
-      "compare": "Compare the location and plot number with the corresponding Jamabandi before relying on them for a land purchase."
+      "body": "Use this tool to open a digitised village parcel map from the official BhuNaksha location. Enter the same district, tehsil, village and Khasra details that appear in your Jamabandi.",
+      "identify": "Start with the exact revenue location and Khasra or subdivision number.",
+      "compare": "Use the map result as a location reference before checking the records and the plot position on the ground."
     },
     "faq": {
       "title": "Frequently asked questions",
