@@ -6,6 +6,7 @@ import { Pagination } from '@/components/search/Pagination';
 import { ResultCard } from '@/components/search/ResultCard';
 import { SaveSearchButton } from '@/components/search/SaveSearchButton';
 import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
+import { JsonLd } from '@/components/seo/JsonLd';
 import { RelatedTools } from '@/components/seo/RelatedTools';
 import { SearchForm } from '@/components/search/SearchForm';
 import { districtLabel, tehsilLabel } from '@/lib/data/districts';
@@ -90,9 +91,39 @@ export default async function SearchPage({ params, searchParams }: Props) {
           .join(', ')
       : '';
 
+  const structuredData: Record<string, unknown>[] = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      name: t('howTitle'),
+      description: t('howBody'),
+      step: (['one', 'two', 'three'] as const).map((key) => ({
+        '@type': 'HowToStep',
+        name: t(`steps.${key}.title`),
+        text: t(`steps.${key}.body`),
+      })),
+    },
+  ];
+
+  if (parsed.status === 'idle') {
+    structuredData.push({
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: (['a', 'b', 'c', 'd', 'e'] as const).map((key) => ({
+        '@type': 'Question',
+        name: t(`results.faq.${key}.q`),
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: t(`results.faq.${key}.a`),
+        },
+      })),
+    });
+  }
+
   return (
     <div className="container py-10 sm:py-14">
       <Breadcrumbs current="search" className="mb-6" />
+      <JsonLd data={structuredData} />
       <header className="max-w-2xl">
         <h1 className="text-3xl sm:text-4xl">{t('title')}</h1>
         <p className="mt-3 text-lg text-muted-foreground">{t('subtitle')}</p>
