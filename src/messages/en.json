@@ -449,7 +449,7 @@
   },
   "eyebrow": "Map tool",
     "title": "Himachal BhuNaksha Map | Search Khasra Plot",
-    "intro": "Prepare the exact district, tehsil, village and Khasra number, then open the Himachal Pradesh BhuNaksha plot map. A map helps with location and neighbours; it does not by itself prove title or access.",
+    "intro": "Use the Himachal Pradesh BhuNaksha (BhuNaksha HP) map to locate a Khasra plot by district, tehsil and village. Compare the plot map with Jamabandi and Tatima records before relying on it for a land purchase.",
     "formTitle": "Locate your plot",
     "formIntro": "Choose the official BhuNaksha location in order. The report opens directly for the selected plot.",
     "districtLabel": "District",
@@ -481,31 +481,31 @@
     },
     "overview": {
       "title": "Himachal Pradesh BhuNaksha overview",
-      "body": "BhuNaksha is Himachal Pradesh’s online parcel map. Use it to locate a Khasra within the selected revenue village and see its mapped outline alongside adjoining plots.",
+      "body": "Himachal Pradesh BhuNaksha is the state’s online Khasra and plot map. Select a district, tehsil and revenue village to locate a digitised parcel and view its outline beside neighbouring plots. The map is a location aid, not proof of ownership or legal access.",
       "identify": "Check the plot number and shape against the village map or Tatima you were given.",
       "compare": "Compare the location and plot number with the corresponding Jamabandi before relying on them for a land purchase."
     },
     "faq": {
       "title": "Frequently asked questions",
       "plotNumber": {
-        "question": "Where do I find the Plot / Khasra No.?",
-        "answer": "Look for the Khasra number in the Jamabandi for that revenue village. Enter it exactly as shown, including any slash or subdivision."
+        "question": "How can I check a Khasra map online in Himachal Pradesh?",
+        "answer": "Choose the district, tehsil or sub-tehsil and village in the map tool, then enter the Khasra number exactly as written in the Jamabandi, including a slash such as 128/2. The map is available only where the village has digitised BhuNaksha data."
       },
       "openReport": {
-        "question": "How do I view or save the plot report?",
-        "answer": "Choose the district, tehsil or sub-tehsil, and village. Enter the Khasra number and click Open Map. The official report opens in a new tab. If the report loads, use your browser’s Print option to save a PDF."
+        "question": "Where do I find the Khasra number and open its plot map?",
+        "answer": "The Khasra number is normally printed in the current Jamabandi or other revenue record. Select the same district, tehsil and village here, enter the number, and choose Open map report. The official viewer may open in a new tab; use the browser print option only after it loads successfully."
       },
       "missingReport": {
-        "question": "What if the map does not open?",
-        "answer": "Check the full location and Khasra number against your land record. If they match and the report still fails to load, try the official BhuNaksha viewer or ask the local revenue office about map availability."
+        "question": "Why is my Khasra not showing on BhuNaksha?",
+        "answer": "First check the district, tehsil, village and full Khasra or subdivision number. If they are correct, the village may not yet have digitised or published parcel data, or the government viewer may be temporarily unavailable. Confirm map availability with the Patwari or Tehsil office and ask for a Tatima where necessary."
       },
       "ownership": {
-        "question": "Can I use BhuNaksha to confirm ownership?",
-        "answer": "Use BhuNaksha to identify the mapped parcel. Check ownership separately against the current revenue record and the relevant registered documents."
+        "question": "What is the difference between BhuNaksha, Jamabandi and Tatima?",
+        "answer": "BhuNaksha is a digital parcel map showing location and boundaries. Jamabandi is the revenue record used to check recorded ownership, shares, area and mutations. Tatima is a plot-specific field sketch prepared by the revenue staff. Compare all three when a plot, subdivision or boundary is important."
       },
       "boundary": {
-        "question": "How do I confirm the boundary on the ground?",
-        "answer": "Compare the mapped outline with the village shajra or Tatima. For a boundary stakeout or dispute, ask the local revenue office about official demarcation."
+        "question": "Does BhuNaksha prove ownership or show Section 118 eligibility?",
+        "answer": "No. BhuNaksha does not prove ownership, title, access or eligibility under Section 118. Check the current Jamabandi, registered documents and the applicable legal requirements with the Tehsil office and a qualified advocate before entering into an agreement."
       },
       "subdivision": {
         "question": "What if a khasra number has been sub-divided?",
