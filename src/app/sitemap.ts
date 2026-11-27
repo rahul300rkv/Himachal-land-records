@@ -8,7 +8,6 @@ import { BLOG_GUIDES } from '@/lib/blog-guides';
 const PATHS = [
   '',
   '/search',
-  '/verify',
   '/check',
   '/marketplace',
   '/reports',
@@ -27,7 +26,7 @@ const PATHS = [
   '/privacy',
   '/terms',
 ];
-const CONTENT_UPDATED = new Date('2026-11-17T00:00:00+05:30');
+const CONTENT_UPDATED = new Date('2026-11-27T00:00:00+05:30');
 
 function lastModified(path: string) {
   const guide = BLOG_GUIDES.find(({ slug }) => path === `/blog/${slug}`);
