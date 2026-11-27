@@ -35,9 +35,9 @@ export function PlotMapLookup() {
   const [districts, setDistricts] = useState<Option[]>([]);
   const [tehsils, setTehsils] = useState<Option[]>([]);
   const [villages, setVillages] = useState<Option[]>([]);
-  const [districtId, setDistrictId] = useState('01');
-  const [tehsilId, setTehsilId] = useState('13');
-  const [villageId, setVillageId] = useState('003201');
+  const [districtId, setDistrictId] = useState('02');
+  const [tehsilId, setTehsilId] = useState('37');
+  const [villageId, setVillageId] = useState('011601');
   const [loading, setLoading] = useState<'districts' | 'tehsils' | 'villages' | ''>('districts');
   const [plot, setPlot] = useState('');
   const [copied, setCopied] = useState(false);
