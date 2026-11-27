@@ -200,7 +200,7 @@ export function PlotMapLookup() {
             plot={plot.trim()}
             attribution={reference}
             onStateChange={setViewerStatus}
-            onShare={canShare ? shareCurrentView : undefined}
+            onShare={districtId && tehsilId && villageId ? shareCurrentView : undefined}
           />
         </div>
       )}

@@ -62,7 +62,6 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onShare, onStateCh
   const [state,        setState]        = useState<'loading' | 'ready' | 'error'>('loading');
   const [satellite,    setSatellite]    = useState(false);
   const [cadastralOpacity, setCadastralOpacity] = useState(80);
-  const [coordinates,  setCoordinates]  = useState('');
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   /* ─── canvas sizing (never touches height via className) ─────────── */
@@ -389,11 +388,6 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onShare, onStateCh
           const c = map.getCenter();
           viewRef.current = { center: [c.lat, c.lng], zoom: map.getZoom() };
         });
-        map.on('mousemove', (e) =>
-          setCoordinates(`${e.latlng.lat.toFixed(6)}, ${e.latlng.lng.toFixed(6)}`),
-        );
-        map.on('mouseout', () => setCoordinates(''));
-
         // Re-add satellite if it was already enabled
         if (satellite) {
           const satL = L.tileLayer(
@@ -523,9 +517,6 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onShare, onStateCh
             <output>{cadastralOpacity}%</output>
           </label>
         </div>
-        <span className="max-w-full truncate font-mono sm:max-w-[20rem]" title={coordinates || attribution || 'Himachal BhuNaksha'}>
-          {coordinates || attribution || 'Himachal BhuNaksha'}
-        </span>
       </div>
 
       {/* status bar */}
