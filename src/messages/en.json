@@ -1128,6 +1128,14 @@
         "c": {
           "q": "Why does the Jamabandi year list change by village?",
           "a": "Years are supplied by HimBhoomi for the selected village, so older or newer records may differ between villages."
+        },
+        "d": {
+          "q": "Is this an official government website?",
+          "a": "No. HimLand Check is independent. It connects you to the HimBhoomi workflow and helps organize the result; it is not a government portal."
+        },
+        "e": {
+          "q": "Can the map prove ownership or exact possession?",
+          "a": "No. BhuNaksha is a spatial reference. Compare it with Jamabandi and obtain official or certified documents before relying on it."
         }
       }
     },
@@ -1153,7 +1161,39 @@
     "howBody": "The search connects to HimBhoomi — Himachal Pradesh's official land records portal — through the public interface. When you choose a district, tehsil, village and jamabandi year, the selectors load the options that HimBhoomi makes available for that combination. After you complete the CAPTCHA, HimBhoomi returns the record choices available for the selected location: Jamabandi (by khewat, khatauni or khasra number) or Shajra Nasab. Choose the identifier that matches the number in your record and load the official nakal. The receipt number returned by HimBhoomi is your reference for that specific record retrieval.",
     "whatTitle": "What to look for in the record",
     "whatBody": "Once the jamabandi loads, check four things. First, confirm the owner entries: the name, share and basis of ownership for every khata. Second, trace the mutation chain: each intkal entry records a change — sale, inheritance, gift, court order — with a date and status. A pending or rejected mutation needs follow-up at the Tehsil. Third, check the khasra area and land-use classification against what the seller stated. Fourth, read the remarks column: entries about mortgages, court stays or other charges appear there and are easy to miss when reading quickly. Use the nakal checker to scan these fields automatically and flag items that need attention.",
-    "captchaNote": "The CAPTCHA is controlled by HimBhoomi and cannot be bypassed or automated. If the CAPTCHA image does not load or the code is not accepted, use the New code button to request a fresh one. If HimBhoomi is temporarily unavailable, the search will show an error — this is a condition of the official portal and is outside our control."
+    "captchaNote": "The CAPTCHA is controlled by HimBhoomi and cannot be bypassed or automated. If the CAPTCHA image does not load or the code is not accepted, use the New code button to request a fresh one. If HimBhoomi is temporarily unavailable, the search will show an error — this is a condition of the official portal and is outside our control.",
+    "trust": {
+      "title": "Why use this search",
+      "sourceTitle": "HimBhoomi-linked search",
+      "sourceBody": "Location and record options come from the Himachal land-records workflow.",
+      "mapTitle": "Add the plot map",
+      "mapBody": "Match the Jamabandi Khasra number with the BhuNaksha parcel view.",
+      "referenceTitle": "Reference first",
+      "referenceBody": "This is an independent lookup. Confirm important details with a certified nakal."
+    },
+    "steps": {
+      "one": {
+        "label": "Step 1",
+        "title": "Choose the location",
+        "body": "Select the district, tehsil or sub-tehsil, village and a Jamabandi year offered for that location."
+      },
+      "two": {
+        "label": "Step 2",
+        "title": "Load the official record",
+        "body": "Complete the HimBhoomi CAPTCHA, then choose Jamabandi and the Khewat, Khatauni or Khasra number you need."
+      },
+      "three": {
+        "label": "Step 3",
+        "title": "Cross-check the plot",
+        "body": "Read the record, compare its Khasra number with the BhuNaksha map, and follow up with the Tehsil or Patwari office before a transaction."
+      }
+    },
+    "links": {
+      "map": "View the BhuNaksha plot map",
+      "checker": "Check a Jamabandi PDF",
+      "verify": "Open the verification checklist",
+      "blog": "Read the Himachal land guides"
+    }
   },
   "LandTypes": {
     "irrigated": "Irrigated",
