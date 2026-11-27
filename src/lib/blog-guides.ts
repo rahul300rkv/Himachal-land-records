@@ -3,6 +3,9 @@ type Localized = { en: string; hi: string };
 export type BlogGuide = {
   slug: string;
   image: string;
+  /** Optional second editorial image used inside longer guides. */
+  secondaryImage?: string;
+  secondaryImageAlt?: Localized;
   publishedAt: string;
   /** Optional. Used for the "Last updated" line and for dateModified in JSON-LD and metadata. */
   updatedAt?: string;
@@ -982,6 +985,114 @@ export const BLOG_GUIDES: BlogGuide[] = [
       { label: 'Outlook Money: Himachal Pradesh sets out new stamp duty structure', url: 'https://www.outlookmoney.com/news/himachal-pradesh-sets-out-new-stamp-duty-structure-for-property-deals' },
       { label: 'The Tribune: Himachal Vidhan Sabha passes Bill on stamp duty', url: 'https://www.tribuneindia.com/news/himachal/himachal-vidhan-sabha-passes-bill-hiking-stamp-duty/' },
       { label: 'Himachal Pradesh Revenue Department', url: 'https://himachal.nic.in/revenue' },
+    ],
+  },
+
+  {
+    slug: 'ehimbhoomi-himachal-land-records-guide',
+    image: '/images/ehimbhoomi-land-records-guide.webp',
+    secondaryImage: '/images/ehimbhoomi-khasra-map-guide.webp',
+    secondaryImageAlt: {
+      en: 'Illustrated cadastral map and highlighted Khasra parcel in Himachal Pradesh',
+      hi: 'हिमाचल प्रदेश के खसरा भूखंड और ततीमा शैली का चित्रित नक्शा',
+    },
+    publishedAt: '2026-11-27T16:00:00+05:30',
+    updatedAt: '2026-11-27T16:00:00+05:30',
+    readTime: { en: '9 minute guide', hi: '9 मिनट की मार्गदर्शिका' },
+    title: {
+      en: 'eHimBhoomi Himachal Land Records: Official Portal Guide',
+      hi: 'eHimBhoomi हिमाचल भूमि रिकॉर्ड: आधिकारिक पोर्टल गाइड',
+    },
+    summary: {
+      en: 'Learn what eHimBhoomi, HimBhoomi and BhuNaksha show, how to search a Jamabandi, and what HimLand Check adds before a land purchase.',
+      hi: 'जानें eHimBhoomi, HimBhoomi और BhuNaksha क्या दिखाते हैं, जमाबंदी कैसे खोजें और खरीद से पहले HimLand Check क्या अतिरिक्त सहायता देता है।',
+    },
+    intro: {
+      en: 'Himachal Pradesh has official online services for viewing Jamabandi and digitised cadastral maps. HimLand Check is an independent guide and verification layer—not a government portal and not a replacement for a certified nakal, registered deed, demarcation or professional advice. This guide explains how the pieces fit together so you can ask better questions before a transaction.',
+      hi: 'हिमाचल प्रदेश में जमाबंदी और डिजिटाइज़ किए गए भू-नक्शे देखने के लिए आधिकारिक ऑनलाइन सेवाएँ हैं। HimLand Check एक स्वतंत्र गाइड और प्रारंभिक जाँच परत है—यह सरकारी पोर्टल नहीं है और प्रमाणित नकल, पंजीकृत विलेख, निशानदेही या पेशेवर सलाह का विकल्प नहीं है। यह गाइड बताती है कि ये सेवाएँ एक-दूसरे से कैसे जुड़ती हैं।',
+    },
+    sections: [
+      {
+        title: { en: 'What eHimBhoomi and HimBhoomi are for', hi: 'eHimBhoomi और HimBhoomi किस काम आते हैं' },
+        body: {
+          en: 'The Himachal Pradesh Revenue Department links citizens to eHimBhoomi services for viewing copies of the Record of Rights, including Jamabandi and Shajra Nasb, where the village data and service are available. The HimBhoomi public interface lets a user select the district, tehsil, village or Hadbast number and Jamabandi year. It may also provide a receipt number so a previous request can be retrieved. Availability and displayed data depend on the concerned revenue records and digitisation status.',
+          hi: 'हिमाचल प्रदेश राजस्व विभाग नागरिकों को eHimBhoomi सेवाओं से जोड़ता है, जहाँ उपलब्धता के अनुसार अधिकार अभिलेख, जमाबंदी और शजरा नस्ब की प्रतियाँ देखी जा सकती हैं। HimBhoomi इंटरफेस में जिला, तहसील, गाँव/हदबस्त नंबर और जमाबंदी वर्ष चुनकर खोज की जाती है। पहले किए गए अनुरोध को रसीद नंबर से फिर देखा जा सकता है। उपलब्धता और प्रदर्शित डेटा संबंधित राजस्व अभिलेख व डिजिटलीकरण स्थिति पर निर्भर करते हैं।',
+        },
+        link: { href: 'https://trainingehimbhoomi.hp.gov.in/citizen', label: { en: 'Open official eHimBhoomi services', hi: 'आधिकारिक eHimBhoomi सेवाएँ खोलें' } },
+      },
+      {
+        title: { en: 'How to search a Himachal Jamabandi', hi: 'हिमाचल जमाबंदी कैसे खोजें' },
+        body: {
+          en: 'Start with the exact property identity, not the seller’s name alone. Select the district, tehsil or sub-tehsil, revenue village, Hadbast number where shown, and the relevant Jamabandi year. Search the owner or cultivator entry and record every Khewat, Khatauni and Khasra number connected to the offer. Retain the receipt or reference number and note the displayed data date. A name match is only one clue: compare shares, area, land class, remarks, mutation references and the registered document chain.',
+          hi: 'सिर्फ विक्रेता के नाम से शुरुआत न करें। जिला, तहसील/उप-तहसील, राजस्व गाँव, जहाँ दिखे वहाँ हदबस्त नंबर और संबंधित जमाबंदी वर्ष चुनें। प्रस्ताव से जुड़े सभी खेवट, खतौनी और खसरा नंबर लिखें। रसीद/संदर्भ नंबर और प्रदर्शित डेटा तिथि सुरक्षित रखें। नाम का मिलान केवल एक संकेत है—हिस्सा, क्षेत्रफल, भूमि वर्ग, टिप्पणियाँ, इंतकाल संदर्भ और पंजीकृत दस्तावेज़ों की कड़ी भी मिलाएँ।',
+        },
+        link: { href: 'https://himbhoomilmk.nic.in/viewlandrecords.aspx', label: { en: 'Open the official HimBhoomi record search', hi: 'आधिकारिक HimBhoomi रिकॉर्ड खोज खोलें' } },
+      },
+      {
+        title: { en: 'What BhuNaksha adds—and what it cannot prove', hi: 'BhuNaksha क्या जोड़ता है और क्या सिद्ध नहीं करता' },
+        body: {
+          en: 'BhuNaksha or a digitised plot map can help you locate a Khasra, see neighbouring plots and compare the broad shape with a Tatima or site visit. The Revenue Department notes that map copies are available only where digitisation is complete. A map is not, by itself, proof of ownership, lawful access, possession, buildability or the exact boundary pointed out by a broker. When the map is missing, outdated or inconsistent, request the relevant official Tatima, demarcation or revenue-office clarification.',
+          hi: 'BhuNaksha या डिजिटाइज़ प्लॉट नक्शा खसरा का स्थान, पड़ोसी भूखंड और ततीमा/मौके से मोटा मिलान समझने में मदद कर सकता है। राजस्व विभाग के अनुसार नक्शा वहीं उपलब्ध होता है जहाँ डिजिटलीकरण पूरा है। नक्शा अकेले स्वामित्व, कानूनी रास्ता, कब्जा, निर्माण-योग्यता या दलाल द्वारा दिखाई गई सीमा सिद्ध नहीं करता। नक्शा न मिले या असंगत हो तो आधिकारिक ततीमा, निशानदेही या राजस्व कार्यालय से स्पष्टीकरण लें।',
+        },
+        link: { href: 'https://bhunakshahp.nic.in/', label: { en: 'Open official BhuNaksha HP', hi: 'आधिकारिक BhuNaksha HP खोलें' } },
+      },
+      {
+        title: { en: 'What HimLand Check adds', hi: 'HimLand Check क्या अतिरिक्त सहायता देता है' },
+        body: {
+          en: 'HimLand Check is an independent website that helps users search, read and cross-check public land-record information in one workflow. Its Jamabandi checker can surface fields and warning signals in an uploaded PDF, its map view can help place a Khasra on an OpenStreetMap base, and its reports organise questions for a pre-purchase review. These are explanatory and preliminary tools. They do not certify a record, issue a map, establish title or represent the Government of Himachal Pradesh.',
+          hi: 'HimLand Check एक स्वतंत्र वेबसाइट है जो सार्वजनिक भूमि रिकॉर्ड जानकारी को एक ही वर्कफ़्लो में खोजने, पढ़ने और मिलाने में सहायता करती है। जमाबंदी चेकर PDF के फ़ील्ड और चेतावनी संकेत दिखा सकता है, नक्शा दृश्य OpenStreetMap आधार पर खसरा का स्थान समझने में मदद कर सकता है और रिपोर्ट खरीद-पूर्व प्रश्न व्यवस्थित करती है। ये प्रारंभिक और व्याख्यात्मक उपकरण हैं। ये रिकॉर्ड प्रमाणित, नक्शा जारी, स्वामित्व स्थापित या हिमाचल सरकार का प्रतिनिधित्व नहीं करते।',
+        },
+        link: { href: '/en/check', label: { en: 'Try the Jamabandi checker', hi: 'जमाबंदी चेकर आज़माएँ' } },
+      },
+      {
+        title: { en: 'A safer pre-purchase sequence', hi: 'खरीद से पहले सुरक्षित क्रम' },
+        body: {
+          en: 'Use the official portals for the source records, then use a guide or checker to organise your review. Compare the Jamabandi with the seller’s registered deed and chain deeds; compare Khasra, area and shares with the map or Tatima; inspect mutation, mortgage and land-use remarks; confirm Section 118 or other eligibility questions with the competent authority; and obtain current certified copies or professional advice before paying a token or signing. If any identity, area, access or ownership detail conflicts, pause the transaction until it is resolved in writing.',
+          hi: 'मूल अभिलेख के लिए आधिकारिक पोर्टल उपयोग करें और फिर गाइड/चेकर से जाँच व्यवस्थित करें। जमाबंदी को विक्रेता के पंजीकृत विलेख और पिछली डीड से मिलाएँ; खसरा, क्षेत्रफल और हिस्से को नक्शे/ततीमा से मिलाएँ; इंतकाल, बंधक और भूमि-उपयोग टिप्पणियाँ पढ़ें; धारा 118 या अन्य पात्रता सक्षम प्राधिकरण से पक्की करें; और टोकन देने या हस्ताक्षर से पहले वर्तमान प्रमाणित प्रतियाँ/पेशेवर सलाह लें। कोई विरोध हो तो लिखित समाधान तक सौदा रोकें।',
+        },
+        list: {
+          en: [
+            'Official record: use eHimBhoomi or HimBhoomi for the available Jamabandi/RoR copy.',
+            'Map check: use BhuNaksha where digitisation is available, then compare with Tatima or demarcation.',
+            'Interpretation: use HimLand Check to organise fields, red flags and follow-up questions.',
+            'Final verification: confirm certified documents and legal eligibility with the competent office or a qualified Himachal property lawyer.',
+          ],
+          hi: [
+            'आधिकारिक रिकॉर्ड: उपलब्ध जमाबंदी/RoR प्रति के लिए eHimBhoomi या HimBhoomi उपयोग करें।',
+            'नक्शा जाँच: डिजिटलीकरण उपलब्ध होने पर BhuNaksha देखें और ततीमा/निशानदेही से मिलाएँ।',
+            'समझ: फ़ील्ड, चेतावनी और आगे के प्रश्न व्यवस्थित करने के लिए HimLand Check उपयोग करें।',
+            'अंतिम सत्यापन: सक्षम कार्यालय या योग्य हिमाचली संपत्ति वकील से प्रमाणित दस्तावेज़ और कानूनी पात्रता जाँचें।',
+          ],
+        },
+      },
+      {
+        title: { en: 'Frequently asked questions', hi: 'अक्सर पूछे जाने वाले प्रश्न' },
+        body: { en: 'These answers describe a practical workflow, not a legal opinion.', hi: 'ये उत्तर व्यावहारिक वर्कफ़्लो बताते हैं, कानूनी राय नहीं।' },
+        list: {
+          en: [
+            'Is HimLand Check the official eHimBhoomi portal? No. HimLand Check is independent; use the Government of Himachal Pradesh Revenue Department and its linked services for official records.',
+            'Does BhuNaksha prove ownership? No. It is a map reference and must be read with the Jamabandi, title documents and, when needed, Tatima or demarcation.',
+            'Can I rely on a downloaded Jamabandi PDF for a purchase? Use it for preliminary checking, then obtain the current certified copy and verify the document chain before committing money.',
+            'Why is a Khasra map unavailable? The village or tehsil may not yet have completed map digitisation, or the service may not have that map stage available. Ask the revenue office about the official map or demarcation.',
+          ],
+          hi: [
+            'क्या HimLand Check आधिकारिक eHimBhoomi पोर्टल है? नहीं। HimLand Check स्वतंत्र वेबसाइट है; आधिकारिक रिकॉर्ड के लिए हिमाचल सरकार के राजस्व विभाग और उसके लिंक किए पोर्टल उपयोग करें।',
+            'क्या BhuNaksha स्वामित्व सिद्ध करता है? नहीं। यह नक्शा संदर्भ है; इसे जमाबंदी, टाइटल दस्तावेज़ और जरूरत पर ततीमा/निशानदेही से मिलाएँ।',
+            'क्या डाउनलोड की गई जमाबंदी PDF पर खरीद के लिए भरोसा कर सकते हैं? प्रारंभिक जाँच के लिए उपयोग करें, फिर वर्तमान प्रमाणित प्रति और दस्तावेज़ों की कड़ी सत्यापित करें।',
+            'खसरा नक्शा उपलब्ध क्यों नहीं है? गाँव/तहसील का नक्शा डिजिटलीकरण पूरा न हुआ हो सकता है या उस चरण का नक्शा उपलब्ध न हो। राजस्व कार्यालय से आधिकारिक नक्शा/निशानदेही पूछें।',
+          ],
+        },
+      },
+    ],
+    takeaway: {
+      en: 'Use eHimBhoomi, HimBhoomi and BhuNaksha as the official starting points. Use HimLand Check to understand and organise the evidence, then finish with current certified records, document-chain review and competent professional or revenue-office verification.',
+      hi: 'eHimBhoomi, HimBhoomi और BhuNaksha को आधिकारिक शुरुआत मानें। प्रमाण समझने और व्यवस्थित करने के लिए HimLand Check उपयोग करें, फिर वर्तमान प्रमाणित रिकॉर्ड, दस्तावेज़ों की कड़ी और सक्षम पेशेवर/राजस्व कार्यालय से अंतिम सत्यापन करें।',
+    },
+    sources: [
+      { label: 'Himachal Pradesh Revenue Department', url: 'https://himachal.nic.in/revenue' },
+      { label: 'eHimBhoomi Citizen Services', url: 'https://trainingehimbhoomi.hp.gov.in/citizen' },
+      { label: 'HimBhoomi public land records', url: 'https://himbhoomilmk.nic.in/viewlandrecords.aspx' },
+      { label: 'BhuNaksha HP', url: 'https://bhunakshahp.nic.in/' },
     ],
   },
 ];

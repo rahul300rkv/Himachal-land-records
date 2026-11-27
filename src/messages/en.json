@@ -430,8 +430,8 @@
   },
   "MapExplorer": {
     "eyebrow": "Map tool",
-    "title": "Himachal BhuNaksha Map | Search Plot by Khasra",
-    "intro": "Prepare the exact district, tehsil, village and Khasra number, then open the Himachal Pradesh BhuNaksha plot map.",
+    "title": "Himachal BhuNaksha Map | Search Khasra Plot",
+    "intro": "Prepare the exact district, tehsil, village and Khasra number, then open the Himachal Pradesh BhuNaksha plot map. A map helps with location and neighbours; it does not by itself prove title or access.",
     "formTitle": "Locate your plot",
     "formIntro": "Choose the official BhuNaksha location in order. The report opens directly for the selected plot.",
     "districtLabel": "District",
@@ -891,8 +891,8 @@
   },
   "Blog": {
     "eyebrow": "Land due-diligence library",
-    "title": "Himachal Land Record Guides",
-    "intro": "Practical, source-aware guides to Jamabandi, Bhulekh, BhuNaksha, mutations and land checks before a property transaction.",
+    "title": "Himachal Land Record Guides: Jamabandi, Bhulekh & BhuNaksha",
+    "intro": "Practical guides to Himachal Jamabandi, Bhulekh, eHimBhoomi and BhuNaksha—plus the checks that help buyers understand a property before they pay.",
     "read": "Read the guide",
     "article": {
       "readTime": "10 minute guide",
@@ -966,8 +966,8 @@
     }
   },
   "Search": {
-    "title": "Himachal Bhulekh & Jamabandi Search",
-    "subtitle": "Choose the district, tehsil, village and Jamabandi year used by HimBhoomi (eHimBhoomi).",
+    "title": "Himachal Land Records Online: Jamabandi & Bhulekh Search",
+    "subtitle": "Choose the district, tehsil, village and Jamabandi year used by HimBhoomi (eHimBhoomi), then compare the result with the current official record.",
     "official": {
       "privacy": "The selectors and record choices below are loaded from HimBhoomi through HimLand Check. You remain on this website throughout the search.",
       "district": "District",
@@ -2243,8 +2243,8 @@
       "contextTitle": "What the checker reads and what it cannot",
       "contextBody": "The checker extracts text from the uploaded PDF and applies a fixed set of rules: it looks for owner entries and shares, mutation status codes, case-reference patterns and remarks that match known mortgage or charge formats. It does not search external databases — it reads only what is in the document you uploaded. If the PDF was scanned at low resolution, or if the Patwari's handwriting in the remarks column was not captured clearly, the extraction may miss entries that are present on the paper copy. Always compare the checker's output with the original PDF before drawing any conclusions."
     },
-    "title": "Himachal Jamabandi Checker",
-    "intro": "Upload a Bhulekh or HimBhoomi Jamabandi nakal PDF. We read it, run rule-based checks and show a score with the reasons. Always compare the result with the original record.",
+    "title": "Himachal Jamabandi Checker: Check Bhulekh Nakal PDF",
+    "intro": "Upload a Bhulekh or HimBhoomi Jamabandi nakal PDF. We read it, run rule-based checks and show a score with the reasons. This is a preliminary reading aid—always compare it with the original and certified record.",
     "choose": "Choose a PDF (up to 4 MB)",
     "analyze": "Check this record",
     "analyzing": "Reading the record… this can take up to a minute.",

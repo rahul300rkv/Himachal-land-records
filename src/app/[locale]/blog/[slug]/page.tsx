@@ -239,7 +239,7 @@ export default async function GuidePage({ params }: Props) {
       '@id': `${articleUrl}#article`,
       headline: guide.title[language],
       description: guide.summary[language],
-      image: [absoluteUrl(guide.image)],
+      image: [absoluteUrl(guide.image), ...(guide.secondaryImage ? [absoluteUrl(guide.secondaryImage)] : [])],
       datePublished: guide.publishedAt,
       dateModified: modifiedAt,
       inLanguage: language === 'hi' ? 'hi-IN' : 'en-IN',
@@ -314,7 +314,7 @@ export default async function GuidePage({ params }: Props) {
       </header>
 
       <figure className="concept-card relative mt-9 aspect-[16/9] overflow-hidden rounded-3xl border bg-muted shadow-[8px_9px_0_rgba(42,16,45,0.08)]">
-        <Image src={guide.image} alt="" fill priority sizes="(min-width: 1024px) 896px, 100vw" className="object-cover" />
+        <Image src={guide.image} alt={guide.title[language]} fill priority sizes="(min-width: 1024px) 896px, 100vw" className="object-cover" />
       </figure>
 
       {/* Table of contents */}
@@ -334,6 +334,18 @@ export default async function GuidePage({ params }: Props) {
           ))}
         </ol>
       </nav>
+
+      {guide.secondaryImage && (
+        <figure className="relative mt-8 aspect-[4/3] overflow-hidden rounded-3xl border bg-muted shadow-[8px_9px_0_rgba(42,16,45,0.08)] sm:aspect-[16/8]">
+          <Image
+            src={guide.secondaryImage}
+            alt={guide.secondaryImageAlt?.[language] ?? guide.title[language]}
+            fill
+            sizes="(min-width: 1024px) 896px, 100vw"
+            className="object-cover"
+          />
+        </figure>
+      )}
 
       {/* Sections */}
       <div className="mt-10 space-y-8">
