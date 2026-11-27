@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowUpRight, Copy, MapPinned, Share2 } from 'lucide-react';
+import { ArrowUpRight, MapPinned } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
@@ -40,7 +40,6 @@ export function PlotMapLookup() {
   const [villageId, setVillageId] = useState('011601');
   const [loading, setLoading] = useState<'districts' | 'tehsils' | 'villages' | ''>('districts');
   const [plot, setPlot] = useState('');
-  const [copied, setCopied] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [viewerOpen, setViewerOpen] = useState(true);
   const [viewerStatus, setViewerStatus] = useState<ViewerStatus>('idle');
@@ -191,13 +190,6 @@ export function PlotMapLookup() {
     window.open('https://bhunakshahp.nic.in/plotreport/' + locationCode + '/' + encodeURIComponent(plot.trim()), '_blank', 'noopener,noreferrer');
   }
 
-  async function copyReference() {
-    if (!reference) return;
-    await navigator.clipboard.writeText(reference);
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 1800);
-  }
-
   return (
     <div className="mt-8 space-y-6">
       {viewerOpen && districtId && tehsilId && villageId && (
@@ -208,6 +200,7 @@ export function PlotMapLookup() {
             plot={plot.trim()}
             attribution={reference}
             onStateChange={setViewerStatus}
+            onShare={canShare ? shareCurrentView : undefined}
           />
         </div>
       )}
@@ -313,27 +306,7 @@ export function PlotMapLookup() {
           <li>{t('step2')}</li>
           <li>{t('step3')}</li>
         </ol>
-        {reference && (
-          <div className="mt-6 rounded-xl border bg-background p-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">{t('reference')}</p>
-            <p className="mt-2 break-words text-sm font-medium">{reference}</p>
-            <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2">
-              <button type="button" onClick={copyReference} className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-primary hover:underline">
-                <Copy className="size-4" aria-hidden="true" /> {copied ? t('copied') : t('copy')}
-              </button>
-              {canShare && (
-                <>
-                  <button type="button" onClick={copyShareLink} className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-primary hover:underline">
-                    <Copy className="size-4" aria-hidden="true" /> {linkCopied ? t('linkCopied') : t('copyLink')}
-                  </button>
-                  <button type="button" onClick={shareCurrentView} className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-primary hover:underline">
-                    <Share2 className="size-4" aria-hidden="true" /> {t('shareLink')}
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
-        )}
+}
         {districtId && (
           <Link
             href={{ pathname: '/marketplace', query: { gis: `${districtId}${tehsilId}${tehsilId && villageId ? villageId : ''}` } }}

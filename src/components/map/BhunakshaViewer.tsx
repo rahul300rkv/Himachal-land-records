@@ -1,7 +1,7 @@
 'use client';
 
 import 'leaflet/dist/leaflet.css';
-import { Layers, LoaderCircle, Maximize2, Minimize2, MapPinned } from 'lucide-react';
+import { Layers, LoaderCircle, Maximize2, Minimize2, MapPinned, Share2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
@@ -10,6 +10,7 @@ type Props = {
   gisCode: string;
   plot: string;
   attribution?: string;
+  onShare?: () => void | Promise<void>;
   onStateChange?: (state: ViewerState) => void;
 };
 type Extent = { xmin: number; ymin: number; xmax: number; ymax: number };
@@ -48,6 +49,7 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
   const wrapperRef   = useRef<HTMLDivElement>(null);
   const toolbarRef   = useRef<HTMLDivElement>(null);
   const statusRef    = useRef<HTMLDivElement>(null);
+  const controlsRef  = useRef<HTMLDivElement>(null);
 
   // keep live Leaflet objects in refs — never in state
   const mapRef        = useRef<import('leaflet').Map | null>(null);
@@ -69,6 +71,7 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
     const container = containerRef.current;
     const toolbar   = toolbarRef.current;
     const status    = statusRef.current;
+    const controls  = controlsRef.current;
     if (!wrapper || !container) return;
 
     const isFs = !!(document.fullscreenElement ?? (document as WebkitDoc).webkitFullscreenElement);
@@ -76,7 +79,8 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
     if (isFs) {
       const toolbarH = toolbar?.offsetHeight ?? 48;
       const statusH  = status?.offsetHeight  ?? 0;
-      height = window.innerHeight - toolbarH - statusH;
+      const controlsH = controls?.offsetHeight ?? 0;
+      height = window.innerHeight - toolbarH - statusH - controlsH;
     } else {
       height = window.innerWidth >= 640
         ? 480
@@ -431,14 +435,34 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
       className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm"
       style={isFullscreen ? { display: 'flex', flexDirection: 'column', borderRadius: 0, border: 'none' } : undefined}
     >
-      {/* toolbar */}
-      <div ref={toolbarRef} className="flex flex-wrap items-center justify-between gap-3 border-b border-border/70 bg-card px-4 py-3 text-sm">
-        <span className="flex items-center gap-2 font-semibold">
-          <MapPinned className="size-4 text-primary" />
-          {plot ? `${t('viewer.khasra')} ${plot}` : t('viewer.villageMap')}
-        </span>
+      {/* top map panel */}
+      <div ref={toolbarRef} className="flex items-center justify-between gap-3 border-b border-border/70 bg-card px-4 py-3 text-sm">
+        <div className="flex min-w-0 items-center gap-2">
+          <MapPinned className="size-4 shrink-0 text-primary" />
+          <div className="min-w-0">
+            <p className="truncate font-semibold">
+              {plot ? t('viewer.khasra') + ' ' + plot : t('viewer.villageMap')}
+            </p>
+            {attribution && (
+              <p className="truncate text-xs text-muted-foreground" title={attribution}>
+                {attribution}
+              </p>
+            )}
+          </div>
+        </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2">
+          {onShare && (
+            <button
+              type="button"
+              onClick={() => void onShare()}
+              aria-label={t('shareLink')}
+              title={t('shareLink')}
+              className="inline-flex min-h-9 w-9 items-center justify-center rounded-full border bg-background transition-colors hover:bg-muted"
+            >
+              <Share2 className="size-4" aria-hidden="true" />
+            </button>
+          )}
           <button
             type="button"
             onClick={() => setSatellite((v) => !v)}
@@ -464,45 +488,44 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
         </div>
       </div>
 
-      <div className="relative">
-        {/* map canvas */}
-        <div
-          ref={containerRef}
-          role="region"
-          aria-label={t('viewer.mapLabel')}
-          className="w-full bg-muted/30"
-          style={{ height: '420px' }}
-        />
+      {/* map canvas */}
+      <div
+        ref={containerRef}
+        role="region"
+        aria-label={t('viewer.mapLabel')}
+        className="w-full bg-muted/30"
+        style={{ height: '420px' }}
+      />
 
-        <div className="pointer-events-none absolute inset-x-3 bottom-3 z-[1000] flex flex-wrap items-end justify-between gap-2 text-[11px] text-muted-foreground">
-          <div className="pointer-events-auto flex flex-wrap items-center gap-x-3 gap-y-2 rounded-xl border border-border/70 bg-card/90 px-3 py-2 shadow-lg backdrop-blur-sm" aria-label="Map layer controls">
-            <span className="inline-flex items-center gap-1.5">
-              <span className="h-0.5 w-5 rounded-full bg-[#7b3f78]" aria-hidden="true" />
-              Selected Khasra
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <span className="h-0.5 w-5 rounded-full bg-[#4aaec4]" aria-hidden="true" />
-              Other boundaries
-            </span>
-            <label className="inline-flex items-center gap-2 border-l border-border/70 pl-3 font-semibold">
-              <span>{t('viewer.opacity')}</span>
-              <input
-                type="range"
-                min="20"
-                max="100"
-                step="5"
-                value={cadastralOpacity}
-                onChange={(event) => setCadastralOpacity(Number(event.target.value))}
-                aria-label={t('viewer.opacity')}
-                className="h-1.5 w-20 accent-primary"
-              />
-              <output>{cadastralOpacity}%</output>
-            </label>
-          </div>
-          <span className="pointer-events-auto hidden max-w-full rounded-xl border border-border/70 bg-card/90 px-3 py-2 font-mono shadow-lg backdrop-blur-sm sm:inline-flex">
-            {coordinates || attribution || 'Himachal BhuNaksha'}
+      {/* controls below the map */}
+      <div ref={controlsRef} className="flex flex-wrap items-center justify-between gap-3 border-t border-border/70 bg-card px-3 py-2.5 text-[11px] text-muted-foreground" aria-label="Map layer controls">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+          <span className="inline-flex items-center gap-1.5">
+            <span className="h-0.5 w-5 rounded-full bg-[#7b3f78]" aria-hidden="true" />
+            Selected Khasra
           </span>
+          <span className="inline-flex items-center gap-1.5">
+            <span className="h-0.5 w-5 rounded-full bg-[#4aaec4]" aria-hidden="true" />
+            Other boundaries
+          </span>
+          <label className="inline-flex items-center gap-2 border-l border-border/70 pl-3 font-semibold">
+            <span>{t('viewer.opacity')}</span>
+            <input
+              type="range"
+              min="20"
+              max="100"
+              step="5"
+              value={cadastralOpacity}
+              onChange={(event) => setCadastralOpacity(Number(event.target.value))}
+              aria-label={t('viewer.opacity')}
+              className="h-1.5 w-20 accent-primary"
+            />
+            <output>{cadastralOpacity}%</output>
+          </label>
         </div>
+        <span className="max-w-full truncate font-mono sm:max-w-[20rem]" title={coordinates || attribution || 'Himachal BhuNaksha'}>
+          {coordinates || attribution || 'Himachal BhuNaksha'}
+        </span>
       </div>
 
       {/* status bar */}
