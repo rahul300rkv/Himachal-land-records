@@ -9,6 +9,7 @@ import { pageMetadata } from '@/lib/seo';
 import { absoluteUrl } from '@/lib/utils';
 
 const PUBLISHED_AT = '2026-11-15T09:00:00+05:30';
+const UPDATED_AT = '2026-11-27T23:00:00+05:30';
 
 const DOCUMENTS = [
   { key: 'jamabandi', url: 'https://himbhoomilmk.nic.in/viewlandrecords.aspx' },
@@ -51,7 +52,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: t('intro'),
     type: 'article',
     publishedTime: PUBLISHED_AT,
-    modifiedTime: PUBLISHED_AT,
+    modifiedTime: UPDATED_AT,
   });
 }
 
@@ -68,6 +69,7 @@ export default async function SevenDocumentsPage({ params }: Props) {
           home: 'होम',
           blog: 'ब्लॉग',
           published: 'प्रकाशित',
+          updated: 'अद्यतन',
           readTime: '7 दस्तावेज़ों की जाँच-सूची',
           toc: 'इस लेख में',
           checklist: 'त्वरित जाँच-सूची',
@@ -81,6 +83,7 @@ export default async function SevenDocumentsPage({ params }: Props) {
           home: 'Home',
           blog: 'Blog',
           published: 'Published',
+          updated: 'Last updated',
           readTime: '7-document checklist',
           toc: 'In this guide',
           checklist: 'Quick checklist',
@@ -102,7 +105,7 @@ export default async function SevenDocumentsPage({ params }: Props) {
       description: t('intro'),
       image: [absoluteUrl('/images/seven-land-documents.webp')],
       datePublished: PUBLISHED_AT,
-      dateModified: PUBLISHED_AT,
+      dateModified: UPDATED_AT,
       inLanguage: language === 'hi' ? 'hi-IN' : 'en-IN',
       mainEntityOfPage: articleUrl,
       author: { '@type': 'Organization', name: 'HimachalLand Check', url: absoluteUrl('/') },
@@ -157,6 +160,9 @@ export default async function SevenDocumentsPage({ params }: Props) {
           <span className="inline-flex items-center gap-1.5">
             <CalendarDays className="size-4" aria-hidden="true" />
             {labels.published}: <time dateTime={PUBLISHED_AT}>{formatDate(PUBLISHED_AT, language)}</time>
+          </span>
+          <span>
+            {labels.updated}: <time dateTime={UPDATED_AT}>{formatDate(UPDATED_AT, language)}</time>
           </span>
         </p>
         <p className="mt-5 text-lg leading-relaxed text-muted-foreground">{t('intro')}</p>
