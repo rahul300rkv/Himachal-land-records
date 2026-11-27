@@ -232,7 +232,10 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
           ymin = cy - viewH / 2; ymax = cy + viewH / 2;
         }
 
+        const defaultCenter: [number, number] = [31.9, 77.2];
         const map = L.map(containerRef.current, {
+          center: defaultCenter,
+          zoom: 8,
           scrollWheelZoom: false,
           attributionControl: true,
         });
@@ -327,6 +330,7 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
         // Base map — OSM roads and place labels remain unchanged beneath the
         // independently styled official cadastral layers.
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxNativeZoom: 19,
           maxZoom: 21,
           zIndex: 0,
           attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -355,17 +359,25 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
         selectedLayer?.addTo(map);
 
 
-        // Initial view
-        if (savedView) {
+        const validPoint = ([lat, lng]: [number, number]) =>
+          Number.isFinite(lat) && Number.isFinite(lng) &&
+          lat >= 30 && lat <= 34 && lng >= 74 && lng <= 80;
+        const validBounds = validPoint(sw) && validPoint(ne) && sw[0] < ne[0] && sw[1] < ne[1];
+
+        // Initial view: always keep a usable Himachal map even if the government
+        // service returns an incomplete extent for the default village.
+        if (savedView && validPoint(savedView.center)) {
           map.setView(savedView.center, savedView.zoom, { animate: false });
         } else if (data.selectedPlot) {
           const c = utm43ToLatLng(
             (data.selectedPlot.minx + data.selectedPlot.maxx) / 2,
             (data.selectedPlot.miny + data.selectedPlot.maxy) / 2,
           );
-          map.setView(c, 17, { animate: false });
-        } else {
+          map.setView(validPoint(c) ? c : defaultCenter, validPoint(c) ? 17 : 8, { animate: false });
+        } else if (validBounds) {
           map.fitBounds([sw, ne], { padding: [24, 24], maxZoom: 15 });
+        } else {
+          map.setView(defaultCenter, 8, { animate: false });
         }
 
         map.on('moveend', () => {
@@ -462,7 +474,7 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
           style={{ height: '420px' }}
         />
 
-        <div className="pointer-events-none absolute inset-x-3 bottom-3 z-20 flex flex-wrap items-end justify-between gap-2 text-[11px] text-muted-foreground">
+        <div className="pointer-events-none absolute inset-x-3 bottom-3 z-[1000] flex flex-wrap items-end justify-between gap-2 text-[11px] text-muted-foreground">
           <div className="pointer-events-auto flex flex-wrap items-center gap-x-3 gap-y-2 rounded-xl border border-border/70 bg-card/90 px-3 py-2 shadow-lg backdrop-blur-sm" aria-label="Map layer controls">
             <span className="inline-flex items-center gap-1.5">
               <span className="h-0.5 w-5 rounded-full bg-[#7b3f78]" aria-hidden="true" />
