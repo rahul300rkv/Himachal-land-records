@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { PlotMapLookup } from '@/components/map/PlotMapLookup';
 import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
 import { RelatedTools } from '@/components/seo/RelatedTools';
+import { JsonLd } from '@/components/seo/JsonLd';
 import type { Locale } from '@/i18n/routing';
 import { pageMetadata } from '@/lib/seo';
 
@@ -21,6 +22,19 @@ export default async function MapPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale as Locale);
   const t = await getTranslations('MapExplorer');
+  const faqItems = faqTopics.map((topic) => ({
+    '@type': 'Question',
+    name: t(`faq.${topic}.question`),
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: t(`faq.${topic}.answer`),
+    },
+  }));
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqItems,
+  };
   return (
     <article className="container max-w-6xl py-10 sm:py-14">
       <Breadcrumbs current="map" className="mb-6" />
@@ -33,20 +47,6 @@ export default async function MapPage({ params }: Props) {
       <Suspense fallback={null}>
         <PlotMapLookup />
       </Suspense>
-      <figure className="mt-8 overflow-hidden rounded-2xl border bg-card">
-        <figcaption className="border-b px-5 py-4 sm:px-7">
-          <h2 className="text-2xl">{t('sample.title')}</h2>
-        </figcaption>
-        {/* Use the supplied image directly so its report is available at full resolution. */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="https://mp-sample-docs.s3.ap-south-1.amazonaws.com/hp/hp-bhunaksha-sample-document.jpg"
-          alt={t('sample.mapAlt')}
-          loading="lazy"
-          decoding="async"
-          className="mx-auto block h-auto w-full max-w-3xl"
-        />
-      </figure>
       <section aria-labelledby="map-overview" className="mt-10 max-w-3xl">
         <h2 id="map-overview" className="text-2xl sm:text-3xl">{t('overview.title')}</h2>
         <p className="mt-3 text-muted-foreground">{t('overview.body')}</p>
@@ -54,6 +54,14 @@ export default async function MapPage({ params }: Props) {
           <li>{t('overview.identify')}</li>
           <li>{t('overview.compare')}</li>
         </ul>
+      </section>
+      <section aria-labelledby="map-context" className="mt-10 max-w-3xl">
+        <h2 id="map-context" className="text-2xl sm:text-3xl">{t('contextTitle')}</h2>
+        <p className="mt-3 text-muted-foreground">{t('contextBody')}</p>
+        <div className="mt-6 rounded-xl border border-border bg-card p-5 sm:p-6">
+          <h3 className="text-xl">{t('tatima.title')}</h3>
+          <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{t('tatima.body')}</p>
+        </div>
       </section>
       <section aria-labelledby="map-faq" className="mt-10 max-w-3xl">
         <h2 id="map-faq" className="text-2xl sm:text-3xl">{t('faq.title')}</h2>
@@ -68,8 +76,23 @@ export default async function MapPage({ params }: Props) {
           ))}
         </div>
       </section>
+      <figure className="mt-10 overflow-hidden rounded-2xl border bg-card">
+        <figcaption className="border-b px-5 py-4 sm:px-7">
+          <h2 className="text-2xl">{t('sample.title')}</h2>
+        </figcaption>
+        {/* Use the supplied image directly so its report is available at full resolution. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="https://mp-sample-docs.s3.ap-south-1.amazonaws.com/hp/hp-bhunaksha-sample-document.jpg"
+          alt={t('sample.mapAlt')}
+          loading="lazy"
+          decoding="async"
+          className="mx-auto block h-auto w-full max-w-3xl"
+        />
+      </figure>
       <p className="mt-5 rounded-xl border border-notice-border bg-notice px-4 py-3 text-sm text-notice-foreground">{t('notice')}</p>
       <RelatedTools current="map" />
+      <JsonLd data={faqSchema} />
     </article>
   );
 }
