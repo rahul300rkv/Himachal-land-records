@@ -43,7 +43,7 @@ function latLngToUtm43(lat: number, lon: number): [number, number] {
   return [easting, northing];
 }
 
-export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: Props) {
+export function BhunakshaViewer({ gisCode, plot, attribution, onShare, onStateChange }: Props) {
   const t = useTranslations('MapExplorer');
   const containerRef = useRef<HTMLDivElement>(null);
   const wrapperRef   = useRef<HTMLDivElement>(null);
