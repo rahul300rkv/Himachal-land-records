@@ -1,4 +1,4 @@
-use client';
+'use client';
 
 import 'leaflet/dist/leaflet.css';
 import { Layers, LoaderCircle, Maximize2, Minimize2, MapPinned } from 'lucide-react';

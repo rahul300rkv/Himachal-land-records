@@ -1,4 +1,4 @@
-use client';
+'use client';
 
 import { ArrowUpRight, Copy, MapPinned, Share2 } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
