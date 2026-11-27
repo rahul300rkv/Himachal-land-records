@@ -127,6 +127,24 @@ export function PlotMapLookup() {
     [district, tehsil, village, plot, t],
   );
 
+  function syncMapQuery(nextDistrict: string, nextTehsil: string, nextVillage: string, nextPlot: string) {
+    const url = new URL(window.location.href);
+    const gis = nextDistrict && nextTehsil && nextVillage
+      ? nextDistrict + nextTehsil + nextVillage
+      : '';
+    if (gis) {
+      url.searchParams.set('gis', gis);
+    } else {
+      url.searchParams.delete('gis');
+    }
+    if (gis && nextPlot.trim()) {
+      url.searchParams.set('plot', nextPlot.trim());
+    } else {
+      url.searchParams.delete('plot');
+    }
+    window.history.replaceState(null, '', url);
+  }
+
   function validate() {
     const normalizedPlot = plot.trim();
     const plotNotListed = locationStatus === 'ready' && availablePlots.length > 0 && !availablePlots.includes(normalizedPlot);
@@ -197,7 +215,9 @@ export function PlotMapLookup() {
           <div className="min-w-0">
             <Label htmlFor="map-district">{t('districtLabel')}</Label>
             <Select id="map-district" value={districtId} disabled={loading === 'districts'} aria-invalid={Boolean(errors.district)} onChange={(event) => {
-              setDistrictId(event.target.value); setTehsilId(''); setVillageId(''); setErrors((current) => ({ ...current, district: '', tehsil: '', village: '' }));
+              const nextDistrict = event.target.value;
+              setDistrictId(nextDistrict); setTehsilId(''); setVillageId(''); setErrors((current) => ({ ...current, district: '', tehsil: '', village: '' }));
+              syncMapQuery(nextDistrict, '', '', '');
             }}>
               <option value="">{loading === 'districts' ? t('loading') : t('districtPlaceholder')}</option>
               {districts.map((item) => <option key={item.id} value={item.id}>{locale === 'hi' ? item.hi : item.name}</option>)}
@@ -207,7 +227,9 @@ export function PlotMapLookup() {
           <div className="min-w-0">
             <Label htmlFor="map-tehsil">{t('tehsilLabel')}</Label>
             <Select id="map-tehsil" value={tehsilId} disabled={!districtId || loading === 'tehsils'} aria-invalid={Boolean(errors.tehsil)} onChange={(event) => {
-              setTehsilId(event.target.value); setVillageId(''); setErrors((current) => ({ ...current, tehsil: '', village: '' }));
+              const nextTehsil = event.target.value;
+              setTehsilId(nextTehsil); setVillageId(''); setErrors((current) => ({ ...current, tehsil: '', village: '' }));
+              syncMapQuery(districtId, nextTehsil, '', '');
             }}>
               <option value="">{loading === 'tehsils' ? t('loading') : t('tehsilPlaceholder')}</option>
               {tehsils.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
@@ -217,7 +239,9 @@ export function PlotMapLookup() {
           <div className="min-w-0">
             <Label htmlFor="map-village">{t('villageLabel')}</Label>
             <Select id="map-village" value={villageId} disabled={!tehsilId || loading === 'villages'} aria-invalid={Boolean(errors.village)} onChange={(event) => {
-              setVillageId(event.target.value); setErrors((current) => ({ ...current, village: '' }));
+              const nextVillage = event.target.value;
+              setVillageId(nextVillage); setErrors((current) => ({ ...current, village: '' }));
+              syncMapQuery(districtId, tehsilId, nextVillage, plot);
             }}>
               <option value="">{loading === 'villages' ? t('loading') : t('villagePlaceholder')}</option>
               {villages.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
@@ -235,8 +259,10 @@ export function PlotMapLookup() {
               list="bhunaksha-plot-options"
               aria-describedby={errors.plot ? 'plot-number-error' : 'plot-number-hint'}
               onChange={(event) => {
-                setPlot(event.target.value);
+                const nextPlot = event.target.value;
+                setPlot(nextPlot);
                 setErrors((current) => ({ ...current, plot: '' }));
+                syncMapQuery(districtId, tehsilId, villageId, nextPlot);
               }}
             />
             <datalist id="bhunaksha-plot-options">
@@ -254,7 +280,6 @@ export function PlotMapLookup() {
 
         <div className="mt-5 min-h-6" aria-live="polite">
           {locationStatus === 'loading' && <p className="text-sm text-muted-foreground">{t('status.loadingVillage')}</p>}
-          {locationStatus === 'ready' && <p className="text-sm text-muted-foreground">{t('status.villageReady', { count: availablePlots.length })}</p>}
           {locationStatus === 'error' && <p className="text-sm text-destructive">{t('status.villageError')}</p>}
           {viewerStatus === 'plot-found' && <p className="text-sm font-medium text-leaf">{t('status.plotFound')}</p>}
           {viewerStatus === 'plot-unavailable' && <p className="text-sm text-destructive">{t('status.plotUnavailable')}</p>}
