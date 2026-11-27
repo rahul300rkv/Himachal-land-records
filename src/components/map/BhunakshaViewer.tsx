@@ -427,10 +427,6 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
         </span>
 
         <div className="flex items-center gap-2">
-          <span className="font-mono text-xs text-muted-foreground">
-            {coordinates || attribution || 'Himachal BhuNaksha'}
-          </span>
-
           <button
             type="button"
             onClick={() => setSatellite((v) => !v)}
@@ -440,21 +436,6 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
             <Layers className="size-4" aria-hidden="true" />
             {satellite ? t('viewer.mapOnly') : t('viewer.satellite')}
           </button>
-
-          <label className="inline-flex min-h-9 items-center gap-2 rounded-full border bg-background px-3 text-xs font-semibold">
-            <span>{t('viewer.opacity')}</span>
-            <input
-              type="range"
-              min="20"
-              max="100"
-              step="5"
-              value={cadastralOpacity}
-              onChange={(event) => setCadastralOpacity(Number(event.target.value))}
-              aria-label={t('viewer.opacity')}
-              className="h-1.5 w-20 accent-primary"
-            />
-            <output>{cadastralOpacity}%</output>
-          </label>
 
           <button
             type="button"
@@ -471,25 +452,46 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-border/70 bg-background px-4 py-2 text-[11px] text-muted-foreground" aria-label="Map layer legend">
-        <span className="inline-flex items-center gap-1.5">
-          <span className="h-0.5 w-5 rounded-full bg-[#7b3f78]" aria-hidden="true" />
-          Selected Khasra boundary
-        </span>
-        <span className="inline-flex items-center gap-1.5">
-          <span className="h-0.5 w-5 rounded-full bg-[#4aaec4]" aria-hidden="true" />
-          Other village boundaries
-        </span>
-      </div>
+      <div className="relative">
+        {/* map canvas */}
+        <div
+          ref={containerRef}
+          role="region"
+          aria-label={t('viewer.mapLabel')}
+          className="w-full bg-muted/30"
+          style={{ height: '420px' }}
+        />
 
-      {/* map canvas */}
-      <div
-        ref={containerRef}
-        role="region"
-        aria-label={t('viewer.mapLabel')}
-        className="w-full bg-muted/30"
-        style={{ height: '420px' }}
-      />
+        <div className="pointer-events-none absolute inset-x-3 bottom-3 flex flex-wrap items-end justify-between gap-2 text-[11px] text-muted-foreground">
+          <div className="pointer-events-auto flex flex-wrap items-center gap-x-3 gap-y-2 rounded-xl border border-border/70 bg-card/90 px-3 py-2 shadow-lg backdrop-blur-sm" aria-label="Map layer controls">
+            <span className="inline-flex items-center gap-1.5">
+              <span className="h-0.5 w-5 rounded-full bg-[#7b3f78]" aria-hidden="true" />
+              Selected Khasra
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <span className="h-0.5 w-5 rounded-full bg-[#4aaec4]" aria-hidden="true" />
+              Other boundaries
+            </span>
+            <label className="inline-flex items-center gap-2 border-l border-border/70 pl-3 font-semibold">
+              <span>{t('viewer.opacity')}</span>
+              <input
+                type="range"
+                min="20"
+                max="100"
+                step="5"
+                value={cadastralOpacity}
+                onChange={(event) => setCadastralOpacity(Number(event.target.value))}
+                aria-label={t('viewer.opacity')}
+                className="h-1.5 w-20 accent-primary"
+              />
+              <output>{cadastralOpacity}%</output>
+            </label>
+          </div>
+          <span className="pointer-events-auto hidden max-w-full rounded-xl border border-border/70 bg-card/90 px-3 py-2 font-mono shadow-lg backdrop-blur-sm sm:inline-flex">
+            {coordinates || attribution || 'Himachal BhuNaksha'}
+          </span>
+        </div>
+      </div>
 
       {/* status bar */}
       {state !== 'ready' && (
