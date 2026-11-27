@@ -2,6 +2,7 @@
 
 import { Languages } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
+import { useSearchParams } from 'next/navigation';
 import { useTransition } from 'react';
 import { usePathname, useRouter } from '@/i18n/navigation';
 import { routing, type Locale } from '@/i18n/routing';
@@ -21,12 +22,14 @@ export function LanguageToggle({ className }: { className?: string }) {
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
 
   function switchTo(next: Locale) {
     if (next === locale) return;
     startTransition(() => {
-      router.replace(pathname, { locale: next });
+      const query = searchParams.toString();
+      router.replace(query ? `${pathname}?${query}` : pathname, { locale: next });
     });
   }
 
