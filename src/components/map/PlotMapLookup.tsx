@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select } from '@/components/ui/select';
-import { Link } from '@/i18n/navigation';
 import { BhunakshaViewer } from './BhunakshaViewer';
 
 type Option = { id: string; name: string; hi?: string };
@@ -306,17 +305,6 @@ export function PlotMapLookup() {
           <li>{t('step2')}</li>
           <li>{t('step3')}</li>
         </ol>
-        {districtId && (
-          <Link
-            href={{ pathname: '/marketplace', query: { gis: `${districtId}${tehsilId}${tehsilId && villageId ? villageId : ''}` } }}
-            className="mt-6 block rounded-xl border bg-background p-4 transition-colors hover:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            <span className="flex items-center gap-2 text-sm font-semibold text-primary">
-              {t('forSale')} <ArrowUpRight className="size-4" aria-hidden="true" />
-            </span>
-            <span className="mt-1 block text-sm text-muted-foreground">{t('forSaleBody')}</span>
-          </Link>
-        )}
       </aside>
 
       </div>
