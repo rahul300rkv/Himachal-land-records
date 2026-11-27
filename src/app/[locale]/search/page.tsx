@@ -13,6 +13,7 @@ import { getCurrentUser } from '@/lib/auth';
 import { parseSearchParams, searchLandRecords } from '@/lib/search';
 import { pageMetadata } from '@/lib/seo';
 import { isSupabaseConfigured } from '@/lib/supabase/config';
+import { Link } from '@/i18n/navigation';
 import type { Locale } from '@/i18n/routing';
 
 type Props = {
@@ -102,6 +103,23 @@ export default async function SearchPage({ params, searchParams }: Props) {
         <SearchForm key={JSON.stringify(initialLocation)} initialLocation={initialLocation} />
       </section>
 
+      
+      <section className="mt-4 grid gap-3 sm:grid-cols-3" aria-labelledby="search-trust-title">
+        <h2 id="search-trust-title" className="sr-only">{t('trust.title')}</h2>
+        <div className="rounded-lg border border-primary/15 bg-primary-soft p-4">
+          <p className="text-sm font-semibold text-primary">{t('trust.sourceTitle')}</p>
+          <p className="mt-1 text-sm text-muted-foreground">{t('trust.sourceBody')}</p>
+        </div>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <p className="text-sm font-semibold text-primary">{t('trust.mapTitle')}</p>
+          <p className="mt-1 text-sm text-muted-foreground">{t('trust.mapBody')}</p>
+        </div>
+        <div className="rounded-lg border border-notice-border bg-notice p-4">
+          <p className="text-sm font-semibold text-notice-foreground">{t('trust.referenceTitle')}</p>
+          <p className="mt-1 text-sm text-notice-foreground/80">{t('trust.referenceBody')}</p>
+        </div>
+      </section>
+
       <section className="mt-10" aria-live="polite">
         {parsed.status === 'idle' && (
           <div className="rounded-lg bg-primary-soft p-6">
@@ -110,7 +128,7 @@ export default async function SearchPage({ params, searchParams }: Props) {
               {t('results.idle.title')}
             </h2>
             <ol className="mt-4 list-decimal space-y-2 pl-5 marker:font-semibold marker:text-primary">
-              {(['a', 'b', 'c'] as const).map((key) => (
+              {(['a', 'b', 'c', 'd', 'e'] as const).map((key) => (
                 <li key={key}>{t(`results.idle.tips.${key}`)}</li>
               ))}
             </ol>
@@ -209,6 +227,32 @@ export default async function SearchPage({ params, searchParams }: Props) {
           </>
         )}
       </section>
+      
+      <section className="mt-12 border-t border-border pt-8" aria-labelledby="search-how-title">
+        <h2 id="search-how-title" className="text-2xl sm:text-3xl">{t('howTitle')}</h2>
+        <p className="mt-3 max-w-4xl leading-relaxed text-muted-foreground">{t('howBody')}</p>
+        <div className="mt-6 grid gap-4 md:grid-cols-3">
+          {(['one', 'two', 'three'] as const).map((key) => (
+            <article key={key} className="rounded-xl border border-border bg-card p-5">
+              <p className="text-sm font-semibold uppercase tracking-[0.12em] text-primary">{t(`steps.${key}.label`)}</p>
+              <h3 className="mt-2 text-lg">{t(`steps.${key}.title`)}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t(`steps.${key}.body`)}</p>
+            </article>
+          ))}
+        </div>
+        <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold">
+          <Link href="/map" className="text-primary underline underline-offset-4">{t('links.map')}</Link>
+          <Link href="/check" className="text-primary underline underline-offset-4">{t('links.checker')}</Link>
+          <Link href="/verify" className="text-primary underline underline-offset-4">{t('links.verify')}</Link>
+          <Link href="/blog" className="text-primary underline underline-offset-4">{t('links.blog')}</Link>
+        </div>
+      </section>
+
+      <section className="mt-10 rounded-xl border border-border bg-card p-6" aria-labelledby="search-what-title">
+        <h2 id="search-what-title" className="text-2xl sm:text-3xl">{t('whatTitle')}</h2>
+        <p className="mt-3 leading-relaxed text-muted-foreground">{t('whatBody')}</p>
+      </section>
+
       <RelatedTools current="search" />
     </div>
   );
