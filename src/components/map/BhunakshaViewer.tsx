@@ -379,6 +379,12 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onShare, onStateCh
           map.setView(validPoint(c) ? c : defaultCenter, validPoint(c) ? 17 : 8, { animate: false });
         } else if (validBounds) {
           map.fitBounds([sw, ne], { padding: [24, 24], maxZoom: 15 });
+          // Keep the default village preview close enough for satellite detail.
+          // A searched Khasra still uses the tighter plot-specific view above.
+          const villageZoom = map.getZoom();
+          if (Number.isFinite(villageZoom) && villageZoom < 14) {
+            map.setZoom(14, { animate: false });
+          }
         } else {
           map.setView(defaultCenter, 8, { animate: false });
         }
