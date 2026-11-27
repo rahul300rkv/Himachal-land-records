@@ -306,7 +306,6 @@ export function PlotMapLookup() {
           <li>{t('step2')}</li>
           <li>{t('step3')}</li>
         </ol>
-}
         {districtId && (
           <Link
             href={{ pathname: '/marketplace', query: { gis: `${districtId}${tehsilId}${tehsilId && villageId ? villageId : ''}` } }}
