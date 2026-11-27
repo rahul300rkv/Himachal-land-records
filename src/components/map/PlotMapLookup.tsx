@@ -199,7 +199,20 @@ export function PlotMapLookup() {
   }
 
   return (
-    <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1.25fr)_minmax(18rem,.75fr)]">
+    <div className="mt-8 space-y-6">
+      {viewerOpen && districtId && tehsilId && villageId && (
+        <div id="plot-map-viewer" className="scroll-mt-20 lg:col-span-2">
+          <BhunakshaViewer
+            key={shareLink || (districtId + tehsilId + villageId + '-' + plot.trim())}
+            gisCode={districtId + tehsilId + villageId}
+            plot={plot.trim()}
+            attribution={reference}
+            onStateChange={setViewerStatus}
+          />
+        </div>
+      )}
+
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1.25fr)_minmax(18rem,.75fr)]">
       <section className="rounded-2xl border bg-card p-5 shadow-sm sm:p-7" aria-labelledby="plot-map-form-title">
         <div className="flex items-start gap-3 border-b border-border/70 pb-5">
           <span className="grid size-11 shrink-0 place-items-center rounded-full bg-notice text-primary">
@@ -333,18 +346,8 @@ export function PlotMapLookup() {
           </Link>
         )}
       </aside>
-      {viewerOpen && districtId && tehsilId && villageId && (
-        <div id="plot-map-viewer" className="scroll-mt-20 lg:col-span-2">
-          <BhunakshaViewer
-            key={shareLink || (districtId + tehsilId + villageId + '-' + plot.trim())}
-            gisCode={districtId + tehsilId + villageId}
-            plot={plot.trim()}
-            attribution={reference}
-            onStateChange={setViewerStatus}
-          />
-        </div>
-      )}
 
+      </div>
     </div>
   );
 }
