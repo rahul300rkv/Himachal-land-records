@@ -248,20 +248,13 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
           0.34,
           'grayscale(1) brightness(1.42) contrast(0.76)',
         );
-        // Same-owner plots: muted teal, still subordinate to the selected Khasra.
-        createDisplayPane(
-          'sameOwnerPane',
-          450,
-          0.72,
-          'grayscale(0.18) sepia(0.2) hue-rotate(105deg) saturate(0.72) brightness(1.04)',
-        );
-        // Selected Khasra: warm amber treatment plus a plum glow around the
-        // official raster pixels. This pane stays above satellite imagery.
+        // Selected Khasra: recolour the official raster pixels toward plum
+        // and keep the layer above both OSM and satellite imagery.
         createDisplayPane(
           'selectedKhasraPane',
           470,
-          1,
-          'sepia(0.92) saturate(4.2) hue-rotate(335deg) brightness(1.08) drop-shadow(0 0 1.5px #4b1643) drop-shadow(0 0 3px rgba(75,22,67,0.72))',
+          0.94,
+          'brightness(0) saturate(100%) invert(21%) sepia(25%) saturate(2200%) hue-rotate(286deg) brightness(86%) contrast(96%) drop-shadow(0 0 1.5px #4b1643) drop-shadow(0 0 3px rgba(75,22,67,0.72))',
         );
 
         const sw = utm43ToLatLng(xmin, ymin);
@@ -337,13 +330,6 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
             'villageParcelPane',
           ),
           ...(data.selectedPlot ? [
-            createWmsGrid(
-              'OWNER_PLOTS',
-              'SAME_OWNER_PLOT_LIST',
-              { state: '', giscode: gisCode, plot_no: plot },
-              0.9,
-              'sameOwnerPane',
-            ),
             createWmsGrid(
               'PLOT_SELECTION',
               'PLOT_LIST',
@@ -459,13 +445,9 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
           <span className="size-3 rounded-sm border border-[#4b1643] bg-amber-400" aria-hidden="true" />
           Selected Khasra
         </span>
-        <span className="inline-flex items-center gap-1.5">
-          <span className="size-3 rounded-sm border border-[#4f8780] bg-[#78aaa4]" aria-hidden="true" />
-          Same-owner plots
-        </span>
-        <span className="inline-flex items-center gap-1.5">
+         <span className="inline-flex items-center gap-1.5">
           <span className="size-3 rounded-sm border border-slate-300 bg-slate-200" aria-hidden="true" />
-          Village parcels
+          Other village parcels
         </span>
       </div>
 
