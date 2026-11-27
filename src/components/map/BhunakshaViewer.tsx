@@ -443,12 +443,12 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
 
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-border/70 bg-background px-4 py-2 text-[11px] text-muted-foreground" aria-label="Map layer legend">
         <span className="inline-flex items-center gap-1.5">
-          <span className="size-3 rounded-sm border border-[#4b1643] bg-amber-400" aria-hidden="true" />
-          Selected Khasra
+          <span className="h-0.5 w-5 rounded-full bg-[#4b1643]" aria-hidden="true" />
+          Selected Khasra boundary
         </span>
-         <span className="inline-flex items-center gap-1.5">
-          <span className="size-3 rounded-sm border border-slate-300 bg-slate-200" aria-hidden="true" />
-          Other village parcels
+        <span className="inline-flex items-center gap-1.5">
+          <span className="h-0.5 w-5 rounded-full bg-[#8ed8ea]" aria-hidden="true" />
+          Other village boundaries
         </span>
       </div>
 
