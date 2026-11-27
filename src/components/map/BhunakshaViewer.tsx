@@ -436,7 +436,6 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onShare, onStateCh
       }
       satLayerRef.current = null;
       baseLayerRef.current = null;
-      fallbackBaseLayerRef.current = null;
       villageLayerRef.current = null;
       selectedLayerRef.current = null;
       viewRef.current = null;
