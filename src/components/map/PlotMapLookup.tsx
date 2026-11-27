@@ -1,4 +1,4 @@
-'use client';
+use client';
 
 import { ArrowUpRight, Copy, MapPinned, Share2 } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
@@ -182,8 +182,8 @@ export function PlotMapLookup() {
 
   return (
     <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1.25fr)_minmax(18rem,.75fr)]">
-      <section className="rounded-xl border bg-card p-5 sm:p-7" aria-labelledby="plot-map-form-title">
-        <div className="flex items-start gap-3">
+      <section className="rounded-2xl border bg-card p-5 shadow-sm sm:p-7" aria-labelledby="plot-map-form-title">
+        <div className="flex items-start gap-3 border-b border-border/70 pb-5">
           <span className="grid size-11 shrink-0 place-items-center rounded-full bg-notice text-primary">
             <MapPinned className="size-5" aria-hidden="true" />
           </span>
@@ -193,7 +193,7 @@ export function PlotMapLookup() {
           </div>
         </div>
 
-        <div className="mt-7 grid gap-5 sm:grid-cols-2">
+        <div className="mt-6 grid gap-5 sm:grid-cols-2">
           <div className="min-w-0">
             <Label htmlFor="map-district">{t('districtLabel')}</Label>
             <Select id="map-district" value={districtId} disabled={loading === 'districts'} aria-invalid={Boolean(errors.district)} onChange={(event) => {
@@ -260,14 +260,14 @@ export function PlotMapLookup() {
           {viewerStatus === 'plot-unavailable' && <p className="text-sm text-destructive">{t('status.plotUnavailable')}</p>}
           {viewerStatus === 'error' && <p className="text-sm text-destructive">{t('status.viewerError')}</p>}
         </div>
-        <div className="mt-3 flex flex-col gap-3 sm:flex-row">
-          <Button type="button" size="lg" onClick={openOfficialMap}>
+        <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+          <Button type="button" size="lg" className="w-full sm:w-auto" onClick={openOfficialMap}>
             {t('openOfficial')} <ArrowUpRight aria-hidden="true" />
           </Button>
         </div>
       </section>
 
-      <aside className="rounded-xl border border-border bg-card p-5 sm:p-7">
+      <aside className="rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-7">
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-primary">{t('officialEyebrow')}</p>
         <h2 className="mt-2 text-2xl">{t('officialTitle')}</h2>
         <ol className="mt-5 list-decimal space-y-3 pl-5 text-sm leading-6 text-muted-foreground">
@@ -276,7 +276,7 @@ export function PlotMapLookup() {
           <li>{t('step3')}</li>
         </ol>
         {reference && (
-          <div className="mt-6 rounded-lg border bg-background p-4">
+          <div className="mt-6 rounded-xl border bg-background p-4">
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">{t('reference')}</p>
             <p className="mt-2 break-words text-sm font-medium">{reference}</p>
             <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2">
@@ -299,7 +299,7 @@ export function PlotMapLookup() {
         {districtId && (
           <Link
             href={{ pathname: '/marketplace', query: { gis: `${districtId}${tehsilId}${tehsilId && villageId ? villageId : ''}` } }}
-            className="mt-6 block rounded-lg border bg-background p-4 transition-colors hover:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="mt-6 block rounded-xl border bg-background p-4 transition-colors hover:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             <span className="flex items-center gap-2 text-sm font-semibold text-primary">
               {t('forSale')} <ArrowUpRight className="size-4" aria-hidden="true" />

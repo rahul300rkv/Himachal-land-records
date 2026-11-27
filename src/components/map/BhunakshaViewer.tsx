@@ -1,4 +1,4 @@
-'use client';
+use client';
 
 import 'leaflet/dist/leaflet.css';
 import { Layers, LoaderCircle, Maximize2, Minimize2, MapPinned } from 'lucide-react';
@@ -400,11 +400,11 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
   return (
     <div
       ref={wrapperRef}
-      className="overflow-hidden rounded-2xl border bg-white shadow-inner"
+      className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm"
       style={isFullscreen ? { display: 'flex', flexDirection: 'column', borderRadius: 0, border: 'none' } : undefined}
     >
       {/* toolbar */}
-      <div ref={toolbarRef} className="flex flex-wrap items-center justify-between gap-3 border-b bg-white px-4 py-3 text-sm">
+      <div ref={toolbarRef} className="flex flex-wrap items-center justify-between gap-3 border-b border-border/70 bg-card px-4 py-3 text-sm">
         <span className="flex items-center gap-2 font-semibold">
           <MapPinned className="size-4 text-primary" />
           {plot ? `${t('viewer.khasra')} ${plot}` : t('viewer.villageMap')}
@@ -419,7 +419,7 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
             type="button"
             onClick={() => setSatellite((v) => !v)}
             aria-pressed={satellite}
-            className="inline-flex min-h-9 items-center gap-1.5 rounded-full border bg-white px-3 text-sm font-semibold hover:bg-muted transition-colors"
+            className="inline-flex min-h-9 items-center gap-1.5 rounded-full border bg-background px-3 text-sm font-semibold transition-colors hover:bg-muted"
           >
             <Layers className="size-4" aria-hidden="true" />
             {satellite ? t('viewer.mapOnly') : t('viewer.satellite')}
@@ -430,7 +430,7 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
             onClick={toggleFullscreen}
             aria-label={isFullscreen ? t('viewer.exitFullscreen') : t('viewer.fullscreen')}
             title={isFullscreen ? t('viewer.exitFullscreenHint') : t('viewer.fullscreenHint')}
-            className="inline-flex min-h-9 w-9 items-center justify-center rounded-full border bg-white hover:bg-muted transition-colors"
+            className="inline-flex min-h-9 w-9 items-center justify-center rounded-full border bg-background transition-colors hover:bg-muted"
           >
             {isFullscreen
               ? <Minimize2 className="size-4" aria-hidden="true" />
@@ -440,7 +440,7 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-b bg-white px-4 py-2 text-[11px] text-muted-foreground" aria-label="Map layer legend">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-border/70 bg-background px-4 py-2 text-[11px] text-muted-foreground" aria-label="Map layer legend">
         <span className="inline-flex items-center gap-1.5">
           <span className="size-3 rounded-sm border border-[#4b1643] bg-amber-400" aria-hidden="true" />
           Selected Khasra
@@ -456,7 +456,7 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
         ref={containerRef}
         role="region"
         aria-label={t('viewer.mapLabel')}
-        className="w-full bg-white"
+        className="w-full bg-muted/30"
         style={{ height: '420px' }}
       />
 
