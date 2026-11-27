@@ -56,6 +56,7 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onShare, onStateCh
   const mapRef        = useRef<import('leaflet').Map | null>(null);
   const satLayerRef   = useRef<import('leaflet').Layer | null>(null);
   const baseLayerRef  = useRef<import('leaflet').Layer | null>(null);
+  const fallbackBaseLayerRef = useRef<import('leaflet').Layer | null>(null);
   const villageLayerRef = useRef<import('leaflet').GridLayer | null>(null);
   const selectedLayerRef = useRef<import('leaflet').GridLayer | null>(null);
   const viewRef       = useRef<{ center: [number, number]; zoom: number } | null>(null);
@@ -156,6 +157,9 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onShare, onStateCh
       if (baseLayerRef.current && map.hasLayer(baseLayerRef.current)) {
         map.removeLayer(baseLayerRef.current);
       }
+      if (fallbackBaseLayerRef.current && map.hasLayer(fallbackBaseLayerRef.current)) {
+        map.removeLayer(fallbackBaseLayerRef.current);
+      }
       if (satLayerRef.current && map.hasLayer(satLayerRef.current)) {
         map.removeLayer(satLayerRef.current);
         satLayerRef.current = null;
@@ -186,6 +190,9 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onShare, onStateCh
       if (satLayerRef.current && map.hasLayer(satLayerRef.current)) {
         map.removeLayer(satLayerRef.current);
         satLayerRef.current = null;
+      }
+      if (fallbackBaseLayerRef.current && !map.hasLayer(fallbackBaseLayerRef.current)) {
+        fallbackBaseLayerRef.current.addTo(map);
       }
       if (baseLayerRef.current && !map.hasLayer(baseLayerRef.current)) {
         baseLayerRef.current.addTo(map);
@@ -230,6 +237,7 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onShare, onStateCh
         }
         satLayerRef.current = null;
         baseLayerRef.current = null;
+        fallbackBaseLayerRef.current = null;
         // capture previous view BEFORE clearing the ref (avoids TS "never" error)
         const savedView = viewRef.current;
         viewRef.current = null;
@@ -345,11 +353,25 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onShare, onStateCh
         // OpenFreeMap vector basemap: free OpenMapTiles/OpenStreetMap data with
         // crisp labels and roads at the same Leaflet zoom range. Keep it as a
         // Leaflet layer so the official BhuNaksha WMS layers remain untouched.
+        // Keep a conventional free raster fallback underneath the vector layer.
+        // It prevents a blank map when WebGL, a style request, or a mobile browser
+        // temporarily prevents MapLibre from rendering.
+        const fallbackBaseLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxNativeZoom: 19,
+          maxZoom: 21,
+          zIndex: 0,
+          attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        }).addTo(map);
+        fallbackBaseLayerRef.current = fallbackBaseLayer;
+
         const baseLayer = maplibreGL({
           style: 'https://tiles.openfreemap.org/styles/liberty',
         }).addTo(map);
         baseLayerRef.current = baseLayer;
+        map.attributionControl.addAttribution('OpenFreeMap © OpenMapTiles Data from OpenStreetMap');
+
         if (satellite) {
+          map.removeLayer(fallbackBaseLayer);
           map.removeLayer(baseLayer);
         }
 
@@ -435,6 +457,7 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onShare, onStateCh
       }
       satLayerRef.current = null;
       baseLayerRef.current = null;
+      fallbackBaseLayerRef.current = null;
       villageLayerRef.current = null;
       selectedLayerRef.current = null;
       viewRef.current = null;
