@@ -228,17 +228,41 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
         });
         mapRef.current = map;
 
-        // Create custom pane BEFORE adding any layer that uses it
-        // This fixes the _updateLevels / _isValidTile crashes
-        const wmsPane = map.createPane('wmsPane');
-        wmsPane.style.zIndex = '450';
-        wmsPane.style.pointerEvents = 'none';
+        // Separate display panes keep the official WMS geometry intact while making
+        // the visual hierarchy readable over both OSM and satellite imagery.
+        const createDisplayPane = (name: string, zIndex: number, opacity: number, filter: string) => {
+          const pane = map.createPane(name);
+          pane.style.zIndex = String(zIndex);
+          pane.style.pointerEvents = 'none';
+          pane.style.opacity = String(opacity);
+          pane.style.filter = filter;
+          pane.style.transform = 'translate(-15px, -21px)';
+          pane.style.willChange = 'transform';
+          return pane;
+        };
 
-        // Datum-shift correction applied on the pane (safe)
-        const SHIFT_PX_X = -15; // negative = westward
-        const SHIFT_PX_Y = -21; // negative = southward
-        wmsPane.style.transform = `translate(${SHIFT_PX_X}px, ${SHIFT_PX_Y}px)`;
-        wmsPane.style.willChange = 'transform';
+        // Village parcels: neutral, low-contrast background context.
+        createDisplayPane(
+          'villageParcelPane',
+          430,
+          0.34,
+          'grayscale(1) brightness(1.42) contrast(0.76)',
+        );
+        // Same-owner plots: muted teal, still subordinate to the selected Khasra.
+        createDisplayPane(
+          'sameOwnerPane',
+          450,
+          0.72,
+          'grayscale(0.18) sepia(0.2) hue-rotate(105deg) saturate(0.72) brightness(1.04)',
+        );
+        // Selected Khasra: warm amber treatment plus a plum glow around the
+        // official raster pixels. This pane stays above satellite imagery.
+        createDisplayPane(
+          'selectedKhasraPane',
+          470,
+          1,
+          'sepia(0.92) saturate(4.2) hue-rotate(335deg) brightness(1.08) drop-shadow(0 0 1.5px #4b1643) drop-shadow(0 0 3px rgba(75,22,67,0.72))',
+        );
 
         const sw = utm43ToLatLng(xmin, ymin);
         const ne = utm43ToLatLng(xmax, ymax);
@@ -248,6 +272,7 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
           layerName: string,
           extra: Record<string, string>,
           opacity: number,
+          paneName: string,
         ) => {
           const Grid = L.GridLayer.extend({
             createTile(
@@ -291,26 +316,41 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
             opacity,
             updateWhenZooming: false,
             keepBuffer: 2,
-            pane: 'wmsPane',
+            pane: paneName,
           });
         };
 
-        // Base map — roads, village names, place labels
+        // Base map — OSM roads and place labels remain unchanged beneath the
+        // independently styled official cadastral layers.
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
           maxZoom: 21,
           zIndex: 0,
           attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         }).addTo(map);
 
-        // WMS layers
         const wmsLayers = [
-          createWmsGrid('VILLAGE_MAP', 'VILLAGE_MAP',
-            { transparent: 'true', state: '', gis_code: gisCode, overlay_codes: '' }, 0.6),
+          createWmsGrid(
+            'VILLAGE_MAP',
+            'VILLAGE_MAP',
+            { transparent: 'true', state: '', gis_code: gisCode, overlay_codes: '' },
+            0.72,
+            'villageParcelPane',
+          ),
           ...(data.selectedPlot ? [
-            createWmsGrid('OWNER_PLOTS', 'SAME_OWNER_PLOT_LIST',
-              { state: '', giscode: gisCode, plot_no: plot }, 0.8),
-            createWmsGrid('PLOT_SELECTION', 'PLOT_LIST',
-              { transparent: 'true', state: '', gis_code: gisCode, overlay_codes: '', plot_id: data.selectedPlot.id }, 1),
+            createWmsGrid(
+              'OWNER_PLOTS',
+              'SAME_OWNER_PLOT_LIST',
+              { state: '', giscode: gisCode, plot_no: plot },
+              0.9,
+              'sameOwnerPane',
+            ),
+            createWmsGrid(
+              'PLOT_SELECTION',
+              'PLOT_LIST',
+              { transparent: 'true', state: '', gis_code: gisCode, overlay_codes: '', plot_id: data.selectedPlot.id },
+              1,
+              'selectedKhasraPane',
+            ),
           ] : []),
         ];
         wmsLayers.forEach((l) => l.addTo(map));
@@ -412,6 +452,21 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
             }
           </button>
         </div>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-b bg-white px-4 py-2 text-[11px] text-muted-foreground" aria-label="Map layer legend">
+        <span className="inline-flex items-center gap-1.5">
+          <span className="size-3 rounded-sm border border-[#4b1643] bg-amber-400" aria-hidden="true" />
+          Selected Khasra
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <span className="size-3 rounded-sm border border-[#4f8780] bg-[#78aaa4]" aria-hidden="true" />
+          Same-owner plots
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <span className="size-3 rounded-sm border border-slate-300 bg-slate-200" aria-hidden="true" />
+          Village parcels
+        </span>
       </div>
 
       {/* map canvas */}
