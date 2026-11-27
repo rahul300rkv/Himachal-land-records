@@ -159,7 +159,7 @@ export function PlotMapLookup() {
   async function shareCurrentView() {
     const link = updateShareableUrl();
     if (navigator.share) {
-      await navigator.share({ title: t('shareTitle'), text: t('shareBody'), url: link });
+      await navigator.share({ title: t('shareTitle'), text: link, url: link });
     } else {
       await copyShareLink();
     }
