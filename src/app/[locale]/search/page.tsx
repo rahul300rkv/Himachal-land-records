@@ -128,7 +128,7 @@ export default async function SearchPage({ params, searchParams }: Props) {
               {t('results.idle.title')}
             </h2>
             <ol className="mt-4 list-decimal space-y-2 pl-5 marker:font-semibold marker:text-primary">
-              {(['a', 'b', 'c', 'd', 'e'] as const).map((key) => (
+              {(['a', 'b', 'c'] as const).map((key) => (
                 <li key={key}>{t(`results.idle.tips.${key}`)}</li>
               ))}
             </ol>
