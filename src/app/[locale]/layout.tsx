@@ -97,7 +97,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: t('description'),
     applicationName: t('siteName'),
     category: 'real estate',
-    keywords: ['Himachal Pradesh land records', 'jamabandi', 'khasra', 'khatauni', 'khewat', 'land verification', 'circle rates', 'stamp duty'],
+    keywords: ['Himachal Pradesh land records', 'Bhulekh Himachal Pradesh', 'eHimBhoomi', 'HimBhoomi', 'BhuNaksha HP', 'jamabandi', 'khasra', 'khatauni', 'khewat', 'land verification', 'circle rates', 'stamp duty'],
     authors: [{ name: 'HimLand Check' }],
     creator: 'HimLand Check',
     publisher: 'HimLand Check',
