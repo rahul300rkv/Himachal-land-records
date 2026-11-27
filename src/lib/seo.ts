@@ -37,6 +37,12 @@ export function pageMetadata({
     description,
     keywords: [
       'Himachal Pradesh land records',
+      'Bhulekh Himachal Pradesh',
+      'eHimBhoomi',
+      'HimBhoomi',
+      'BhuNaksha HP',
+      'Himachal BhuNaksha',
+      'Jamabandi nakal',
       'jamabandi',
       'khasra khatauni khewat',
       'Himachal land verification',
