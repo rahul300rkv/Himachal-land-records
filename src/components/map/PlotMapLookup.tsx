@@ -48,6 +48,7 @@ export function PlotMapLookup() {
   const [availablePlots, setAvailablePlots] = useState<string[]>([]);
   const [shareLink, setShareLink] = useState('');
   const [linkCopied, setLinkCopied] = useState(false);
+  const canShare = Boolean(districtId && tehsilId && villageId && plot.trim());
 
   // Opened from a marketplace listing: /map?gis=<10-digit village code>&plot=<khasra>.
   // Fill in the village and plot and show the map straight away.
@@ -149,14 +150,14 @@ export function PlotMapLookup() {
   }
 
   async function copyShareLink() {
-    const link = shareLink || updateShareableUrl();
+    const link = updateShareableUrl();
     await navigator.clipboard.writeText(link);
     setLinkCopied(true);
     window.setTimeout(() => setLinkCopied(false), 1800);
   }
 
   async function shareCurrentView() {
-    const link = shareLink || updateShareableUrl();
+    const link = updateShareableUrl();
     if (navigator.share) {
       await navigator.share({ title: t('shareTitle'), text: t('shareBody'), url: link });
     } else {
@@ -282,7 +283,7 @@ export function PlotMapLookup() {
               <button type="button" onClick={copyReference} className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-primary hover:underline">
                 <Copy className="size-4" aria-hidden="true" /> {copied ? t('copied') : t('copy')}
               </button>
-              {shareLink && (
+              {canShare && (
                 <>
                   <button type="button" onClick={copyShareLink} className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-primary hover:underline">
                     <Copy className="size-4" aria-hidden="true" /> {linkCopied ? t('linkCopied') : t('copyLink')}
