@@ -245,16 +245,16 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
         createDisplayPane(
           'villageParcelPane',
           430,
-          0.34,
-          'grayscale(1) brightness(1.42) contrast(0.76)',
+          0.64,
+          'grayscale(0.72) saturate(0.48) brightness(1.14) contrast(1.28)',
         );
         // Selected Khasra: recolour the official raster pixels toward plum
         // and keep the layer above both OSM and satellite imagery.
         createDisplayPane(
           'selectedKhasraPane',
           470,
-          0.94,
-          'brightness(0) saturate(100%) invert(21%) sepia(25%) saturate(2200%) hue-rotate(286deg) brightness(86%) contrast(96%) drop-shadow(0 0 1.5px #4b1643) drop-shadow(0 0 3px rgba(75,22,67,0.72))',
+          0.82,
+          'brightness(0) saturate(100%) invert(17%) sepia(33%) saturate(1760%) hue-rotate(286deg) brightness(101%) contrast(91%) drop-shadow(0 0 1.5px #4b1643) drop-shadow(0 0 3px rgba(75,22,67,0.58))',
         );
 
         const sw = utm43ToLatLng(xmin, ymin);
