@@ -246,8 +246,8 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
         createDisplayPane(
           'villageParcelPane',
           430,
-          0.68,
-          'brightness(0) saturate(100%) invert(79%) sepia(19%) saturate(1020%) hue-rotate(164deg) brightness(96%) contrast(88%)',
+          0.78,
+          'brightness(0) saturate(100%) invert(65%) sepia(33%) saturate(1123%) hue-rotate(155deg) brightness(91%) contrast(89%)',
         );
         // Selected Khasra: recolour the official raster pixels toward plum
         // and keep the layer above both OSM and satellite imagery.
@@ -447,7 +447,7 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
           Selected Khasra boundary
         </span>
         <span className="inline-flex items-center gap-1.5">
-          <span className="h-0.5 w-5 rounded-full bg-[#8ed8ea]" aria-hidden="true" />
+          <span className="h-0.5 w-5 rounded-full bg-[#4aaec4]" aria-hidden="true" />
           Other village boundaries
         </span>
       </div>
