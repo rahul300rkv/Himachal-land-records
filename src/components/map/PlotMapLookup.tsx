@@ -12,7 +12,7 @@ import { Link } from '@/i18n/navigation';
 import { BhunakshaViewer } from './BhunakshaViewer';
 
 type Option = { id: string; name: string; hi?: string };
-type ViewerStatus = 'idle' | 'loading' | 'village-ready' | 'plot-found' | 'plot-unavailable' | 'error';
+type ViewerStatus = 'idle' | 'loading' | 'ready' | 'village-ready' | 'plot-found' | 'plot-unavailable' | 'error';
 type PlotApiValue = string | Record<string, unknown>;
 
 function normalizePlotNumbers(value: unknown): string[] {
