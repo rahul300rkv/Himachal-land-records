@@ -255,7 +255,7 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
           'selectedKhasraPane',
           470,
           0.82,
-          'brightness(0) saturate(100%) invert(17%) sepia(33%) saturate(1760%) hue-rotate(286deg) brightness(101%) contrast(91%) drop-shadow(0 0 1.5px #4b1643) drop-shadow(0 0 3px rgba(75,22,67,0.58))',
+          'brightness(0) saturate(100%) invert(31%) sepia(29%) saturate(1350%) hue-rotate(284deg) brightness(108%) contrast(95%) drop-shadow(0 0 1.5px #7b3f78) drop-shadow(0 0 3px rgba(123,63,120,0.62))',
         );
 
         const sw = utm43ToLatLng(xmin, ymin);
@@ -443,7 +443,7 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
 
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-border/70 bg-background px-4 py-2 text-[11px] text-muted-foreground" aria-label="Map layer legend">
         <span className="inline-flex items-center gap-1.5">
-          <span className="h-0.5 w-5 rounded-full bg-[#4b1643]" aria-hidden="true" />
+          <span className="h-0.5 w-5 rounded-full bg-[#7b3f78]" aria-hidden="true" />
           Selected Khasra boundary
         </span>
         <span className="inline-flex items-center gap-1.5">
