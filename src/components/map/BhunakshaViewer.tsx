@@ -52,8 +52,8 @@ export function BhunakshaViewer({ gisCode, plot, attribution, onStateChange }: P
   // keep live Leaflet objects in refs — never in state
   const mapRef        = useRef<import('leaflet').Map | null>(null);
   const satLayerRef   = useRef<import('leaflet').Layer | null>(null);
-  const villageLayerRef = useRef<import('leaflet').Layer | null>(null);
-  const selectedLayerRef = useRef<import('leaflet').Layer | null>(null);
+  const villageLayerRef = useRef<import('leaflet').GridLayer | null>(null);
+  const selectedLayerRef = useRef<import('leaflet').GridLayer | null>(null);
   const viewRef       = useRef<{ center: [number, number]; zoom: number } | null>(null);
   const LRef          = useRef<typeof import('leaflet') | null>(null);
 
