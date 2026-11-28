@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import { FileKey2, FileUp, Gavel, Landmark, Loader2 } from 'lucide-react';
+import { FileUp, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import type { AssessResult, Band, Severity } from '@/lib/nakal/assess';
@@ -110,7 +110,7 @@ export function NakalChecker() {
               <div className="min-w-[180px] flex-1 space-y-2"><Badge tone={BAND_TONE[result.band]}>{tx(`bands.${result.band}`)}</Badge><p className={`text-lg font-medium ${BAND_STYLE[result.band].label}`}>{t('scoreHelp')}</p><div className="h-2 overflow-hidden rounded-full bg-black/10"><div className={`h-full rounded-full ${BAND_STYLE[result.band].bar}`} style={{ width: `${result.score}%` }} /></div></div>
             </div>
             <div className="mt-6 grid gap-3 sm:grid-cols-3">
-              {[['ownership', s.shareHolders > 0 ? 100 : 0, t('threeChecks.ownership.title'), t('threeChecks.ownership.body', { count: s.shareHolders })], ['history', Math.min(100, s.mutationCount * 20), t('threeChecks.encumbrances.title'), t('threeChecks.encumbrances.body', { count: s.mutationCount })], ['litigation', s.pendingCases > 0 ? 20 : 100, t('threeChecks.litigation.title'), t('threeChecks.litigation.body', { count: s.pendingCases })]].map(([key, value, title, body]) => <div key={key} className="rounded-lg bg-background/70 p-3"><div className="flex items-center justify-between gap-2 text-sm font-medium"><span>{title}</span><span className="tabular-nums text-muted-foreground">{value}%</span></div><div className="mt-2 h-1.5 rounded-full bg-muted"><div className={`h-full rounded-full ${key === 'litigation' && s.pendingCases > 0 ? 'bg-red-500' : 'bg-primary'}`} style={{ width: `${value}%` }} /></div><p className="mt-2 text-xs text-muted-foreground">{body}</p></div>)}
+              {[['ownership', s.shareHolders > 0 ? 100 : 0, t('threeChecks.ownership.title'), t('threeChecks.ownership.body', { count: s.shareHolders })], ['history', Math.min(100, s.mutationCount * 20), t('threeChecks.encumbrances.title'), t('threeChecks.encumbrances.body', { count: s.mutationCount })], ['litigation', s.pendingCases > 0 ? 20 : 100, t('threeCheckresult.litigation.title'), t('threeCheckresult.litigation.body', { count: s.pendingCases })]].map(([key, value, title, body]) => <div key={key} className="rounded-lg bg-background/70 p-3"><div className="flex items-center justify-between gap-2 text-sm font-medium"><span>{title}</span><span className="tabular-nums text-muted-foreground">{value}%</span></div><div className="mt-2 h-1.5 rounded-full bg-muted"><div className={`h-full rounded-full ${key === 'litigation' && s.pendingCases > 0 ? 'bg-red-500' : 'bg-primary'}`} style={{ width: `${value}%` }} /></div><p className="mt-2 text-xs text-muted-foreground">{body}</p></div>)}
             </div>
           </div>
           {(!s.extractionComplete || s.lowConfidenceCount > 0) && (
@@ -129,7 +129,7 @@ export function NakalChecker() {
             </div>
           </div></div>
 
-          {s.khasras.length > 0 && (
+          {result.khasras.length > 0 && (
             <div>
               <h2 className="mb-3 text-xl">{t('khasrasTitle')}</h2>
               <div className="overflow-x-auto rounded-lg border border-border">
@@ -143,7 +143,7 @@ export function NakalChecker() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border">
-                    {s.khasras.map((k, i) => (
+                    {result.khasras.map((k, i) => (
                       <tr key={`${k.number ?? 'khasra'}-${i}`}>
                         <td className="px-3 py-2 font-medium">{k.number ?? t('tables.notRecorded')}</td>
                         <td className="px-3 py-2">{k.area ?? t('tables.notRecorded')}</td>
@@ -156,7 +156,7 @@ export function NakalChecker() {
               </div>
             </div>
           )}
-          {s.mutations.length > 0 && (
+          {result.mutations.length > 0 && (
             <div>
               <h2 className="mb-3 text-xl">{t('mutationsTitle')}</h2>
               <div className="overflow-x-auto rounded-lg border border-border">
@@ -171,7 +171,7 @@ export function NakalChecker() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border">
-                    {s.mutations.map((m, i) => (
+                    {result.mutations.map((m, i) => (
                       <tr key={`${m.number ?? 'mutation'}-${i}`}>
                         <td className="px-3 py-2 font-medium">{m.number ?? t('tables.notRecorded')}</td>
                         <td className="px-3 py-2">{m.kind}</td>
@@ -185,7 +185,7 @@ export function NakalChecker() {
               </div>
             </div>
           )}
-          {s.litigation.length > 0 && (
+          {result.litigation.length > 0 && (
             <div>
               <h2 className="mb-3 text-xl">{t('litigationTitle')}</h2>
               <div className="overflow-x-auto rounded-lg border border-border">
@@ -200,7 +200,7 @@ export function NakalChecker() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border">
-                    {s.litigation.map((l, i) => (
+                    {result.litigation.map((l, i) => (
                       <tr key={`${l.caseNo ?? 'case'}-${i}`}>
                         <td className="px-3 py-2 font-medium">{l.caseNo ?? t('tables.notRecorded')}</td>
                         <td className="px-3 py-2">{l.caseType ?? t('tables.notRecorded')}</td>
