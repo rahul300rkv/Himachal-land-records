@@ -236,9 +236,9 @@ export function NakalChecker() {
             <div>
               <h2 className="mb-3 text-xl">{t('ownerUpdatesTitle')}</h2>
               <p className="mb-3 text-sm text-muted-foreground">{t('ownerUpdatesIntro')}</p>
-              <div className="overflow-x-auto rounded-lg border border-border">
+              <div className="overflow-x-auto rounded-lg border border-amber-300/70 bg-amber-50/60 dark:border-amber-400/30 dark:bg-amber-950/20">
                 <table className="w-full min-w-[640px] text-sm">
-                  <thead className="bg-muted/50 text-left">
+                  <thead className="bg-amber-100/80 text-left dark:bg-amber-900/30">
                     <tr>
                       <th className="px-3 py-2 font-medium">{t('tables.mutation')}</th>
                       <th className="px-3 py-2 font-medium">{t('tables.date')}</th>
