@@ -112,7 +112,38 @@ async function supplementCrystalReport(pdf: Buffer, raw: RawNakal): Promise<RawN
       }
     }
 
-    const text = pages.join('\n');
+    const text = pages.join('\\n');
+
+    // Crystal Reports wraps remarks across pages. The vision model can attach
+    // a wrapped remark to the next mutation number, so re-associate each
+    // remark from its own printed mutation marker and number.
+    const markerPositions = [...text.matchAll(/ननट|नोट|ननटट/g)]
+      .map((match) => match.index ?? -1)
+      .filter((index) => index >= 0);
+    const crystalNotes = new Map<string, string>();
+    for (const row of mutationRows) {
+      const numberPosition = text.lastIndexOf(row.number);
+      if (numberPosition < 0) continue;
+      const start = markerPositions.filter((position) => position < numberPosition).at(-1);
+      if (start === undefined) continue;
+      const nextMarker = markerPositions.find((position) => position > start + 4);
+      const casePosition = text.indexOf('A Case Number', start + 4);
+      const endCandidates = [nextMarker, casePosition >= 0 ? casePosition : undefined].filter(
+        (position): position is number => position !== undefined && position > start,
+      );
+      const end = endCandidates.length > 0 ? Math.min(...endCandidates) : text.length;
+      const note = text.slice(start, end).replace(/\\s+/g, ' ').trim();
+      if (note) crystalNotes.set(row.number, note);
+    }
+
+    const correctedMutations = mergedMutations.map((mutation) => {
+      const note = mutation.number ? crystalNotes.get(mutation.number) : undefined;
+      const indexed = mutation.number ? mutationRows.find((row) => row.number === mutation.number) : undefined;
+      return note || indexed
+        ? { ...mutation, kind: indexed?.kind ?? mutation.kind, note: note ?? mutation.note }
+        : mutation;
+    });
+
     const caseMatch = text.match(new RegExp(
       'Case Number\\s+(\\d{5,}\\/\\d{4})\\s+related to\\s+([\\s\\S]+?)\\s+titled as\\s+([\\s\\S]+?)\\s+instituted on\\s+(\\d{4}-\\d{2}-\\d{2})\\s+in the court of\\s+([\\s\\S]+?)\\s+and is currently\\s+([A-Za-z]+)',
       'i',
@@ -127,7 +158,7 @@ async function supplementCrystalReport(pdf: Buffer, raw: RawNakal): Promise<RawN
         status: caseMatch[6],
       });
     }
-    return rawNakalSchema.parse({ ...raw, mutations: mergedMutations, litigation: mergedLitigation });
+    return rawNakalSchema.parse({ ...raw, mutations: correctedMutations, litigation: mergedLitigation });
   } catch {
     // Supplementation is best effort. The original model result remains valid
     // if a particular PDF has a different layout or pdfjs cannot read it.
