@@ -111,8 +111,10 @@ type OwnerUpdate = { mutationNumber: string | null; names: string | null; share:
 function cleanRecipientNames(value: string): string | null {
   const cleaned = value
     .replace(/\s+/g, ' ')
-    .replace(/^(?:वहक|भाग|बराबर)\s+/g, '')
-    .replace(/(?:वहक|भाग|बराबर)\s*$/g, '')
+    .replace(/^((?:वहक|भाग|बराबर)\s+)+/g, '')
+    .replace(/\s+भाग\s+बराबर(?:\s+\(\d+\))?\s*$/g, '')
+    .replace(/\s+भाग\s*$/g, '')
+    .replace(/(?:वहक|बराबर)\s*$/g, '')
     .trim();
   return cleaned || null;
 }
