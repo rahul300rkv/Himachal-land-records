@@ -217,6 +217,35 @@ export function NakalChecker() {
             </div>
           )}
 
+          {result.ownerUpdates.length > 0 && (
+            <div>
+              <h2 className="mb-3 text-xl">{t('ownerUpdatesTitle')}</h2>
+              <p className="mb-3 text-sm text-muted-foreground">{t('ownerUpdatesIntro')}</p>
+              <div className="overflow-x-auto rounded-lg border border-border">
+                <table className="w-full min-w-[640px] text-sm">
+                  <thead className="bg-muted/50 text-left">
+                    <tr>
+                      <th className="px-3 py-2 font-medium">{t('tables.mutation')}</th>
+                      <th className="px-3 py-2 font-medium">{t('tables.date')}</th>
+                      <th className="px-3 py-2 font-medium">{t('tables.newOwners')}</th>
+                      <th className="px-3 py-2 font-medium">{t('tables.share')}</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border">
+                    {result.ownerUpdates.map((owner, i) => (
+                      <tr key={`${owner.mutationNumber ?? 'update'}-${i}`}>
+                        <td className="px-3 py-2 font-medium">{owner.mutationNumber ?? t('tables.notRecorded')}</td>
+                        <td className="px-3 py-2">{owner.date ?? t('tables.notRecorded')}</td>
+                        <td className="max-w-[34rem] whitespace-normal px-3 py-2">{owner.names ?? t('tables.notRecorded')}</td>
+                        <td className="px-3 py-2 font-medium">{owner.share ?? t('tables.notRecorded')}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
           <div>
             <h2 className="mb-3 text-xl">{t('flagsTitle')}</h2>
             {result.flags.length === 0 ? (

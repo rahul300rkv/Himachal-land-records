@@ -2399,6 +2399,8 @@
     "khasrasTitle": "Khasra parcels",
     "mutationsTitle": "Mutation history",
     "litigationTitle": "Litigation references",
+    "ownerUpdatesTitle": "Owners named in later mutations",
+    "ownerUpdatesIntro": "These parties and shares are taken from later accepted mutation notes. They are shown separately because the Jamabandi owner block may reflect an earlier record year.",
     "quality": {
       "title": "Extraction limits",
       "incomplete": "Some essential fields could not be read. Treat the score as unreliable and compare the original PDF with a certified record.",
@@ -2415,6 +2417,8 @@
       "transferredArea": "Area",
       "party": "Buyer / lender",
       "note": "Record note",
+      "newOwners": "New owners / recipients",
+      "share": "Recorded share",
       "caseNo": "Case number",
       "caseType": "Case type",
       "court": "Court",

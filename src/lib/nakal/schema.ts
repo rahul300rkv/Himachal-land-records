@@ -46,6 +46,16 @@ export const rawNakalSchema = z.object({
       }),
     )
     .default([]),
+  owner_updates: z
+    .array(
+      z.object({
+        mutation_number: text,
+        names: text,
+        share: text,
+        date: text,
+      }),
+    )
+    .default([]),
   litigation: z
     .array(
       z.object({ case_no: text, case_type: text, court: text, filed_on: text, status: text }),

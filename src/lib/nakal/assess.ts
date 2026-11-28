@@ -50,6 +50,7 @@ export type AssessResult = {
   khasras: { number: string | null; area: string | null; landClass: string | null; possession: string | null }[];
   mutations: { number: string | null; kind: string; date: string | null; area: string | null; buyer: string | null; note: string | null }[];
   litigation: { caseNo: string | null; caseType: string | null; court: string | null; filedOn: string | null; status: string | null }[];
+  ownerUpdates: { mutationNumber: string | null; names: string | null; share: string | null; date: string | null }[];
 };
 
 const RECENT_MONTHS = 24;
@@ -219,6 +220,12 @@ export function assess(raw: RawNakal, now: Date = new Date()): AssessResult {
       court: l.court,
       filedOn: l.filed_on,
       status: l.status,
+    })),
+    ownerUpdates: raw.owner_updates.map((o) => ({
+      mutationNumber: o.mutation_number,
+      names: o.names,
+      share: o.share,
+      date: o.date,
     })),
     owners: raw.owners.map((o) => ({
       // Crystal Reports often leaves a khata/khewat column number attached to

@@ -38,6 +38,8 @@ Return ONLY a JSON object of this shape (no markdown):
   "mutations": [{"number": string, "kind": "sale"|"inheritance"|"gift"|"partition"|"mortgage"|"exchange"|"other",
                  "date": "dd/mm/yyyy"|null, "area": string|null, "buyer": string|null,
                  "note": string|null}],
+  "owner_updates": [{"mutation_number": string|null, "names": string|null,
+                     "share": string|null, "date": "dd/mm/yyyy"|null}],
   "litigation": [{"case_no": string, "case_type": string|null, "court": string|null,
                   "filed_on": "YYYY-MM-DD"|null, "status": string|null}],
   "low_confidence_fields": [string]
@@ -49,6 +51,7 @@ Rules:
 - If a value is unreadable or absent use null. Never guess. List unsure fields in low_confidence_fields.
 - owners: one entry per printed share line. If several people share one line (e.g. "bhag barabar (989)") keep them together in ONE entry with the printed share number.
 - mutations: every intkal number in the khasra rows AND in the "note" lines at the bottom. kind: sale (baiy/bai), inheritance (vrasat), gift (hiba), partition (taqsim), mortgage/charge (rahan, bank, ऋण, गिरवी, बंधक), exchange (tabadla), else other. Take date, area transferred, lender/bank or buyer, and the complete printed note text when visible. A bank loan or rahan entry is an encumbrance and must never be treated as a clean record.
+- owner_updates: this is separate from the original owners block. For every accepted inheritance, sale, gift or partition note that names a new owner, create one entry for each printed recipient group. Copy the recipient names exactly as printed and copy the fractional share exactly as printed, such as "45/715", "209/715" or "22/715". Do not treat the old Jamabandi owners as the post-mutation owners, and do not invent a share when the note does not state one.
 - HimBhoomi PDFs may have a corrupted Hindi text layer (Crystal Reports). Read the rendered page visually. Do not infer a name or number from a broken glyph. Preserve each khasra row separately.
 - litigation: the English stamp "A Case Number ... related to ... titled as ... instituted on ... in the court of ... and is currently ...". One entry per distinct case number (the stamp repeats on pages).
 - Ignore page headers, footers and page numbers.`;
