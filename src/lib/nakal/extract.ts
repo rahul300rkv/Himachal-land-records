@@ -139,10 +139,17 @@ async function supplementCrystalReport(pdf: Buffer, raw: RawNakal): Promise<RawN
     }
 
     const correctedMutations = mergedMutations.map((mutation) => {
-      const note = mutation.number ? crystalNotes.get(mutation.number) : undefined;
+      const crystalNote = mutation.number ? crystalNotes.get(mutation.number) : undefined;
       const indexed = mutation.number ? mutationRows.find((row) => row.number === mutation.number) : undefined;
+      // Prefer the vision model's rendered-page note when it names its own
+      // mutation. The embedded Crystal Reports Hindi layer is structurally
+      // useful but often corrupts names such as Buddhu/Arti.
+      const modelNoteBelongsToMutation = Boolean(
+        mutation.note && mutation.number && mutation.note.includes(mutation.number),
+      );
+      const note = modelNoteBelongsToMutation ? mutation.note : crystalNote ?? mutation.note;
       return note || indexed
-        ? { ...mutation, kind: indexed?.kind ?? mutation.kind, note: note ?? mutation.note }
+        ? { ...mutation, kind: indexed?.kind ?? mutation.kind, note }
         : mutation;
     });
 
