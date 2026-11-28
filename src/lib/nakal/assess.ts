@@ -83,6 +83,14 @@ function uniqueBy<T>(items: T[], key: (item: T) => string) {
   });
 }
 
+function cleanOwnerName(value: string | null): string {
+  return (value ?? '')
+    .replace(/\s+भाग\s+बराबर\s*$/g, '')
+    .replace(/\s+भाग\s*$/g, '')
+    .replace(/[\s|:;,]*(?:\d{1,2})\s*$/, '')
+    .trim();
+}
+
 function normalizeMutationNote(note: string | null): string | null {
   return note
     ?.replace(/(?:शमन|समन)\s+जान[िवब]+/g, 'मिन जानिब')
@@ -345,7 +353,7 @@ export function assess(raw: RawNakal, now: Date = new Date()): AssessResult {
       // Crystal Reports often leaves a khata/khewat column number attached to
       // the end of the owner line. Remove only a trailing numeric artifact;
       // never alter digits inside a name or a genuine share value.
-      names: (o.names ?? '').replace(/[\s|:;,]*(?:\d{1,2})\s*$/, '').trim(),
+      names: cleanOwnerName(o.names),
       shareNum: o.share_num,
       sharePct: o.share_num !== null && raw.total_share ? (o.share_num / raw.total_share) * 100 : null,
     })),
