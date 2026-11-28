@@ -91,6 +91,86 @@ function dateFromNote(note: string | null): string | null {
 function areaFromNote(note: string | null): string | null {
   return note?.match(/(?:वकदर|वकदर)\s+([0-9]{1,2}-[0-9]{1,2}-[0-9]{1,2})/i)?.[1] ?? null;
 }
+type OwnerUpdate = { mutationNumber: string | null; names: string | null; share: string | null; date: string | null };
+
+function cleanRecipientNames(value: string): string | null {
+  const cleaned = value
+    .replace(/\s+/g, ' ')
+    .replace(/^(?:वहक|भाग|बराबर)\s+/g, '')
+    .replace(/(?:वहक|भाग|बराबर)\s*$/g, '')
+    .trim();
+  return cleaned || null;
+}
+
+/** Derive recipient groups from the printed note instead of trusting a model
+ * to associate a long Hindi name list with the fraction that follows it. */
+function ownerUpdatesFromNotes(mutations: RawNakal['mutations']): OwnerUpdate[] {
+  const updates: OwnerUpdate[] = [];
+  for (const mutation of mutations) {
+    const note = mutation.note;
+    if (!note || !/के नाम|क नाम/.test(note)) continue;
+    const date = dateFromNote(note) ?? mutation.date;
+    const end = note.search(/के नाम|क नाम/);
+
+    if (mutation.kind === 'sale') {
+      const areaEnd = note.search(/वकदर\s+[0-9]{1,2}-[0-9]{1,2}-[0-9]{1,2}/);
+      const recipientStart = note.search(/(?:शमन|समन)\s+जानिव/);
+      if (recipientStart < 0) continue;
+      const recipients = note.slice(recipientStart).slice(0, end - recipientStart);
+      const fractions: { value: string; index: number; length: number }[] = [];
+      const fractionPattern = /(\d+\/\d+)\s*भाग/g;
+      let match: RegExpExecArray | null;
+      while ((match = fractionPattern.exec(recipients)) !== null) {
+        fractions.push({ value: match[1], index: match.index, length: match[0].length });
+      }
+      if (fractions.length === 0) {
+        const transferShare = areaEnd >= 0
+          ? note.slice(0, areaEnd).match(/(\d+\/\d+)\s*भाग\s*रकवा/)?.[1] ?? null
+          : null;
+        updates.push({ mutationNumber: mutation.number, names: cleanRecipientNames(recipients), share: transferShare, date });
+        continue;
+      }
+      let cursor = 0;
+      for (const fraction of fractions) {
+        const names = cleanRecipientNames(recipients.slice(cursor, fraction.index));
+        if (names) updates.push({ mutationNumber: mutation.number, names, share: fraction.value, date });
+        cursor = fraction.index + fraction.length;
+      }
+      const tail = cleanRecipientNames(recipients.slice(cursor));
+      if (tail && updates.length > 0) {
+        updates[updates.length - 1].names = `${updates[updates.length - 1].names}, ${tail}`;
+      }
+      continue;
+    }
+
+    if (mutation.kind === 'inheritance') {
+      const total = note.match(/कुल\s*\((\d+)\)\s*भाग/);
+      if (total) {
+        const bodyStart = note.indexOf(total[0]) + total[0].length;
+        const body = note.slice(bodyStart, end);
+        const parts: { value: string; index: number; length: number }[] = [];
+        const partPattern = /\((\d+)\)\s*भाग/g;
+        let part: RegExpExecArray | null;
+        while ((part = partPattern.exec(body)) !== null) {
+          parts.push({ value: `${part[1]}/${total[1]}`, index: part.index, length: part[0].length });
+        }
+        let cursor = 0;
+        for (const part of parts) {
+          const names = cleanRecipientNames(body.slice(cursor, part.index));
+          if (names) updates.push({ mutationNumber: mutation.number, names, share: part.value, date });
+          cursor = part.index + part.length;
+        }
+        const tail = cleanRecipientNames(body.slice(cursor));
+        if (tail && updates.length > 0) updates[updates.length - 1].names = `${updates[updates.length - 1].names}, ${tail}`;
+      } else {
+        const rights = note.search(/हक\s+/);
+        const names = rights >= 0 ? cleanRecipientNames(note.slice(rights + 3, end)) : null;
+        if (names) updates.push({ mutationNumber: mutation.number, names, share: null, date });
+      }
+    }
+  }
+  return updates;
+}
 
 export function assess(raw: RawNakal, now: Date = new Date()): AssessResult {
   const flags: Flag[] = [];
@@ -182,6 +262,14 @@ export function assess(raw: RawNakal, now: Date = new Date()): AssessResult {
   else if (raw.low_confidence_fields.length >= 3) score = Math.min(score, 60);
   const band: Band = score >= 80 ? 'low' : score >= 55 ? 'moderate' : 'high';
 
+  const ownerUpdates = ownerUpdatesFromNotes(mutations);
+  const recipientsByMutation = new Map<string, string>();
+  for (const update of ownerUpdates) {
+    if (!update.mutationNumber || !update.names) continue;
+    const current = recipientsByMutation.get(update.mutationNumber);
+    recipientsByMutation.set(update.mutationNumber, current ? `${current}; ${update.names}` : update.names);
+  }
+
   return {
     score,
     band,
@@ -211,7 +299,7 @@ export function assess(raw: RawNakal, now: Date = new Date()): AssessResult {
       kind: m.kind,
       date: m.date,
       area: m.area,
-      buyer: m.buyer,
+      buyer: recipientsByMutation.get(m.number ?? '') ?? m.buyer,
       note: m.note,
     })),
     litigation: litigation.map((l) => ({
@@ -221,7 +309,7 @@ export function assess(raw: RawNakal, now: Date = new Date()): AssessResult {
       filedOn: l.filed_on,
       status: l.status,
     })),
-    ownerUpdates: raw.owner_updates.map((o) => ({
+    ownerUpdates: ownerUpdates.length > 0 ? ownerUpdates : raw.owner_updates.map((o) => ({
       mutationNumber: o.mutation_number,
       names: o.names,
       share: o.share,
