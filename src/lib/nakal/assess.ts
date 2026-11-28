@@ -144,7 +144,7 @@ function ownerUpdatesFromNotes(
     const isTransferNote = /वहक\s+/.test(note) && /\d+\/\d+\s*भाग/.test(note);
     if (!/के नाम|क नाम/.test(note) && !isTransferNote) continue;
     const date = dateFromNote(note) ?? mutation.date;
-    const endMatch = note.search(/के नाम|क नाम|नकम\\s+वककक|नाम\\s+वाका|वाका/);
+    const endMatch = note.search(/के नाम|क नाम|नकम\s+वककक|नाम\s+वाका|वाका/);
     const end = endMatch >= 0 ? endMatch : note.length;
 
     if (mutation.kind === 'sale' || isTransferNote) {
