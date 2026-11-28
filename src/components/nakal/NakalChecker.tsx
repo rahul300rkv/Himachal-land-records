@@ -113,6 +113,13 @@ export function NakalChecker() {
               {[['ownership', s.shareHolders > 0 ? 100 : 0, t('threeChecks.ownership.title'), t('threeChecks.ownership.body', { count: s.shareHolders })], ['history', Math.min(100, s.mutationCount * 20), t('threeChecks.encumbrances.title'), t('threeChecks.encumbrances.body', { count: s.mutationCount })], ['litigation', s.pendingCases > 0 ? 20 : 100, t('threeChecks.litigation.title'), t('threeChecks.litigation.body', { count: s.pendingCases })]].map(([key, value, title, body]) => <div key={key} className="rounded-lg bg-background/70 p-3"><div className="flex items-center justify-between gap-2 text-sm font-medium"><span>{title}</span><span className="tabular-nums text-muted-foreground">{value}%</span></div><div className="mt-2 h-1.5 rounded-full bg-muted"><div className={`h-full rounded-full ${key === 'litigation' && s.pendingCases > 0 ? 'bg-red-500' : 'bg-primary'}`} style={{ width: `${value}%` }} /></div><p className="mt-2 text-xs text-muted-foreground">{body}</p></div>)}
             </div>
           </div>
+          {(!s.extractionComplete || s.lowConfidenceCount > 0) && (
+            <div className="rounded-lg border border-notice-border bg-notice p-4 text-sm text-notice-foreground">
+              <p className="font-semibold">{t('quality.title')}</p>
+              {!s.extractionComplete && <p className="mt-1">{t('quality.incomplete')}</p>}
+              {s.lowConfidenceCount > 0 && <p className="mt-1">{t('quality.uncertain', { count: s.lowConfidenceCount })}</p>}
+            </div>
+          )}
           <div className="hidden">
           <div className="flex flex-wrap items-center gap-4 border-y border-border py-5">
             <p className="text-5xl font-semibold tabular-nums text-primary">{result.score}<span className="text-2xl text-muted-foreground">/100</span></p>
@@ -122,27 +129,91 @@ export function NakalChecker() {
             </div>
           </div></div>
 
-          <div>
-            <h2 className="mb-3 text-xl">{t('threeChecks.title')}</h2>
-            <div className="grid gap-3 md:grid-cols-3">
-              <article className="rounded-lg border border-border bg-card p-4">
-                <FileKey2 className="size-5 text-primary" aria-hidden="true" />
-                <h3 className="mt-3 text-base">{t('threeChecks.ownership.title')}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">{t('threeChecks.ownership.body', { count: s.shareHolders })}</p>
-              </article>
-              <article className="rounded-lg border border-border bg-card p-4">
-                <Landmark className="size-5 text-primary" aria-hidden="true" />
-                <h3 className="mt-3 text-base">{t('threeChecks.encumbrances.title')}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">{t('threeChecks.encumbrances.body', { count: s.mutationCount })}</p>
-              </article>
-              <article className="rounded-lg border border-border bg-card p-4">
-                <Gavel className="size-5 text-primary" aria-hidden="true" />
-                <h3 className="mt-3 text-base">{t('threeChecks.litigation.title')}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">{t('threeChecks.litigation.body', { count: s.pendingCases })}</p>
-              </article>
+          {s.khasras.length > 0 && (
+            <div>
+              <h2 className="mb-3 text-xl">{t('khasrasTitle')}</h2>
+              <div className="overflow-x-auto rounded-lg border border-border">
+                <table className="w-full min-w-[560px] text-sm">
+                  <thead className="bg-muted/50 text-left">
+                    <tr>
+                      <th className="px-3 py-2 font-medium">{t('tables.khasra')}</th>
+                      <th className="px-3 py-2 font-medium">{t('tables.area')}</th>
+                      <th className="px-3 py-2 font-medium">{t('tables.landClass')}</th>
+                      <th className="px-3 py-2 font-medium">{t('tables.possession')}</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border">
+                    {s.khasras.map((k, i) => (
+                      <tr key={`${k.number ?? 'khasra'}-${i}`}>
+                        <td className="px-3 py-2 font-medium">{k.number ?? t('tables.notRecorded')}</td>
+                        <td className="px-3 py-2">{k.area ?? t('tables.notRecorded')}</td>
+                        <td className="px-3 py-2">{k.landClass ?? t('tables.notRecorded')}</td>
+                        <td className="px-3 py-2">{k.possession ?? t('tables.notRecorded')}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
-            <p className="mt-3 text-xs text-muted-foreground">{t('threeChecks.note')}</p>
-          </div>
+          )}
+          {s.mutations.length > 0 && (
+            <div>
+              <h2 className="mb-3 text-xl">{t('mutationsTitle')}</h2>
+              <div className="overflow-x-auto rounded-lg border border-border">
+                <table className="w-full min-w-[620px] text-sm">
+                  <thead className="bg-muted/50 text-left">
+                    <tr>
+                      <th className="px-3 py-2 font-medium">{t('tables.mutation')}</th>
+                      <th className="px-3 py-2 font-medium">{t('tables.type')}</th>
+                      <th className="px-3 py-2 font-medium">{t('tables.date')}</th>
+                      <th className="px-3 py-2 font-medium">{t('tables.transferredArea')}</th>
+                      <th className="px-3 py-2 font-medium">{t('tables.party')}</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border">
+                    {s.mutations.map((m, i) => (
+                      <tr key={`${m.number ?? 'mutation'}-${i}`}>
+                        <td className="px-3 py-2 font-medium">{m.number ?? t('tables.notRecorded')}</td>
+                        <td className="px-3 py-2">{m.kind}</td>
+                        <td className="px-3 py-2">{m.date ?? t('tables.notRecorded')}</td>
+                        <td className="px-3 py-2">{m.area ?? t('tables.notRecorded')}</td>
+                        <td className="px-3 py-2">{m.buyer ?? t('tables.notRecorded')}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+          {s.litigation.length > 0 && (
+            <div>
+              <h2 className="mb-3 text-xl">{t('litigationTitle')}</h2>
+              <div className="overflow-x-auto rounded-lg border border-border">
+                <table className="w-full min-w-[680px] text-sm">
+                  <thead className="bg-muted/50 text-left">
+                    <tr>
+                      <th className="px-3 py-2 font-medium">{t('tables.caseNo')}</th>
+                      <th className="px-3 py-2 font-medium">{t('tables.caseType')}</th>
+                      <th className="px-3 py-2 font-medium">{t('tables.court')}</th>
+                      <th className="px-3 py-2 font-medium">{t('tables.filedOn')}</th>
+                      <th className="px-3 py-2 font-medium">{t('tables.status')}</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border">
+                    {s.litigation.map((l, i) => (
+                      <tr key={`${l.caseNo ?? 'case'}-${i}`}>
+                        <td className="px-3 py-2 font-medium">{l.caseNo ?? t('tables.notRecorded')}</td>
+                        <td className="px-3 py-2">{l.caseType ?? t('tables.notRecorded')}</td>
+                        <td className="px-3 py-2">{l.court ?? t('tables.notRecorded')}</td>
+                        <td className="px-3 py-2">{l.filedOn ?? t('tables.notRecorded')}</td>
+                        <td className="px-3 py-2">{l.status ?? t('tables.notRecorded')}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
 
           <div>
             <h2 className="mb-3 text-xl">{t('flagsTitle')}</h2>
