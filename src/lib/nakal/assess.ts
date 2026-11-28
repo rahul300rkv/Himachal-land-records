@@ -176,7 +176,7 @@ function ownerUpdatesFromNotes(
         const rights = note.search(/हक\s+/);
         const names = rights >= 0 ? cleanRecipientNames(note.slice(rights + 3, end)) : null;
         const share = sourceShare !== null && recordTotal !== null
-          ? `${sourceShare}/${recordTotal} (inherited block; individual split not stated)`
+          ? `Within original ${sourceShare}/${recordTotal} owner block; individual split not stated`
           : null;
         if (names) updates.push({ mutationNumber: mutation.number, names, share, date });
       }
