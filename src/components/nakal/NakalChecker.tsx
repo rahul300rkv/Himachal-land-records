@@ -168,6 +168,7 @@ export function NakalChecker() {
                       <th className="px-3 py-2 font-medium">{t('tables.date')}</th>
                       <th className="px-3 py-2 font-medium">{t('tables.transferredArea')}</th>
                       <th className="px-3 py-2 font-medium">{t('tables.party')}</th>
+                      <th className="px-3 py-2 font-medium">{t('tables.note')}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border">
@@ -178,6 +179,7 @@ export function NakalChecker() {
                         <td className="px-3 py-2">{m.date ?? t('tables.notRecorded')}</td>
                         <td className="px-3 py-2">{m.area ?? t('tables.notRecorded')}</td>
                         <td className="px-3 py-2">{m.buyer ?? t('tables.notRecorded')}</td>
+                        <td className="max-w-[28rem] whitespace-normal px-3 py-2">{m.note ?? t('tables.notRecorded')}</td>
                       </tr>
                     ))}
                   </tbody>

@@ -26,11 +26,32 @@ export async function readWithNvidia(pdf: Buffer, prompt: string, key: string, s
       const canvas = createCanvas(Math.ceil(viewport.width), Math.ceil(viewport.height));
       try {
         await page.render({ canvas: canvas as unknown as HTMLCanvasElement, viewport }).promise;
-        let jpeg = canvas.toBuffer('image/jpeg', 78);
-        if (jpeg.length > 130_000) jpeg = canvas.toBuffer('image/jpeg', 50);
-        if (jpeg.length > 130_000) jpeg = canvas.toBuffer('image/jpeg', 32);
+        // Crystal Reports puts the useful mutation history and case stamp in
+        // the narrow right-hand remarks column. Keep page 1 complete for the
+        // header/owner/khasra fields, but send a focused crop for continuation
+        // pages. This keeps the same three-image request while giving the
+        // fallback model materially more pixels for the evidence column.
+        const evidenceCanvas = index === 1
+          ? canvas
+          : (() => {
+              const crop = createCanvas(Math.ceil(canvas.width * 0.4), canvas.height);
+              const context = crop.getContext('2d');
+              context.drawImage(
+                canvas,
+                Math.floor(canvas.width * 0.6), 0,
+                Math.ceil(canvas.width * 0.4), canvas.height,
+                0, 0,
+                crop.width, crop.height,
+              );
+              return crop;
+            })();
+        let jpeg = evidenceCanvas.toBuffer('image/jpeg', 78);
+        if (jpeg.length > 130_000) jpeg = evidenceCanvas.toBuffer('image/jpeg', 50);
+        if (jpeg.length > 130_000) jpeg = evidenceCanvas.toBuffer('image/jpeg', 50);
+        if (jpeg.length > 130_000) jpeg = evidenceCanvas.toBuffer('image/jpeg', 32);
         if (jpeg.length > 130_000) throw new Error('Rendered page exceeds NVIDIA inline image limit');
         images.push({ type: 'image_url', image_url: { url: `data:image/jpeg;base64,${jpeg.toString('base64')}` } });
+        if (evidenceCanvas !== canvas) evidenceCanvas.width = evidenceCanvas.height = 1;
       } finally {
         page.cleanup();
         canvas.width = canvas.height = 1;

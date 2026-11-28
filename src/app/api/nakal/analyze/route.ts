@@ -8,6 +8,11 @@ export const maxDuration = 60; // PDF vision requests can take up to 55 s
 
 const MAX_BYTES = 4 * 1024 * 1024; // Vercel rejects request bodies over ~4.5 MB
 const MAX_PER_HOUR = 20;
+// Changing the extraction contract must invalidate partial results held by a
+// warm server instance. Keep this separate from the PDF digest so the same PDF
+// can be reprocessed after an extractor improvement without another AI pass in
+// the client.
+const EXTRACTOR_VERSION = 'nakal-extractor-v3-full-mutation-notes';
 
 // Best-effort limiter and cache, both scoped to the server instance.
 const hits = new Map<string, number[]>();
@@ -35,7 +40,7 @@ export async function POST(request: Request) {
   if (file.size > MAX_BYTES) return json({ error: 'too_large' }, 413);
   const bytes = Buffer.from(await file.arrayBuffer());
   if (bytes.subarray(0, 5).toString('latin1') !== '%PDF-') return json({ error: 'invalid_file' }, 400);
-  const digest = createHash('sha256').update(bytes).digest('hex');
+  const digest = createHash('sha256').update(EXTRACTOR_VERSION).update(bytes).digest('hex');
   const cached = resultCache.get(digest);
   if (cached && cached.expiresAt > Date.now()) {
     return json({ ...cached.value, cached: true }, 200);

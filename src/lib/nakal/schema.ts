@@ -42,6 +42,7 @@ export const rawNakalSchema = z.object({
         date: text,
         area: text,
         buyer: text,
+        note: text,
       }),
     )
     .default([]),

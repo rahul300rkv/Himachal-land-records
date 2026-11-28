@@ -2414,6 +2414,7 @@
       "date": "Date",
       "transferredArea": "Area",
       "party": "Buyer / lender",
+      "note": "Record note",
       "caseNo": "Case number",
       "caseType": "Case type",
       "court": "Court",

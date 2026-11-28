@@ -48,7 +48,7 @@ export type AssessResult = {
   };
   owners: { names: string; shareNum: number | null; sharePct: number | null }[];
   khasras: { number: string | null; area: string | null; landClass: string | null; possession: string | null }[];
-  mutations: { number: string | null; kind: string; date: string | null; area: string | null; buyer: string | null }[];
+  mutations: { number: string | null; kind: string; date: string | null; area: string | null; buyer: string | null; note: string | null }[];
   litigation: { caseNo: string | null; caseType: string | null; court: string | null; filedOn: string | null; status: string | null }[];
 };
 
@@ -91,7 +91,7 @@ export function assess(raw: RawNakal, now: Date = new Date()): AssessResult {
   const sum = shares.reduce((a, b) => a + b, 0);
   // Repeated mutation/case stamps can occur across Jamabandi pages. Deduplicate
   // before counting or scoring so repetition does not inflate concern levels.
-  const mutations = uniqueBy(raw.mutations, (m) => [m.number, m.kind, m.date, m.area, m.buyer].join('|'));
+  const mutations = uniqueBy(raw.mutations, (m) => [m.number, m.kind, m.date, m.area, m.buyer, m.note].join('|'));
   const litigation = uniqueBy(raw.litigation, (l) => l.case_no ? `case:${l.case_no}` : JSON.stringify(l));
   const extractionComplete = raw.owners.length > 0 && raw.total_share !== null && raw.khasras.length > 0;
 
@@ -198,6 +198,7 @@ export function assess(raw: RawNakal, now: Date = new Date()): AssessResult {
       date: m.date,
       area: m.area,
       buyer: m.buyer,
+      note: m.note,
     })),
     litigation: litigation.map((l) => ({
       caseNo: l.case_no,
