@@ -137,12 +137,13 @@ function ownerUpdatesFromNotes(
     const date = dateFromNote(note) ?? mutation.date;
     const end = note.search(/के नाम|क नाम/);
 
-    if (mutation.kind === 'sale') {
+    const isTransferNote = /वहक\s+.+के नाम/.test(note);
+    if (mutation.kind === 'sale' || isTransferNote) {
       // “मिन जानिब” introduces transferors; “वहक ... के नाम” identifies
       // the beneficiary. Only the beneficiary is a new owner in this sale.
       const vahak = note.slice(0, end).match(/वहक\s+(.+)$/);
       if (vahak) {
-        const transferShare = note.match(/(\d+\/\d+)\s*भाग\s*रकवा/)?.[1] ?? null;
+        const transferShare = note.match(/(\d+\/\d+)\s*भाग/)?.[1] ?? null;
         const names = cleanRecipientNames(vahak[1]);
         if (names) updates.push({ mutationNumber: mutation.number, names, share: transferShare, date });
       }
