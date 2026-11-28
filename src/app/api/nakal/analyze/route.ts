@@ -12,7 +12,7 @@ const MAX_PER_HOUR = 20;
 // warm server instance. Keep this separate from the PDF digest so the same PDF
 // can be reprocessed after an extractor improvement without another AI pass in
 // the client.
-const EXTRACTOR_VERSION = 'nakal-extractor-v16-derived-owner-presentation';
+const EXTRACTOR_VERSION = 'nakal-extractor-v17-buddhu-normalization';
 
 // Best-effort limiter and cache, both scoped to the server instance.
 const hits = new Map<string, number[]>();
