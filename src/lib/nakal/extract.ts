@@ -46,10 +46,12 @@ Return ONLY a JSON object of this shape (no markdown):
 }
 
 Rules:
-- Transcribe names and place names in Devanagari exactly as printed. Do not translate.
+- Read and understand the entire PDF page by page before producing JSON, then compare every extracted field against the rendered page.
+- Transcribe names and place names in Devanagari exactly as printed. Do not translate, transliterate, autocorrect, or invent names.
+- Preserve the original owner-line order and keep relationship words attached to the correct person: पुत्र, पुत्री, पत्नी, विधवा, व/और, and मिन जानिब. “मिन जानिब” means “from the side of”; it is not a person’s name.
 - Numbers as ASCII digits. Areas stay in printed ha-are-sqm form, e.g. "00-07-15".
 - If a value is unreadable or absent use null. Never guess. List unsure fields in low_confidence_fields.
-- owners: one entry per printed share line. If several people share one line (e.g. "bhag barabar (989)") keep them together in ONE entry with the printed share number.
+- owners: one entry per printed share line. The PDF owner block appears before mutation remarks; keep all printed owner groups, including the final group, and attach each share to the same line. If several people share one line (e.g. "bhag barabar (989)") keep them together in ONE entry with the printed share number.
 - mutations: every intkal number in the khasra rows AND in the "note" lines at the bottom. kind: sale (baiy/bai), inheritance (vrasat), gift (hiba), partition (taqsim), mortgage/charge (rahan, bank, ऋण, गिरवी, बंधक), exchange (tabadla), else other. Take date, area transferred, lender/bank or buyer, and the complete printed note text when visible. A bank loan or rahan entry is an encumbrance and must never be treated as a clean record.
 - owner_updates: this is separate from the original owners block. For every accepted inheritance, sale, gift or partition note that names a new owner, create one entry for each printed recipient group. Copy the recipient names exactly as printed and copy the fractional share exactly as printed, such as "45/715", "209/715" or "22/715". Do not treat the old Jamabandi owners as the post-mutation owners, and do not invent a share when the note does not state one.
 - HimBhoomi PDFs may have a corrupted Hindi text layer (Crystal Reports). Read the rendered page visually. Do not infer a name or number from a broken glyph. Preserve each khasra row separately.
@@ -112,7 +114,7 @@ async function supplementCrystalReport(pdf: Buffer, raw: RawNakal): Promise<RawN
       }
     }
 
-    const text = pages.join('\\n');
+    const text = pages.join('\n');
 
     // Crystal Reports wraps remarks across pages. The vision model can attach
     // a wrapped remark to the next mutation number, so re-associate each
@@ -132,7 +134,7 @@ async function supplementCrystalReport(pdf: Buffer, raw: RawNakal): Promise<RawN
         (position): position is number => position !== undefined && position > start,
       );
       const end = endCandidates.length > 0 ? Math.min(...endCandidates) : text.length;
-      const note = text.slice(start, end).replace(/\\s+/g, ' ').trim();
+      const note = text.slice(start, end).replace(/\s+/g, ' ').trim();
       if (note) crystalNotes.set(row.number, note);
     }
 
