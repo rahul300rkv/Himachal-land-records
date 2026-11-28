@@ -129,6 +129,21 @@ export function NakalChecker() {
             </div>
           </div></div>
 
+          {result.owners.length > 0 && (
+            <div>
+              <h2 className="mb-3 text-xl">{t('ownersTitle')}</h2>
+              <ul className="divide-y divide-border rounded-md border border-border text-sm">
+                {result.owners.map((o, i) => (
+                  <li key={i} className="flex items-start justify-between gap-4 p-3">
+                    <span className="min-w-0 break-words">{o.names || '—'}</span>
+                    <span className="shrink-0 tabular-nums text-muted-foreground">
+                      {o.shareNum ?? '—'}{o.sharePct !== null ? ` (${num.format(o.sharePct)}%)` : ''}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           {result.khasras.length > 0 && (
             <div>
               <h2 className="mb-3 text-xl">{t('khasrasTitle')}</h2>
@@ -274,21 +289,7 @@ export function NakalChecker() {
             </dl>
           </div>
 
-          {result.owners.length > 0 && (
-            <div>
-              <h2 className="mb-3 text-xl">{t('ownersTitle')}</h2>
-              <ul className="divide-y divide-border rounded-md border border-border text-sm">
-                {result.owners.map((o, i) => (
-                  <li key={i} className="flex items-start justify-between gap-4 p-3">
-                    <span className="min-w-0 break-words">{o.names || '—'}</span>
-                    <span className="shrink-0 tabular-nums text-muted-foreground">
-                      {o.shareNum ?? '—'}{o.sharePct !== null ? ` (${num.format(o.sharePct)}%)` : ''}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+
 
           <p className="text-sm text-muted-foreground">{t('verify')}</p>
         </div>
