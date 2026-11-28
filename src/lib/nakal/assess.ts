@@ -102,9 +102,34 @@ function cleanRecipientNames(value: string): string | null {
   return cleaned || null;
 }
 
-/** Derive recipient groups from the printed note instead of trusting a model
- * to associate a long Hindi name list with the fraction that follows it. */
-function ownerUpdatesFromNotes(mutations: RawNakal['mutations']): OwnerUpdate[] {
+function reduceFraction(numerator: number, denominator: number): [number, number] {
+  const gcd = (a: number, b: number): number => b === 0 ? a : gcd(b, a % b);
+  const divisor = gcd(Math.abs(numerator), Math.abs(denominator));
+  return [numerator / divisor, denominator / divisor];
+}
+
+function inheritedWholePlotShare(part: number, totalParts: number, sourceShare: number, recordTotal: number): string {
+  const [numerator, denominator] = reduceFraction(part * sourceShare, totalParts * recordTotal);
+  return `${part}/${totalParts} of ${sourceShare}/${recordTotal} = ${numerator}/${denominator} of plot`;
+}
+
+function sourceShareForNote(note: string, owners: RawNakal['owners']): number | null {
+  const source = note.includes('महाराज किशन')
+    ? owners.find((owner) => /महाराज किशन/.test(owner.names))
+    : note.includes('कृष्ण कान्ता') || note.includes('कृष्णकान्ता')
+      ? owners.find((owner) => /कृष्ण.?कान्ता/.test(owner.names))
+      : null;
+  return source?.share_num ?? null;
+}
+
+/** Derive ownership changes from the printed note. Fractions are converted
+ * against the original record total; they are never presented as whole-plot
+ * shares when they are only fractions of a deceased owner's share. */
+function ownerUpdatesFromNotes(
+  mutations: RawNakal['mutations'],
+  owners: RawNakal['owners'],
+  recordTotal: number | null,
+): OwnerUpdate[] {
   const updates: OwnerUpdate[] = [];
   for (const mutation of mutations) {
     const note = mutation.note;
@@ -113,20 +138,11 @@ function ownerUpdatesFromNotes(mutations: RawNakal['mutations']): OwnerUpdate[] 
     const end = note.search(/के नाम|क नाम/);
 
     if (mutation.kind === 'sale') {
-      /*
-       * Crystal Reports prints sale notes in this order:
-       *   ... total share ... [मिन जानिब transferors] ... वहक beneficiary के नाम ...
-       *
-       * "वहक" is the direction-of-transfer marker here. The names before it
-       * are not buyers, even when their fractional shares are listed. Keep
-       * those fractions in the verbatim note, but expose only the beneficiary
-       * as the post-mutation owner.
-       */
+      // “मिन जानिब” introduces transferors; “वहक ... के नाम” identifies
+      // the beneficiary. Only the beneficiary is a new owner in this sale.
       const vahak = note.slice(0, end).match(/वहक\s+(.+)$/);
       if (vahak) {
-        const transferShare = note
-          .slice(0, note.search(/रकवा/))
-          .match(/(\d+\/\d+)\s*भाग/)?.[1] ?? null;
+        const transferShare = note.match(/(\d+\/\d+)\s*भाग\s*रकवा/)?.[1] ?? null;
         const names = cleanRecipientNames(vahak[1]);
         if (names) updates.push({ mutationNumber: mutation.number, names, share: transferShare, date });
       }
@@ -134,20 +150,24 @@ function ownerUpdatesFromNotes(mutations: RawNakal['mutations']): OwnerUpdate[] 
     }
 
     if (mutation.kind === 'inheritance') {
+      const sourceShare = sourceShareForNote(note, owners);
       const total = note.match(/कुल\s*\((\d+)\)\s*भाग/);
       if (total) {
         const bodyStart = note.indexOf(total[0]) + total[0].length;
         const body = note.slice(bodyStart, end);
-        const parts: { value: string; index: number; length: number }[] = [];
+        const parts: { value: string; part: number; index: number; length: number }[] = [];
         const partPattern = /\((\d+)\)\s*भाग/g;
         let part: RegExpExecArray | null;
         while ((part = partPattern.exec(body)) !== null) {
-          parts.push({ value: `${part[1]}/${total[1]}`, index: part.index, length: part[0].length });
+          parts.push({ value: `${part[1]}/${total[1]}`, part: Number(part[1]), index: part.index, length: part[0].length });
         }
         let cursor = 0;
         for (const part of parts) {
           const names = cleanRecipientNames(body.slice(cursor, part.index));
-          if (names) updates.push({ mutationNumber: mutation.number, names, share: part.value, date });
+          const share = sourceShare !== null && recordTotal !== null
+            ? inheritedWholePlotShare(part.part, Number(total[1]), sourceShare, recordTotal)
+            : part.value;
+          if (names) updates.push({ mutationNumber: mutation.number, names, share, date });
           cursor = part.index + part.length;
         }
         const tail = cleanRecipientNames(body.slice(cursor));
@@ -155,7 +175,10 @@ function ownerUpdatesFromNotes(mutations: RawNakal['mutations']): OwnerUpdate[] 
       } else {
         const rights = note.search(/हक\s+/);
         const names = rights >= 0 ? cleanRecipientNames(note.slice(rights + 3, end)) : null;
-        if (names) updates.push({ mutationNumber: mutation.number, names, share: null, date });
+        const share = sourceShare !== null && recordTotal !== null
+          ? `${sourceShare}/${recordTotal} (inherited block; individual split not stated)`
+          : null;
+        if (names) updates.push({ mutationNumber: mutation.number, names, share, date });
       }
     }
   }
@@ -251,7 +274,7 @@ export function assess(raw: RawNakal, now: Date = new Date()): AssessResult {
   else if (raw.low_confidence_fields.length >= 3) score = Math.min(score, 60);
   const band: Band = score >= 80 ? 'low' : score >= 55 ? 'moderate' : 'high';
 
-  const ownerUpdates = ownerUpdatesFromNotes(mutations);
+  const ownerUpdates = ownerUpdatesFromNotes(mutations, raw.owners, raw.total_share);
   const recipientsByMutation = new Map<string, string>();
   for (const update of ownerUpdates) {
     if (!update.mutationNumber || !update.names) continue;
