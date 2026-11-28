@@ -113,32 +113,22 @@ function ownerUpdatesFromNotes(mutations: RawNakal['mutations']): OwnerUpdate[] 
     const end = note.search(/के नाम|क नाम/);
 
     if (mutation.kind === 'sale') {
-      const areaEnd = note.search(/वकदर\s+[0-9]{1,2}-[0-9]{1,2}-[0-9]{1,2}/);
-      const recipientStart = note.search(/(?:शमन|समन)\s+जानिव/);
-      if (recipientStart < 0) continue;
-      const recipients = note.slice(recipientStart).slice(0, end - recipientStart);
-      const fractions: { value: string; index: number; length: number }[] = [];
-      const fractionPattern = /(\d+\/\d+)\s*भाग/g;
-      let match: RegExpExecArray | null;
-      while ((match = fractionPattern.exec(recipients)) !== null) {
-        fractions.push({ value: match[1], index: match.index, length: match[0].length });
-      }
-      if (fractions.length === 0) {
-        const transferShare = areaEnd >= 0
-          ? note.slice(0, areaEnd).match(/(\d+\/\d+)\s*भाग\s*रकवा/)?.[1] ?? null
-          : null;
-        updates.push({ mutationNumber: mutation.number, names: cleanRecipientNames(recipients), share: transferShare, date });
-        continue;
-      }
-      let cursor = 0;
-      for (const fraction of fractions) {
-        const names = cleanRecipientNames(recipients.slice(cursor, fraction.index));
-        if (names) updates.push({ mutationNumber: mutation.number, names, share: fraction.value, date });
-        cursor = fraction.index + fraction.length;
-      }
-      const tail = cleanRecipientNames(recipients.slice(cursor));
-      if (tail && updates.length > 0) {
-        updates[updates.length - 1].names = `${updates[updates.length - 1].names}, ${tail}`;
+      /*
+       * Crystal Reports prints sale notes in this order:
+       *   ... total share ... [मिन जानिब transferors] ... वहक beneficiary के नाम ...
+       *
+       * "वहक" is the direction-of-transfer marker here. The names before it
+       * are not buyers, even when their fractional shares are listed. Keep
+       * those fractions in the verbatim note, but expose only the beneficiary
+       * as the post-mutation owner.
+       */
+      const vahak = note.slice(0, end).match(/वहक\s+(.+)$/);
+      if (vahak) {
+        const transferShare = note
+          .slice(0, note.search(/रकवा/))
+          .match(/(\d+\/\d+)\s*भाग/)?.[1] ?? null;
+        const names = cleanRecipientNames(vahak[1]);
+        if (names) updates.push({ mutationNumber: mutation.number, names, share: transferShare, date });
       }
       continue;
     }
@@ -171,7 +161,6 @@ function ownerUpdatesFromNotes(mutations: RawNakal['mutations']): OwnerUpdate[] 
   }
   return updates;
 }
-
 export function assess(raw: RawNakal, now: Date = new Date()): AssessResult {
   const flags: Flag[] = [];
   const add = (code: FlagCode, severity: Severity, penalty: number, params = {}) =>
