@@ -446,8 +446,8 @@
       "official": "Open official map",
       "verification": "Verification checklist",
       "share": "Share plot"
-  },
-  "eyebrow": "Map tool",
+    },
+    "eyebrow": "Map tool",
     "title": "Himachal BhuNaksha Map | Search Khasra Plot",
     "intro": "Use the Himachal Pradesh BhuNaksha (BhuNaksha HP) map to locate a Khasra plot by district, tehsil and village. Compare the plot map with Jamabandi and Tatima records before relying on it for a land purchase.",
     "formTitle": "Locate your plot",
@@ -2338,7 +2338,7 @@
       "bad_output": "The record could not be read. Please try again.",
       "network": "Network error. Please try again."
     },
-    "scoreHelp": "Higher is better. 100 means our checks found no issues.",
+    "scoreHelp": "This is a document review score, not a title or safety guarantee.",
     "threeChecks": {
       "title": "The three checks at a glance",
       "ownership": {
@@ -2366,8 +2366,8 @@
       "medium": "Medium",
       "low": "Low"
     },
-    "flagsTitle": "What we found",
-    "noFlags": "Our checks found no issues. This does not prove the record is genuine.",
+    "flagsTitle": "Checks requiring attention",
+    "noFlags": "No issues were detected by these checks. This does not prove that the record is complete, current or free from dispute.",
     "summary": {
       "title": "Record details",
       "refNo": "Nakal reference",
@@ -2377,10 +2377,11 @@
       "area": "Total area",
       "shareHolders": "Share holders",
       "mutations": "Mutations",
-      "pendingCases": "Pending cases"
+      "pendingCases": "Pending cases",
+      "khasras": "Khasra parcels"
     },
     "areaValue": "{sqm} sq m ({kanal} kanal {marla} marla)",
-    "ownersTitle": "Owners and shares",
+    "ownersTitle": "Owners and recorded shares",
     "verify": "Before any purchase, verify this record on the official Himachal Pradesh land records portal or with the Patwari.",
     "flags": {
       "SHARE_MISMATCH": "The owner shares add up to {sum}, but the record states a total of {total}. Either the record is inconsistent or it was read incorrectly.",
@@ -2394,6 +2395,31 @@
       "AGRI_LAND": "This looks like agricultural land. In Himachal Pradesh, buying it as a non-agriculturist generally needs permission under Section 118 of the HP Tenancy and Land Reforms Act.",
       "LOW_CONFIDENCE": "The reader was unsure about {count} fields. Compare the details below with the original.",
       "EXTRACTION_INCOMPLETE": "Owners or the total share could not be read, so this score is not reliable."
+    },
+    "khasrasTitle": "Khasra parcels",
+    "mutationsTitle": "Mutation history",
+    "litigationTitle": "Litigation references",
+    "quality": {
+      "title": "Extraction limits",
+      "incomplete": "Some essential fields could not be read. Treat the score as unreliable and compare the original PDF with a certified record.",
+      "uncertain": "{count} field(s) were difficult to read. Review the original PDF before relying on the extracted details."
+    },
+    "tables": {
+      "khasra": "Khasra",
+      "area": "Area",
+      "landClass": "Land classification",
+      "possession": "Possession / cultivator",
+      "mutation": "Mutation",
+      "type": "Type",
+      "date": "Date",
+      "transferredArea": "Area",
+      "party": "Buyer / lender",
+      "caseNo": "Case number",
+      "caseType": "Case type",
+      "court": "Court",
+      "filedOn": "Filed on",
+      "status": "Status",
+      "notRecorded": "Not read"
     }
   }
 }
