@@ -42,8 +42,14 @@ export type AssessResult = {
     shareHolders: number;
     mutationCount: number;
     pendingCases: number;
+    litigationCount: number;
+    extractionComplete: boolean;
+    lowConfidenceCount: number;
   };
   owners: { names: string; shareNum: number | null; sharePct: number | null }[];
+  khasras: { number: string | null; area: string | null; landClass: string | null; possession: string | null }[];
+  mutations: { number: string | null; kind: string; date: string | null; area: string | null; buyer: string | null }[];
+  litigation: { caseNo: string | null; caseType: string | null; court: string | null; filedOn: string | null; status: string | null }[];
 };
 
 const RECENT_MONTHS = 24;
@@ -66,6 +72,16 @@ function parseIso(s: string | null): Date | null {
 }
 const isPending = (status: string | null) => /pending|लंबित|विचाराधीन/i.test(status ?? '');
 
+function uniqueBy<T>(items: T[], key: (item: T) => string) {
+  const seen = new Set<string>();
+  return items.filter((item) => {
+    const value = key(item);
+    if (seen.has(value)) return false;
+    seen.add(value);
+    return true;
+  });
+}
+
 export function assess(raw: RawNakal, now: Date = new Date()): AssessResult {
   const flags: Flag[] = [];
   const add = (code: FlagCode, severity: Severity, penalty: number, params = {}) =>
@@ -73,19 +89,24 @@ export function assess(raw: RawNakal, now: Date = new Date()): AssessResult {
 
   const shares = raw.owners.map((o) => o.share_num).filter((n): n is number => n !== null);
   const sum = shares.reduce((a, b) => a + b, 0);
+  // Repeated mutation/case stamps can occur across Jamabandi pages. Deduplicate
+  // before counting or scoring so repetition does not inflate concern levels.
+  const mutations = uniqueBy(raw.mutations, (m) => [m.number, m.kind, m.date, m.area, m.buyer].join('|'));
+  const litigation = uniqueBy(raw.litigation, (l) => l.case_no ? `case:${l.case_no}` : JSON.stringify(l));
+  const extractionComplete = raw.owners.length > 0 && raw.total_share !== null && raw.khasras.length > 0;
 
   // 1. Could we read the essentials?
-  if (raw.owners.length === 0 || raw.total_share === null) add('EXTRACTION_INCOMPLETE', 'high', 20);
-  const mortgages = raw.mutations.filter((m) => m.kind === 'mortgage');
+  if (!extractionComplete) add('EXTRACTION_INCOMPLETE', 'high', 20);
+  const mortgages = mutations.filter((m) => m.kind === 'mortgage');
   if (mortgages.length > 0) add('MORTGAGE_OR_CHARGE', 'critical', 30, { count: mortgages.length });
 
   // 2. Share arithmetic
-  if (raw.total_share !== null && raw.owners.length > 0 && sum !== raw.total_share) {
+  if (raw.total_share !== null && raw.owners.length > 0 && shares.length === raw.owners.length && sum !== raw.total_share) {
     add('SHARE_MISMATCH', 'critical', 40, { sum, total: raw.total_share });
   }
 
   // 3. Pending litigation, and transfers made after a case was filed
-  const pending = raw.litigation.filter((l) => isPending(l.status));
+  const pending = litigation.filter((l) => isPending(l.status));
   for (const l of pending) {
     const partition = /partition|बंटवारा|तक़सीम|तकसीम/i.test(l.case_type ?? '');
     add('PENDING_CASE', partition ? 'critical' : 'high', partition ? 35 : 25, {
@@ -96,7 +117,7 @@ export function assess(raw: RawNakal, now: Date = new Date()): AssessResult {
     });
     const filed = parseIso(l.filed_on);
     if (!filed) continue;
-    for (const m of raw.mutations) {
+    for (const m of mutations) {
       const d = parseDmy(m.date);
       if ((m.kind === 'sale' || m.kind === 'gift') && d && d > filed) {
         add('SALE_AFTER_CASE', 'critical', 30, { number: m.number ?? '?', date: m.date ?? '?' });
@@ -112,7 +133,7 @@ export function assess(raw: RawNakal, now: Date = new Date()): AssessResult {
   // 5. Rapid recent transfers
   const cutoff = new Date(now);
   cutoff.setMonth(cutoff.getMonth() - RECENT_MONTHS);
-  const recent = raw.mutations.filter((m) => {
+  const recent = mutations.filter((m) => {
     const d = parseDmy(m.date);
     return (m.kind === 'sale' || m.kind === 'gift') && d && d >= cutoff && d <= now;
   });
@@ -123,7 +144,7 @@ export function assess(raw: RawNakal, now: Date = new Date()): AssessResult {
   // 6. A mutation cannot move more land than the record holds
   const areaSqm = raw.khasras.reduce((a, k) => a + (parseHaAreSqm(k.area) ?? 0), 0);
   if (areaSqm > 0) {
-    for (const m of raw.mutations) {
+    for (const m of mutations) {
       const a = parseHaAreSqm(m.area);
       if (a !== null && a > areaSqm) add('MUTATION_EXCEEDS_AREA', 'high', 25, { number: m.number ?? '?' });
     }
@@ -142,6 +163,9 @@ export function assess(raw: RawNakal, now: Date = new Date()): AssessResult {
   flags.sort((a, b) => b.penalty - a.penalty);
   let score = Math.max(0, 100 - flags.reduce((a, f) => a + f.penalty, 0));
   if (flags.some((f) => f.severity === 'critical')) score = Math.min(score, 45); // a critical flag caps the score
+  // A score based on missing essentials must never look reassuring.
+  if (!extractionComplete) score = Math.min(score, 35);
+  else if (raw.low_confidence_fields.length >= 3) score = Math.min(score, 60);
   const band: Band = score >= 80 ? 'low' : score >= 55 ? 'moderate' : 'high';
 
   return {
@@ -156,9 +180,32 @@ export function assess(raw: RawNakal, now: Date = new Date()): AssessResult {
       areaSqm,
       area: sqmToKanalMarla(areaSqm),
       shareHolders: holders,
-      mutationCount: raw.mutations.length,
+      mutationCount: mutations.length,
       pendingCases: pending.length,
+      litigationCount: litigation.length,
+      extractionComplete,
+      lowConfidenceCount: raw.low_confidence_fields.length,
     },
+    khasras: raw.khasras.map((k) => ({
+      number: k.number,
+      area: k.area,
+      landClass: k.land_class,
+      possession: k.possession,
+    })),
+    mutations: mutations.map((m) => ({
+      number: m.number,
+      kind: m.kind,
+      date: m.date,
+      area: m.area,
+      buyer: m.buyer,
+    })),
+    litigation: litigation.map((l) => ({
+      caseNo: l.case_no,
+      caseType: l.case_type,
+      court: l.court,
+      filedOn: l.filed_on,
+      status: l.status,
+    })),
     owners: raw.owners.map((o) => ({
       // Crystal Reports often leaves a khata/khewat column number attached to
       // the end of the owner line. Remove only a trailing numeric artifact;
