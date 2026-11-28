@@ -140,11 +140,13 @@ function ownerUpdatesFromNotes(
   const updates: OwnerUpdate[] = [];
   for (const mutation of mutations) {
     const note = mutation.note;
-    if (!note || !/के नाम|क नाम/.test(note)) continue;
+    if (!note) continue;
+    const isTransferNote = /वहक\s+/.test(note) && /\d+\/\d+\s*भाग/.test(note);
+    if (!/के नाम|क नाम/.test(note) && !isTransferNote) continue;
     const date = dateFromNote(note) ?? mutation.date;
-    const end = note.search(/के नाम|क नाम/);
+    const endMatch = note.search(/के नाम|क नाम|नकम\\s+वककक|नाम\\s+वाका|वाका/);
+    const end = endMatch >= 0 ? endMatch : note.length;
 
-    const isTransferNote = /वहक\s+.+के नाम/.test(note);
     if (mutation.kind === 'sale' || isTransferNote) {
       // “मिन जानिब” introduces transferors; “वहक ... के नाम” identifies
       // the beneficiary. Only the beneficiary is a new owner in this sale.
