@@ -115,9 +115,9 @@ function inheritedWholePlotShare(part: number, totalParts: number, sourceShare: 
 
 function sourceShareForNote(note: string, owners: RawNakal['owners']): number | null {
   const source = note.includes('महाराज किशन')
-    ? owners.find((owner) => /महाराज किशन/.test(owner.names))
+    ? owners.find((owner) => /महाराज किशन/.test(owner.names ?? ''))
     : note.includes('कृष्ण कान्ता') || note.includes('कृष्णकान्ता')
-      ? owners.find((owner) => /कृष्ण.?कान्ता/.test(owner.names))
+      ? owners.find((owner) => /कृष्ण.?कान्ता/.test(owner.names ?? ''))
       : null;
   return source?.share_num ?? null;
 }
