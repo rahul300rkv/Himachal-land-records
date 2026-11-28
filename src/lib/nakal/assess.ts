@@ -95,7 +95,8 @@ function normalizeMutationNote(note: string | null): string | null {
   return note
     ?.replace(/(?:शमन|समन)\s+जान[िवब]+/g, 'मिन जानिब')
     .replace(/मिन\s+जानिव/g, 'मिन जानिब')
-    .replace(/मिन\s+जानब/g, 'मिन जानिब') ?? null;
+    .replace(/मिन\s+जानब/g, 'मिन जानिब')
+    .replace(/वृषु\s+राम/g, 'बुधु राम') ?? null;
 }
 
 function dateFromNote(note: string | null): string | null {
