@@ -1,4 +1,5 @@
 import 'server-only';
+import { getDocument } from 'pdfjs-dist/legacy/build/pdf.mjs';
 import { rawNakalSchema, type RawNakal } from './schema';
 
 /**
@@ -57,6 +58,80 @@ function parseJson(text: string): unknown {
   return JSON.parse(cleaned);
 }
 
+type PdfTextItem = { str?: string; transform?: number[] };
+
+/**
+ * Crystal Reports preserves the numeric mutation index and the English case
+ * stamp in its text objects even when the Hindi glyph mapping is corrupted.
+ * Recover those stable signals deterministically after the model pass. This
+ * avoids a second model request and prevents the vision model from having to
+ * infer a mutation number that is already present in the PDF structure.
+ */
+async function supplementCrystalReport(pdf: Buffer, raw: RawNakal): Promise<RawNakal> {
+  try {
+    const doc = await getDocument({ data: Uint8Array.from(pdf) }).promise;
+    const pages: string[] = [];
+    const mutationRows: { number: string; kind: RawNakal['mutations'][number]['kind'] }[] = [];
+    for (let pageNumber = 1; pageNumber <= doc.numPages; pageNumber++) {
+      const page = await doc.getPage(pageNumber);
+      const content = await page.getTextContent();
+      const items = content.items as PdfTextItem[];
+      pages.push(items.map((item) => item.str ?? '').join('\n'));
+
+      // On the landscape HimBhoomi Crystal Reports layout, the mutation index
+      // is the left edge of the right-hand remarks column on page 1. Restrict
+      // the y-range to the index list so reference numbers and dates are not
+      // mistaken for mutation numbers.
+      if (pageNumber === 1) {
+        for (const item of items) {
+          const x = item.transform?.[4] ?? 0;
+          const y = item.transform?.[5] ?? 0;
+          const number = item.str?.trim();
+          if (x < 675 || x > 705 || y < 255 || y > 375 || !number || !/^\d{3,4}$/.test(number)) continue;
+          const nearby = items
+            .filter((candidate) => Math.abs((candidate.transform?.[5] ?? 0) - y) <= 2 && (candidate.transform?.[4] ?? 0) >= x)
+            .map((candidate) => candidate.str ?? '')
+            .join(' ');
+          const kind = /वरासत|वरकसत|वकसत/.test(nearby)
+            ? 'inheritance'
+            : /ब[ैह]|बह/.test(nearby)
+              ? 'sale'
+              : 'other';
+          mutationRows.push({ number, kind });
+        }
+      }
+      page.cleanup();
+    }
+    const mergedMutations = [...raw.mutations];
+    for (const row of mutationRows) {
+      if (!mergedMutations.some((mutation) => mutation.number === row.number)) {
+        mergedMutations.push({ number: row.number, kind: row.kind, date: null, area: null, buyer: null, note: null });
+      }
+    }
+
+    const text = pages.join('\n');
+    const caseMatch = text.match(new RegExp(
+      'Case Number\\s+(\\d{5,}\\/\\d{4})\\s+related to\\s+([\\s\\S]+?)\\s+titled as\\s+([\\s\\S]+?)\\s+instituted on\\s+(\\d{4}-\\d{2}-\\d{2})\\s+in the court of\\s+([\\s\\S]+?)\\s+and is currently\\s+([A-Za-z]+)',
+      'i',
+    ));
+    const mergedLitigation = [...raw.litigation];
+    if (caseMatch && !mergedLitigation.some((item) => item.case_no === caseMatch[1])) {
+      mergedLitigation.push({
+        case_no: caseMatch[1],
+        case_type: caseMatch[2].replace(/\s+/g, ' ').trim(),
+        court: caseMatch[5].replace(/\s+/g, ' ').trim(),
+        filed_on: caseMatch[4],
+        status: caseMatch[6],
+      });
+    }
+    return rawNakalSchema.parse({ ...raw, mutations: mergedMutations, litigation: mergedLitigation });
+  } catch {
+    // Supplementation is best effort. The original model result remains valid
+    // if a particular PDF has a different layout or pdfjs cannot read it.
+    return raw;
+  }
+}
+
 export async function extractNakal(pdf: Buffer): Promise<{ raw: RawNakal; model: string }> {
   const key = process.env.GEMINI_API_KEY;
   const nvidiaKey = process.env.NVIDIA_API_KEY?.trim();
@@ -108,7 +183,8 @@ export async function extractNakal(pdf: Buffer): Promise<{ raw: RawNakal; model:
       continue;
     }
     try {
-      return { raw: rawNakalSchema.parse(parseJson(text)), model };
+      const parsed = rawNakalSchema.parse(parseJson(text));
+      return { raw: await supplementCrystalReport(pdf, parsed), model };
     } catch {
       last = new ExtractionError('bad_output', `${model}: output was not valid`);
     }
@@ -125,7 +201,7 @@ export async function extractNakal(pdf: Buffer): Promise<{ raw: RawNakal; model:
         stage = 'NVIDIA output missing ownership or parcels';
         throw new Error(stage);
       }
-      return { raw, model };
+      return { raw: await supplementCrystalReport(pdf, raw), model };
     } catch (error) {
       const safeDetail = error instanceof Error
         ? /^NVIDIA (?:HTTP \d{3}|render timeout|render failed \(page \d+\)|request timeout|connection failed|response timeout|invalid response|output truncated|empty or unfinished output)$/.exec(error.message)?.[0]

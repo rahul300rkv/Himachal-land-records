@@ -82,6 +82,15 @@ function uniqueBy<T>(items: T[], key: (item: T) => string) {
   });
 }
 
+function dateFromNote(note: string | null): string | null {
+  const dates = note?.match(/\b\d{1,2}\/\d{1,2}\/\d{4}\b/g);
+  return dates?.at(-1) ?? null;
+}
+
+function areaFromNote(note: string | null): string | null {
+  return note?.match(/(?:वकदर|वकदर)\s+([0-9]{1,2}-[0-9]{1,2}-[0-9]{1,2})/i)?.[1] ?? null;
+}
+
 export function assess(raw: RawNakal, now: Date = new Date()): AssessResult {
   const flags: Flag[] = [];
   const add = (code: FlagCode, severity: Severity, penalty: number, params = {}) =>
@@ -91,7 +100,11 @@ export function assess(raw: RawNakal, now: Date = new Date()): AssessResult {
   const sum = shares.reduce((a, b) => a + b, 0);
   // Repeated mutation/case stamps can occur across Jamabandi pages. Deduplicate
   // before counting or scoring so repetition does not inflate concern levels.
-  const mutations = uniqueBy(raw.mutations, (m) => [m.number, m.kind, m.date, m.area, m.buyer, m.note].join('|'));
+  const mutations = uniqueBy(raw.mutations.map((mutation) => ({
+    ...mutation,
+    date: dateFromNote(mutation.note) ?? mutation.date,
+    area: areaFromNote(mutation.note) ?? mutation.area,
+  })), (m) => [m.number, m.kind, m.date, m.area, m.buyer, m.note].join('|'));
   const litigation = uniqueBy(raw.litigation, (l) => l.case_no ? `case:${l.case_no}` : JSON.stringify(l));
   const extractionComplete = raw.owners.length > 0 && raw.total_share !== null && raw.khasras.length > 0;
 
